@@ -1,7 +1,6 @@
 ﻿using MoneySaver.Data.Models.Enums;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MoneySaver.Data.Models
 {
@@ -15,7 +14,7 @@ namespace MoneySaver.Data.Models
 
         public int CategoryId { get; set; }
 
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
 
         public RecordType Type { get; set; }
 
