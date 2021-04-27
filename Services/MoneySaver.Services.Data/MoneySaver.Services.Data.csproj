@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\MoneySaver.Data.Common\MoneySaver.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\MoneySaver.Data.Models\MoneySaver.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\MoneySaver.Data\MoneySaver.Data.csproj" />
     <ProjectReference Include="..\MoneySaver.Services.Mapping\MoneySaver.Services.Mapping.csproj" />
   </ItemGroup>
 

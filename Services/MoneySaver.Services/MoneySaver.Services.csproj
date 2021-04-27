@@ -18,4 +18,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\MoneySaver.Data.Models\MoneySaver.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\MoneySaver.Data\MoneySaver.Data.csproj" />
+  </ItemGroup>
+
 </Project>

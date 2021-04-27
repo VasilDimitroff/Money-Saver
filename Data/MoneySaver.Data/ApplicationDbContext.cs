@@ -25,6 +25,16 @@
         }
 
         public DbSet<Setting> Settings { get; set; }
+        public DbSet<Budget> Budgets { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductShoplist> ProductsShoplists { get; set; }
+        public DbSet<Record> Records { get; set; }
+        public DbSet<Shoplist> Shoplists { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
+        public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<UserTrade> UsersTrades { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
