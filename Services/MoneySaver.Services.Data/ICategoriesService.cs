@@ -1,9 +1,11 @@
 ﻿namespace MoneySaver.Services.Data
 {
+    using System.Threading.Tasks;
+
     public interface ICategoriesService
     {
-        void Add(string name);
+        public Task<string> AddAsync(string name);
 
-        void Remove(string name);
+        public Task<string> RemoveAsync(string name);
     }
 }

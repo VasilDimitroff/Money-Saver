@@ -1,16 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MoneySaver.Data;
-using MoneySaver.Data.Models;
-using MoneySaver.Data.Models.Enums;
-using MoneySaver.Services.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MoneySaver.Services.Data
+﻿namespace MoneySaver.Services.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+    using MoneySaver.Common;
+    using MoneySaver.Data;
+    using MoneySaver.Data.Models;
+    using MoneySaver.Data.Models.Enums;
+    using MoneySaver.Services.Data.Models;
+
     public class RecordsService : IRecordsService
     {
         private readonly ApplicationDbContext dbContext;
@@ -20,21 +21,26 @@ namespace MoneySaver.Services.Data
             this.dbContext = dbContext;
         }
 
-        public async Task<string> Add(string description, decimal amount, string category, string type, string wallet)
+        public async Task<string> AddAsync(string description, decimal amount, string category, string type, string wallet)
         {
-            var targetWallet = await dbContext.Wallets.FirstOrDefaultAsync(w => w.Name == wallet);
+            var targetWallet = await this.dbContext.Wallets.FirstOrDefaultAsync(w => w.Name == wallet);
             RecordType recordType;
             bool isTypeParsed = Enum.TryParse<RecordType>(type, out recordType);
-            Category targetCategory = await dbContext.Categories.FirstOrDefaultAsync(categ => categ.Name == category);
+            Category targetCategory = await this.dbContext.Categories.FirstOrDefaultAsync(categ => categ.Name == category);
 
-            if (targetWallet == null || targetCategory == null)
+            if (targetCategory == null)
             {
-                throw new ArgumentNullException("Wallet or Category Cannot Be Null");
+                throw new ArgumentNullException(GlobalConstants.NullValueOfCategory);
+            }
+
+            if (targetWallet == null)
+            {
+                throw new ArgumentNullException(GlobalConstants.NullValueOfWallet);
             }
 
             if (!isTypeParsed)
             {
-                throw new ArgumentException("Invalid Record Type");
+                throw new ArgumentException(GlobalConstants.InvalidRecordType);
             }
 
             Record record = new Record()
@@ -46,30 +52,101 @@ namespace MoneySaver.Services.Data
                 Wallet = targetWallet,
             };
 
-            await dbContext.Records.AddAsync(record);
-            await dbContext.SaveChangesAsync();
-
-            return $"Record {description} with type {recordType} and amount {amount} successfully added in category {targetCategory}";
+            await this.dbContext.Records.AddAsync(record);
+            await this.dbContext.SaveChangesAsync();
+            return string.Format(GlobalConstants.SuccessfullyAddedRecord, description, recordType, amount, targetCategory);
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByCategory(string category)
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(string category)
         {
-            throw new NotImplementedException();
+            Category targetCategory = await this.dbContext.Categories.FirstOrDefaultAsync(categ => categ.Name == category);
+
+            if (targetCategory == null)
+            {
+                throw new ArgumentNullException(GlobalConstants.NullValueOfCategory);
+            }
+
+            var records = await this.dbContext.Records
+                .Where(record => record.Category.Name == category)
+                .Select(record => new RecordInfoDto
+                {
+                    Category = record.Category.Name,
+                    Amount = record.Amount,
+                    Description = record.Description,
+                    Type = record.Type.ToString(),
+                    Wallet = record.Wallet.Name,
+                })
+                .ToListAsync();
+
+            return records;
         }
 
-        public Task<RecordInfoDto> GetRecordsByDateRange(DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime? startDate, DateTime endDate)
         {
-            throw new NotImplementedException();
+            if (startDate == null)
+            {
+               startDate = endDate.AddDays(-7);
+            }
+
+            var records = await this.dbContext.Records
+                .Where(record => record.CreatedOn >= startDate && record.CreatedOn <= endDate)
+                .Select(record => new RecordInfoDto
+                {
+                    Category = record.Category.Name,
+                    Amount = record.Amount,
+                    Description = record.Description,
+                    Type = record.Type.ToString(),
+                    Wallet = record.Wallet.Name,
+                })
+                .ToListAsync();
+
+            return records;
         }
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordInDateRange(string keyword, DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword)
         {
-            throw new NotImplementedException();
+            if (keyword == null)
+            {
+                var records = await this.dbContext.Records
+                    .Select(record => new RecordInfoDto
+                    {
+                        Category = record.Category.Name,
+                        Amount = record.Amount,
+                        Description = record.Description,
+                        Type = record.Type.ToString(),
+                        Wallet = record.Wallet.Name,
+                    })
+                    .ToListAsync();
+
+                return records;
+            }
+
+            var filteredRecords = await this.dbContext.Records
+                    .Where(x => x.Description.Contains(keyword))
+                    .Select(record => new RecordInfoDto
+                    {
+                        Category = record.Category.Name,
+                        Amount = record.Amount,
+                        Description = record.Description,
+                        Type = record.Type.ToString(),
+                        Wallet = record.Wallet.Name,
+                    })
+                    .ToListAsync();
+
+            return filteredRecords;
         }
 
-        public Task<string> Remove(int id)
+        public async Task<string> RemoveAsync(int id)
         {
-            throw new NotImplementedException();
+            Record targetRecord = await this.dbContext.Records.FirstOrDefaultAsync(record => record.Id == id);
+            if (targetRecord == null)
+            {
+                throw new ArgumentException(GlobalConstants.InvalidRecordId);
+            }
+
+            string successfullMessage = GlobalConstants.SuccessfullyRemovedRecord;
+
+            return successfullMessage;
         }
     }
 }

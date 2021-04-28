@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MoneySaver.Data.Models
+﻿namespace MoneySaver.Data.Models
 {
+    using System;
+    using System.Collections.Generic;
+
     public class Wallet
     {
         public Wallet()

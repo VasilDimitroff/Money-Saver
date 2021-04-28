@@ -36,7 +36,7 @@
 
             try
             {
-                this.recordsService.Add(description, amount, category, type, wallet);
+                this.recordsService.AddAsync(description, amount, category, type, wallet);
             }
             catch (System.Exception ex)
             {
