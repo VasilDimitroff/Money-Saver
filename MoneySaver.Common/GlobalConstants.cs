@@ -17,7 +17,7 @@
         public const string SuccessfullyAddedRecord = "Record {0} with type {1} and amount {2} successfully added in category {3}";
 
         public const string SuccessfullyRemovedRecord = "The record is successfully removed";
-       
+
         public const string ExistingCategory = "Category with this name already exist";
 
         public const string SuccessfullyAddedCategory = "Category with name {0} added successfully";
@@ -25,5 +25,11 @@
         public const string SuccessfullyRemovedCategory = "Category with name {0} removed successfully";
 
         public const string UnexistingCategory = "Category with name {0} not exist";
+
+        public const string WalletNotExist = "Cannot find wallet with name {0}";
+
+        public const string BudgetAlreadyExists = "Budget with name {0} already exists!";
+
+        public const string BudgetSuccessfullyAdded = "Budget with name {0} successfully added!";
     }
 }

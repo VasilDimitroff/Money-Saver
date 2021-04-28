@@ -9,6 +9,10 @@ namespace MoneySaver.Data.Models
 
         public string Name { get; set; }
 
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+
         public int WalletId { get; set; }
 
         public virtual Wallet Wallet { get; set; }

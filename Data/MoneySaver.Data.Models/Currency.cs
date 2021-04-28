@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace MoneySaver.Data.Models
+﻿namespace MoneySaver.Data.Models
 {
+    using System.Collections.Generic;
+
     public class Currency
     {
         public Currency()
@@ -13,7 +13,7 @@ namespace MoneySaver.Data.Models
 
         public string Name { get; set; }
 
-        public string Symbol { get; set; }
+        public string Code { get; set; }
 
         public virtual ICollection<Wallet> Wallets { get; set; }
     }
