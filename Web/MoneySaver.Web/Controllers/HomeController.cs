@@ -19,6 +19,7 @@
 
         public IActionResult Index()
         {
+            string userId = "wewr-0233-5454-13";
             string description = "test description";
             string category = "test category";
             decimal amount = 1000M;
@@ -31,12 +32,12 @@
                 Category = category,
                 Amount = amount,
                 Type = type,
-                Wallet = wallet
+                Wallet = wallet,
             };
 
             try
             {
-                this.recordsService.AddAsync(description, amount, category, type, wallet);
+                this.recordsService.AddAsync(userId, description, amount, category, type, wallet);
             }
             catch (System.Exception ex)
             {
@@ -60,7 +61,7 @@
 
         public IActionResult AddRecord()
         {
-            
+   
             return this.View();
         }
     }

@@ -52,12 +52,12 @@
             return successMessage;
         }
 
-        public Task<IEnumerable<BudgetInfoDto>> GetBudgetsAsync(string username, string wallet)
+        public Task<IEnumerable<BudgetInfoDto>> GetBudgetsAsync(string userId, string wallet)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> RemoveAsync(string name, string wallet)
+        public Task<string> RemoveAsync(string userId, string name, string wallet)
         {
             throw new NotImplementedException();
         }

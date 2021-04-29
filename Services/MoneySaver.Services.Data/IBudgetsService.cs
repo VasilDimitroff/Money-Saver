@@ -10,8 +10,8 @@
     {
         public Task<string> AddAsync(string userId, string name, DateTime startDate, DateTime endDate, decimal amount, string wallet);
 
-        public Task<string> RemoveAsync(string name, string wallet);
+        public Task<string> RemoveAsync(string userId, string name, string wallet);
 
-        public Task<IEnumerable<BudgetInfoDto>> GetBudgetsAsync(string username, string wallet);
+        public Task<IEnumerable<BudgetInfoDto>> GetBudgetsAsync(string userId, string wallet);
     }
 }

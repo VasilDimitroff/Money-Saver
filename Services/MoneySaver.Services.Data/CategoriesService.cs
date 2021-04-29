@@ -18,9 +18,10 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<string> AddAsync(string name)
+        public async Task<string> AddAsync(string userId, string name)
         {
-            Category category = await this.dbContext.Categories.FirstOrDefaultAsync(categ => categ.Name == name);
+            Category category = await this.dbContext.Categories
+                .FirstOrDefaultAsync(categ => categ.Name == name && categ.Records.Any(r => r.Wallet.ApplicationUserId == userId));
 
             if (category != null)
             {
@@ -37,9 +38,10 @@
             return successMessage;
         }
 
-        public async Task<string> RemoveAsync(string name)
+        public async Task<string> RemoveAsync(string userId, string name)
         {
-            Category category = await this.dbContext.Categories.FirstOrDefaultAsync(categ => categ.Name == name);
+            Category category = await this.dbContext.Categories
+                .FirstOrDefaultAsync(categ => categ.Name == name && categ.Records.Any(r => r.Wallet.ApplicationUserId == userId));
 
             if (category == null)
             {

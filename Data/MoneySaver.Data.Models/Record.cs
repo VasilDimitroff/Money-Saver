@@ -1,9 +1,9 @@
-﻿using MoneySaver.Data.Models.Enums;
-using System;
-using System.Collections.Generic;
-
-namespace MoneySaver.Data.Models
+﻿namespace MoneySaver.Data.Models
 {
+    using System;
+
+    using MoneySaver.Data.Models.Enums;
+
     public class Record
     {
         public int Id { get; set; }

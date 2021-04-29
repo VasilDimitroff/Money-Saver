@@ -4,8 +4,8 @@
 
     public interface ICategoriesService
     {
-        public Task<string> AddAsync(string name);
+        public Task<string> AddAsync(string userId, string name);
 
-        public Task<string> RemoveAsync(string name);
+        public Task<string> RemoveAsync(string userId, string name);
     }
 }

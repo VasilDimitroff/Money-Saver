@@ -21,12 +21,14 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<string> AddAsync(string description, decimal amount, string category, string type, string wallet)
+        public async Task<string> AddAsync(string userId, string description, decimal amount, string category, string type, string wallet)
         {
-            var targetWallet = await this.dbContext.Wallets.FirstOrDefaultAsync(w => w.Name == wallet);
+            var targetWallet = await this.dbContext.Wallets.FirstOrDefaultAsync(w => w.Name == wallet && w.ApplicationUserId == userId);
             RecordType recordType;
             bool isTypeParsed = Enum.TryParse<RecordType>(type, out recordType);
-            Category targetCategory = await this.dbContext.Categories.FirstOrDefaultAsync(categ => categ.Name == category);
+
+            Category targetCategory = await this.dbContext.Categories
+                .FirstOrDefaultAsync(categ => categ.Name == category && categ.Records.Any(r => r.Wallet.ApplicationUserId == userId));
 
             if (targetCategory == null)
             {
@@ -57,9 +59,10 @@
             return string.Format(GlobalConstants.SuccessfullyAddedRecord, description, recordType, amount, targetCategory);
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(string category)
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(string userId, string category)
         {
-            Category targetCategory = await this.dbContext.Categories.FirstOrDefaultAsync(categ => categ.Name == category);
+            Category targetCategory = await this.dbContext.Categories
+                .FirstOrDefaultAsync(categ => categ.Name == category && (categ.Records.Any(r => r.Wallet.ApplicationUserId == userId)));
 
             if (targetCategory == null)
             {
@@ -81,7 +84,7 @@
             return records;
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime? startDate, DateTime endDate)
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(string userId, DateTime? startDate, DateTime endDate)
         {
             if (startDate == null)
             {
@@ -89,7 +92,7 @@
             }
 
             var records = await this.dbContext.Records
-                .Where(record => record.CreatedOn >= startDate && record.CreatedOn <= endDate)
+                .Where(record => record.CreatedOn >= startDate && record.CreatedOn <= endDate && record.Wallet.ApplicationUserId == userId)
                 .Select(record => new RecordInfoDto
                 {
                     Category = record.Category.Name,
@@ -103,11 +106,12 @@
             return records;
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword)
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string userId, string keyword)
         {
             if (keyword == null)
             {
                 var records = await this.dbContext.Records
+                    .Where(record => record.Wallet.ApplicationUserId == userId)
                     .Select(record => new RecordInfoDto
                     {
                         Category = record.Category.Name,
@@ -122,7 +126,7 @@
             }
 
             var filteredRecords = await this.dbContext.Records
-                    .Where(x => x.Description.Contains(keyword))
+                    .Where(x => x.Description.Contains(keyword) && x.Wallet.ApplicationUserId == userId)
                     .Select(record => new RecordInfoDto
                     {
                         Category = record.Category.Name,
@@ -136,9 +140,11 @@
             return filteredRecords;
         }
 
-        public async Task<string> RemoveAsync(int id)
+        public async Task<string> RemoveAsync(string userId, int id)
         {
-            Record targetRecord = await this.dbContext.Records.FirstOrDefaultAsync(record => record.Id == id);
+            Record targetRecord = await this.dbContext.Records
+                .FirstOrDefaultAsync(record => record.Id == id && record.Wallet.ApplicationUserId == userId);
+
             if (targetRecord == null)
             {
                 throw new ArgumentException(GlobalConstants.InvalidRecordId);
