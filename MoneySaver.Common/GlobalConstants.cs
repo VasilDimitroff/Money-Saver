@@ -31,5 +31,9 @@
         public const string BudgetAlreadyExists = "Budget with name {0} already exists!";
 
         public const string BudgetSuccessfullyAdded = "Budget with name {0} successfully added!";
+
+        public const string BudgetSuccessfullyRemoved = "Budget with name {0} successfully removed!";
+
+        public const string InvalidBudgetName = "Budget with name {0} doesn't exist in this wallet!";
     }
 }

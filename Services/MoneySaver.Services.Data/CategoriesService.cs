@@ -21,7 +21,7 @@
         public async Task<string> AddAsync(string userId, string name)
         {
             Category category = await this.dbContext.Categories
-                .FirstOrDefaultAsync(categ => categ.Name == name && categ.Records.Any(r => r.Wallet.ApplicationUserId == userId));
+                .FirstOrDefaultAsync(categ => categ.Name.ToLower() == name.ToLower() && categ.Records.Any(r => r.Wallet.ApplicationUserId == userId));
 
             if (category != null)
             {
@@ -41,7 +41,7 @@
         public async Task<string> RemoveAsync(string userId, string name)
         {
             Category category = await this.dbContext.Categories
-                .FirstOrDefaultAsync(categ => categ.Name == name && categ.Records.Any(r => r.Wallet.ApplicationUserId == userId));
+                .FirstOrDefaultAsync(categ => categ.Name.ToLower() == name.ToLower() && categ.Records.Any(r => r.Wallet.ApplicationUserId == userId));
 
             if (category == null)
             {

@@ -20,10 +20,9 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<string> AddAsync(string userId, string name, DateTime startDate, DateTime endDate, decimal amount, string wallet)
+        public async Task<string> AddAsync(string userId, string budgetName, DateTime startDate, DateTime endDate, decimal amount, string wallet)
         {
-            Wallet targetWallet = await this.dbContext.Wallets
-                .FirstOrDefaultAsync(w => w.Name == wallet && w.ApplicationUser.Id == userId);
+            Wallet targetWallet = await GetWalletByNameAsync(userId, wallet);
 
             if (targetWallet == null)
             {
@@ -31,14 +30,14 @@
             }
 
             Budget targetBudget = await this.dbContext.Budgets
-                .FirstOrDefaultAsync(budget => budget.Name == name && budget.WalletId == targetWallet.Id);
+                .FirstOrDefaultAsync(budget => budget.Name.ToLower() == budgetName.ToLower() && budget.WalletId == targetWallet.Id);
 
             if (targetBudget != null)
             {
-                throw new ArgumentException(string.Format(GlobalConstants.BudgetAlreadyExists, name));
+                throw new ArgumentException(string.Format(GlobalConstants.BudgetAlreadyExists, budgetName));
             }
 
-            targetBudget.Name = name;
+            targetBudget.Name = budgetName;
             targetBudget.StartDate = startDate;
             targetBudget.EndDate = endDate;
             targetBudget.Amount = amount;
@@ -52,14 +51,83 @@
             return successMessage;
         }
 
-        public Task<IEnumerable<BudgetInfoDto>> GetBudgetsAsync(string userId, string wallet)
+        public async Task<IEnumerable<BudgetInfoDto>> GetAllBudgetsAsync(string userId, string wallet)
         {
-            throw new NotImplementedException();
+            Wallet targetWallet = await GetWalletByNameAsync(userId, wallet);
+
+            if (targetWallet == null)
+            {
+                throw new ArgumentException(string.Format(GlobalConstants.WalletNotExist, wallet));
+            }
+
+            var budgets = await this.dbContext.Budgets
+                .Where(budget => budget.Wallet.Name.ToLower() == wallet.ToLower() && budget.Wallet.ApplicationUserId == userId)
+                .Select(budget => new BudgetInfoDto
+                {
+                    Wallet = budget.Wallet.Name,
+                    Name = budget.Name,
+                    Amount = budget.Amount,
+                    StartDate = budget.StartDate.ToString(),
+                    EndDate = budget.EndDate.ToString(),
+                })
+                .ToListAsync();
+
+            return budgets;
         }
 
-        public Task<string> RemoveAsync(string userId, string name, string wallet)
+        public async Task<string> RemoveAsync(string userId, string budgetName, string wallet)
         {
-            throw new NotImplementedException();
+            Budget budget = await this.dbContext.Budgets
+                .FirstOrDefaultAsync(budget =>
+                    budget.Name.ToLower() == budgetName.ToLower()
+                    && budget.Wallet.Name.ToLower() == wallet.ToLower()
+                    && budget.Wallet.ApplicationUserId == userId);
+
+            if (budget == null)
+            {
+                throw new ArgumentException(string.Format(GlobalConstants.InvalidBudgetName, budgetName));
+            }
+
+            this.dbContext.Budgets.Remove(budget);
+            await this.dbContext.SaveChangesAsync();
+
+            string successMessage = string.Format(GlobalConstants.BudgetSuccessfullyRemoved, budget.Name);
+
+            return successMessage;
+        }
+
+        public async Task<Wallet> GetWalletByNameAsync(string userId, string wallet)
+        {
+            Wallet targetWallet = await this.dbContext.Wallets
+              .FirstOrDefaultAsync(w => w.Name.ToLower() == wallet.ToLower() && w.ApplicationUser.Id == userId);
+
+            return targetWallet;
+        }
+
+        public async Task<BudgetInfoDto> GetBudgetByNameAsync(string userId, string budgetName, string walletName)
+        {
+            Wallet wallet = await GetWalletByNameAsync(userId, walletName);
+
+            if (wallet == null)
+            {
+                throw new ArgumentException(string.Format(GlobalConstants.WalletNotExist, wallet));
+            }
+
+            BudgetInfoDto targetBudget = await this.dbContext.Budgets
+                .Select(budget => new BudgetInfoDto
+                {
+                    Wallet = budget.Wallet.Name,
+                    Name = budget.Name,
+                    Amount = budget.Amount,
+                    StartDate = budget.StartDate.ToString(),
+                    EndDate = budget.EndDate.ToString(),
+                })
+                .FirstOrDefaultAsync(budget =>
+                    budget.Name.ToLower() == budgetName.ToLower()
+                    && wallet.Name.ToLower() == budget.Wallet.ToLower()
+                    && wallet.ApplicationUserId == userId);
+
+            return targetBudget;
         }
     }
 }
