@@ -16,15 +16,18 @@
     public class RecordsService : IRecordsService
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly IWalletsService walletsService;
 
-        public RecordsService(ApplicationDbContext dbContext)
+        public RecordsService(ApplicationDbContext dbContext, IWalletsService walletsService)
         {
             this.dbContext = dbContext;
+            this.walletsService = walletsService;
         }
 
+        // TODO: Add wallet as parameter to all records methods (must know where to add record)
         public async Task<string> AddAsync(string userId, string description, decimal amount, string category, string type, string wallet)
         {
-            var targetWallet = await this.dbContext.Wallets.FirstOrDefaultAsync(w => w.Name.ToLower() == wallet.ToLower() && w.ApplicationUserId == userId);
+           // var targetWallet = await walletsService.GetWalletByNameAsync(userId, wallet);
             RecordType recordType;
             bool isTypeParsed = Enum.TryParse<RecordType>(type, out recordType);
 
