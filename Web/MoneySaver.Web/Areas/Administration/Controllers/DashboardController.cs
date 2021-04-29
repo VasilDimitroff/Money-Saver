@@ -4,6 +4,7 @@
     using MoneySaver.Web.ViewModels.Administration.Dashboard;
 
     using Microsoft.AspNetCore.Mvc;
+    using MoneySaver.Services.Data.Contracts;
 
     public class DashboardController : AdministrationController
     {

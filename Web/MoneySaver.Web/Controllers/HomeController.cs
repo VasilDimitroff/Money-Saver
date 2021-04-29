@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Services.Data;
     using MoneySaver.Web.Models;
+    using MoneySaver.Services.Data.Contracts;
 
     public class HomeController : BaseController
     {

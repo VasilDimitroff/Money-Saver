@@ -1,4 +1,4 @@
-﻿namespace MoneySaver.Services.Data
+﻿namespace MoneySaver.Services.Data.Contracts
 {
     using System.Threading.Tasks;
 

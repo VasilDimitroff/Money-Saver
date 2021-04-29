@@ -9,6 +9,7 @@
     using MoneySaver.Common;
     using MoneySaver.Data;
     using MoneySaver.Data.Models;
+    using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Services.Data.Models;
 
     public class BudgetsService : IBudgetsService

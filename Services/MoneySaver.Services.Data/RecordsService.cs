@@ -10,6 +10,7 @@
     using MoneySaver.Data;
     using MoneySaver.Data.Models;
     using MoneySaver.Data.Models.Enums;
+    using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Services.Data.Models;
 
     public class RecordsService : IRecordsService

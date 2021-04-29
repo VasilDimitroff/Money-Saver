@@ -1,8 +1,9 @@
-﻿namespace MoneySaver.Services.Data
+﻿namespace MoneySaver.Services.Data.Contracts
 {
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Models;
 

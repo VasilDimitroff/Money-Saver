@@ -8,6 +8,7 @@
     using MoneySaver.Common;
     using MoneySaver.Data;
     using MoneySaver.Data.Models;
+    using MoneySaver.Services.Data.Contracts;
 
     public class CategoriesService : ICategoriesService
     {
