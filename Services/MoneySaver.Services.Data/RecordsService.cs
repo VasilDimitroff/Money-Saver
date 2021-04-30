@@ -61,7 +61,7 @@
             return string.Format(GlobalConstants.SuccessfullyAddedRecord, description, recordType, amount, targetCategory);
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(string userId, string category, string wallet)
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(string categoryId)
         {
             Wallet targetWallet = await this.GetWalletByNameAsync(userId, wallet);
 
