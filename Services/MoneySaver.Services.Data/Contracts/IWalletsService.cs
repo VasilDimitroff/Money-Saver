@@ -7,8 +7,6 @@
 
     public interface IWalletsService
     {
-        public Task<WalletInfoDto> GetWalletByNameAsync(string userId, string wallet);
-
         public Task<IEnumerable<WalletInfoDto>> GetWallets(string userId);
     }
 }

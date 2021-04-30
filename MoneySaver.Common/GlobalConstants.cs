@@ -24,9 +24,9 @@
 
         public const string SuccessfullyRemovedCategory = "Category with name {0} removed successfully";
 
-        public const string UnexistingCategory = "Category with name {0} not exist";
+        public const string UnexistingCategory = "Category do not exist";
 
-        public const string WalletNotExist = "Cannot find wallet with name {0}";
+        //public const string WalletNotExist = "Cannot find wallet with name {0}";
 
         public const string BudgetAlreadyExists = "Budget with name {0} already exists!";
 

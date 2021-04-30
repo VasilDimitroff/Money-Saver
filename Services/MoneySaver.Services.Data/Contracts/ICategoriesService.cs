@@ -2,10 +2,14 @@
 {
     using System.Threading.Tasks;
 
+    using MoneySaver.Services.Data.Models;
+
     public interface ICategoriesService
     {
-        public Task<string> AddAsync(string userId, string name);
+        public Task<string> AddAsync(string categoryName, int walletId);
 
-        public Task<string> RemoveAsync(string userId, string name);
+        public Task<string> RemoveAsync(int categoryId);
+
+        public Task<CategoryInfoDto> GetCategoryAsync(int categoryId);
     }
 }

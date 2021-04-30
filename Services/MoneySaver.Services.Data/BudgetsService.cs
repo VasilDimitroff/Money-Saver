@@ -27,7 +27,7 @@
 
             if (targetWallet == null)
             {
-                throw new ArgumentException(string.Format(GlobalConstants.WalletNotExist, wallet));
+                throw new ArgumentException(string.Format(GlobalConstants.NullValueOfWallet, wallet));
             }
 
             Budget targetBudget = await this.dbContext.Budgets
@@ -54,11 +54,11 @@
 
         public async Task<IEnumerable<BudgetInfoDto>> GetAllBudgetsAsync(string userId, string wallet)
         {
-            Wallet targetWallet = await GetWalletByNameAsync(userId, wallet);
+            Wallet targetWallet = await this.GetWalletByNameAsync(userId, wallet);
 
             if (targetWallet == null)
             {
-                throw new ArgumentException(string.Format(GlobalConstants.WalletNotExist, wallet));
+                throw new ArgumentException(string.Format(GlobalConstants.NullValueOfWallet, wallet));
             }
 
             var budgets = await this.dbContext.Budgets
@@ -97,21 +97,13 @@
             return successMessage;
         }
 
-        public async Task<Wallet> GetWalletByNameAsync(string userId, string wallet)
-        {
-            Wallet targetWallet = await this.dbContext.Wallets
-              .FirstOrDefaultAsync(w => w.Name.ToLower() == wallet.ToLower() && w.ApplicationUser.Id == userId);
-
-            return targetWallet;
-        }
-
         public async Task<BudgetInfoDto> GetBudgetByNameAsync(string userId, string budgetName, string walletName)
         {
             Wallet wallet = await GetWalletByNameAsync(userId, walletName);
 
             if (wallet == null)
             {
-                throw new ArgumentException(string.Format(GlobalConstants.WalletNotExist, wallet));
+                throw new ArgumentException(string.Format(GlobalConstants.NullValueOfWallet, wallet));
             }
 
             BudgetInfoDto targetBudget = await this.dbContext.Budgets
@@ -129,6 +121,14 @@
                     && wallet.ApplicationUserId == userId);
 
             return targetBudget;
+        }
+
+        private async Task<Wallet> GetWalletByNameAsync(string userId, string wallet)
+        {
+            Wallet targetWallet = await this.dbContext.Wallets
+              .FirstOrDefaultAsync(w => w.Name.ToLower() == wallet.ToLower() && w.ApplicationUser.Id == userId);
+
+            return targetWallet;
         }
     }
 }

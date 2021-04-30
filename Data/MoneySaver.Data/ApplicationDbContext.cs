@@ -44,7 +44,11 @@
 
         public DbSet<Wallet> Wallets { get; set; }
 
+        public DbSet<WalletCategory> WalletsCategories { get; set; }
+
         public DbSet<UserTrade> UsersTrades { get; set; }
+
+
 
         public override int SaveChanges() => this.SaveChanges(true);
 

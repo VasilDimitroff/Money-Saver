@@ -8,14 +8,14 @@
 
     public interface IRecordsService
     {
-        public Task<string> AddAsync(string userId, string description, decimal amount, string category, string type, string wallet);
+        public Task<string> AddAsync(string description, decimal amount, int categoryId, string type, int walletId);
 
-        public Task<string> RemoveAsync(string userId, int id);
+        public Task<string> RemoveAsync(string userId, int id, string wallet);
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(string userId, DateTime? startDate, DateTime endDate);
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(string userId, DateTime? startDate, DateTime endDate, string wallet);
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(string userId, string category);
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(string userId, string category, string wallet);
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string userId, string keyword);
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string userId, string keyword, string wallet);
     }
 }
