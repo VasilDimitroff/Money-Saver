@@ -9,12 +9,12 @@
 
     public interface IBudgetsService
     {
-        public Task<string> AddAsync(string userId, string budgetName, DateTime startDate, DateTime endDate, decimal amount, string wallet);
+        public Task<string> AddAsync(int walletId, string name, DateTime startDate, DateTime endDate, decimal amount);
 
-        public Task<string> RemoveAsync(string userId, string budgetName, string wallet);
+        public Task<string> RemoveAsync(int budgetId);
 
-        public Task<IEnumerable<BudgetInfoDto>> GetAllBudgetsAsync(string userId, string wallet);
+        public Task<IEnumerable<BudgetInfoDto>> GetAllBudgetsAsync(string userId, int walletId);
 
-        public Task<BudgetInfoDto> GetBudgetByNameAsync(string userId, string budgetName, string walletName);
+        public Task<BudgetInfoDto> GetBudgetByIdAsync(int budgetId);
     }
 }
