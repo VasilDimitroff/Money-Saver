@@ -6,7 +6,7 @@
 
     public interface ICategoriesService
     {
-        public Task<string> AddAsync(string categoryName, int walletId);
+        public Task<string> AddAsync(string categoryName);
 
         public Task<string> RemoveAsync(int categoryId);
 

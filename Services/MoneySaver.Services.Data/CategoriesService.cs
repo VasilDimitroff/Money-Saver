@@ -20,79 +20,38 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<string> AddAsync(string categoryName, int walletId)
+        public async Task<string> AddAsync(string categoryName)
         {
-            Wallet targetWallet = await this.GetWalletByIdAsync(walletId);
-
-            if (targetWallet == null)
+            Category category = new Category
             {
-                throw new ArgumentNullException(GlobalConstants.NullValueOfWallet);
-            }
-
-            Category category = await this.dbContext.Categories
-                .FirstOrDefaultAsync(categ => categ.Name.ToLower() == categoryName.ToLower()
-                    && categ.Records.Any(record => record.WalletId == targetWallet.Id));
-
-            if (category != null)
-            {
-                throw new ArgumentException(GlobalConstants.ExistingCategory);
-            }
-
-            category.Name = categoryName;
+                Name = categoryName,
+            };
 
             await this.dbContext.Categories.AddAsync(category);
             await this.dbContext.SaveChangesAsync();
 
-            string successMessage = string.Format(GlobalConstants.SuccessfullyAddedCategory, category.Name);
-
-            return successMessage;
-        }
-
-        public async Task<string> RemoveAsync(int categoryId)
-        {
-            Category category = await this.dbContext.Categories
-                .FirstOrDefaultAsync(categ => categ.Id == categoryId);
-
-            if (category == null)
-            {
-                throw new ArgumentException(GlobalConstants.UnexistingCategory);
-            }
-
-            this.dbContext.Categories.Remove(category);
-            await this.dbContext.SaveChangesAsync();
-
-            string successMessage = string.Format(GlobalConstants.SuccessfullyRemovedCategory, category.Name);
-
-            return successMessage;
+            return string.Format(GlobalConstants.SuccessfullyAddedCategory, category.Name);
         }
 
         public async Task<CategoryInfoDto> GetCategoryAsync(int categoryId)
         {
-            var category = await this.dbContext.Categories
-                .Where(c => c.Id == categoryId)
-                .ToListAsync();
-
-            var categoryDto = category
-                .Select(category => new CategoryInfoDto
+            CategoryInfoDto category = await this.dbContext.Categories
+                .Select(categ => new CategoryInfoDto
                 {
-                    Name = category.Name,
+                    Name = categ.Name,
+                    Id = categ.Id,
                 })
-                .FirstOrDefault();
+                 .FirstOrDefaultAsync(x => x.Id == categoryId);
 
-            if (category == null)
-            {
-                throw new ArgumentException(GlobalConstants.UnexistingCategory);
-            }
-
-            return categoryDto;
+            return category;
         }
 
-        private async Task<Wallet> GetWalletByIdAsync(int walletId)
+        public async Task<string> RemoveAsync(int categoryId)
         {
-            Wallet targetWallet = await this.dbContext.Wallets
-              .FirstOrDefaultAsync(w => w.Id == walletId);
+            Category category = await this.dbContext.Categories.FirstOrDefaultAsync(x => x.Id == categoryId);
+            this.dbContext.Categories.Remove(category);
 
-            return targetWallet;
+            return string.Format(GlobalConstants.SuccessfullyRemovedCategory, category.Name);
         }
     }
 }

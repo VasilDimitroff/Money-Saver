@@ -6,7 +6,7 @@
 
     public class Record
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public string Description { get; set; }
 
