@@ -20,7 +20,7 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<string> Add(string userId, string name, decimal initialMoney, string currencyName)
+        public async Task<string> AddAsync(string userId, string name, decimal initialMoney, string currencyName)
         {
             Wallet wallet = await this.GetWalletAsync(userId, name);
 
@@ -51,7 +51,7 @@
             return string.Format(GlobalConstants.WalletSuccessfullyAdded, newWallet.Name);
         }
 
-        public async Task<IEnumerable<CategoryWalletInfoDto>> GetWalletCategories(int walletId)
+        public async Task<IEnumerable<CategoryWalletInfoDto>> GetWalletCategoriesAsync(int walletId)
         {
             var categories = await this.dbContext.WalletsCategories
                 .Where(wc => wc.WalletId == walletId)
@@ -65,7 +65,7 @@
             return categories;
         }
 
-        public async Task<IEnumerable<WalletInfoDto>> GetWallets(string userId)
+        public async Task<IEnumerable<WalletInfoDto>> GetWalletsAsync(string userId)
         {
             var wallets = await this.dbContext.Wallets
                 .Select(w => new WalletInfoDto
@@ -86,7 +86,7 @@
         }
 
         //TODO: CHECK IF IT WORKS CORRECTLY!!!!
-        public async Task<string> Remove(int walletId)
+        public async Task<string> RemoveAsync(int walletId)
         {
             var walletsCategoriesForDelete = await this.dbContext.WalletsCategories
                 .Where(wc => wc.WalletId == walletId)
@@ -116,6 +116,27 @@
             await this.dbContext.SaveChangesAsync();
 
             return string.Format(GlobalConstants.WalletSuccessfullyRemoved, walletForDelete.Name);
+        }
+
+        public async Task<WalletInfoDto> GetWalletByIdAsync(int walletId)
+        {
+            var wallet = await this.dbContext.Wallets
+                .Where(w => w.Id == walletId)
+                .Select(w => new WalletInfoDto
+                {
+                    Id = w.Id,
+                    Name = w.Name,
+                    Currency = w.Currency.Code,
+                    MoneyAmount = w.MoneyAmount,
+                    Categories = w.Categories.Select(c => new CategoryWalletInfoDto
+                    {
+                        CategoryName = c.Category.Name,
+                        WalletName = c.Wallet.Name,
+                    }),
+                })
+                .FirstOrDefaultAsync();
+
+            return wallet;
         }
 
         private async Task<Wallet> GetWalletAsync(string userId, string walletName)

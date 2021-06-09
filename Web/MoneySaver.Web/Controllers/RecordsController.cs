@@ -1,15 +1,26 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MoneySaver.Web.Controllers
+﻿namespace MoneySaver.Web.Controllers
 {
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using MoneySaver.Services.Data.Contracts;
+    using MoneySaver.Web.Models;
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+
+
     public class RecordsController : Controller
     {
-        // GET: RecordsController
+        private readonly IRecordsService recordsService;
+
+        public RecordsController(IRecordsService recordsService)
+        {
+            this.recordsService = recordsService;
+        }
+
         public IActionResult All()
         {
             return View();
@@ -22,7 +33,7 @@ namespace MoneySaver.Web.Controllers
         }
 
         // GET: RecordsController/Create
-        public IActionResult Create()
+        public IActionResult Add()
         {
             return View();
         }
@@ -30,15 +41,17 @@ namespace MoneySaver.Web.Controllers
         // POST: RecordsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(IFormCollection collection)
+        public IActionResult Add(RecordInputModel input)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
+                this.recordsService.AddAsync("078-203d-34", input.CategoryId, input.WalletId, input.Description, input.Amount, input.Type);
+                return Redirect("/");
             }
             catch
             {
-                return View();
+                return Redirect("/");
             }
         }
 

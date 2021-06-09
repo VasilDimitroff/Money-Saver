@@ -2,17 +2,19 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Models;
 
     public interface IWalletsService
     {
-        public Task<IEnumerable<WalletInfoDto>> GetWallets(string userId);
+        public Task<IEnumerable<WalletInfoDto>> GetWalletsAsync(string userId);
 
-        public Task<IEnumerable<CategoryWalletInfoDto>> GetWalletCategories(int walletId);
+        public Task<IEnumerable<CategoryWalletInfoDto>> GetWalletCategoriesAsync(int walletId);
 
-        public Task<string> Add(string userId, string name, decimal initialMoney, string currencyName);
+        public Task<string> AddAsync(string userId, string name, decimal initialMoney, string currencyName);
 
-        public Task<string> Remove(int walletId);
+        public Task<string> RemoveAsync(int walletId);
+
+        public Task<WalletInfoDto> GetWalletByIdAsync(int walletId);
     }
 }

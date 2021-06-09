@@ -4,19 +4,23 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using MoneySaver.Services.Data.Models;
+    using MoneySaver.Data.Models.Enums;
+    using MoneySaver.Services.Data.Models.Records;
 
     public interface IRecordsService
     {
-        public Task<string> AddAsync(string description, string description1, decimal amount, int categoryId, string type, int walletId);
+        public Task<string> AddAsync(string userId, int categoryId, int walletId, string description, decimal amount, RecordType type);
 
-        public Task<string> RemoveAsync(string userId, int id, string wallet);
+        public Task<string> RemoveAsync(string recordId);
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(string userId, DateTime? startDate, DateTime endDate, string wallet);
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(int walletId, DateTime startDate, DateTime endDate);
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(string userId, string category, string wallet);
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(int walletId, int categoryId);
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string userId, string keyword, string wallet);
-        void AddAsync(string userId, string description, decimal amount, string category, string type, string wallet);
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int walletId);
+
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByWalletAsync(int walletId);
+
+        public Task<RecordInfoDto> GetRecordById(string recordId);
     }
 }
