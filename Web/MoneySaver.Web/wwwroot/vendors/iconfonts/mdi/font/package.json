@@ -1,0 +1,66 @@
+{
+  "_args": [
+    [
+      "@mdi/font@2.8.94",
+      "/Users/jyothish/Documents/serein/template"
+    ]
+  ],
+  "_from": "@mdi/font@2.8.94",
+  "_id": "@mdi/font@2.8.94",
+  "_inBundle": false,
+  "_integrity": "sha512-QSmuK0BedRMDSgh7RCOc0yO+cAHAaAKfj11BPv0XDxvGKNNKGRqDJcJKdrWUpVmO1/xiFLWfPEmqMi/PKwvjcg==",
+  "_location": "/@mdi/font",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "@mdi/font@2.8.94",
+    "name": "@mdi/font",
+    "escapedName": "@mdi%2ffont",
+    "scope": "@mdi",
+    "rawSpec": "2.8.94",
+    "saveSpec": null,
+    "fetchSpec": "2.8.94"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@mdi/font/-/font-2.8.94.tgz",
+  "_spec": "2.8.94",
+  "_where": "/Users/jyothish/Documents/serein/template",
+  "author": {
+    "name": "Austin Andrews",
+    "url": "http://twitter.com/templarian"
+  },
+  "bugs": {
+    "url": "https://github.com/Templarian/MaterialDesign/issues"
+  },
+  "description": "Dist for Material Design Webfont. This includes the Stock and Community icons in a single webfont collection.",
+  "homepage": "http://materialdesignicons.com",
+  "keywords": [
+    "material",
+    "design",
+    "icons",
+    "webfont"
+  ],
+  "licenses": [
+    {
+      "type": "OFL-1.1",
+      "url": "http://scripts.sil.org/OFL"
+    },
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/mit-license.html"
+    }
+  ],
+  "name": "@mdi/font",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Templarian/MaterialDesign-Webfont.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "style": "css/materialdesignicons.css",
+  "version": "2.8.94"
+}

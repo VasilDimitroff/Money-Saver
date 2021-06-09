@@ -26,5 +26,10 @@
         {
             return this.settingsRepository.All().To<T>().ToList();
         }
+
+        object ISettingsService.GetAll<T>()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

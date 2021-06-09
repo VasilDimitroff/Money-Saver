@@ -6,10 +6,10 @@
 
     public interface ICategoriesService
     {
-        public Task<string> AddAsync(string categoryName);
+        public Task<string> AddAsync(string categoryName, int walletId);
 
         public Task<string> RemoveAsync(int categoryId);
 
-        public Task<CategoryInfoDto> GetCategoryAsync(int categoryId);
+        public Task<CategoryWalletInfoDto> GetCategoryAsync(int categoryId, int walletId);
     }
 }

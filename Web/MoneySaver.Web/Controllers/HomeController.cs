@@ -20,32 +20,17 @@
 
         public IActionResult Index()
         {
-            string userId = "wewr-0233-5454-13";
-            string description = "test description";
-            string category = "test category";
-            decimal amount = 1000M;
-            string type = "Income";
-            string wallet = "Prihodi";
-
-            RecordViewModel record = new RecordViewModel
-            {
-                Description = description,
-                Category = category,
-                Amount = amount,
-                Type = type,
-                Wallet = wallet,
-            };
 
             try
             {
-                this.recordsService.AddAsync(userId, description, amount, category, type, wallet);
+               // this.recordsService.AddAsync(userId, description, amount, category, type, wallet);
             }
             catch (System.Exception ex)
             {
                 BadRequest(ex.Message);
             }
 
-            return this.View(record);
+            return this.View();
         }
 
         public IActionResult Privacy()

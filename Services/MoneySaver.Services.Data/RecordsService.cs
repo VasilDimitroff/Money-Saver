@@ -22,7 +22,12 @@
             this.dbContext = dbContext;
         }
 
-        public Task<string> AddAsync(string description, decimal amount, int categoryId, string type, int walletId)
+        public Task<string> AddAsync(string description, string description1, decimal amount, int categoryId, string type, int walletId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddAsync(string userId, string description, decimal amount, string category, string type, string wallet)
         {
             throw new NotImplementedException();
         }
@@ -42,7 +47,7 @@
             throw new NotImplementedException();
         }
 
-        public Task<string> RemoveAsync(string userId, string id, string wallet)
+        public Task<string> RemoveAsync(string userId, int id, string wallet)
         {
             throw new NotImplementedException();
         }

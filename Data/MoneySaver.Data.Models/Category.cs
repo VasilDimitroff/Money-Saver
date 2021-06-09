@@ -9,11 +9,16 @@ namespace MoneySaver.Data.Models
         {
             this.Records = new HashSet<Record>();
             this.Products = new HashSet<Product>();
+            this.Wallets = new HashSet<WalletCategory>();
         }
 
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public int WalletId { get; set; }
+
+        public virtual ICollection<WalletCategory> Wallets { get; set; }
 
         public virtual ICollection<Record> Records { get; set; }
 

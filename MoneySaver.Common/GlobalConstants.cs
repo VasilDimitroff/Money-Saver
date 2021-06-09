@@ -26,7 +26,13 @@
 
         public const string UnexistingCategory = "Category do not exist";
 
-        //public const string WalletNotExist = "Cannot find wallet with name {0}";
+        public const string WalletNotExist = "Wallet do not exist";
+
+        public const string WalletAlreadyExist = "Wallet with this name already exist";
+
+        public const string WalletSuccessfullyAdded = "Wallet with name {0} successfully added!";
+
+        public const string WalletSuccessfullyRemoved = "Wallet with name {0} successfully removed!";
 
         public const string BudgetAlreadyExists = "Budget with name {0} already exists!";
 
@@ -35,5 +41,7 @@
         public const string BudgetSuccessfullyRemoved = "Budget with name {0} successfully removed!";
 
         public const string InvalidBudgetName = "Budget with name {0} doesn't exist in this wallet!";
+
+        public const string InvalidCurrency = "Please select a valid currency!";
     }
 }

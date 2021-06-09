@@ -8,7 +8,7 @@
 
     public interface IRecordsService
     {
-        public Task<string> AddAsync(string description, decimal amount, int categoryId, string type, int walletId);
+        public Task<string> AddAsync(string description, string description1, decimal amount, int categoryId, string type, int walletId);
 
         public Task<string> RemoveAsync(string userId, int id, string wallet);
 
@@ -17,5 +17,6 @@
         public Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(string userId, string category, string wallet);
 
         public Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string userId, string keyword, string wallet);
+        void AddAsync(string userId, string description, decimal amount, string category, string type, string wallet);
     }
 }

@@ -26,7 +26,7 @@
         public IActionResult Index()
         {
             var settings = this.settingsService.GetAll<SettingViewModel>();
-            var model = new SettingsListViewModel { Settings = settings };
+            var model = new SettingsListViewModel { Settings = (System.Collections.Generic.IEnumerable<SettingViewModel>)settings };
             return this.View(model);
         }
 

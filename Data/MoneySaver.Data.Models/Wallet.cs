@@ -9,6 +9,7 @@
         {
             this.Budgets = new HashSet<Budget>();
             this.Records = new HashSet<Record>();
+            this.Categories = new HashSet<WalletCategory>();
         }
 
         public int Id { get; set; }
@@ -28,5 +29,7 @@
         public virtual ICollection<Budget> Budgets { get; set; }
 
         public virtual ICollection<Record> Records { get; set; }
+
+        public virtual ICollection<WalletCategory> Categories { get; set; }
     }
 }
