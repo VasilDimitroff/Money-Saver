@@ -10,6 +10,6 @@
 
         public Task<string> RemoveAsync(int categoryId);
 
-        public Task<CategoryWalletInfoDto> GetCategoryAsync(int categoryId, int walletId);
+        public Task<CategoryWalletInfoDto> GetCategoryAsync(int categoryId);
     }
 }

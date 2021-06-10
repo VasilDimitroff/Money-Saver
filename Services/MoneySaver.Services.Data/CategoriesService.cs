@@ -46,13 +46,13 @@
             return string.Format(GlobalConstants.SuccessfullyAddedCategory, category.Name);
         }
 
-        public async Task<CategoryWalletInfoDto> GetCategoryAsync(int categoryId, int walletId)
+        public async Task<CategoryWalletInfoDto> GetCategoryAsync(int categoryId)
         {
-            CategoryWalletInfoDto category = await this.dbContext.WalletsCategories
-                .Where(x => x.CategoryId == categoryId && x.WalletId == walletId)
+            CategoryWalletInfoDto category = await this.dbContext.Categories
+                .Where(x => x.Id == categoryId)
                 .Select(categ => new CategoryWalletInfoDto
                 {
-                    CategoryName = categ.Category.Name,
+                    CategoryName = categ.Name,
                     WalletName = categ.Wallet.Name,
                 })
                 .FirstOrDefaultAsync();
@@ -82,8 +82,8 @@
 
         private async Task<bool> IsCategoryExistAsync(int walletId, string categoryName)
         {
-            return await this.dbContext.WalletsCategories
-                .AnyAsync(cat => cat.WalletId == walletId && cat.Category.Name == categoryName);
+            return await this.dbContext.Categories
+                .AnyAsync(cat => cat.WalletId == walletId && cat.Name.ToLower() == categoryName.ToLower());
         }
     }
 }

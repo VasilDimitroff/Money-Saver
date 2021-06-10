@@ -18,10 +18,6 @@
 
         public RecordType Type { get; set; }
 
-        public int WalletId { get; set; }
-
-        public virtual Wallet Wallet { get; set; }
-
         public DateTime CreatedOn { get; set; }
     }
 }

@@ -53,12 +53,13 @@
 
         public async Task<IEnumerable<CategoryWalletInfoDto>> GetWalletCategoriesAsync(int walletId)
         {
-            var categories = await this.dbContext.WalletsCategories
-                .Where(wc => wc.WalletId == walletId)
-                .Select(wc => new CategoryWalletInfoDto
+            var categories = await this.dbContext.Categories
+                .Where(c => c.WalletId == walletId)
+                .Select(c => new CategoryWalletInfoDto
                 {
-                    CategoryName = wc.Category.Name,
-                    WalletName = wc.Wallet.Name,
+                    CategoryName = c.Name,
+                    WalletName = c.Wallet.Name,
+                    Id = c.Id,
                 })
                 .ToListAsync();
 
@@ -68,6 +69,7 @@
         public async Task<IEnumerable<WalletInfoDto>> GetWalletsAsync(string userId)
         {
             var wallets = await this.dbContext.Wallets
+                .Where(w => w.ApplicationUserId == userId)
                 .Select(w => new WalletInfoDto
                 {
                     Id = w.Id,
@@ -76,7 +78,7 @@
                     Name = w.Name,
                     Categories = w.Categories.Select(c => new CategoryWalletInfoDto
                     {
-                        CategoryName = c.Category.Name,
+                        CategoryName = c.Name,
                         WalletName = c.Wallet.Name,
                     }),
                 })
@@ -85,28 +87,20 @@
             return wallets;
         }
 
-        //TODO: CHECK IF IT WORKS CORRECTLY!!!!
+        //TODO: ID WE HAVE BUDGETS, MUST DELETE THEM IN THIS METHOD!
         public async Task<string> RemoveAsync(int walletId)
         {
-            var walletsCategoriesForDelete = await this.dbContext.WalletsCategories
-                .Where(wc => wc.WalletId == walletId)
+            var categories = await this.dbContext.Categories
+                .Where(c => c.WalletId == walletId)
                 .ToListAsync();
 
-            foreach (var wc in walletsCategoriesForDelete)
+            foreach (var category in categories)
             {
-                Category categoryForDelete = await this.dbContext.Categories
-                    .FirstOrDefaultAsync(x => x.Id == wc.CategoryId);
+                var records = category.Records.ToList();
 
-                this.dbContext.Categories.Remove(categoryForDelete);
+                this.dbContext.Records.RemoveRange(records);
 
-                var budgetsForDelete = await this.dbContext.Budgets.Where(b => b.WalletId == walletId).ToListAsync();
-
-                foreach (var budget in budgetsForDelete)
-                {
-                    this.dbContext.Budgets.Remove(budget);
-                }
-
-                this.dbContext.WalletsCategories.Remove(wc);
+                this.dbContext.Categories.Remove(category);
             }
 
             var walletForDelete = await this.dbContext.Wallets.FirstOrDefaultAsync(x => x.Id == walletId);
@@ -130,7 +124,7 @@
                     MoneyAmount = w.MoneyAmount,
                     Categories = w.Categories.Select(c => new CategoryWalletInfoDto
                     {
-                        CategoryName = c.Category.Name,
+                        CategoryName = c.Name,
                         WalletName = c.Wallet.Name,
                     }),
                 })

@@ -1,205 +1,68 @@
-﻿@*@using MoneySaver.Web.Models
-    @model RecordViewModel *@
+﻿@using MoneySaver.Web.Models.Records.Enums
+@using MoneySaver.Web.Models.Categories
+@using MoneySaver.Web.Models.Records
+@model AddRecordViewModel
 @{
-    this.ViewData["Title"] = "Records";
+    this.ViewData["Title"] = "Add Record";
+
+    //int categoryId, int walletId, string description, decimal amount, string type
 }
-<!-- partial -->
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Data table</h4>
-                <div class="row pb-5">
-                    <div class="btn-group mr-2">
-                        <button class="btn btn-sm btn-success"><i class="mdi mdi-plus-circle-outline"></i> Add</button>
-                    </div>
-                    <div class="btn-group mr-2">
-                        <button type="button" class="btn btn-light"><i class="mdi mdi-alert-circle-outline"></i></button>
-                        <button type="button" class="btn btn-light"><i class="mdi mdi-delete-empty"></i></button>
-                    </div>
-                    <div class="btn-group mr-2">
-                        <button type="button" class="btn btn-light"><i class="mdi mdi-printer"></i></button>
-                    </div>
-                    <div class="btn-group ml-auto mr-2 border-0 d-none d-md-block">
-                        <input type="text" class="form-control" placeholder="Search Here">
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-light"><i class="mdi mdi-cloud"></i></button>
-                        <button type="button" class="btn btn-light"><i class="mdi mdi-dots-vertical"></i></button>
-                    </div>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add record</h4>
+            <p class="card-description">
+                Add Record
+            </p>
+            <form class="forms-sample" asp-controller="Records" asp-action="Add" method="post">
+                <div class="form-group">
+                    <label for="Category">Category</label>
+                    <select asp-for="CategoryId"
+                            asp-items="@(new SelectList(Model.Categories,"Id","Name"))" class="js-example-basic-single" style="width:100%">
+                    </select>
                 </div>
-                    <div class="col-12" >
-                        <div class="table-responsive">
-                            <table id="order-listing" class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Order #</th>
-                                        <th>Purchased On</th>
-                                        <th>Customer</th>
-                                        <th>Ship to</th>
-                                        <th>Base Price</th>
-                                        <th>Purchased Price</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>2012/08/03</td>
-                                        <td>Edinburgh</td>
-                                        <td>New York</td>
-                                        <td>$1500</td>
-                                        <td>$3200</td>
-                                        <td>
-                                            <label class="badge badge-info">On hold</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">View</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>2015/04/01</td>
-                                        <td>Doe</td>
-                                        <td>Brazil</td>
-                                        <td>$4500</td>
-                                        <td>$7500</td>
-                                        <td>
-                                            <label class="badge badge-danger">Pending</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">View</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>2010/11/21</td>
-                                        <td>Sam</td>
-                                        <td>Tokyo</td>
-                                        <td>$2100</td>
-                                        <td>$6300</td>
-                                        <td>
-                                            <label class="badge badge-success">Closed</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">View</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>2016/01/12</td>
-                                        <td>Sam</td>
-                                        <td>Tokyo</td>
-                                        <td>$2100</td>
-                                        <td>$6300</td>
-                                        <td>
-                                            <label class="badge badge-success">Closed</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">View</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>2017/12/28</td>
-                                        <td>Sam</td>
-                                        <td>Tokyo</td>
-                                        <td>$2100</td>
-                                        <td>$6300</td>
-                                        <td>
-                                            <label class="badge badge-success">Closed</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">View</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>2000/10/30</td>
-                                        <td>Sam</td>
-                                        <td>Tokyo</td>
-                                        <td>$2100</td>
-                                        <td>$6300</td>
-                                        <td>
-                                            <label class="badge badge-info">On-hold</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">View</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>7</td>
-                                        <td>2011/03/11</td>
-                                        <td>Cris</td>
-                                        <td>Tokyo</td>
-                                        <td>$2100</td>
-                                        <td>$6300</td>
-                                        <td>
-                                            <label class="badge badge-success">Closed</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">View</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>8</td>
-                                        <td>2015/06/25</td>
-                                        <td>Tim</td>
-                                        <td>Italy</td>
-                                        <td>$6300</td>
-                                        <td>$2100</td>
-                                        <td>
-                                            <label class="badge badge-info">On-hold</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">View</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>9</td>
-                                        <td>2016/11/12</td>
-                                        <td>John</td>
-                                        <td>Tokyo</td>
-                                        <td>$2100</td>
-                                        <td>$6300</td>
-                                        <td>
-                                            <label class="badge badge-success">Closed</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">View</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>10</td>
-                                        <td>2003/12/26</td>
-                                        <td>Tom</td>
-                                        <td>Germany</td>
-                                        <td>$1100</td>
-                                        <td>$2300</td>
-                                        <td>
-                                            <label class="badge badge-danger">Pending</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">View</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <!-- Pagination-->
-                            <div class="d-flex justify-content-center pt-5">
-                                        <nav>
-                                            <ul class="pagination rounded-flat pagination-success">
-                                                <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
-                                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                                <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
-                                            </ul>
-                                        </nav> 
-                            </div>
-                            <!-- End Pagination-->
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="Description">Description</label>
+                    <input type="text" class="form-control" id="Description" name="Description" placeholder="Description">
                 </div>
-            </div>
-    <!-- content-wrapper ends -->
+                <div class="form-group">
+                    <label for="Type">Type</label>
+                    <select class="js-example-basic-single" style="width:100%" id="Type" name="Type" placeholder="Type">
+                        @foreach (string name in Enum.GetNames(typeof(RecordTypeViewModel)))
+                        {
+                            <option>@name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Amount">Amount</label>
+                    <input type="number" class="form-control" id="Amount" name="Amount" placeholder="Amount">
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-light">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+    <!-- it make sidebar not collapsable-->
+    <script src="~/js/template.js"></script>
+<!---end of script-->
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="~/js/file-upload.js"></script>
+    <script src="~/js/typeahead.js"></script>
+    <script src="~/js/select2.js"></script>
+}

@@ -17,30 +17,36 @@
     public class RecordsService : IRecordsService
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly IWalletsService walletsService;
 
         public RecordsService(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        public async Task<string> AddAsync(string userId, int categoryId, int walletId, string description, decimal amount, RecordType type)
+        public async Task<string> AddAsync(int categoryId, string description, decimal amount, string type)
         {
             var category = await this.dbContext.Categories.FirstOrDefaultAsync(x => x.Id == categoryId);
+
+            bool isTypeParsed = Enum.TryParse<RecordType>(type, out RecordType recordType);
+
+            if (!isTypeParsed)
+            {
+                throw new ArgumentException(GlobalConstants.InvalidRecordType);
+            }
 
             if (category == null)
             {
                 throw new ArgumentException(GlobalConstants.UnexistingCategory);
             }
 
-            var wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(w => w.Id == walletId);
+            Wallet wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(x => x.Id == category.WalletId);
 
             if (wallet == null)
             {
                 throw new ArgumentException(GlobalConstants.WalletNotExist);
             }
 
-            if (type == RecordType.Expense)
+            if (recordType == RecordType.Expense)
             {
                 amount = (-1) * amount;
             }
@@ -52,8 +58,7 @@
                 CategoryId = categoryId,
                 CreatedOn = DateTime.UtcNow,
                 Description = description,
-                Type = type,
-                WalletId = walletId,
+                Type = recordType,
             };
 
             wallet.MoneyAmount += amount;
@@ -64,9 +69,9 @@
             return GlobalConstants.RecordSuccessfullyAdded;
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(int walletId, int categoryId)
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(int categoryId)
         {
-            var category = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == categoryId && c.WalletId == walletId);
+            var category = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
 
             if (category == null)
             {
@@ -74,7 +79,7 @@
             }
 
             var records = await this.dbContext.Records
-                 .Where(r => r.CategoryId == categoryId && r.WalletId == walletId)
+                 .Where(r => r.CategoryId == categoryId)
                  .Select(r => new RecordInfoDto
                  {
                      Id = r.Id,
@@ -83,24 +88,18 @@
                      CreatedOn = r.CreatedOn.ToString(),
                      Description = r.Description,
                      Type = r.Type.ToString(),
-                     Wallet = r.Wallet.Name,
+                     Wallet = r.Category.Wallet.Name,
                  })
                  .ToListAsync();
 
             return records;
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(int walletId, DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(string userId, DateTime startDate, DateTime endDate)
         {
-            var wallet = await this.dbContext.Categories.FirstOrDefaultAsync(w => w.Id == walletId);
-
-            if (wallet == null)
-            {
-                throw new ArgumentException(GlobalConstants.WalletNotExist);
-            }
 
             var records = await this.dbContext.Records
-                 .Where(r => r.CreatedOn >= startDate && r.CreatedOn <= endDate && r.WalletId == walletId)
+                 .Where(r => r.CreatedOn >= startDate && r.CreatedOn <= endDate && r.Category.Wallet.ApplicationUserId == userId)
                  .Select(r => new RecordInfoDto
                  {
                      Id = r.Id,
@@ -109,24 +108,17 @@
                      CreatedOn = r.CreatedOn.ToString(),
                      Description = r.Description,
                      Type = r.Type.ToString(),
-                     Wallet = r.Wallet.Name,
+                     Wallet = r.Category.Wallet.Name,
                  })
                  .ToListAsync();
 
             return records;
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int walletId)
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, string userId)
         {
-            var wallet = await this.dbContext.Categories.FirstOrDefaultAsync(w => w.Id == walletId);
-
-            if (wallet == null)
-            {
-                throw new ArgumentException(GlobalConstants.WalletNotExist);
-            }
-
             var records = await this.dbContext.Records
-                 .Where(r => r.Description.Contains(keyword) && r.WalletId == walletId)
+                 .Where(r => r.Description.Contains(keyword) && r.Category.Wallet.ApplicationUserId == userId)
                  .Select(r => new RecordInfoDto
                  {
                      Id = r.Id,
@@ -135,7 +127,7 @@
                      CreatedOn = r.CreatedOn.ToString(),
                      Description = r.Description,
                      Type = r.Type.ToString(),
-                     Wallet = r.Wallet.Name,
+                     Wallet = r.Category.Wallet.Name,
                  })
                  .ToListAsync();
 
@@ -144,7 +136,7 @@
 
         public async Task<IEnumerable<RecordInfoDto>> GetRecordsByWalletAsync(int walletId)
         {
-            var wallet = await this.dbContext.Categories.FirstOrDefaultAsync(w => w.Id == walletId);
+            var wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(w => w.Id == walletId);
 
             if (wallet == null)
             {
@@ -152,7 +144,7 @@
             }
 
             var records = await this.dbContext.Records
-                 .Where(r => r.WalletId == walletId)
+                 .Where(r => r.Category.WalletId == walletId)
                  .Select(r => new RecordInfoDto
                  {
                      Id = r.Id,
@@ -161,7 +153,7 @@
                      CreatedOn = r.CreatedOn.ToString(),
                      Description = r.Description,
                      Type = r.Type.ToString(),
-                     Wallet = r.Wallet.Name,
+                     Wallet = wallet.Name,
                  })
                  .ToListAsync();
 
@@ -195,9 +187,8 @@
                     CreatedOn = r.CreatedOn.ToString(),
                     Description = r.Description,
                     Type = r.Type.ToString(),
-                    Wallet = r.Wallet.Name,
+                    Wallet = r.Category.Wallet.Name,
                 })
-
                 .FirstOrDefaultAsync(r => r.Id == recordId);
 
             if (record == null)
