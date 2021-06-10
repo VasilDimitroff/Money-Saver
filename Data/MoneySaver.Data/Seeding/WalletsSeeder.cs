@@ -17,7 +17,7 @@
             }
 
             await dbContext.Wallets
-                .AddAsync(new Wallet { Name = "Default Wallet", ApplicationUserId = "078-203d-34", MoneyAmount = 1000, CurrencyId = 9 });
+                .AddAsync(new Wallet { Name = "Default Wallet", ApplicationUserId = "first", MoneyAmount = 1000, CurrencyId = 1 });
         }
     }
 }

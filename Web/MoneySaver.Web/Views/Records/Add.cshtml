@@ -1,11 +1,11 @@
 ﻿@using MoneySaver.Web.Models.Records.Enums
 @using MoneySaver.Web.Models.Categories
 @using MoneySaver.Web.Models.Records
+@using MoneySaver.Web.ViewComponents
+@using System.Linq;
 @model AddRecordViewModel
 @{
     this.ViewData["Title"] = "Add Record";
-
-    //int categoryId, int walletId, string description, decimal amount, string type
 }
 
 <div class="col-12 grid-margin stretch-card">
@@ -13,7 +13,7 @@
         <div class="card-body">
             <h4 class="card-title">Add record</h4>
             <p class="card-description">
-                Add Record
+                Add Record to <strong>@Model.WalletName</strong>
             </p>
             <form class="forms-sample" asp-controller="Records" asp-action="Add" method="post">
                 <div class="form-group">
@@ -23,25 +23,24 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="Description">Description</label>
-                    <input type="text" class="form-control" id="Description" name="Description" placeholder="Description">
+                    <label asp-for="Description">Description</label>
+                    <input type="text" class="form-control" asp-for="Description" placeholder="Description">
                 </div>
                 <div class="form-group">
-                    <label for="Type">Type</label>
-                    <select class="js-example-basic-single" style="width:100%" id="Type" name="Type" placeholder="Type">
-                        @foreach (string name in Enum.GetNames(typeof(RecordTypeViewModel)))
+                    <label asp-for="Type">Type</label>
+                    <select class="js-example-basic-single" style="width:100%" asp-for="Type" placeholder="Type">
+                        @foreach (string name in Enum.GetNames(typeof(RecordTypeInputModel)))
                         {
                             <option>@name</option>
                         }
                     </select>
                 </div>
-
                 <div class="form-group">
-                    <label for="Amount">Amount</label>
-                    <input type="number" class="form-control" id="Amount" name="Amount" placeholder="Amount">
+                    <label asp-for="Amount">Amount</label>
+                    <input type="number" class="form-control" asp-for="Amount" placeholder="Amount">
                 </div>
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                <button class="btn btn-light">Cancel</button>
+                <button class="btn btn-light"> <a href="javascript:history.back()" style="text-decoration: none;">Back</a></button>
             </form>
         </div>
     </div>
@@ -55,9 +54,9 @@
     <!-- inject:js -->
     <script src="~/js/off-canvas.js"></script>
     <script src="~/js/hoverable-collapse.js"></script>
-    <!-- it make sidebar not collapsable-->
+    <!-- it make sidebar not collapsable
     <script src="~/js/template.js"></script>
-<!---end of script-->
+    end of script-->
     <script src="~/js/settings.js"></script>
     <script src="~/js/todolist.js"></script>
     <!-- endinject -->

@@ -1,8 +1,8 @@
-﻿namespace MoneySaver.Services.Data.Models.Records
+﻿using MoneySaver.Web.Models.Records.Enums;
+using System;
+namespace MoneySaver.Web.Models.Records
 {
-    using System;
-
-    public class RecordInfoDto
+    public class AllRecordsByWalletViewModel
     {
         public string Id { get; set; }
 
@@ -14,7 +14,7 @@
 
         public int CategoryId { get; set; }
 
-        public string Type { get; set; }
+        public RecordTypeInputModel Type { get; set; }
 
         public string Wallet { get; set; }
 

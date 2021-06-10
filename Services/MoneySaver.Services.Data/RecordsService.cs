@@ -85,10 +85,12 @@
                      Id = r.Id,
                      Amount = (r.Type == RecordType.Income) ? r.Amount : Math.Abs(r.Amount) * (-1),
                      Category = r.Category.Name,
-                     CreatedOn = r.CreatedOn.ToString(),
+                     CategoryId = r.CategoryId,
+                     CreatedOn = r.CreatedOn,
                      Description = r.Description,
                      Type = r.Type.ToString(),
                      Wallet = r.Category.Wallet.Name,
+                     Currency = r.Category.Wallet.Currency.Code,
                  })
                  .ToListAsync();
 
@@ -105,10 +107,12 @@
                      Id = r.Id,
                      Amount = (r.Type == RecordType.Income) ? r.Amount : Math.Abs(r.Amount) * (-1),
                      Category = r.Category.Name,
-                     CreatedOn = r.CreatedOn.ToString(),
+                     CategoryId = r.CategoryId,
+                     CreatedOn = r.CreatedOn,
                      Description = r.Description,
                      Type = r.Type.ToString(),
                      Wallet = r.Category.Wallet.Name,
+                     Currency = r.Category.Wallet.Currency.Code,
                  })
                  .ToListAsync();
 
@@ -124,10 +128,12 @@
                      Id = r.Id,
                      Amount = (r.Type == RecordType.Income) ? r.Amount : Math.Abs(r.Amount) * (-1),
                      Category = r.Category.Name,
-                     CreatedOn = r.CreatedOn.ToString(),
+                     CategoryId = r.CategoryId,
+                     CreatedOn = r.CreatedOn,
                      Description = r.Description,
                      Type = r.Type.ToString(),
                      Wallet = r.Category.Wallet.Name,
+                     Currency = r.Category.Wallet.Currency.Code,
                  })
                  .ToListAsync();
 
@@ -150,11 +156,14 @@
                      Id = r.Id,
                      Amount = (r.Type == RecordType.Income) ? r.Amount : Math.Abs(r.Amount) * (-1),
                      Category = r.Category.Name,
-                     CreatedOn = r.CreatedOn.ToString(),
+                     CategoryId = r.CategoryId,
+                     CreatedOn = r.CreatedOn,
                      Description = r.Description,
                      Type = r.Type.ToString(),
                      Wallet = wallet.Name,
+                     Currency = r.Category.Wallet.Currency.Code,
                  })
+                 .OrderByDescending(x => x.CreatedOn)
                  .ToListAsync();
 
             return records;
@@ -184,10 +193,12 @@
                     Id = r.Id,
                     Amount = r.Amount,
                     Category = r.Category.Name,
-                    CreatedOn = r.CreatedOn.ToString(),
+                    CategoryId = r.CategoryId,
+                    CreatedOn = r.CreatedOn,
                     Description = r.Description,
                     Type = r.Type.ToString(),
                     Wallet = r.Category.Wallet.Name,
+                    Currency = r.Category.Wallet.Currency.Code,
                 })
                 .FirstOrDefaultAsync(r => r.Id == recordId);
 

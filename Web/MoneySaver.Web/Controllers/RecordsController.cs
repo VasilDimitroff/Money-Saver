@@ -5,6 +5,7 @@
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.Models.Categories;
     using MoneySaver.Web.Models.Records;
+    using MoneySaver.Web.Models.Records.Enums;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -23,9 +24,30 @@
             this.walletsService = walletsService;
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All(int walletId)
         {
-            return View();
+            var model = new RecordsWithWalletIdViewModel();      
+
+            var records = await this.recordsService.GetRecordsByWalletAsync(walletId);
+
+            model.Records = records.Select(r => new AllRecordsByWalletViewModel
+            {
+                Amount = r.Amount,
+                Category = r.Category,
+                CategoryId = r.CategoryId,
+                CreatedOn = r.CreatedOn,
+                Description = r.Description,
+                Wallet = r.Wallet,
+                Id = r.Id,
+                Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
+                Currency = r.Currency,
+            })
+                .ToList();
+
+            model.WalletId = walletId;
+            model.Wallet = model.Records.FirstOrDefault().Wallet;
+
+            return this.View(model);
         }
 
         // GET: RecordsController/Details/5
@@ -34,10 +56,12 @@
             return View();
         }
 
-        // GET: RecordsController/Create
+
         public async Task<IActionResult> Add(int walletId)
         {
             AddRecordViewModel model = new AddRecordViewModel();
+
+            
 
             var categories = await this.walletsService.GetWalletCategoriesAsync(walletId);
 
@@ -45,19 +69,20 @@
             {
                 Name = x.CategoryName,
                 Id = x.Id,
+                WalletName = x.WalletName,
             });
+
+            model.WalletName = model.Categories.FirstOrDefault().WalletName;
 
             return View(model);
         }
 
-        // POST: RecordsController/Create
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(RecordInputModel input)
+        public async Task<IActionResult> Add(AddRecordViewModel input)
         {
-            await this.recordsService.AddAsync(input.CategoryId, input.Description, input.Amount, input.Type);
-
-            return this.Redirect("/");
+            var enumValueAsString = input.Type.ToString();
+            await this.recordsService.AddAsync(input.CategoryId, input.Description, input.Amount, enumValueAsString);
+            return this.RedirectToAction(nameof(this.All));
         }
 
         // GET: RecordsController/Edit/5

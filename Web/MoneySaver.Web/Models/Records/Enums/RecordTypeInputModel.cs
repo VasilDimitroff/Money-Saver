@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MoneySaver.Web.Models.Records.Enums
 {
-    public enum RecordTypeViewModel
+    public enum RecordTypeInputModel
     {
         Income = 1,
         Expense = 2,
