@@ -18,5 +18,7 @@
         public Task<WalletInfoDto> GetWalletByIdAsync(int walletId);
 
         public Task<string> GetWalletNameAsync(int walletId);
+
+        public Task<int> GetWalletIdByRecordId(string recordId);
     }
 }

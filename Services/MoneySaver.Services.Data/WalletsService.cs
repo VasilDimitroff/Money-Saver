@@ -88,6 +88,8 @@
         }
 
         //TODO: ID WE HAVE BUDGETS, MUST DELETE THEM IN THIS METHOD!
+
+        //INCREASE WALLET AMOUNT WHEN DELETE RECORD!
         public async Task<string> RemoveAsync(int walletId)
         {
             var categories = await this.dbContext.Categories
@@ -143,6 +145,21 @@
             }
 
             return wallet.Name;
+        }
+
+
+        public async Task<int> GetWalletIdByRecordId(string recordId)
+        {
+            var wallet = await this.dbContext.Wallets
+                .FirstOrDefaultAsync(x => x.Categories.Any(c => c.Records.Any(d => d.Id == recordId)));
+
+
+            if (wallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.WalletNotExist);
+            }
+
+            return wallet.Id;
         }
 
         private async Task<Wallet> GetWalletAsync(string userId, string walletName)

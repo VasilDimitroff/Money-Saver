@@ -164,9 +164,12 @@
         }
 
         // GET: RecordsController/Delete/5
-        public ActionResult Delete(int recordId)
+        public async Task<IActionResult> Delete(string recordId)
         {
-            return View();
+            await this.recordsService.RemoveAsync(recordId);
+
+           int wallet = await this.walletsService.GetWalletIdByRecordId(recordId);
+           return this.RedirectToAction("All", "Records", new { wallet });
         }
 
         // POST: RecordsController/Delete/5
