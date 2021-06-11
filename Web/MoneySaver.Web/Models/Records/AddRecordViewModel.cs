@@ -1,5 +1,6 @@
 ﻿namespace MoneySaver.Web.Models.Records
 {
+    using System;
     using System.Collections.Generic;
 
     using MoneySaver.Data.Models.Enums;

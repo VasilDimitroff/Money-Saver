@@ -26,7 +26,7 @@
 
         public async Task<IActionResult> All(int walletId)
         {
-            var model = new RecordsWithWalletIdViewModel();      
+            var model = new RecordsWithWalletIdViewModel();
 
             var records = await this.recordsService.GetRecordsByWalletAsync(walletId);
 
@@ -50,6 +50,65 @@
             return this.View(model);
         }
 
+        public async Task<IActionResult> Search(string searchTerm, int walletId)
+        {
+            if (searchTerm == null)
+            {
+                searchTerm = string.Empty;
+            }
+
+            var model = new RecordsWithWalletIdViewModel();
+
+            var records = await this.recordsService.GetRecordsByKeywordAsync(searchTerm, walletId);
+
+            model.Records = records.Select(r => new AllRecordsByWalletViewModel
+            {
+                Amount = r.Amount,
+                Category = r.Category,
+                CategoryId = r.CategoryId,
+                CreatedOn = r.CreatedOn,
+                Description = r.Description,
+                Wallet = r.Wallet,
+                Id = r.Id,
+                Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
+                Currency = r.Currency,
+            })
+                .ToList();
+
+            model.SearchTerm = searchTerm;
+            model.WalletId = walletId;
+            model.Wallet = await this.walletsService.GetWalletNameAsync(walletId);
+
+            return this.View("All", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetRecordsByDate(DateTime startDate, DateTime endDate, int walletId)
+        {
+            var model = new RecordsWithWalletIdViewModel();
+
+            var records = await this.recordsService.GetRecordsByDateRangeAsync(startDate, endDate, walletId);
+
+            model.Records = records.Select(r => new AllRecordsByWalletViewModel
+            {
+                Amount = r.Amount,
+                Category = r.Category,
+                CategoryId = r.CategoryId,
+                CreatedOn = r.CreatedOn,
+                Description = r.Description,
+                Wallet = r.Wallet,
+                Id = r.Id,
+                Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
+                Currency = r.Currency,
+            })
+                .ToList();
+
+            model.WalletId = walletId;
+            model.Wallet = "Test";
+
+            return this.View(model);
+        }
+
         // GET: RecordsController/Details/5
         public IActionResult Details(int id)
         {
@@ -60,8 +119,6 @@
         public async Task<IActionResult> Add(int walletId)
         {
             AddRecordViewModel model = new AddRecordViewModel();
-
-            
 
             var categories = await this.walletsService.GetWalletCategoriesAsync(walletId);
 
@@ -107,7 +164,7 @@
         }
 
         // GET: RecordsController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int recordId)
         {
             return View();
         }

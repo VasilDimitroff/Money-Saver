@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -97,11 +99,13 @@
             return records;
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(string userId, DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId)
         {
 
+            //DateTime startDateParsed = DateTime.ParseExact(startDate.ToString(), "MM/dd/YYYY hh:mm:ss tt", CultureInfo.InvariantCulture);
+           // DateTime endDateParsed = DateTime.ParseExact(startDate.ToString(), "MM/dd/YYYY hh:mm:ss tt", CultureInfo.InvariantCulture);
             var records = await this.dbContext.Records
-                 .Where(r => r.CreatedOn >= startDate && r.CreatedOn <= endDate && r.Category.Wallet.ApplicationUserId == userId)
+                 .Where(r => DateTime.Compare(startDate, r.CreatedOn) >= 0 && DateTime.Compare(endDate, r.CreatedOn) < 1 && r.Category.WalletId == walletId)
                  .Select(r => new RecordInfoDto
                  {
                      Id = r.Id,
@@ -119,10 +123,33 @@
             return records;
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, string userId)
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int walletId)
         {
+            keyword = keyword.ToLower().Trim();
+
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                var allRecords = await this.dbContext.Records
+                 .Where(r => r.Category.WalletId == walletId)
+                 .Select(r => new RecordInfoDto
+                 {
+                     Id = r.Id,
+                     Amount = (r.Type == RecordType.Income) ? r.Amount : Math.Abs(r.Amount) * (-1),
+                     Category = r.Category.Name,
+                     CategoryId = r.CategoryId,
+                     CreatedOn = r.CreatedOn,
+                     Description = r.Description,
+                     Type = r.Type.ToString(),
+                     Wallet = r.Category.Wallet.Name,
+                     Currency = r.Category.Wallet.Currency.Code,
+                 })
+                 .ToListAsync();
+
+                return allRecords;
+            }
+
             var records = await this.dbContext.Records
-                 .Where(r => r.Description.Contains(keyword) && r.Category.Wallet.ApplicationUserId == userId)
+                 .Where(r => r.Description.Contains(keyword.ToLower()) && r.Category.WalletId == walletId)
                  .Select(r => new RecordInfoDto
                  {
                      Id = r.Id,

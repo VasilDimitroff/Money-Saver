@@ -15,10 +15,10 @@
                 return;
             }
 
-            await dbContext.Categories.AddAsync(new Category { Name = "Grocery", WalletId = 3 });
-            await dbContext.Categories.AddAsync(new Category { Name = "Alcohol", WalletId = 3 });
-            await dbContext.Categories.AddAsync(new Category { Name = "Home", WalletId = 3 });
-            await dbContext.Categories.AddAsync(new Category { Name = "Beauty", WalletId = 3 });
+            await dbContext.Categories.AddAsync(new Category { Name = "Grocery", WalletId = 5 });
+            await dbContext.Categories.AddAsync(new Category { Name = "Alcohol", WalletId = 5 });
+            await dbContext.Categories.AddAsync(new Category { Name = "Home", WalletId = 5 });
+            await dbContext.Categories.AddAsync(new Category { Name = "Beauty", WalletId = 5 });
          }
     }
 }

@@ -1,0 +1,15 @@
+﻿@model MoneySaver.Web.Models.ViewComponents.GetRecordsByDateComponentViewModel
+
+<form method="post" asp-controller="Records" asp-action="GetRecordsByDate">
+    <span style="float: left;">
+        <input type="date" class="form-control" asp-for="StartDate" asp-controller="Records" asp-action="GetRecordsByDate" placeholder="Search Here">
+    </span>
+
+    <span style="float: left;">
+        <input type="date" class="form-control" asp-for="EndDate" asp-controller="Records" asp-action="GetRecordsByDate" placeholder="Search Here">
+    </span>
+
+    <input type="hidden" class="form-control" asp-for="WalletId">
+    &nbsp;
+    <input class="btn btn-primary btn-sm" type="submit" value="Search" />
+</form>

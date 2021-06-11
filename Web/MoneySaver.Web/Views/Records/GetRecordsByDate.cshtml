@@ -23,6 +23,7 @@
             </div>
             <div class="btn-group ml-auto mr-2 border-0 d-none d-md-block">
                 <vc:search-record search-term="@Model.SearchTerm" wallet-id="@Model.WalletId"></vc:search-record>
+
             </div>
             <div class="btn-group">
                 <button type="button" class="btn btn-light"><i class="mdi mdi-cloud"></i></button>
@@ -45,6 +46,7 @@
                         </tr>
                     </thead>
                     <tbody>
+
                         @foreach (var record in Model.Records)
                         {
                             <tr class="card-shadow">
@@ -115,21 +117,13 @@
                                     <!--<span class="btn btn-secondary btn-sm"><i class="fa fa-edit"></i> Edit</span>-->
                                 </td>
                                 <!--   <td>
-                        <a href="/Records/Delete?recordId=@record.Id"><span class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>  Delete</span></a>
-                    </td>-->
+                                    <a href="/Records/Delete?recordId=@record.Id"><span class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>  Delete</span></a>
+                                </td>-->
+
                             </tr>
                         }
                     </tbody>
                 </table>
-                @if (Model.Records.Count() == 0)
-                {
-                    <br />
-                    <div class="alert alert-warning" role="alert">
-                        <span>There are no records containing search term <strong>"@Model.SearchTerm</strong>". Please try with other search terms.</span>
-                    </div>
-
-                    <a href="javascript:history.back()"><button class="btn btn-primary">Back</button></a>
-                }
                 <!-- Pagination-->
                 <div class="d-flex justify-content-center pt-5">
                     <nav>
@@ -144,8 +138,6 @@
                     </nav>
                 </div>
                 <!-- End Pagination-->
-
-                <vc:get-records-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" wallet-id="@Model.WalletId"></vc:get-records-by-date>
             </div>
         </div>
     </div>
@@ -153,7 +145,7 @@
 <!-- content-wrapper ends -->
 @section Scripts {
     <script>
-        $(document).ready(function () {
+    $(document).ready(function () {
             // executes when HTML-Document is loaded and DOM is ready
             console.log("document is ready");
 
@@ -168,20 +160,5 @@
 
             // document ready
         });
-
-
-
-
-
-
-
-        <script src="~/js/formpickers.js"></script>
-    <script src="~/js/form-addons.js"></script>
-    <script src="~/js/x-editable.js"></script>
-    <script src="~/js/dropify.js"></script>
-    <script src="~/js/dropzone.js"></script>
-    <script src="~/js/jquery-file-upload.js"></script>
-    <script src="~/js/formpickers.js"></script>
-    <script src="~/js/form-repeater.js"></script>
     </script>
 }

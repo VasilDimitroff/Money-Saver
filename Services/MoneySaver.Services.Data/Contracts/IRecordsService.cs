@@ -13,11 +13,11 @@
 
         public Task<string> RemoveAsync(string recordId);
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(string userId, DateTime startDate, DateTime endDate);
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId);
 
         public Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(int categoryId);
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, string userId);
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int walletId);
 
         public Task<IEnumerable<RecordInfoDto>> GetRecordsByWalletAsync(int walletId);
 

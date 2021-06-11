@@ -16,5 +16,7 @@
         public Task<string> RemoveAsync(int walletId);
 
         public Task<WalletInfoDto> GetWalletByIdAsync(int walletId);
+
+        public Task<string> GetWalletNameAsync(int walletId);
     }
 }

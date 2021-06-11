@@ -133,6 +133,18 @@
             return wallet;
         }
 
+        public async Task<string> GetWalletNameAsync(int walletId)
+        {
+            var wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(x => x.Id == walletId);
+
+            if (wallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.WalletNotExist);
+            }
+
+            return wallet.Name;
+        }
+
         private async Task<Wallet> GetWalletAsync(string userId, string walletName)
         {
             Wallet wallet = await this.dbContext.Wallets
