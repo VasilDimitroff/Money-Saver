@@ -1,5 +1,6 @@
-﻿using MoneySaver.Data.Models.Enums;
-using System;
+﻿using System;
+
+using MoneySaver.Data.Models.Enums;
 
 namespace MoneySaver.Data.Models
 {

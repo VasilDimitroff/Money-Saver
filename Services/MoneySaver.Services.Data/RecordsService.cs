@@ -2,9 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
-    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
@@ -13,7 +11,6 @@
     using MoneySaver.Data.Models;
     using MoneySaver.Data.Models.Enums;
     using MoneySaver.Services.Data.Contracts;
-    using MoneySaver.Services.Data.Models;
     using MoneySaver.Services.Data.Models.Records;
 
     public class RecordsService : IRecordsService
@@ -63,7 +60,8 @@
                 Type = recordType,
             };
 
-            wallet.MoneyAmount += amount;
+            await this.EditWalletAmountAsync(wallet.Id, amount);
+           // wallet.MoneyAmount += amount;
 
             await this.dbContext.Records.AddAsync(record);
             await this.dbContext.SaveChangesAsync();
@@ -205,9 +203,26 @@
                 throw new ArgumentException(GlobalConstants.RecordNotExist);
             }
 
+            Wallet wallet = await this.dbContext.Wallets
+                .FirstOrDefaultAsync(w => w.Categories.Any(c => c.Records.Any(r => r.Id == recordId)));
+
+            int walletId = wallet.Id;
+            decimal amount = record.Amount;
+
+            if (record.Type == RecordType.Expense)
+            {
+                 amount = Math.Abs(amount);
+            }
+            else if (record.Type == RecordType.Income)
+            {
+                 amount *= -1;
+            }
+
             this.dbContext.Records.Remove(record);
 
             await this.dbContext.SaveChangesAsync();
+
+            await this.EditWalletAmountAsync(walletId, amount);
 
             return GlobalConstants.SuccessfullyRemovedRecord;
         }
@@ -235,6 +250,21 @@
             }
 
             return record;
+        }
+
+        private async Task EditWalletAmountAsync(int walletId, decimal amount)
+        {
+            var wallet = await this.dbContext.Wallets
+                .FirstOrDefaultAsync(x => x.Id == walletId);
+
+            if (wallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.WalletNotExist);
+            }
+
+            wallet.MoneyAmount += amount;
+
+            await this.dbContext.SaveChangesAsync();
         }
     }
 }

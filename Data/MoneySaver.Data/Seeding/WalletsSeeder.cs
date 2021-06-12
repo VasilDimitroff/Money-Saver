@@ -1,11 +1,10 @@
 ﻿namespace MoneySaver.Data.Seeding
 {
-    using MoneySaver.Data.Models;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
+
+    using MoneySaver.Data.Models;
 
     public class WalletsSeeder : ISeeder
     {
@@ -17,7 +16,7 @@
             }
 
             await dbContext.Wallets
-                .AddAsync(new Wallet { Name = "Default Wallet", ApplicationUserId = "first", MoneyAmount = 1000, CurrencyId = 13 });
+                .AddAsync(new Wallet { Name = "My Home Wallet", ApplicationUserId = "first", MoneyAmount = 1000, CurrencyId = 2 });
         }
     }
 }

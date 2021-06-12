@@ -9,7 +9,6 @@
     using MoneySaver.Web.ViewModels.Settings;
 
     using Microsoft.AspNetCore.Mvc;
-    using MoneySaver.Services.Data.Contracts;
 
     public class SettingsController : BaseController
     {

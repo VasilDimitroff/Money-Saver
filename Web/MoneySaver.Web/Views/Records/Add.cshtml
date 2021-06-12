@@ -7,7 +7,6 @@
 @{
     this.ViewData["Title"] = "Add Record";
 }
-
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -39,15 +38,16 @@
                     <label asp-for="Amount">Amount</label>
                     <input type="number" class="form-control" asp-for="Amount" placeholder="Amount">
                 </div>
-                <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                <button class="btn btn-light"> <a href="javascript:history.back()" style="text-decoration: none;">Back</a></button>
+                <input type="hidden" asp-for="@Model.WalletId" /></input>
+                <button type="submit" class="btn btn-primary mr-2">
+                    Submit</input>
+                    <button class="btn btn-light"> <a href="javascript:history.back()" style="text-decoration: none;">Back</a></button>
             </form>
         </div>
     </div>
 </div>
 
 @section Scripts {
-
     <script src="~/vendors/js/vendor.bundle.base.js"></script>
     <script src="~/vendors/js/vendor.bundle.addons.js"></script>
     <!-- endinject -->

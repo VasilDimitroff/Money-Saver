@@ -1,5 +1,7 @@
-﻿using MoneySaver.Web.Models.Records.Enums;
-using System;
+﻿using System;
+
+using MoneySaver.Web.Models.Records.Enums;
+
 namespace MoneySaver.Web.Models.Records
 {
     public class AllRecordsByWalletViewModel

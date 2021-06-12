@@ -1,9 +1,10 @@
 ﻿namespace MoneySaver.Data.Models
 {
-    using System;
     using System.Collections.Generic;
 
-    public class Wallet
+    using MoneySaver.Data.Common.Models;
+
+    public class Wallet : BaseModel<int>
     {
         public Wallet()
         {

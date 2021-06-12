@@ -10,6 +10,7 @@
     using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Services.Data.Models;
+    using MoneySaver.Services.Data.Models.Wallets;
 
     public class CategoriesService : ICategoriesService
     {
@@ -44,25 +45,6 @@
             await this.dbContext.SaveChangesAsync();
 
             return string.Format(GlobalConstants.SuccessfullyAddedCategory, category.Name);
-        }
-
-        public async Task<CategoryWalletInfoDto> GetCategoryAsync(int categoryId)
-        {
-            CategoryWalletInfoDto category = await this.dbContext.Categories
-                .Where(x => x.Id == categoryId)
-                .Select(categ => new CategoryWalletInfoDto
-                {
-                    CategoryName = categ.Name,
-                    WalletName = categ.Wallet.Name,
-                })
-                .FirstOrDefaultAsync();
-
-            if (category == null)
-            {
-                throw new ArgumentException(GlobalConstants.UnexistingCategory);
-            }
-
-            return category;
         }
 
         public async Task<string> RemoveAsync(int categoryId)

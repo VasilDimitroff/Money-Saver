@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using MoneySaver.Data.Models.Enums;
     using MoneySaver.Services.Data.Models.Records;
 
     public interface IRecordsService

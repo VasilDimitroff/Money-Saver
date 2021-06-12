@@ -5,7 +5,6 @@
 
     using MoneySaver.Data.Common.Repositories;
     using MoneySaver.Data.Models;
-    using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Services.Mapping;
 
     public class SettingsService : ISettingsService

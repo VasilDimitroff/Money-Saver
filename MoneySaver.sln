@@ -39,7 +39,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneySaver.Web.Tests", "Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneySaver.Web.ViewModels", "Web\MoneySaver.Web.ViewModels\MoneySaver.Web.ViewModels.csproj", "{13B7AACB-9C85-4409-8D4B-95A67D0DFFF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneySaver.ConsoleApp", "Data\MoneySaver.ConsoleApp\MoneySaver.ConsoleApp.csproj", "{73CE87D1-FB71-47D8-9991-32B8ED4B0472}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneySaver.ConsoleApp", "Data\MoneySaver.ConsoleApp\MoneySaver.ConsoleApp.csproj", "{73CE87D1-FB71-47D8-9991-32B8ED4B0472}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6E9DD6CA-6D32-4B59-8BC8-398FCCC6950E}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

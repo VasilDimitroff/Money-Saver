@@ -1,8 +1,9 @@
 ﻿namespace MoneySaver.Web.ViewComponents
 {
+    using System;
+
     using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Web.Models.ViewComponents;
-    using System;
 
     public class GetRecordsByDateViewComponent : ViewComponent
     {

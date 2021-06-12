@@ -1,4 +1,4 @@
-﻿namespace MoneySaver.Services.Data.Models
+﻿namespace MoneySaver.Services.Data.Models.Wallets
 {
     using System.Collections.Generic;
 

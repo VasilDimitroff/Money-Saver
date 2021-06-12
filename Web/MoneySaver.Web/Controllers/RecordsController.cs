@@ -1,17 +1,15 @@
 ﻿namespace MoneySaver.Web.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.Models.Categories;
     using MoneySaver.Web.Models.Records;
     using MoneySaver.Web.Models.Records.Enums;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Threading.Tasks;
-
 
     public class RecordsController : Controller
     {
@@ -45,7 +43,7 @@
                 .ToList();
 
             model.WalletId = walletId;
-            model.Wallet = model.Records.FirstOrDefault().Wallet;
+            model.Wallet = await this.walletsService.GetWalletNameAsync(walletId);
 
             return this.View(model);
         }
@@ -112,9 +110,8 @@
         // GET: RecordsController/Details/5
         public IActionResult Details(int id)
         {
-            return View();
+            return this.View();
         }
-
 
         public async Task<IActionResult> Add(int walletId)
         {
@@ -124,14 +121,14 @@
 
             model.Categories = categories.Select(x => new CategoryNameIdViewModel()
             {
-                Name = x.CategoryName,
+                Name = x.Name,
                 Id = x.Id,
                 WalletName = x.WalletName,
             });
 
-            model.WalletName = model.Categories.FirstOrDefault().WalletName;
+            model.WalletName = await this.walletsService.GetWalletNameAsync(walletId);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
@@ -139,7 +136,8 @@
         {
             var enumValueAsString = input.Type.ToString();
             await this.recordsService.AddAsync(input.CategoryId, input.Description, input.Amount, enumValueAsString);
-            return this.RedirectToAction(nameof(this.All));
+           //return this.RedirectToAction(nameof(this.All));
+            return this.RedirectToAction("All", new { walletId = input.WalletId });
         }
 
         // GET: RecordsController/Edit/5
@@ -155,7 +153,7 @@
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                return this.RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -166,10 +164,11 @@
         // GET: RecordsController/Delete/5
         public async Task<IActionResult> Delete(string recordId)
         {
-            await this.recordsService.RemoveAsync(recordId);
+           int wallet = await this.walletsService.GetWalletIdByRecordIdAsync(recordId);
+           await this.recordsService.RemoveAsync(recordId);
 
-           int wallet = await this.walletsService.GetWalletIdByRecordId(recordId);
-           return this.RedirectToAction("All", "Records", new { wallet });
+            // return this.RedirectToAction("All", "Records", new { walletId, action = "Submit", submitAll = false });
+           return this.RedirectToAction("All", new { walletId = wallet });
         }
 
         // POST: RecordsController/Delete/5

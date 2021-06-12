@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MoneySaver.Data.Models.Enums
+﻿namespace MoneySaver.Data.Models.Enums
 {
     public enum RecordType
     {
