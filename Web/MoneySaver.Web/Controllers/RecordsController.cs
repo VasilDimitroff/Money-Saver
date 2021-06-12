@@ -1,6 +1,7 @@
 ﻿namespace MoneySaver.Web.Controllers
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -33,7 +34,7 @@
                 Amount = r.Amount,
                 Category = r.Category,
                 CategoryId = r.CategoryId,
-                CreatedOn = r.CreatedOn,
+                CreatedOn = r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
                 Description = r.Description,
                 Wallet = r.Wallet,
                 Id = r.Id,
@@ -64,7 +65,7 @@
                 Amount = r.Amount,
                 Category = r.Category,
                 CategoryId = r.CategoryId,
-                CreatedOn = r.CreatedOn,
+                CreatedOn = r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
                 Description = r.Description,
                 Wallet = r.Wallet,
                 Id = r.Id,
@@ -92,7 +93,7 @@
                 Amount = r.Amount,
                 Category = r.Category,
                 CategoryId = r.CategoryId,
-                CreatedOn = r.CreatedOn,
+                CreatedOn = r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
                 Description = r.Description,
                 Wallet = r.Wallet,
                 Id = r.Id,
@@ -105,12 +106,6 @@
             model.Wallet = "Test";
 
             return this.View(model);
-        }
-
-        // GET: RecordsController/Details/5
-        public IActionResult Details(int id)
-        {
-            return this.View();
         }
 
         public async Task<IActionResult> Add(int walletId)

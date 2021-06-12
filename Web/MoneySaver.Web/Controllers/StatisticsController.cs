@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@
             StatisticsWalletViewModel model = new StatisticsWalletViewModel()
             {
                 WalletId = dbResult.WalletId,
-                ModifiedOn = dbResult.ModifiedOn,
+                ModifiedOn = dbResult.ModifiedOn.Value.ToString("D", CultureInfo.InvariantCulture),
                 TotalAmount = dbResult.TotalAmount,
                 WalletName = dbResult.WalletName,
                 Categories = dbResult.Categories.Select(c => new CategoryStatisticsViewModel
@@ -35,9 +36,13 @@
                     Id = c.Id,
                     Name = c.Name,
                     TotalRecordsCount = c.RecordsCount,
-                    TotalSpent = c.TotalSpent,
+                    TotalExpensesAmount = c.TotalExpensesAmount,
+                    TotalIncomesAmount = c.TotalIncomesAmount,
                 })
                 .ToList(),
+                Incomes = dbResult.Incomes,
+                Outcomes = dbResult.Outcomes,
+                Currency = dbResult.Currency,
             };
 
             return this.View(model);

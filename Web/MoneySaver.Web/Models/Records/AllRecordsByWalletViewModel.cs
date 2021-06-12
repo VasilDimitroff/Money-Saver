@@ -20,7 +20,7 @@ namespace MoneySaver.Web.Models.Records
 
         public string Wallet { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public string CreatedOn { get; set; }
 
         public string Currency { get; set; }
     }

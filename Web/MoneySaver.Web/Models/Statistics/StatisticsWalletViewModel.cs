@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
+    using System.Linq;
     using MoneySaver.Web.Models.Categories;
 
     public class StatisticsWalletViewModel
@@ -11,10 +11,18 @@
 
         public string WalletName { get; set; }
 
+        public string Currency { get; set; }
+
         public decimal TotalAmount { get; set; }
 
-        public DateTime? ModifiedOn { get; set; }
+        public decimal Incomes { get; set; }
 
-        public IEnumerable<CategoryStatisticsViewModel> Categories { get; set; }
+        public decimal Outcomes { get; set; }
+
+        public string ModifiedOn { get; set; }
+
+        public int RecordsCount => this.Categories.Sum(c => c.TotalRecordsCount);
+
+        public ICollection<CategoryStatisticsViewModel> Categories { get; set; }
     }
 }

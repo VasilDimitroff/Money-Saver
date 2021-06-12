@@ -8,6 +8,7 @@
     using MoneySaver.Common;
     using MoneySaver.Data;
     using MoneySaver.Data.Models;
+    using MoneySaver.Data.Models.Enums;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Services.Data.Models;
     using MoneySaver.Services.Data.Models.Categories;
@@ -38,6 +39,8 @@
                 throw new ArgumentException(GlobalConstants.InvalidCurrency);
             }
 
+            initialMoney = decimal.Round(initialMoney, 2);
+
             Wallet newWallet = new Wallet
             {
                 ApplicationUserId = userId,
@@ -55,7 +58,7 @@
 
         public async Task<WalletCategoriesDto> GetWalletWithCategoriesAsync(int walletId)
         {
-            // EF Core can't translate the query for total sum
+            // EF Core can't translate the query for total amount, total expenses and total incomes
             decimal total = 0;
 
             var wallets = this.dbContext.Wallets.Include(x => x.Categories).ThenInclude(x => x.Records);
@@ -71,11 +74,21 @@
                 }
             }
 
+            Record lastRecord = await this.dbContext.Records
+                .OrderByDescending(r => r.CreatedOn)
+                .FirstOrDefaultAsync();
+
+            if (lastRecord == null)
+            {
+                throw new ArgumentNullException(GlobalConstants.RecordNotExist);
+            }
+
             var wallet = await this.dbContext.Wallets
                 .Where(w => w.Id == walletId)
                 .Select(w => new WalletCategoriesDto
                 {
-                    ModifiedOn = w.ModifiedOn,
+                    ModifiedOn = lastRecord.CreatedOn,
+                    Currency = w.Currency.Code,
                     TotalAmount = total,
                     WalletName = w.Name,
                     WalletId = w.Id,
@@ -84,10 +97,15 @@
                         Id = c.Id,
                         Name = c.Name,
                         RecordsCount = c.Records.Count(),
-                        TotalSpent = c.Records.Sum(r => r.Amount),
-                    }),
+                        TotalIncomesAmount = c.Records.Where(r => r.Type == RecordType.Income).Sum(r => r.Amount),
+                        TotalExpensesAmount = c.Records.Where(r => r.Type == RecordType.Expense).Sum(r => r.Amount),
+                    })
+                    .ToList(),
                 })
                 .FirstOrDefaultAsync();
+
+            wallet.Incomes = wallet.Categories.Sum(x => x.TotalIncomesAmount);
+            wallet.Outcomes = wallet.Categories.Sum(x => x.TotalExpensesAmount);
 
             return wallet;
         }
@@ -98,7 +116,6 @@
                 .Where(w => w.ApplicationUserId == userId)
                 .Select(w => new WalletCategoriesDto
                 {
-                    ModifiedOn = w.ModifiedOn,
                     TotalAmount = decimal.Parse(w.Categories.Sum(x => x.Records.Sum(y => y.Amount)).ToString("f2")),
                     WalletName = w.Name,
                     WalletId = w.Id,
@@ -107,7 +124,6 @@
                         Id = c.Id,
                         Name = c.Name,
                         RecordsCount = c.Records.Count(),
-                        TotalSpent = c.Records.Sum(r => r.Amount),
                     }),
                 })
                 .ToListAsync();

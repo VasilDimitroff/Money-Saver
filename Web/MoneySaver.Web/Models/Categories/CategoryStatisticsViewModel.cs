@@ -8,6 +8,7 @@
 
         public int TotalRecordsCount { get; set; }
 
-        public decimal TotalSpent { get; set; }
+        public decimal TotalExpensesAmount { get; set; }
+        public decimal TotalIncomesAmount { get; set; }
     }
 }

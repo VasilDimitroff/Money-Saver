@@ -49,7 +49,7 @@
                             @foreach (var record in Model.Records)
                             {
                                 <tr class="card-shadow">
-                                    <td>@record.CreatedOn.ToLocalTime()</td>
+                                    <td>@record.CreatedOn</td>
                                     <td style="width: 25%;">@record.Description</td>
                                     <td>
                                         @if (record.Type == RecordTypeInputModel.Expense)

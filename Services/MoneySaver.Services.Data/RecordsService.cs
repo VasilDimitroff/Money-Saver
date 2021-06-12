@@ -45,6 +45,8 @@
                 throw new ArgumentException(GlobalConstants.WalletNotExist);
             }
 
+            amount = decimal.Round(amount, 2);
+
             if (recordType == RecordType.Expense)
             {
                 amount = (-1) * amount;
@@ -58,6 +60,7 @@
                 CreatedOn = DateTime.UtcNow,
                 Description = description,
                 Type = recordType,
+                ModifiedOn = DateTime.UtcNow,
             };
 
             await this.EditWalletAmountAsync(wallet.Id, amount);
@@ -67,34 +70,6 @@
             await this.dbContext.SaveChangesAsync();
 
             return GlobalConstants.RecordSuccessfullyAdded;
-        }
-
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByCategoryAsync(int categoryId)
-        {
-            var category = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
-
-            if (category == null)
-            {
-                throw new ArgumentException(GlobalConstants.UnexistingCategory);
-            }
-
-            var records = await this.dbContext.Records
-                 .Where(r => r.CategoryId == categoryId)
-                 .Select(r => new RecordInfoDto
-                 {
-                     Id = r.Id,
-                     Amount = (r.Type == RecordType.Income) ? r.Amount : Math.Abs(r.Amount) * (-1),
-                     Category = r.Category.Name,
-                     CategoryId = r.CategoryId,
-                     CreatedOn = r.CreatedOn,
-                     Description = r.Description,
-                     Type = r.Type.ToString(),
-                     Wallet = r.Category.Wallet.Name,
-                     Currency = r.Category.Wallet.Currency.Code,
-                 })
-                 .ToListAsync();
-
-            return records;
         }
 
         public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId)

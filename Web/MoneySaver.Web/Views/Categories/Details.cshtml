@@ -1,17 +1,17 @@
-﻿@using MoneySaver.Web.Models.Records
+﻿@using MoneySaver.Web.Models.Categories
 @using System.Globalization
 @using MoneySaver.Web.Models.Records.Enums
 
-@model RecordsWithWalletIdViewModel
+@model CategoryRecordsViewModel
 @{
-    this.ViewData["Title"] = "All Records - " + Model.Wallet;
+    this.ViewData["Title"] = "All Records - " + Model.Category + " - " + Model.WalletName;
     int counter = 0;
     string badgeClassName = string.Empty;
 }
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">@Model.Wallet - All Records</h4>
+        <h4 class="card-title">@Model.Category - All Records - @Model.WalletName</h4>
         <div class="row pb-5">
             <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
             <vc:wallet-statistics wallet-id="@Model.WalletId"></vc:wallet-statistics>
@@ -69,20 +69,20 @@
 
                                     @if (record.Amount < 0)
                                     {
-                                        <p class="text-danger"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                        <p class="text-danger"><strong>@record.Amount.ToString("f2") @Model.Currency</strong></p>
                                     }
 
                                     else if (record.Amount == 0)
                                     {
-                                        <p class="text-secondary"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                        <p class="text-secondary"><strong>@record.Amount.ToString("f2") @Model.Currency</strong></p>
                                     }
 
                                     else
                                     {
-                                        <p class="text-success bold"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                        <p class="text-success bold"><strong>@record.Amount.ToString("f2") @Model.Currency</strong></p>
                                     }
                                 </td>
-                                <td>@record.Wallet</td>
+                                <td>@Model.WalletName</td>
                                 <td>
                                     @if (counter % 5 == 0)
                                     {
@@ -109,7 +109,7 @@
                                         badgeClassName = "danger";
                                     }
 
-                                    <a href="/Categories/Details/@record.CategoryId" class="badge badge-@badgeClassName">@record.Category</a>
+                                    <a href="/Categories/Details?categoryId=@Model.CategoryId" class="badge badge-@badgeClassName">@Model.Category</a>
 
                                     @{counter++; }
 
@@ -122,8 +122,8 @@
                                     <!--<span class="btn btn-secondary btn-sm"><i class="fa fa-edit"></i> Edit</span>-->
                                 </td>
                                 <!--   <td>
-                                <a href="/Records/Delete?recordId=@record.Id"><span class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>  Delete</span></a>
-                            </td>-->
+                                    <a href="/Records/Delete?recordId=@record.Id"><span class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>  Delete</span></a>
+                                </td>-->
                             </tr>
                         }
                     </tbody>
@@ -178,7 +178,7 @@
     </script>
 
 
-     <script src="~/js/formpickers.js"></script>
+    <script src="~/js/formpickers.js"></script>
     <script src="~/js/form-addons.js"></script>
     <script src="~/js/x-editable.js"></script>
     <script src="~/js/dropify.js"></script>
@@ -186,5 +186,5 @@
     <script src="~/js/jquery-file-upload.js"></script>
     <script src="~/js/formpickers.js"></script>
     <script src="~/js/form-repeater.js"></script>
-   
+
 }
