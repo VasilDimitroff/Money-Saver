@@ -17,6 +17,8 @@ namespace MoneySaver.Web.Models.Records
 
         public string Type { get; set; }
 
+        public decimal OldAmount { get; set; }
+
         public decimal Amount { get; set; }
 
         public DateTime ModifiedOn { get; set; }

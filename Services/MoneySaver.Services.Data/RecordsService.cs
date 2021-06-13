@@ -241,11 +241,11 @@
         //OLD AMOUNT PROPERTY E RE6ENIETO !!!!! TO SE PODAVA NA PARVATA PROMQNA NA WALLETA KATO AMOUNT
         //POSLE NOVO PROPERTY => NEW AMOUNT KOETO SE SETVA NA VE4E NOVOSAZDADENIQ ZAPIS
         //TO DO: EDIT LOGIC - IF USER CHANGE TYPE OF RECORD, MUSC INCRESE/DECREASE WALLET; OR NOT CHANGE - DO NOTHING
-        public async Task<string> UpdateRecord(string recordId, int categoryId, int walletId, string description, decimal amount, string type, DateTime modifiedOn)
+        public async Task<string> UpdateRecord(string recordId, int categoryId, int walletId, string description, decimal oldAmount,decimal newAmount, string type, DateTime modifiedOn)
         {
-            amount = Math.Abs(amount);
-            string amountAsString = amount.ToString("f2");
-            amount = decimal.Parse(amountAsString);
+            newAmount = Math.Abs(newAmount);
+            string newAmountAsString = newAmount.ToString("f2");
+            newAmount = decimal.Parse(newAmountAsString);
 
             Wallet wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(x => x.Id == walletId);
 
@@ -278,23 +278,22 @@
             string currentRecordId = record.Id;
             DateTime currentRecordCreatedDate = record.CreatedOn;
 
-            decimal amountForEdit = amount;
+            oldAmount = Math.Abs(oldAmount);
 
-            if (recordInputType == RecordType.Income)
+            if (recordInputType == record.Type)
             {
-                amountForEdit *= -1;
+                if (recordInputType == RecordType.Income)
+                {
+                    oldAmount *= -1;
+                }
             }
-
-            await this.EditWalletAmountAsync(wallet.Id, amountForEdit);
 
             await this.RemoveAsync(recordId);
 
             if (recordInputType == RecordType.Expense)
             {
-                amount = (-1) * amount;
+                newAmount = -1 * newAmount;
             }
-
-            await this.EditWalletAmountAsync(wallet.Id, amount);
 
             Record newRecord = new Record
             {
@@ -304,10 +303,11 @@
                 Type = recordInputType,
                 Description = description,
                 CategoryId = categoryId,
-                Amount = amount,
+                Amount = newAmount,
             };
 
             await this.dbContext.Records.AddAsync(newRecord);
+            await this.EditWalletAmountAsync(wallet.Id, newAmount);
             this.dbContext.SaveChanges();
 
             return GlobalConstants.RecordSuccessfullyUpdated;

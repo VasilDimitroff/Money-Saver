@@ -153,6 +153,7 @@
                 Type = Enum.Parse<RecordTypeInputModel>(recordDto.Type.ToString()),
                 WalletId = walletId,
                 Amount = recordDto.Amount,
+                OldAmount = 0,
                 WalletName = recordDto.WalletName,
                 CategoryId = recordDto.CategoryId,
                 Categories = recordDto.Categories.Select(c => new CategoryNameIdViewModel
@@ -170,7 +171,7 @@
         [HttpPost]
         public async Task<ActionResult> Edit(EditRecordInputModel input)
         {
-            await this.recordsService.UpdateRecord(input.Id, input.CategoryId, input.WalletId, input.Description, input.Amount, input.Type, input.ModifiedOn);
+            await this.recordsService.UpdateRecord(input.Id, input.CategoryId, input.WalletId, input.Description, input.OldAmount, input.Amount, input.Type, input.ModifiedOn);
             return this.RedirectToAction("All", new { walletId = input.WalletId });
         }
 

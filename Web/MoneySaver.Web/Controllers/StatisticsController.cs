@@ -23,12 +23,21 @@
         [HttpGet("/Statistics")]
         public async Task<IActionResult> Index(int walletId)
         {
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+
+            }
             var dbResult = await this.walletsService.GetWalletWithCategoriesAsync(walletId);
 
             StatisticsWalletViewModel model = new StatisticsWalletViewModel()
             {
                 WalletId = dbResult.WalletId,
-                ModifiedOn = dbResult.ModifiedOn.Value.ToString("D", CultureInfo.InvariantCulture),
+                ModifiedOn = dbResult.ModifiedOn.HasValue ? dbResult.ModifiedOn.Value.ToString("D", CultureInfo.InvariantCulture) : null,
                 TotalAmount = dbResult.TotalAmount,
                 WalletName = dbResult.WalletName,
                 Categories = dbResult.Categories.Select(c => new CategoryStatisticsViewModel

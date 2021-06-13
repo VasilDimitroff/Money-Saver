@@ -7,6 +7,7 @@
 @model EditRecordViewModel
 @{
     this.ViewData["Title"] = "Edit Record";
+    Model.OldAmount = Model.Amount;
 }
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
@@ -44,12 +45,13 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Amount">Amount</label>
-                    <input type="number" class="form-control" asp-for="Amount" placeholder="Amount" value="@Model.Amount">
+                    <label asp-for="@Model.Amount">Amount</label>
+                    <input type="hidden" asp-for="@Model.OldAmount" /></input>
+                    <input type="number" class="form-control" asp-for="@Model.Amount" placeholder="@Model.Amount" value="@Model.Amount">
                 </div>
                 <div class="form-group">
-                    <label asp-for="ModifiedOn">CreatedOn</label>
-                    <input type="date" class="form-control" asp-for="ModifiedOn" placeholder="ModifiedOn">
+                    <label asp-for="@Model.ModifiedOn">CreatedOn</label>
+                    <input type="date" class="form-control" asp-for="@Model.ModifiedOn" placeholder="@Model.ModifiedOn">
                 </div>
                 <input type="hidden" asp-for="@Model.Id" /></input>
                 <input type="hidden" asp-for="@Model.WalletId" /></input>

@@ -20,7 +20,7 @@
 
         public Task<EditRecordInfoDto> GetRecordByIdAsync(string recordId, int walletId);
 
-        public Task<string> UpdateRecord(string recordId, int categoryId, int walletId, string description, decimal amount, string type, DateTime modifiedOn);
+        public Task<string> UpdateRecord(string recordId, int categoryId, int walletId, string description, decimal oldAmount, decimal newAmount, string type, DateTime modifiedOn);
 
 
     }

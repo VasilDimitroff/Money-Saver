@@ -62,37 +62,33 @@
         public async Task<WalletCategoriesDto> GetWalletWithCategoriesAsync(int walletId)
         {
             // EF Core can't translate the query for total amount, total expenses and total incomes
-            decimal total = 0;
+            //decimal total = 0;
 
-            var wallets = this.dbContext.Wallets.Include(x => x.Categories).ThenInclude(x => x.Records);
+            var targetWallet = await this.dbContext.Wallets.Include(x => x.Categories).ThenInclude(x => x.Records)
+                .FirstOrDefaultAsync(x => x.Id == walletId);
 
-            foreach (var item in wallets)
-            {
-                foreach (var cat in item.Categories)
-                {
-                    foreach (var rec in cat.Records)
-                    {
-                        total += rec.Amount;
-                    }
-                }
-            }
+            // foreach (var item in wallets)
+            // {
+            //    foreach (var cat in item.Categories)
+            //    {
+            //        foreach (var rec in cat.Records)
+            //        {
+            //           total += rec.Amount;
+            //        }
+            //    }
+            // }
 
             Record lastRecord = await this.dbContext.Records
                 .OrderByDescending(r => r.CreatedOn)
                 .FirstOrDefaultAsync();
 
-            if (lastRecord == null)
-            {
-                throw new ArgumentNullException(GlobalConstants.RecordNotExist);
-            }
-
             var wallet = await this.dbContext.Wallets
                 .Where(w => w.Id == walletId)
                 .Select(w => new WalletCategoriesDto
                 {
-                    ModifiedOn = lastRecord.CreatedOn,
+                    ModifiedOn = lastRecord == null ? null : lastRecord.CreatedOn,
                     Currency = w.Currency.Code,
-                    TotalAmount = total,
+                    TotalAmount = targetWallet.MoneyAmount,
                     WalletName = w.Name,
                     WalletId = w.Id,
                     Categories = w.Categories.Select(c => new CategoryWalletInfoDto
