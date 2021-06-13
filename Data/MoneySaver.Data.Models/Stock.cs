@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using MoneySaver.Data.Common.Models;
+using System.Collections.Generic;
 
 namespace MoneySaver.Data.Models
 {
-    public class Stock
+    public class Stock : BaseDeletableModel<int>
     {
         public Stock()
         {

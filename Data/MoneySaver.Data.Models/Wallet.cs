@@ -4,7 +4,7 @@
 
     using MoneySaver.Data.Common.Models;
 
-    public class Wallet
+    public class Wallet : BaseDeletableModel<int>
     {
         public Wallet()
         {

@@ -1,22 +1,19 @@
-﻿using System;
+﻿using MoneySaver.Data.Common.Models;
+using System;
 using System.Collections.Generic;
 
 namespace MoneySaver.Data.Models
 {
-    public class Shoplist
+    public class Shoplist : BaseDeletableModel<int>
     {
         public Shoplist()
         {
             this.ProductsShoplist = new HashSet<ProductShoplist>();
         }
 
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         public bool IsClosed { get; set; }
-
-        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
 
         public string ApplicationUserId { get; set; }
 

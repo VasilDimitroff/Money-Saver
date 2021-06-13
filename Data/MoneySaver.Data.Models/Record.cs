@@ -3,7 +3,7 @@
     using MoneySaver.Data.Common.Models;
     using MoneySaver.Data.Models.Enums;
 
-    public class Record : BaseModel<string>
+    public class Record : BaseDeletableModel<string>
     {
         public string Description { get; set; }
 

@@ -77,9 +77,6 @@
 
         public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId)
         {
-
-            //DateTime startDateParsed = DateTime.ParseExact(startDate.ToString(), "MM/dd/YYYY hh:mm:ss tt", CultureInfo.InvariantCulture);
-           // DateTime endDateParsed = DateTime.ParseExact(startDate.ToString(), "MM/dd/YYYY hh:mm:ss tt", CultureInfo.InvariantCulture);
             var records = await this.dbContext.Records
                  .Where(r => r.CreatedOn >= startDate && r.CreatedOn <= endDate && r.Category.WalletId == walletId)
                  .Select(r => new RecordInfoDto

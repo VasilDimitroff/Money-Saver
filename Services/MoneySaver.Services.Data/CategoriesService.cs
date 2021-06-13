@@ -101,6 +101,8 @@
             return categ;
         }
 
+        //Func<int, bool> func = dbCatId => dbCatId == categoryId;
+
         private async Task<bool> IsCategoryExistAsync(int walletId, string categoryName)
         {
             return await this.dbContext.Categories
