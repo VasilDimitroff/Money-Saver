@@ -1,6 +1,7 @@
 ﻿namespace MoneySaver.Web.Controllers
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -40,7 +41,7 @@
                 .Select(r => new RecordsByCategoryViewModel
                 {
                     Amount = r.Amount,
-                    CreatedOn = r.CreatedOn,
+                    CreatedOn = r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
                     Description = r.Description,
                     Id = r.Id,
                     Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),

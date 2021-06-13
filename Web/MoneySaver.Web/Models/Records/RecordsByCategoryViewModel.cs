@@ -1,7 +1,6 @@
 ﻿namespace MoneySaver.Web.Models.Records
 {
     using MoneySaver.Web.Models.Records.Enums;
-    using System;
 
     public class RecordsByCategoryViewModel
     {
@@ -13,6 +12,6 @@
 
         public RecordTypeInputModel Type { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public string CreatedOn { get; set; }
     }
 }

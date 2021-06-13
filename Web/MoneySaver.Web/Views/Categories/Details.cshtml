@@ -15,19 +15,14 @@
         <div class="row pb-5">
             <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
             <vc:wallet-statistics wallet-id="@Model.WalletId"></vc:wallet-statistics>
-            <div class="btn-group mr-2">
-                <button type="button" class="btn btn-light"><i class="mdi mdi-alert-circle-outline"></i></button>
-                <button type="button" class="btn btn-light"><i class="mdi mdi-delete-empty"></i></button>
+            <span class="btn-group ml-auto pt-1 mr-4 d-md-block">Sort By:</span>
+            <div class="btn-group mr-2 border-0 d-none d-md-block pl-0">
+                @*MAKE NEW VIEW COMPONENT BASED ON CATEGORY*@
+                <vc:get-records-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" wallet-id="@Model.WalletId"></vc:get-records-by-date>
             </div>
-            <div class="btn-group mr-2">
-                <button type="button" class="btn btn-light"><i class="mdi mdi-printer"></i></button>
-            </div>
-            <div class="btn-group ml-auto mr-2 border-0 d-none d-md-block">
-                @* <vc:search-record search-term="@Model.SearchTerm" wallet-id="@Model.WalletId"></vc:search-record>*@
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-light"><i class="mdi mdi-cloud"></i></button>
-                <button type="button" class="btn btn-light"><i class="mdi mdi-dots-vertical"></i></button>
+            <div class="btn-group ml-4 mr-2 border-0 d-none d-md-block">
+                @*MAKE NEW VIEW COMPONENT BASED ON CATEGORY*@
+                <vc:search-record search-term="@Model.SearchTerm" wallet-id="@Model.WalletId"></vc:search-record>
             </div>
         </div>
         <div class="col-12">
@@ -35,7 +30,7 @@
                 <table id="order-listing" class="table text-center">
                     <thead>
                         <tr>
-                            <th>Added On</th>
+                            <th>Last Added</th>
                             <th>Description</th>
                             <th>Type</th>
                             <th>Amount</th>
@@ -125,7 +120,7 @@
                 {
                     <br />
                     <div class="alert alert-warning" role="alert">
-                        <span>There are no records containing search term <strong>"@Model.SearchTerm</strong>". Please try with other search terms.</span>
+                        <span>No records found</span>
                     </div>
 
                     <a href="javascript:history.back()"><button class="btn btn-primary">Back</button></a>
@@ -145,7 +140,7 @@
                 </div>
                 <!-- End Pagination-->
 
-                <vc:get-records-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" wallet-id="@Model.WalletId"></vc:get-records-by-date>
+               
             </div>
         </div>
     </div>

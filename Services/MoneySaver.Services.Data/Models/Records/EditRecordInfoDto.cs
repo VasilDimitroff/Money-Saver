@@ -20,6 +20,8 @@
 
         public DateTime? ModifiedOn { get; set; }
 
+        public DateTime CreatedOn { get; set; }
+
         public IEnumerable<CategoryBasicInfoDto> Categories { get; set; }
 
         public RecordType Type { get; set; }

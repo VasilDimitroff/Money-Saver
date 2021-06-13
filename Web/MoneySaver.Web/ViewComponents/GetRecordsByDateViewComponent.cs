@@ -13,6 +13,8 @@
             viewModel.StartDate = startDate;
             viewModel.EndDate = endDate;
             viewModel.WalletId = walletId;
+            viewModel.DefaultStartDate = DateTime.UtcNow;
+            viewModel.DefaultEndDate = DateTime.UtcNow;
 
             return this.View(viewModel);
         }

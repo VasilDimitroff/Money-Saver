@@ -35,6 +35,7 @@
                 Category = r.Category,
                 CategoryId = r.CategoryId,
                 CreatedOn = r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
+                ModifiedOn = r.ModifiedOn.HasValue ? r.ModifiedOn.Value.ToString("D", CultureInfo.InvariantCulture) : null,
                 Description = r.Description,
                 Wallet = r.Wallet,
                 Id = r.Id,
@@ -82,7 +83,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetRecordsByDate(DateTime startDate, DateTime endDate, int walletId)
+        public async Task<IActionResult> DateSorted(DateTime startDate, DateTime endDate, int walletId)
         {
             var model = new RecordsWithWalletIdViewModel();
 
@@ -103,9 +104,9 @@
                 .ToList();
 
             model.WalletId = walletId;
-            model.Wallet = "Test";
+            model.Wallet = await this.walletsService.GetWalletNameAsync(walletId);
 
-            return this.View(model);
+            return this.View("All", model);
         }
 
         public async Task<IActionResult> Add(int walletId)
@@ -135,7 +136,6 @@
             return this.RedirectToAction("All", new { walletId = input.WalletId });
         }
 
-        // GET: RecordsController/Edit/5
         public async Task<IActionResult> Edit(string id, int walletId)
         {
             if (id == null)
@@ -149,7 +149,8 @@
             {
                 Id = recordDto.Id,
                 Description = recordDto.Description,
-                ModifiedOn = recordDto.ModifiedOn.HasValue ? recordDto.ModifiedOn.Value : null,
+                ModifiedOn = recordDto.ModifiedOn,
+                CreatedOn = recordDto.CreatedOn,
                 Type = Enum.Parse<RecordTypeInputModel>(recordDto.Type.ToString()),
                 WalletId = walletId,
                 Amount = recordDto.Amount,
@@ -167,15 +168,13 @@
             return this.View(model);
         }
 
-        // POST: RecordsController/Edit/5
         [HttpPost]
         public async Task<ActionResult> Edit(EditRecordInputModel input)
         {
-            await this.recordsService.UpdateRecord(input.Id, input.CategoryId, input.WalletId, input.Description, input.OldAmount, input.Amount, input.Type, input.ModifiedOn);
+            await this.recordsService.UpdateRecord(input.Id, input.CategoryId, input.WalletId, input.Description, input.OldAmount, input.Amount, input.Type, input.CreatedOn);
             return this.RedirectToAction("All", new { walletId = input.WalletId });
         }
 
-        // GET: RecordsController/Delete/5
         public async Task<IActionResult> Delete(string recordId)
         {
            int wallet = await this.walletsService.GetWalletIdByRecordIdAsync(recordId);

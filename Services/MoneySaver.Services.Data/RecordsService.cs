@@ -81,7 +81,7 @@
             //DateTime startDateParsed = DateTime.ParseExact(startDate.ToString(), "MM/dd/YYYY hh:mm:ss tt", CultureInfo.InvariantCulture);
            // DateTime endDateParsed = DateTime.ParseExact(startDate.ToString(), "MM/dd/YYYY hh:mm:ss tt", CultureInfo.InvariantCulture);
             var records = await this.dbContext.Records
-                 .Where(r => DateTime.Compare(startDate, r.CreatedOn) >= 0 && DateTime.Compare(endDate, r.CreatedOn) < 1 && r.Category.WalletId == walletId)
+                 .Where(r => r.CreatedOn >= startDate && r.CreatedOn <= endDate && r.Category.WalletId == walletId)
                  .Select(r => new RecordInfoDto
                  {
                      Id = r.Id,
@@ -161,6 +161,7 @@
                      Category = r.Category.Name,
                      CategoryId = r.CategoryId,
                      CreatedOn = r.CreatedOn,
+                     ModifiedOn = r.ModifiedOn,
                      Description = r.Description,
                      Type = r.Type.ToString(),
                      Wallet = wallet.Name,
@@ -219,6 +220,7 @@
                     CategoryId = r.CategoryId,
                     Description = r.Description,
                     ModifiedOn = r.ModifiedOn.HasValue ? r.ModifiedOn : null,
+                    CreatedOn = r.CreatedOn,
                     Type = r.Type,
                     WalletName = r.Category.Wallet.Name,
                     Categories = allCategories.Select(c => new CategoryBasicInfoDto
@@ -238,10 +240,78 @@
             return record;
         }
 
-        //OLD AMOUNT PROPERTY E RE6ENIETO !!!!! TO SE PODAVA NA PARVATA PROMQNA NA WALLETA KATO AMOUNT
-        //POSLE NOVO PROPERTY => NEW AMOUNT KOETO SE SETVA NA VE4E NOVOSAZDADENIQ ZAPIS
-        //TO DO: EDIT LOGIC - IF USER CHANGE TYPE OF RECORD, MUSC INCRESE/DECREASE WALLET; OR NOT CHANGE - DO NOTHING
-        public async Task<string> UpdateRecord(string recordId, int categoryId, int walletId, string description, decimal oldAmount,decimal newAmount, string type, DateTime modifiedOn)
+        public async Task<string> UpdateRecord(string recordId, int categoryId, int walletId, string description, decimal oldAmount, decimal newAmount, string type, DateTime createdOn)
+        {
+            newAmount = Math.Abs(newAmount);
+            string newAmountAsString = newAmount.ToString("f2");
+            newAmount = decimal.Parse(newAmountAsString);
+
+            Wallet wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(x => x.Id == walletId);
+
+            if (wallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.WalletNotExist);
+            }
+
+            Record record = await this.dbContext.Records.FirstOrDefaultAsync(r => r.Id == recordId);
+
+            if (record == null)
+            {
+                throw new ArgumentException(GlobalConstants.RecordNotExist);
+            }
+
+            Category category = await this.GetCategoryByIdAsync(categoryId);
+
+            if (category == null)
+            {
+                throw new ArgumentException(GlobalConstants.UnexistingCategory);
+            }
+
+            RecordType recordInputType = this.ParseRecordType(type);
+
+            if (recordInputType == 0)
+            {
+                throw new ArgumentException(GlobalConstants.InvalidRecordType);
+            }
+
+            oldAmount = Math.Abs(oldAmount);
+
+            if (recordInputType == record.Type)
+            {
+                if (recordInputType == RecordType.Income)
+                {
+                    oldAmount *= -1;
+                }
+            }
+
+            if (recordInputType != record.Type)
+            {
+                if (recordInputType == RecordType.Expense)
+                {
+                    oldAmount *= -1;
+                }
+            }
+
+            await this.EditWalletAmountAsync(walletId, oldAmount);
+
+            if (recordInputType == RecordType.Expense)
+            {
+                newAmount = -1 * newAmount;
+            }
+
+            record.Description = description;
+            record.Amount = newAmount;
+            record.CreatedOn = createdOn;
+            record.Type = recordInputType;
+            record.CategoryId = categoryId;
+
+            await this.EditWalletAmountAsync(wallet.Id, newAmount);
+            this.dbContext.SaveChanges();
+
+            return GlobalConstants.RecordSuccessfullyUpdated;
+        }
+
+        public async Task<string> UpdateRecordWORKFINE(string recordId, int categoryId, int walletId, string description, decimal oldAmount,decimal newAmount, string type, DateTime modifiedOn)
         {
             newAmount = Math.Abs(newAmount);
             string newAmountAsString = newAmount.ToString("f2");

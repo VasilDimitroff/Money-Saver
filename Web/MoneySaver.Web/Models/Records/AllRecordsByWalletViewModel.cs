@@ -22,6 +22,8 @@ namespace MoneySaver.Web.Models.Records
 
         public string CreatedOn { get; set; }
 
+        public string ModifiedOn { get; set; }
+
         public string Currency { get; set; }
     }
 }

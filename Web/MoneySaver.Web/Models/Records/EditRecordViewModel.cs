@@ -9,5 +9,7 @@ namespace MoneySaver.Web.Models.Records
         public decimal OldAmount{ get; set; }
 
         public DateTime? ModifiedOn { get; set; }
+
+        public DateTime CreatedOn { get; set; }
     }
 }
