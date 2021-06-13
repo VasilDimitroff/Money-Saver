@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MoneySaver.Services.Data.Contracts;
-using MoneySaver.Web.Models.Categories;
-using MoneySaver.Web.Models.Records;
-using MoneySaver.Web.Models.Records.Enums;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MoneySaver.Web.Controllers
+﻿namespace MoneySaver.Web.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Mvc;
+    using MoneySaver.Services.Data.Contracts;
+    using MoneySaver.Web.Models.Categories;
+    using MoneySaver.Web.Models.Records;
+    using MoneySaver.Web.Models.Records.Enums;
+
     public class CategoriesController : Controller
     {
         private readonly ICategoriesService categoriesService;

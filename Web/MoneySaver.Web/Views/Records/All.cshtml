@@ -41,16 +41,17 @@
                             <th>Amount</th>
                             <th> Wallet</th>
                             <th>Category</th>
-                            <th>Actions</th>
+                            <th>Edit/Delete</th>
                             <!-- <th>Delete</th>-->
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var record in Model.Records)
                         {
-                            <tr class="card-shadow">
 
-                                <td><span class="badge badge-outline-primary float-left" data-toggle="tooltip" data-placement="bottom" title="Last modified date"><i class="fa fa-calendar" aria-hidden="true"></i></span>@record.CreatedOn</td>
+                        <tr class="card-shadow" onclick="window.location='/Records/Edit?id=@record.Id&walletId=@Model.WalletId'">
+                            <a href="">
+                                <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create date">@record.CreatedOn</td>
                                 <td style="width: 25%;">@record.Description</td>
                                 <td>
                                     @if (record.Type == RecordTypeInputModel.Expense)
@@ -115,16 +116,12 @@
 
                                 </td>
                                 <td>
-                                    <a href="/Records/Edit?recordId=@record.Id"><span class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Edit record"><i class="fa fa-edit fa-lg"></i></span></a>
-                                    &nbsp;
-                                    <a href="/Records/Delete?recordId=@record.Id"><span class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Delete record"><i class="fa fa-trash fa-lg"></i></span></a>
 
-                                    <!--<span class="btn btn-secondary btn-sm"><i class="fa fa-edit"></i> Edit</span>-->
+                                    <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
                                 </td>
-                                <!--   <td>
-                                <a href="/Records/Delete?recordId=@record.Id"><span class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>  Delete</span></a>
-                            </td>-->
-                            </tr>
+                            </a>
+                        </tr>
+                        
                         }
                     </tbody>
                 </table>
@@ -135,7 +132,7 @@
                         <span>There are no records containing search term <strong>"@Model.SearchTerm</strong>". Please try with other search terms.</span>
                     </div>
 
-                    <a href="javascript:history.back()"><button class="btn btn-primary">Back</button></a>
+                    <a class="btn btn-primary" href="javascript:history.back()">Back</a>
                 }
                 <!-- Pagination-->
                 <div class="d-flex justify-content-center pt-5">

@@ -1,10 +1,10 @@
 ﻿namespace MoneySaver.Web.Areas.Administration.Controllers
 {
-    using MoneySaver.Common;
-    using MoneySaver.Web.Controllers;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+
+    using MoneySaver.Common;
+    using MoneySaver.Web.Controllers;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     [Area("Administration")]

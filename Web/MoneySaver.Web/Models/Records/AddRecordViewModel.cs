@@ -6,8 +6,10 @@
     using MoneySaver.Web.Models.Records.Enums;
     using MoneySaver.Web.Models.Wallets;
 
-    public class AddRecordViewModel : WalletIdViewModel
+    public class AddRecordViewModel
     {
+        public int WalletId { get; set; }
+
         public int CategoryId { get; set; }
 
         public string Description { get; set; }

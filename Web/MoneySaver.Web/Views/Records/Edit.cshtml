@@ -3,18 +3,19 @@
 @using MoneySaver.Web.Models.Records
 @using MoneySaver.Web.ViewComponents
 @using System.Linq;
-@model AddRecordViewModel
+@using System.Globalization;
+@model EditRecordViewModel
 @{
-    this.ViewData["Title"] = "Add Record";
+    this.ViewData["Title"] = "Edit Record";
 }
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Add record</h4>
+            <h4 class="card-title">@ViewData["Title"]</h4>
             <p class="card-description">
-                Add Record to <strong>@Model.WalletName</strong>
+                Edit record from <strong>@Model.WalletName</strong>
             </p>
-            <form class="forms-sample" asp-controller="Records" asp-action="Add" method="post">
+            <form class="forms-sample" asp-controller="Records" asp-action="Edit" method="post">
                 <div class="form-group">
                     <label for="Category">Category</label>
                     <select asp-for="CategoryId"
@@ -36,20 +37,25 @@
                             }
                             else
                             {
-                                <option>@name</option>    
+                                <option>@name</option>
+
                             }
                         }
                     </select>
                 </div>
                 <div class="form-group">
                     <label asp-for="Amount">Amount</label>
-                    <input type="number" class="form-control" asp-for="Amount" placeholder="Amount" value="Enter amount">
+                    <input type="number" class="form-control" asp-for="Amount" placeholder="Amount" value="@Model.Amount">
                 </div>
+                <div class="form-group">
+                    <label asp-for="ModifiedOn">CreatedOn</label>
+                    <input type="date" class="form-control" asp-for="ModifiedOn" placeholder="ModifiedOn">
+                </div>
+                <input type="hidden" asp-for="@Model.Id" /></input>
                 <input type="hidden" asp-for="@Model.WalletId" /></input>
-                <button type="submit" class="btn btn-primary mr-2">
-                    Submit
-                </button>
-                 <a class="btn btn-light" href="javascript:history.back()" style="text-decoration: none;">Back</a>
+                <button type="submit" class="btn btn-primary mr-2">Save Changes</button>
+                <vc:delete-record record-id="@Model.Id"></vc:delete-record>
+                <a class="btn btn-light" href="javascript:history.back()" style="text-decoration: none;">Back</a>
             </form>
         </div>
     </div>

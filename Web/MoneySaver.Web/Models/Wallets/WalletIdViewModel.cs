@@ -4,7 +4,6 @@
 
     public class WalletIdViewModel
     {
-        [IsWalletExist]
         public int WalletId { get; set; }
     }
 }

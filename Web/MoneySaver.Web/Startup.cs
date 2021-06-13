@@ -2,17 +2,6 @@
 {
     using System.Reflection;
 
-    using MoneySaver.Data;
-    using MoneySaver.Data.Common;
-    using MoneySaver.Data.Common.Repositories;
-    using MoneySaver.Data.Models;
-    using MoneySaver.Data.Repositories;
-    using MoneySaver.Data.Seeding;
-    using MoneySaver.Services.Data;
-    using MoneySaver.Services.Mapping;
-    using MoneySaver.Services.Messaging;
-    using MoneySaver.Web.ViewModels;
-
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -21,7 +10,17 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using MoneySaver.Data;
+    using MoneySaver.Data.Common;
+    using MoneySaver.Data.Common.Repositories;
+    using MoneySaver.Data.Models;
+    using MoneySaver.Data.Repositories;
+    using MoneySaver.Data.Seeding;
+    using MoneySaver.Services.Data;
     using MoneySaver.Services.Data.Contracts;
+    using MoneySaver.Services.Mapping;
+    using MoneySaver.Services.Messaging;
+    using MoneySaver.Web.ViewModels;
 
     public class Startup
     {

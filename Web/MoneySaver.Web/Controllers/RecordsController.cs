@@ -131,29 +131,47 @@
         {
             var enumValueAsString = input.Type.ToString();
             await this.recordsService.AddAsync(input.CategoryId, input.Description, input.Amount, enumValueAsString);
-           //return this.RedirectToAction(nameof(this.All));
+           // return this.RedirectToAction(nameof(this.All));
             return this.RedirectToAction("All", new { walletId = input.WalletId });
         }
 
         // GET: RecordsController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(string id, int walletId)
         {
-            return View();
+            if (id == null)
+            {
+                this.RedirectToAction("All", new { walletId = walletId });
+            }
+
+            var recordDto = await this.recordsService.GetRecordByIdAsync(id, walletId);
+
+            EditRecordViewModel model = new EditRecordViewModel()
+            {
+                Id = recordDto.Id,
+                Description = recordDto.Description,
+                ModifiedOn = recordDto.ModifiedOn.HasValue ? recordDto.ModifiedOn.Value : null,
+                Type = Enum.Parse<RecordTypeInputModel>(recordDto.Type.ToString()),
+                WalletId = walletId,
+                Amount = recordDto.Amount,
+                WalletName = recordDto.WalletName,
+                CategoryId = recordDto.CategoryId,
+                Categories = recordDto.Categories.Select(c => new CategoryNameIdViewModel
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    WalletName = c.WalletName,
+                })
+                .ToList(),
+            };
+            return this.View(model);
         }
 
         // POST: RecordsController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(EditRecordInputModel input)
         {
-            try
-            {
-                return this.RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            await this.recordsService.UpdateRecord(input.Id, input.CategoryId, input.WalletId, input.Description, input.Amount, input.Type, input.ModifiedOn);
+            return this.RedirectToAction("All", new { walletId = input.WalletId });
         }
 
         // GET: RecordsController/Delete/5

@@ -4,7 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
+
     using MoneySaver.Common;
     using MoneySaver.Data;
     using MoneySaver.Data.Models;
@@ -39,7 +41,8 @@
                 throw new ArgumentException(GlobalConstants.InvalidCurrency);
             }
 
-            initialMoney = decimal.Round(initialMoney, 2);
+            string amountAsString = initialMoney.ToString("f2");
+            initialMoney = decimal.Parse(amountAsString);
 
             Wallet newWallet = new Wallet
             {
@@ -131,7 +134,7 @@
             return wallets;
         }
 
-        //TODO: ID WE HAVE BUDGETS, MUST DELETE THEM IN THIS METHOD!
+        // TODO: ID WE HAVE BUDGETS, MUST DELETE THEM IN THIS METHOD!
 
         public async Task<string> RemoveAsync(int walletId)
         {

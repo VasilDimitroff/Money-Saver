@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="~/vendors/css/vendor.bundle.addons.css">
     <link rel="stylesheet" href="~/css/vertical-layout-light/style.css">
-    <link rel="stylesheet" href="~/vendors/iconfonts/font-awesome/css/font-awesome.min.css" />
+    <!--<link rel="stylesheet" href="~/vendors/iconfonts/font-awesome/css/font-awesome.min.css" />-->
 
 
     <link rel="stylesheet" href="~/css/maps/vertical-layout-light/style.css.map">
@@ -56,7 +56,7 @@
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                     <span class="mdi mdi-menu"></span>
-                </button>  
+                </button>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item dropdown">
                         <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
@@ -645,34 +645,35 @@
             </div>
             <!-- page-body-wrapper ends -->
         </div>
-        <!-- container-scroller -->
-        <!-- plugins:js -->
-        <script src="~/vendors/js/vendor.bundle.base.js"></script>
-        <script src="~/vendors/js/vendor.bundle.addons.js"></script>
-        <!-- endinject -->
-        <!-- Plugin js for this page-->
-        <!-- End plugin js for this page-->
-        <!-- inject:js -->
-        <script src="~/js/off-canvas.js"></script>
-        <script src="~/js/hoverable-collapse.js"></script>
-        <script src="~/js/template.js"></script>
-        <script src="~/js/settings.js"></script>
-        <script src="~/js/todolist.js"></script>
-        <!-- endinject -->
-        <!-- Custom js for this page-->
-        <!-- End custom js for this page-->
-        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+    <script src="~/js/template.js"></script>
+    <script src="~/js/settings.js"></script>
+    <script src="~/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <!-- End custom js for this page-->
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
 
 
 
 
 
 
-        @await this.RenderSectionAsync("Scripts", required: false)
+    @await this.RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -11,6 +11,7 @@
     using MoneySaver.Data.Models;
     using MoneySaver.Data.Models.Enums;
     using MoneySaver.Services.Data.Contracts;
+    using MoneySaver.Services.Data.Models.Categories;
     using MoneySaver.Services.Data.Models.Records;
 
     public class RecordsService : IRecordsService
@@ -24,18 +25,18 @@
 
         public async Task<string> AddAsync(int categoryId, string description, decimal amount, string type)
         {
-            var category = await this.dbContext.Categories.FirstOrDefaultAsync(x => x.Id == categoryId);
-
-            bool isTypeParsed = Enum.TryParse<RecordType>(type, out RecordType recordType);
-
-            if (!isTypeParsed)
-            {
-                throw new ArgumentException(GlobalConstants.InvalidRecordType);
-            }
+            Category category = await this.GetCategoryByIdAsync(categoryId);
 
             if (category == null)
             {
                 throw new ArgumentException(GlobalConstants.UnexistingCategory);
+            }
+
+            RecordType recordType = this.ParseRecordType(type);
+
+            if (recordType == 0)
+            {
+                throw new ArgumentException(GlobalConstants.InvalidRecordType);
             }
 
             Wallet wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(x => x.Id == category.WalletId);
@@ -45,7 +46,9 @@
                 throw new ArgumentException(GlobalConstants.WalletNotExist);
             }
 
-            amount = decimal.Round(amount, 2);
+            amount = Math.Abs(amount);
+            string amountAsString = amount.ToString("f2");
+            amount = decimal.Parse(amountAsString);
 
             if (recordType == RecordType.Expense)
             {
@@ -202,20 +205,28 @@
             return GlobalConstants.SuccessfullyRemovedRecord;
         }
 
-        public async Task<RecordInfoDto> GetRecordById(string recordId)
+        public async Task<EditRecordInfoDto> GetRecordByIdAsync(string recordId, int walletId)
         {
-            RecordInfoDto record = await this.dbContext.Records
-                .Select(r => new RecordInfoDto
+            var allCategories = await this.dbContext.Categories
+                .Where(c => c.WalletId == walletId)
+                .ToListAsync();
+
+            EditRecordInfoDto record = await this.dbContext.Records
+                .Select(r => new EditRecordInfoDto
                 {
                     Id = r.Id,
                     Amount = r.Amount,
-                    Category = r.Category.Name,
                     CategoryId = r.CategoryId,
-                    CreatedOn = r.CreatedOn,
                     Description = r.Description,
-                    Type = r.Type.ToString(),
-                    Wallet = r.Category.Wallet.Name,
-                    Currency = r.Category.Wallet.Currency.Code,
+                    ModifiedOn = r.ModifiedOn.HasValue ? r.ModifiedOn : null,
+                    Type = r.Type,
+                    WalletName = r.Category.Wallet.Name,
+                    Categories = allCategories.Select(c => new CategoryBasicInfoDto
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                    })
+                    .ToList(),
                 })
                 .FirstOrDefaultAsync(r => r.Id == recordId);
 
@@ -225,6 +236,81 @@
             }
 
             return record;
+        }
+
+        //OLD AMOUNT PROPERTY E RE6ENIETO !!!!! TO SE PODAVA NA PARVATA PROMQNA NA WALLETA KATO AMOUNT
+        //POSLE NOVO PROPERTY => NEW AMOUNT KOETO SE SETVA NA VE4E NOVOSAZDADENIQ ZAPIS
+        //TO DO: EDIT LOGIC - IF USER CHANGE TYPE OF RECORD, MUSC INCRESE/DECREASE WALLET; OR NOT CHANGE - DO NOTHING
+        public async Task<string> UpdateRecord(string recordId, int categoryId, int walletId, string description, decimal amount, string type, DateTime modifiedOn)
+        {
+            amount = Math.Abs(amount);
+            string amountAsString = amount.ToString("f2");
+            amount = decimal.Parse(amountAsString);
+
+            Wallet wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(x => x.Id == walletId);
+
+            if (wallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.WalletNotExist);
+            }
+
+            Record record = await this.dbContext.Records.FirstOrDefaultAsync(r => r.Id == recordId);
+
+            if (record == null)
+            {
+                throw new ArgumentException(GlobalConstants.RecordNotExist);
+            }
+
+            Category category = await this.GetCategoryByIdAsync(categoryId);
+
+            if (category == null)
+            {
+                throw new ArgumentException(GlobalConstants.UnexistingCategory);
+            }
+
+            RecordType recordInputType = this.ParseRecordType(type);
+
+            if (recordInputType == 0)
+            {
+                throw new ArgumentException(GlobalConstants.InvalidRecordType);
+            }
+
+            string currentRecordId = record.Id;
+            DateTime currentRecordCreatedDate = record.CreatedOn;
+
+            decimal amountForEdit = amount;
+
+            if (recordInputType == RecordType.Income)
+            {
+                amountForEdit *= -1;
+            }
+
+            await this.EditWalletAmountAsync(wallet.Id, amountForEdit);
+
+            await this.RemoveAsync(recordId);
+
+            if (recordInputType == RecordType.Expense)
+            {
+                amount = (-1) * amount;
+            }
+
+            await this.EditWalletAmountAsync(wallet.Id, amount);
+
+            Record newRecord = new Record
+            {
+                Id = currentRecordId,
+                CreatedOn = currentRecordCreatedDate,
+                ModifiedOn = modifiedOn,
+                Type = recordInputType,
+                Description = description,
+                CategoryId = categoryId,
+                Amount = amount,
+            };
+
+            await this.dbContext.Records.AddAsync(newRecord);
+            this.dbContext.SaveChanges();
+
+            return GlobalConstants.RecordSuccessfullyUpdated;
         }
 
         private async Task EditWalletAmountAsync(int walletId, decimal amount)
@@ -240,6 +326,25 @@
             wallet.MoneyAmount += amount;
 
             await this.dbContext.SaveChangesAsync();
+        }
+
+        private RecordType ParseRecordType(string type)
+        {
+            bool isTypeParsed = Enum.TryParse<RecordType>(type, out RecordType recordType);
+
+            if (!isTypeParsed)
+            {
+                return 0;
+            }
+
+            return recordType;
+        }
+
+        private async Task<Category> GetCategoryByIdAsync(int categoryId)
+        {
+            var category = await this.dbContext.Categories.FirstOrDefaultAsync(x => x.Id == categoryId);
+
+            return category;
         }
     }
 }

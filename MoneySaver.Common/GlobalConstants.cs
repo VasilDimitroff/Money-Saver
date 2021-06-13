@@ -12,7 +12,9 @@
 
         public const string InvalidRecordType = "Invalid Record Type";
 
-        public const string RecordSuccessfullyAdded = "The record is successfully ddded";
+        public const string RecordSuccessfullyAdded = "The record is successfully added";
+
+        public const string RecordSuccessfullyUpdated = "The record is successfully updated";
 
         public const string RecordNotExist = "Record with this Id does not exist";
 

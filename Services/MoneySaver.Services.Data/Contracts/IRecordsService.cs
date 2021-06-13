@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using MoneySaver.Services.Data.Models.Categories;
     using MoneySaver.Services.Data.Models.Records;
 
     public interface IRecordsService
@@ -18,6 +18,10 @@
 
         public Task<IEnumerable<RecordInfoDto>> GetRecordsByWalletAsync(int walletId);
 
-        public Task<RecordInfoDto> GetRecordById(string recordId);
+        public Task<EditRecordInfoDto> GetRecordByIdAsync(string recordId, int walletId);
+
+        public Task<string> UpdateRecord(string recordId, int categoryId, int walletId, string description, decimal amount, string type, DateTime modifiedOn);
+
+
     }
 }
