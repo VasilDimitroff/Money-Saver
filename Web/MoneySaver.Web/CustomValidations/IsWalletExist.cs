@@ -4,7 +4,7 @@
     using System.Linq;
 
     using MoneySaver.Data;
-    using MoneySaver.Web.Models.Wallets;
+    using MoneySaver.Web.ViewModels.Wallets;
 
     public class IsWalletExist : ValidationAttribute
     {

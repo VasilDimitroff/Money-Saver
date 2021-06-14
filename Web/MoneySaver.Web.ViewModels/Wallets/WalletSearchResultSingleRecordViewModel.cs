@@ -1,8 +1,8 @@
 ﻿using System;
 
-using MoneySaver.Web.Models.Records.Enums;
+using MoneySaver.Web.ViewModels.Records.Enums;
 
-namespace MoneySaver.Web.Models.Wallets
+namespace MoneySaver.Web.ViewModels.Wallets
 {
     public class WalletSearchResultSingleRecordViewModel
     {

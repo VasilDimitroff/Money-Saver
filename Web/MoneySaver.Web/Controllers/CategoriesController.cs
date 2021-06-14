@@ -8,9 +8,9 @@
 
     using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Services.Data.Contracts;
-    using MoneySaver.Web.Models.Categories;
-    using MoneySaver.Web.Models.Records;
-    using MoneySaver.Web.Models.Records.Enums;
+    using MoneySaver.Web.ViewModels.Categories;
+    using MoneySaver.Web.ViewModels.Records;
+    using MoneySaver.Web.ViewModels.Records.Enums;
 
     public class CategoriesController : Controller
     {

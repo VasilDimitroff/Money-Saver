@@ -1,7 +1,7 @@
 ﻿namespace MoneySaver.Web.ViewComponents
 {
     using Microsoft.AspNetCore.Mvc;
-    using MoneySaver.Web.Models.ViewComponents;
+    using MoneySaver.Web.ViewModels.ViewComponents;
 
     public class AddRecordViewComponent : ViewComponent
     {

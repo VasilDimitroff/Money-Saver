@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MoneySaver.Web.Models.Records
+namespace MoneySaver.Web.ViewModels.Records
 {
     public class EditRecordViewModel : AddRecordViewModel
     {

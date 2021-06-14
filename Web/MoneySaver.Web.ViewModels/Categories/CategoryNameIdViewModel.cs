@@ -1,4 +1,4 @@
-﻿namespace MoneySaver.Web.Models.Categories
+﻿namespace MoneySaver.Web.ViewModels.Categories
 {
     public class CategoryNameIdViewModel
     {

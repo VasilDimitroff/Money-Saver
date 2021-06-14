@@ -1,8 +1,8 @@
-﻿using MoneySaver.Web.Models.Records;
+﻿using MoneySaver.Web.ViewModels.Records;
 using System;
 using System.Collections.Generic;
 
-namespace MoneySaver.Web.Models.Categories
+namespace MoneySaver.Web.ViewModels.Categories
 {
     public class CategoryRecordsViewModel
     {

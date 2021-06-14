@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MoneySaver.Web.Models.ViewComponents
+namespace MoneySaver.Web.ViewModels.ViewComponents
 {
     public class DeleteRecordComponentViewModel
     {

@@ -1,9 +1,9 @@
-﻿namespace MoneySaver.Web.Models.Wallets
+﻿namespace MoneySaver.Web.ViewModels.Wallets
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using MoneySaver.Web.Models.Categories;
+    using MoneySaver.Web.ViewModels.Categories;
 
     public class StatisticsWalletViewModel
     {

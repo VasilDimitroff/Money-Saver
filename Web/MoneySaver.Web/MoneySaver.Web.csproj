@@ -39,4 +39,8 @@
     <ProjectReference Include="..\MoneySaver.Web.Infrastructure\MoneySaver.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\MoneySaver.Web.ViewModels\MoneySaver.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
 </Project>

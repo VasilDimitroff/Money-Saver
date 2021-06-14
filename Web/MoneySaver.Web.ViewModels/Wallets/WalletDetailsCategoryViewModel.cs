@@ -1,4 +1,4 @@
-﻿namespace MoneySaver.Web.Models.Wallets
+﻿namespace MoneySaver.Web.ViewModels.Wallets
 {
     public class WalletDetailsCategoryViewModel
     {

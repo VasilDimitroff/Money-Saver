@@ -1,4 +1,4 @@
-﻿namespace MoneySaver.Web.Models.ViewComponents
+﻿namespace MoneySaver.Web.ViewModels.ViewComponents
 {
     public class AddRecordComponentViewModel
     {

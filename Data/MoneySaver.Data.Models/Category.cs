@@ -1,8 +1,9 @@
-﻿using MoneySaver.Data.Common.Models;
-using System.Collections.Generic;
-
-namespace MoneySaver.Data.Models
+﻿namespace MoneySaver.Data.Models
 {
+    using System.Collections.Generic;
+
+    using MoneySaver.Data.Common.Models;
+
     public class Category : BaseDeletableModel<int>
     {
         public Category()

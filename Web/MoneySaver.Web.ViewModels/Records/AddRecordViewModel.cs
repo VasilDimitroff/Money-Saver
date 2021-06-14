@@ -1,10 +1,9 @@
-﻿namespace MoneySaver.Web.Models.Records
+﻿namespace MoneySaver.Web.ViewModels.Records
 {
     using System.Collections.Generic;
-    using MoneySaver.Web.Infrastructure.CustomValidations;
-    using MoneySaver.Web.Models.Categories;
-    using MoneySaver.Web.Models.Records.Enums;
-    using MoneySaver.Web.Models.Wallets;
+    using MoneySaver.Web.ViewModels.Categories;
+    using MoneySaver.Web.ViewModels.Wallets;
+    using MoneySaver.Web.ViewModels.Records.Enums;
 
     public class AddRecordViewModel
     {

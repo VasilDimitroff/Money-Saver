@@ -1,4 +1,4 @@
-﻿namespace MoneySaver.Web.Models.Records.Enums
+﻿namespace MoneySaver.Web.ViewModels.Records.Enums
 {
     public enum RecordTypeInputModel
     {

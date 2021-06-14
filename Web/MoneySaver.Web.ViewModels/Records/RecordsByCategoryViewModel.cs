@@ -1,6 +1,6 @@
-﻿namespace MoneySaver.Web.Models.Records
+﻿namespace MoneySaver.Web.ViewModels.Records
 {
-    using MoneySaver.Web.Models.Records.Enums;
+    using MoneySaver.Web.ViewModels.Records.Enums;
 
     public class RecordsByCategoryViewModel
     {

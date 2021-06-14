@@ -3,7 +3,7 @@
     using System;
 
     using Microsoft.AspNetCore.Mvc;
-    using MoneySaver.Web.Models.ViewComponents;
+    using MoneySaver.Web.ViewModels.ViewComponents;
 
     public class GetRecordsByDateViewComponent : ViewComponent
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MoneySaver.Web.Models.Records
+namespace MoneySaver.Web.ViewModels.Wallets
 {
-    public class EditRecordInputModel
+    public class WalletDetailsRecordViewModel
     {
         public string Id { get; set; }
 
@@ -13,14 +13,10 @@ namespace MoneySaver.Web.Models.Records
 
         public int CategoryId { get; set; }
 
-        public int WalletId { get; set; }
-
-        public string Type { get; set; }
-
-        public decimal OldAmount { get; set; }
+        public string CategoryName { get; set; }
 
         public decimal Amount { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public string CreatedOn { get; set; }
     }
 }
