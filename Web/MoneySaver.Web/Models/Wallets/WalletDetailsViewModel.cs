@@ -1,5 +1,6 @@
 ﻿namespace MoneySaver.Web.Models.Wallets
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -16,6 +17,15 @@
         public decimal TotalWalletIncomes => this.Categories.Sum(c => c.TotalIncomes);
 
         public decimal CurrentBalance { get; set; }
+
+        public decimal TotalWalletBalanceLast30Days
+            => this.TotalWalletIncomesLast30Days - Math.Abs(this.TotalWalletExpensesLast30Days);
+
+        public decimal TotalWalletExpensesLast30Days { get; set; }
+
+        public decimal TotalWalletIncomesLast30Days { get; set; }
+
+        public int TotalRecordsCountLast30Days { get; set; }
 
         public IEnumerable<WalletDetailsCategoryViewModel> Categories { get; set; }
 

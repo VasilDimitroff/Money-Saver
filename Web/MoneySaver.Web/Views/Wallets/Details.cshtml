@@ -3,88 +3,84 @@
 @model WalletDetailsViewModel
 @{
     this.ViewData["Title"] = "Details - " + Model.WalletName;
-    // int counter = 0;
-    // string badgeClassName = string.Empty;
+     int counter = 0;
+    string badgeClassName = "success";
+    //string balanceMessage = "Note! Your balance is negative!";
 }
-<div class="main-panel">
-    <div class="content-wrapper">
+<div class="row">
+    <div class="col-12">
+        <h3 class="text-dark text-center">@Model.WalletName - Overview</h3>
+        <br/>
         <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Balance : <span class="h2 text-info ml-2">@Model.CurrentBalance</span></h4>
-                                <div class="d-flex justify-content-between">
-                                    <p class="text-muted">Avg. Session</p>
-                                    <p class="text-muted">max: 40</p>
-                                </div>
-                                <div class="progress progress-md">
-                                    <div class="progress-bar bg-info w-100" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
+            <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card text-center">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Balance : <span class="h3 text-info ml-2"><div class="pt-2">@Model.CurrentBalance @Model.Currency</div></span></h4>
+                        <div class="d-flex justify-content-between">
+                            <p class="text-muted">Last 30 days:</p>
+                            <p class="text-info">@Model.TotalWalletBalanceLast30Days</p>
+                        </div>
+                        <div class="progress progress-md">
+                            <div class="progress-bar bg-info w-100" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Total Incomes: <span class="h2 text-success ml-2"> @Model.TotalWalletIncomes</span></h4>
-                                <div class="d-flex justify-content-between">
-                                    <p class="text-muted">Avg. Session</p>
-                                    <p class="text-muted">max: 120</p>
-                                </div>
-                                <div class="progress progress-md">
-                                    <div class="progress-bar bg-success w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card text-center">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Incomes: <span class="h3 text-success ml-2"><div class="pt-2">@Model.TotalWalletIncomes @Model.Currency</div></span></h4>
+                        <div class="d-flex justify-content-between">
+                            <p class="text-muted">Last 30 days:</p>
+                            <p class="text-success">@Model.TotalWalletIncomesLast30Days</p>
+                        </div>
+                        <div class="progress progress-md">
+                            <div class="progress-bar bg-success w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Total Expenses: <span class="h2 text-danger ml-2"> @Model.TotalWalletExpenses</span></h4>
-                                <div class="d-flex justify-content-between">
-                                    <p class="text-muted">Avg. Session</p>
-                                    <p class="text-muted">max: 54</p>
-                                </div>
-                                <div class="progress progress-md">
-                                    <div class="progress-bar bg-danger w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card text-center">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Expenses: <span class="h3 text-danger ml-2"><div class="pt-2">@Model.TotalWalletExpenses @Model.Currency</div></span></h4>
+                        <div class="d-flex justify-content-between">
+                            <p class="text-muted">Last 30 days:</p>
+                            <p class="text-danger">@Model.TotalWalletExpensesLast30Days</p>
+                        </div>
+                        <div class="progress progress-md">
+                            <div class="progress-bar bg-danger w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Total Records: <span class="h2 text-warning ml-2"> @Model.Records.Count()</span></h4>
-                                <div class="d-flex justify-content-between">
-                                    <p class="text-muted">Avg. Session</p>
-                                    <p class="text-muted">max: 143</p>
-                                </div>
-                                <div class="progress progress-md">
-                                    <div class="progress-bar bg-warning w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card text-center">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Records: <span class="h3 text-warning ml-2"><div class="pt-2">@Model.Records.Count()</div></span></h4>
+                        <div class="d-flex justify-content-between">
+                            <p class="text-muted">Last 30 days:</p>
+                            <p class="text-muted">@Model.TotalRecordsCountLast30Days</p>
+                        </div>
+                        <div class="progress progress-md">
+                            <div class="progress-bar bg-warning w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
+    </div>
+</div>
         <div class="col-md-6 grid-margin grid-margin-md-0 stretch-card float-left">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tickets</h4>
+                    <h4 class="card-title">Categories info</h4>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table text-center">
                             <thead>
                                 <tr>
                                     <th class="pt-1 pl-0">
                                         Category
-                                    </th>
-                                    <th class="pt-1">
-                                        Records
                                     </th>
                                     <th class="pt-1">
                                         Incomes
@@ -98,97 +94,82 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="py-1 pl-0">
-                                        <div class="d-flex align-items-center">
-                                            <img src="https://via.placeholder.com/36x36" alt="profile" />
-                                            <div class="ml-3">
-                                                <p class="mb-2">Sophia Brown</p>
-                                                <p class="mb-0 text-muted text-small">Product Designer</p>
+                                @foreach (var category in Model.Categories.Take(10))
+                                {
+                                    <tr class="card-shadow" onclick="window.location = '/Category/Edit/@category.CategoryId'">
+                                        <td class="py-1 pl-0">
+                                            <div class="d-flex align-items-center"> 
+                                                <div class="ml-3">
+                                                    @if (counter % 5 == 0)
+                                                    {
+                                                        badgeClassName = "warning";
+                                                    }
+
+                                                    else if (counter % 3 == 0)
+                                                    {
+                                                        badgeClassName = "success";
+                                                    }
+
+                                                    else if (counter % 2 == 0)
+                                                    {
+                                                        badgeClassName = "primary";
+                                                    }
+
+                                                    else if (counter % 2 != 1)
+                                                    {
+                                                        badgeClassName = "info";
+                                                    }
+
+                                                    else
+                                                    {
+                                                        badgeClassName = "danger";
+                                                    }
+                                                    <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@badgeClassName">@category.CategoryName</p></a>
+                                                    <p class="mb-0 text-muted text-small">@category.RecordsCount records in category</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        Web App
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-success">Low</label>
-                                    </td>
-                                    <td>
-                                        Web App
-                                    </td>
-                                    <td>
-                                        Web App
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="py-1 pl-0">
-                                        <div class="d-flex align-items-center">
-                                            <img src="https://via.placeholder.com/36x36" alt="profile" />
-                                            <div class="ml-3">
-                                                <p class="mb-2">Rachel Newton</p>
-                                                <p class="mb-0 text-muted text-small">Mobile Developer</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        Mobile App
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-warning">Medium</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="py-1 pl-0">
-                                        <div class="d-flex align-items-center">
-                                            <img src="https://via.placeholder.com/36x36" alt="profile" />
-                                            <div class="ml-3">
-                                                <p class="mb-2">Marcus Stevens</p>
-                                                <p class="mb-0 text-muted text-small">Core Developer</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        Plugin
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-danger">High</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="py-1 pl-0">
-                                        <div class="d-flex align-items-center">
-                                            <img src="https://via.placeholder.com/36x36" alt="profile" />
-                                            <div class="ml-3">
-                                                <p class="mb-2">Theresa Becker</p>
-                                                <p class="mb-0 text-muted text-small">Product Designer</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        Web App
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-success">Low</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="py-1 pl-0">
-                                        <div class="d-flex align-items-center">
-                                            <img src="https://via.placeholder.com/36x36" alt="profile" />
-                                            <div class="ml-3">
-                                                <p class="mb-2">Jessie Ortiz</p>
-                                                <p class="mb-0 text-muted text-small">Web Developer</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        SAAS App
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-danger">High</label>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td>
+                                            @if (category.TotalIncomes < 0)
+                                            {
+                                                badgeClassName = "danger";
+                                            }
+
+                                            else if (category.TotalIncomes == 0)
+                                            {
+                                                badgeClassName = "secondary";
+                                            }
+
+                                            else
+                                            {
+                                                badgeClassName = "success";
+                                            }
+                                            <p class="text-@badgeClassName font-weight-bold">@category.TotalIncomes @Model.Currency</p>
+                                        </td>
+                                        <td>
+                                            @if (category.TotalExpenses < 0)
+                                            {
+                                                badgeClassName = "danger";
+                                            }
+
+                                            else if (category.TotalExpenses == 0)
+                                            {
+                                                badgeClassName = "secondary";
+                                            }
+
+                                            else
+                                            {
+                                                badgeClassName = "success";
+                                            }
+                                            <p class="text-@badgeClassName font-weight-bold">@category.TotalExpenses @Model.Currency</p>
+                                        </td>
+                                        <td>
+                                            <a href="/Category/Edit/@category.CategoryId"><span class="btn btn-outline-info btn-sm btn-icon-text" data-toggle="tooltip" data-placement="bottom" title="Edit record"><i class="mdi mdi-pencil btn-icon-prepend"></i>Edit</span></a>
+                                        </td>
+                                    </tr>
+                                    
+                                     counter = counter + 1;  
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -199,9 +180,9 @@
         <div class="col-md-6 grid-margin grid-margin-md-0 stretch-card float-right">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tickets</h4>
+                    <h4 class="card-title">Last 10 records</h4>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table text-center">
                             <thead>
                                 <tr>
                                     <th class="pt-1">
@@ -222,82 +203,75 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <label class="badge badge-success">Low</label>  
-                                        </div>
-                                    </td>
-                                    <td>
-                                        Web App
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-success">Low</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <label class="badge badge-success">Low</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        Mobile App
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-warning">Medium</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <label class="badge badge-success">Low</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        Plugin
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-danger">High</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <label class="badge badge-success">Low</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        Web App
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-success">Low</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <label class="badge badge-success">Low</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        SAAS App
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-danger">High</label>
-                                    </td>
-                                </tr>
+                                @foreach (var record in Model.Records.Take(10))
+                                {
+                                    <tr class="card-shadow" onclick="window.location = '/Records/Edit/@record.Id'">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Last added on"> @record.CreatedOn</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @if (record.Description.Length > 18)
+                                            {
+                                                string descriptionExcerpt = record.Description.Substring(0, 18) + "...";
+                                                record.Description = descriptionExcerpt;
+                                             }
+
+                                            @record.Description
+                                        </td>
+                                        <td>
+                                            @if (record.Amount < 0)
+                                            {
+                                                badgeClassName = "danger";
+                                            }
+
+                                            else if (record.Amount == 0)
+                                            {
+                                                badgeClassName = "secondary";
+                                            }
+
+                                            else
+                                            {
+                                                badgeClassName = "success";
+                                            }
+                                            <p class="text-@badgeClassName font-weight-bold">@record.Amount @Model.Currency</p>
+                                        </td>
+                                        <td><a href="/Categories/Details/@record.CategoryId"><p class="mb-2 badge badge-@badgeClassName">@record.CategoryName</p></a></td>
+                                        <td> <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record></td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
+                        <br/>
+
+                            <a href="/Wallets/Records/@Model.WalletId" class="btn btn-sm btn-icon-text text-center col-md-2 btn-outline-info">View more</a>
+
+                    </div>  
                     </div>
-                </div>
             </div>
         </div>
-    </div>
-    </div>
 
 
 
     @section Scripts
     {
+        <script>
+            $(document).ready(function () {
+                // executes when HTML-Document is loaded and DOM is ready
+                console.log("document is ready");
+
+
+                $(".card-shadow").hover(
+                    function () {
+                        $(this).addClass('shadow-sm').css('cursor', 'pointer');
+                    }, function () {
+                        $(this).removeClass('shadow-sm');
+                    }
+                );
+
+                // document ready
+            });
+
+        </script>
     }

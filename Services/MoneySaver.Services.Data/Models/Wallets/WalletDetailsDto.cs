@@ -17,6 +17,12 @@
 
         public decimal CurrentBalance { get; set; }
 
+        public decimal TotalWalletExpensesLast30Days { get; set; }
+
+        public decimal TotalWalletIncomesLast30Days { get; set; }
+
+        public int TotalRecordsCountLast30Days { get; set; }
+
         public IEnumerable<WalletDetailsCategoryDto> Categories { get; set; }
 
         public IEnumerable<WalletDetailsRecordDto> Records { get; set; }

@@ -136,6 +136,9 @@
                 CurrentBalance = dtoResult.CurrentBalance,
                 WalletId = dtoResult.WalletId,
                 WalletName = dtoResult.WalletName,
+                TotalWalletExpensesLast30Days = dtoResult.TotalWalletExpensesLast30Days,
+                TotalWalletIncomesLast30Days = dtoResult.TotalWalletIncomesLast30Days,
+                TotalRecordsCountLast30Days = dtoResult.TotalRecordsCountLast30Days,
                 Categories = dtoResult.Categories.Select(c => new WalletDetailsCategoryViewModel
                 {
                     CategoryId = c.CategoryId,
@@ -144,13 +147,15 @@
                     TotalExpenses = c.TotalExpenses,
                     TotalIncomes = c.TotalIncomes,
                 }),
-                Records = dtoResult.Records.Select(r => new WalletDetailsRecordViewModel
+                Records = dtoResult.Records
+                .OrderByDescending(r => r.CreatedOn)
+                .Select(r => new WalletDetailsRecordViewModel
                 {
                     CategoryId = r.CategoryId,
                     CategoryName = r.CategoryName,
                     Amount = r.Amount,
-                    CreatedOn =r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
-                    Description =r.Description,
+                    CreatedOn = r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
+                    Description = r.Description,
                     Id = r.Id,
                 }),
             };

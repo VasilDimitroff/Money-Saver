@@ -14,6 +14,5 @@
         public Task<string> RemoveAsync(int categoryId);
 
         public Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId);
-
     }
 }

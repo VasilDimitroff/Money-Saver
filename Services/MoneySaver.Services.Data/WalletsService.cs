@@ -190,6 +190,22 @@
                 })
                 .FirstOrDefaultAsync();
 
+            decimal totalWalletExpensesLast30days = this.dbContext.Records
+                .Where(r => r.Category.WalletId == walletId && r.Type == RecordType.Expense && r.CreatedOn <= DateTime.UtcNow && r.CreatedOn >= DateTime.UtcNow.AddDays(-30))
+                .Sum(r => r.Amount);
+
+            decimal totalWalletIncomesLast30days = this.dbContext.Records
+               .Where(r => r.Category.WalletId == walletId && r.Type == RecordType.Income && r.CreatedOn <= DateTime.UtcNow && r.CreatedOn >= DateTime.UtcNow.AddDays(-30))
+               .Sum(r => r.Amount);
+
+            int totalRecordsCountLast30Days = this.dbContext.Records
+                .Where(r => r.Category.WalletId == walletId && r.CreatedOn <= DateTime.UtcNow && r.CreatedOn >= DateTime.UtcNow.AddDays(-30))
+                .Count();
+
+            targetWallet.TotalRecordsCountLast30Days = totalRecordsCountLast30Days;
+            targetWallet.TotalWalletExpensesLast30Days = totalWalletExpensesLast30days;
+            targetWallet.TotalWalletIncomesLast30Days = totalWalletIncomesLast30days;
+
             targetWallet.Records = await this.dbContext.Records
                 .Where(r => r.Category.WalletId == walletId)
                 .Select(r => new WalletDetailsRecordDto
