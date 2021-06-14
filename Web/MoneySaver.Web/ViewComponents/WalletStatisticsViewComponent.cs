@@ -5,10 +5,10 @@
 
     public class WalletStatisticsViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(int walletId)
+        public IViewComponentResult Invoke(int id)
         {
             WalletStatisticsComponentViewModel viewModel = new WalletStatisticsComponentViewModel();
-            viewModel.WalletId = walletId;
+            viewModel.Id = id;
             return this.View(viewModel);
         }
     }

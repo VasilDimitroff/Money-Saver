@@ -4,6 +4,6 @@
     {
         public string SearchTerm { get; set; }
 
-        public int WalletId { get; set; }
+        public int Id { get; set; }
     }
 }

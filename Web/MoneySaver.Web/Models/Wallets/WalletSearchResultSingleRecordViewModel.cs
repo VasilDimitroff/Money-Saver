@@ -2,9 +2,9 @@
 
 using MoneySaver.Web.Models.Records.Enums;
 
-namespace MoneySaver.Web.Models.Records
+namespace MoneySaver.Web.Models.Wallets
 {
-    public class AllRecordsByWalletViewModel
+    public class WalletSearchResultSingleRecordViewModel
     {
         public string Id { get; set; }
 

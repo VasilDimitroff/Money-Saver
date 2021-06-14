@@ -14,6 +14,7 @@
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Services.Data.Models;
     using MoneySaver.Services.Data.Models.Categories;
+    using MoneySaver.Services.Data.Models.Records;
     using MoneySaver.Services.Data.Models.Wallets;
 
     public class WalletsService : IWalletsService
@@ -199,6 +200,27 @@
                 .ToListAsync();
 
             return categories;
+        }
+
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId)
+        {
+            var records = await this.dbContext.Records
+                 .Where(r => r.CreatedOn >= startDate && r.CreatedOn <= endDate && r.Category.WalletId == walletId)
+                 .Select(r => new RecordInfoDto
+                 {
+                     Id = r.Id,
+                     Amount = (r.Type == RecordType.Income) ? r.Amount : Math.Abs(r.Amount) * (-1),
+                     Category = r.Category.Name,
+                     CategoryId = r.CategoryId,
+                     CreatedOn = r.CreatedOn,
+                     Description = r.Description,
+                     Type = r.Type.ToString(),
+                     Wallet = r.Category.Wallet.Name,
+                     Currency = r.Category.Wallet.Currency.Code,
+                 })
+                 .ToListAsync();
+
+            return records;
         }
 
         private async Task<Wallet> GetWalletAsync(string userId, string walletName)

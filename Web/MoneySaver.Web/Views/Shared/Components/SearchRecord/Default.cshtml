@@ -1,8 +1,8 @@
 ﻿@model MoneySaver.Web.Models.ViewComponents.SearchRecordComponentViewModel
 
-<form method="get" asp-controller="Records" asp-action="Search">
+<form method="get" asp-controller="Wallets" asp-action="Search">
     <span style="float: left;"><input type="text" class="form-control" asp-for="SearchTerm" asp-controller="Records" asp-action="Search" placeholder="Enter keyword"></span>
-    <input type="hidden" class="form-control" asp-for="WalletId">
+    <input type="hidden" class="form-control" asp-for="Id">
     &nbsp;
     <input class="btn btn-primary btn-sm" type="submit" value="Search" />
 </form>

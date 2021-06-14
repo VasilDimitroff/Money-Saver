@@ -1,9 +1,10 @@
 ﻿namespace MoneySaver.Services.Data.Contracts
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using MoneySaver.Services.Data.Models;
     using MoneySaver.Services.Data.Models.Categories;
+    using MoneySaver.Services.Data.Models.Records;
     using MoneySaver.Services.Data.Models.Wallets;
 
     public interface IWalletsService
@@ -21,5 +22,7 @@
         public Task<int> GetWalletIdByRecordIdAsync(string recordId);
 
         public Task<IEnumerable<CategoryBasicInfoDto>> GetWalletCategoriesAsync(int walletId);
+
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId);
     }
 }

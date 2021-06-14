@@ -12,8 +12,6 @@
 
         public Task<string> RemoveAsync(string recordId);
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId);
-
         public Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int walletId);
 
         public Task<IEnumerable<RecordInfoDto>> GetRecordsByWalletAsync(int walletId);

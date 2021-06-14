@@ -7,12 +7,12 @@
 
     public class GetRecordsByDateViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(DateTime startDate, DateTime endDate, int walletId)
+        public IViewComponentResult Invoke(DateTime startDate, DateTime endDate, int id)
         {
             GetRecordsByDateComponentViewModel viewModel = new GetRecordsByDateComponentViewModel();
             viewModel.StartDate = startDate;
             viewModel.EndDate = endDate;
-            viewModel.WalletId = walletId;
+            viewModel.Id = id;
             viewModel.DefaultStartDate = DateTime.UtcNow;
             viewModel.DefaultEndDate = DateTime.UtcNow;
 

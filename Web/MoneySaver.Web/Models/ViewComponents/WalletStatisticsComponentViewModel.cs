@@ -2,6 +2,6 @@
 {
     public class WalletStatisticsComponentViewModel
     {
-        public int WalletId { get; set; }
+        public int Id { get; set; }
     }
 }

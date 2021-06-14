@@ -1,8 +1,8 @@
-﻿@using MoneySaver.Web.Models.Records
+﻿@using MoneySaver.Web.Models.Wallets
 @using System.Globalization
 @using MoneySaver.Web.Models.Records.Enums
 
-@model RecordsWithWalletIdViewModel
+@model WalletSearchResultViewModel
 @{
     this.ViewData["Title"] = "All Records - " + Model.Wallet;
     int counter = 0;
@@ -14,53 +14,48 @@
         <h4 class="card-title">@Model.Wallet - All Records</h4>
         <div class="row pb-5">
             <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
-            <div class="btn-group mr-2">
-                <button type="button" class="btn btn-light"><i class="mdi mdi-alert-circle-outline"></i></button>
-                <button type="button" class="btn btn-light"><i class="mdi mdi-delete-empty"></i></button>
+            <vc:wallet-statistics id="@Model.WalletId"></vc:wallet-statistics>
+            <span class="btn-group ml-auto pt-1 mr-4 d-md-block">Sort By:</span>
+            <div class="btn-group mr-2 border-0 d-none d-md-block pl-0">
+                <vc:get-records-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" id="@Model.WalletId"></vc:get-records-by-date>
             </div>
-            <div class="btn-group mr-2">
-                <button type="button" class="btn btn-light"><i class="mdi mdi-printer"></i></button>
-            </div>
-            <div class="btn-group ml-auto mr-2 border-0 d-none d-md-block">
-             <vc:search-record search-term="@Model.SearchTerm" wallet-id="@Model.WalletId"></vc:search-record>
-
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-light"><i class="mdi mdi-cloud"></i></button>
-                <button type="button" class="btn btn-light"><i class="mdi mdi-dots-vertical"></i></button>
+            <div class="btn-group ml-4 mr-2 border-0 d-none d-md-block">
+                <vc:search-record search-term="@Model.SearchTerm" wallet-id="@Model.WalletId"></vc:search-record>
             </div>
         </div>
         <div class="col-12">
             <div class="table-responsive">
-                <table id="order-listing" class="table">
+                <table id="order-listing" class="table text-center">
                     <thead>
                         <tr>
-                            <th>Added On</th>
+                            <th>Date</th>
                             <th>Description</th>
                             <th>Type</th>
                             <th>Amount</th>
                             <th> Wallet</th>
                             <th>Category</th>
-                            <th>Actions</th>
+                            <th>Edit/Delete</th>
                             <!-- <th>Delete</th>-->
                         </tr>
                     </thead>
                     <tbody>
-                            @foreach (var record in Model.Records)
-                            {
-                                <tr class="card-shadow">
-                                    <td>@record.CreatedOn</td>
+                        @foreach (var record in Model.Records)
+                        {
+
+                            <tr class="card-shadow" onclick="window.location='/Records/Edit?id=@record.Id&walletId=@Model.WalletId'">
+                                <a href="">
+                                    <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create/Modified date">@record.CreatedOn</td>
                                     <td style="width: 25%;">@record.Description</td>
                                     <td>
                                         @if (record.Type == RecordTypeInputModel.Expense)
                                         {
-                                            <span class="badge badge-danger">@record.Type</span>
+                                            <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @record.Type</span>
                                         }
 
                                         else if (record.Type == RecordTypeInputModel.Income)
                                         {
 
-                                            <span class="badge badge-success">@record.Type</span>
+                                            <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @record.Type</span>
                                         }
                                     </td>
 
@@ -69,6 +64,11 @@
                                         @if (record.Amount < 0)
                                         {
                                             <p class="text-danger"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                        }
+
+                                        else if (record.Amount == 0)
+                                        {
+                                            <p class="text-secondary"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
                                         }
 
                                         else
@@ -103,27 +103,30 @@
                                             badgeClassName = "danger";
                                         }
 
-                                        <a href="/Categories/Details?categoryId=@record.CategoryId" class="badge badge-@badgeClassName">@record.Category</a>
+                                        <a href="/Categories/Details/@record.CategoryId" class="badge badge-@badgeClassName">@record.Category</a>
 
                                         @{counter++; }
 
                                     </td>
                                     <td>
-                                        <a href="/Records/Edit?recordId=@record.Id"><span class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Edit record"><i class="fa fa-edit fa-lg"></i></span></a>
-                                        &nbsp;
-                                        <a href="/Records/Delete?recordId=@record.Id"><span class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Delete record"><i class="fa fa-trash fa-lg"></i></span></a>
 
-                                        <!--<span class="btn btn-secondary btn-sm"><i class="fa fa-edit"></i> Edit</span>-->
+                                        <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
                                     </td>
-                                    <!--   <td>
-                            <a href="/Records/Delete?recordId=@record.Id"><span class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>  Delete</span></a>
-                        </td>-->
+                                </a>
+                            </tr>
 
-                                </tr>
-                            }
+                        }
                     </tbody>
                 </table>
-               
+                @if (Model.Records.Count() == 0)
+                {
+                    <br />
+                    <div class="alert alert-warning" role="alert">
+                        <span>No records found</span>
+                    </div>
+
+                    <a class="btn btn-primary" href="javascript:history.back()">Back</a>
+                }
                 <!-- Pagination-->
                 <div class="d-flex justify-content-center pt-5">
                     <nav>
@@ -145,7 +148,7 @@
 <!-- content-wrapper ends -->
 @section Scripts {
     <script>
-    $(document).ready(function () {
+        $(document).ready(function () {
             // executes when HTML-Document is loaded and DOM is ready
             console.log("document is ready");
 
@@ -161,4 +164,15 @@
             // document ready
         });
     </script>
+
+
+    <script src="~/js/formpickers.js"></script>
+    <script src="~/js/form-addons.js"></script>
+    <script src="~/js/x-editable.js"></script>
+    <script src="~/js/dropify.js"></script>
+    <script src="~/js/dropzone.js"></script>
+    <script src="~/js/jquery-file-upload.js"></script>
+    <script src="~/js/formpickers.js"></script>
+    <script src="~/js/form-repeater.js"></script>
+
 }

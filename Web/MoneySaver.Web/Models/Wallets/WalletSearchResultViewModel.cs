@@ -1,11 +1,12 @@
-﻿namespace MoneySaver.Web.Models.Records
+﻿namespace MoneySaver.Web.Models.Wallets
+
 {
     using System;
     using System.Collections.Generic;
 
     using MoneySaver.Web.Infrastructure.CustomValidations;
 
-    public class RecordsWithWalletIdViewModel
+    public class WalletSearchResultViewModel
     {
         [IsWalletExist]
         public int WalletId { get; set; }
@@ -18,6 +19,6 @@
 
         public DateTime EndDate { get; set; }
 
-        public IEnumerable<AllRecordsByWalletViewModel> Records { get; set; }
+        public IEnumerable<WalletSearchResultSingleRecordViewModel> Records { get; set; }
     }
 }

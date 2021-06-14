@@ -4,7 +4,7 @@
 
     public class GetRecordsByDateComponentViewModel
     {
-        public int WalletId { get; set; }
+        public int Id { get; set; }
 
         public DateTime StartDate { get; set; }
 

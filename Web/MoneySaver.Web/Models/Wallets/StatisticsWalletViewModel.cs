@@ -1,4 +1,4 @@
-﻿namespace MoneySaver.Web.Models.Statistics
+﻿namespace MoneySaver.Web.Models.Wallets
 {
     using System;
     using System.Collections.Generic;

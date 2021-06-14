@@ -9,7 +9,7 @@
         {
             SearchRecordComponentViewModel viewModel = new SearchRecordComponentViewModel();
             viewModel.SearchTerm = searchTerm;
-            viewModel.WalletId = walletId;
+            viewModel.Id = walletId;
 
             return this.View(viewModel);
         }
