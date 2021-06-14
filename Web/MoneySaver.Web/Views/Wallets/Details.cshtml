@@ -1,0 +1,303 @@
+﻿@using MoneySaver.Web.Models.Wallets
+
+@model WalletDetailsViewModel
+@{
+    this.ViewData["Title"] = "Details - " + Model.WalletName;
+    // int counter = 0;
+    // string badgeClassName = string.Empty;
+}
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Balance : <span class="h2 text-info ml-2">@Model.CurrentBalance</span></h4>
+                                <div class="d-flex justify-content-between">
+                                    <p class="text-muted">Avg. Session</p>
+                                    <p class="text-muted">max: 40</p>
+                                </div>
+                                <div class="progress progress-md">
+                                    <div class="progress-bar bg-info w-100" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Total Incomes: <span class="h2 text-success ml-2"> @Model.TotalWalletIncomes</span></h4>
+                                <div class="d-flex justify-content-between">
+                                    <p class="text-muted">Avg. Session</p>
+                                    <p class="text-muted">max: 120</p>
+                                </div>
+                                <div class="progress progress-md">
+                                    <div class="progress-bar bg-success w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Total Expenses: <span class="h2 text-danger ml-2"> @Model.TotalWalletExpenses</span></h4>
+                                <div class="d-flex justify-content-between">
+                                    <p class="text-muted">Avg. Session</p>
+                                    <p class="text-muted">max: 54</p>
+                                </div>
+                                <div class="progress progress-md">
+                                    <div class="progress-bar bg-danger w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Total Records: <span class="h2 text-warning ml-2"> @Model.Records.Count()</span></h4>
+                                <div class="d-flex justify-content-between">
+                                    <p class="text-muted">Avg. Session</p>
+                                    <p class="text-muted">max: 143</p>
+                                </div>
+                                <div class="progress progress-md">
+                                    <div class="progress-bar bg-warning w-100" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6 grid-margin grid-margin-md-0 stretch-card float-left">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Tickets</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="pt-1 pl-0">
+                                        Category
+                                    </th>
+                                    <th class="pt-1">
+                                        Records
+                                    </th>
+                                    <th class="pt-1">
+                                        Incomes
+                                    </th>
+                                    <th class="pt-1">
+                                        Expenses
+                                    </th>
+                                    <th class="pt-1">
+                                        Edit
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-1 pl-0">
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/36x36" alt="profile" />
+                                            <div class="ml-3">
+                                                <p class="mb-2">Sophia Brown</p>
+                                                <p class="mb-0 text-muted text-small">Product Designer</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        Web App
+                                    </td>
+                                    <td>
+                                        <label class="badge badge-success">Low</label>
+                                    </td>
+                                    <td>
+                                        Web App
+                                    </td>
+                                    <td>
+                                        Web App
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1 pl-0">
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/36x36" alt="profile" />
+                                            <div class="ml-3">
+                                                <p class="mb-2">Rachel Newton</p>
+                                                <p class="mb-0 text-muted text-small">Mobile Developer</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        Mobile App
+                                    </td>
+                                    <td>
+                                        <label class="badge badge-warning">Medium</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1 pl-0">
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/36x36" alt="profile" />
+                                            <div class="ml-3">
+                                                <p class="mb-2">Marcus Stevens</p>
+                                                <p class="mb-0 text-muted text-small">Core Developer</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        Plugin
+                                    </td>
+                                    <td>
+                                        <label class="badge badge-danger">High</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1 pl-0">
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/36x36" alt="profile" />
+                                            <div class="ml-3">
+                                                <p class="mb-2">Theresa Becker</p>
+                                                <p class="mb-0 text-muted text-small">Product Designer</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        Web App
+                                    </td>
+                                    <td>
+                                        <label class="badge badge-success">Low</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1 pl-0">
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://via.placeholder.com/36x36" alt="profile" />
+                                            <div class="ml-3">
+                                                <p class="mb-2">Jessie Ortiz</p>
+                                                <p class="mb-0 text-muted text-small">Web Developer</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        SAAS App
+                                    </td>
+                                    <td>
+                                        <label class="badge badge-danger">High</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 grid-margin grid-margin-md-0 stretch-card float-right">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Tickets</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="pt-1">
+                                        Date
+                                    </th>
+                                    <th class="pt-1">
+                                        Description
+                                    </th>
+                                    <th class="pt-1">
+                                        Amount
+                                    </th>
+                                    <th class="pt-1">
+                                        Category
+                                    </th>
+                                    <th class="pt-1">
+                                        Edit
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <label class="badge badge-success">Low</label>  
+                                        </div>
+                                    </td>
+                                    <td>
+                                        Web App
+                                    </td>
+                                    <td>
+                                        <label class="badge badge-success">Low</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <label class="badge badge-success">Low</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        Mobile App
+                                    </td>
+                                    <td>
+                                        <label class="badge badge-warning">Medium</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <label class="badge badge-success">Low</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        Plugin
+                                    </td>
+                                    <td>
+                                        <label class="badge badge-danger">High</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <label class="badge badge-success">Low</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        Web App
+                                    </td>
+                                    <td>
+                                        <label class="badge badge-success">Low</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <label class="badge badge-success">Low</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        SAAS App
+                                    </td>
+                                    <td>
+                                        <label class="badge badge-danger">High</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+    @section Scripts
+    {
+    }

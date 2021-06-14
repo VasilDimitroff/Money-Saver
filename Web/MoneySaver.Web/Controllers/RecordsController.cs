@@ -54,7 +54,7 @@
         {
             if (id == null)
             {
-                this.RedirectToAction("All", new { walletId = walletId });
+                return this.Redirect($"/Wallets/Records/{walletId}");
             }
 
             var recordDto = await this.recordsService.GetRecordByIdAsync(id, walletId);
@@ -95,7 +95,7 @@
            await this.recordsService.RemoveAsync(recordId);
 
             // return this.RedirectToAction("All", "Records", new { walletId, action = "Submit", submitAll = false });
-            return this.Redirect($"/Wallets/Records/{walletId}");
+           return this.Redirect($"/Wallets/Records/{walletId}");
         }
     }
 }

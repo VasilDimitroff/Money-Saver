@@ -104,7 +104,7 @@
 
             var model = new WalletSearchResultViewModel();
 
-            var records = await this.recordsService.GetRecordsByKeywordAsync(searchTerm, id);
+            var records = await this.walletsService.GetRecordsByKeywordAsync(searchTerm, id);
 
             model.Records = records.Select(r => new WalletSearchResultSingleRecordViewModel
             {
@@ -125,6 +125,37 @@
             model.Wallet = await this.walletsService.GetWalletNameAsync(id);
 
             return this.View("Records", model);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var dtoResult = await this.walletsService.GetWalletDetailsAsync(id);
+            WalletDetailsViewModel model = new WalletDetailsViewModel
+            {
+                Currency = dtoResult.Currency,
+                CurrentBalance = dtoResult.CurrentBalance,
+                WalletId = dtoResult.WalletId,
+                WalletName = dtoResult.WalletName,
+                Categories = dtoResult.Categories.Select(c => new WalletDetailsCategoryViewModel
+                {
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.CategoryName,
+                    RecordsCount = c.RecordsCount,
+                    TotalExpenses = c.TotalExpenses,
+                    TotalIncomes = c.TotalIncomes,
+                }),
+                Records = dtoResult.Records.Select(r => new WalletDetailsRecordViewModel
+                {
+                    CategoryId = r.CategoryId,
+                    CategoryName = r.CategoryName,
+                    Amount = r.Amount,
+                    CreatedOn =r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
+                    Description =r.Description,
+                    Id = r.Id,
+                }),
+            };
+
+            return this.View(model);
         }
 
         [HttpPost]

@@ -15,12 +15,10 @@
     public class CategoriesController : Controller
     {
         private readonly ICategoriesService categoriesService;
-        private readonly IWalletsService walletsService;
 
-        public CategoriesController(ICategoriesService categoriesService, IWalletsService walletsService)
+        public CategoriesController(ICategoriesService categoriesService)
         {
             this.categoriesService = categoriesService;
-            this.walletsService = walletsService;
         }
 
         public IActionResult All()

@@ -169,6 +169,48 @@
             return wallet.Name;
         }
 
+        public async Task<WalletDetailsDto> GetWalletDetailsAsync(int walletId)
+        {
+            WalletDetailsDto targetWallet = await this.dbContext.Wallets
+                .Where(w => w.Id == walletId)
+                .Select(w => new WalletDetailsDto
+                {
+                    Currency = w.Currency.Code,
+                    CurrentBalance = w.MoneyAmount,
+                    WalletId = w.Id,
+                    WalletName = w.Name,
+                    Categories = w.Categories.Select(c => new WalletDetailsCategoryDto
+                    {
+                        CategoryId = c.Id,
+                        CategoryName = c.Name,
+                        TotalExpenses = c.Records.Where(r => r.Type == RecordType.Expense).Sum(r => r.Amount),
+                        TotalIncomes = c.Records.Where(r => r.Type == RecordType.Income).Sum(r => r.Amount),
+                        RecordsCount = c.Records.Count(),
+                    }),
+                })
+                .FirstOrDefaultAsync();
+
+            targetWallet.Records = await this.dbContext.Records
+                .Where(r => r.Category.WalletId == walletId)
+                .Select(r => new WalletDetailsRecordDto
+                {
+                    Id = r.Id,
+                    Amount = r.Amount,
+                    CategoryId = r.CategoryId,
+                    CategoryName = r.Category.Name,
+                    CreatedOn = r.CreatedOn,
+                    Description = r.Description,
+                })
+                .ToListAsync();
+
+            if (targetWallet == null)
+            {
+                throw new ArgumentNullException(GlobalConstants.WalletNotExist);
+            }
+
+            return targetWallet;
+        }
+
         public async Task<int> GetWalletIdByRecordIdAsync(string recordId)
         {
             var wallet = await this.dbContext.Records
@@ -202,6 +244,50 @@
             return categories;
         }
 
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int walletId)
+        {
+            keyword = keyword.ToLower().Trim();
+
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                var allRecords = await this.dbContext.Records
+                 .Where(r => r.Category.WalletId == walletId)
+                 .Select(r => new RecordInfoDto
+                 {
+                     Id = r.Id,
+                     Amount = (r.Type == RecordType.Income) ? r.Amount : Math.Abs(r.Amount) * (-1),
+                     Category = r.Category.Name,
+                     CategoryId = r.CategoryId,
+                     CreatedOn = r.CreatedOn,
+                     Description = r.Description,
+                     Type = r.Type.ToString(),
+                     Wallet = r.Category.Wallet.Name,
+                     Currency = r.Category.Wallet.Currency.Code,
+                 })
+                 .ToListAsync();
+
+                return allRecords;
+            }
+
+            var records = await this.dbContext.Records
+                 .Where(r => r.Description.Contains(keyword.ToLower()) && r.Category.WalletId == walletId)
+                 .Select(r => new RecordInfoDto
+                 {
+                     Id = r.Id,
+                     Amount = (r.Type == RecordType.Income) ? r.Amount : Math.Abs(r.Amount) * (-1),
+                     Category = r.Category.Name,
+                     CategoryId = r.CategoryId,
+                     CreatedOn = r.CreatedOn,
+                     Description = r.Description,
+                     Type = r.Type.ToString(),
+                     Wallet = r.Category.Wallet.Name,
+                     Currency = r.Category.Wallet.Currency.Code,
+                 })
+                 .ToListAsync();
+
+            return records;
+        }
+
         public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId)
         {
             var records = await this.dbContext.Records
@@ -229,12 +315,6 @@
                 .FirstOrDefaultAsync(w => w.Name == walletName && w.ApplicationUserId == userId);
 
             return wallet;
-        }
-
-        //TODO: WHAT DO WITH THIS
-        Task<IEnumerable<WalletInfoDto>> IWalletsService.GetWalletsAsync(string userId)
-        {
-            throw new NotImplementedException();
         }
 
         private async Task<Currency> GetCurrencyAsync(string currencyName)

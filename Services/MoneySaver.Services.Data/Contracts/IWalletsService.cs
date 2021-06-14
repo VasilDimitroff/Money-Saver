@@ -9,7 +9,6 @@
 
     public interface IWalletsService
     {
-        public Task<IEnumerable<WalletInfoDto>> GetWalletsAsync(string userId);
 
         public Task<WalletCategoriesDto> GetWalletWithCategoriesAsync(int walletId);
 
@@ -21,8 +20,12 @@
 
         public Task<int> GetWalletIdByRecordIdAsync(string recordId);
 
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int walletId);
+
         public Task<IEnumerable<CategoryBasicInfoDto>> GetWalletCategoriesAsync(int walletId);
 
         public Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId);
+
+        public Task<WalletDetailsDto> GetWalletDetailsAsync(int walletId);
     }
 }

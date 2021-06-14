@@ -43,16 +43,16 @@
                             <th>Incomes</th>
                             <th>Expenses</th>
                             <th>Last Added</th>
-                            <th>Edit</th>
+                            <th>Edit/Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var category in Model.Categories)
                         {
-                            <tr class="card-shadow">
+                            <tr class="card-shadow" onclick="window.location='/Category/Edit/@category.Id'">
                                 <td><a href="/Categories/Details/@category.Id" class="badge badge-primary">@category.Name</a></td>
                                 <td>
-                                    <span class="badge badge-warning text-light">@category.TotalRecordsCount</span>
+                                    <a href="/Categories/Details/@category.Id"><span class="badge badge-warning text-light">@category.TotalRecordsCount</span></a>
                                 </td>
 
                                 <td>
@@ -83,7 +83,7 @@
                                
 
                                     <td>
-                                        <a href="/Records/Edit?categoryId=@category.Id"><span class="btn btn-outline-info btn-sm btn-icon-text" data-toggle="tooltip" data-placement="bottom" title="Edit record"><i class="mdi mdi-pencil btn-icon-prepend"></i>Edit</span></a>
+                                        <a href="/Category/Edit/@category.Id"><span class="btn btn-outline-info btn-sm btn-icon-text" data-toggle="tooltip" data-placement="bottom" title="Edit record"><i class="mdi mdi-pencil btn-icon-prepend"></i>Edit</span></a>
                                         &nbsp;
                                         <!--<span class="btn btn-secondary btn-sm"><i class="fa fa-edit"></i> Edit</span>-->
                                     </td>
@@ -93,7 +93,7 @@
                     <tfoot>
                         <tr>
                             <td class="font-weight-bolder"><span class="badge badge-outline-dark">Total:</span></td>
-                            <td><span class="badge badge-outline-warning">@Model.RecordsCount</span></td>
+                            <td><a href="/Wallets/Records/@Model.WalletId"<span class="badge badge-outline-warning">@Model.RecordsCount</span></a></td>
                             <td>
                                 @if (Model.Incomes == 0)
                                 {
