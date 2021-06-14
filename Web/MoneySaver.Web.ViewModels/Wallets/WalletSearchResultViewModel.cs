@@ -1,9 +1,7 @@
 ﻿namespace MoneySaver.Web.ViewModels.Wallets
-
 {
     using System;
     using System.Collections.Generic;
-
 
     public class WalletSearchResultViewModel
     {

@@ -244,9 +244,11 @@
                             </tbody>
                         </table>
                         <br/>
-
-                            <a href="/Wallets/Records/@Model.WalletId" class="btn btn-sm btn-icon-text text-center col-md-2 btn-outline-info">View more</a>
-
+                        <div class="btn-group mr-2">
+                            <button class="btn btn-sm btn-primary" onclick="location.href='/Wallets/Records/@Model.WalletId'" type="button"><i class="mdi mdi-dots-horizontal"></i> More</button>
+                        </div>      
+                        <span class="mr-2">or</span> 
+                        <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
                     </div>  
                     </div>
             </div>

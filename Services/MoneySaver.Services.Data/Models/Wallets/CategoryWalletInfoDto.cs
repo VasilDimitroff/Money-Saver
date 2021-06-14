@@ -6,6 +6,8 @@
 
         public string Name { get; set; }
 
+        public string BadgeColor { get; set; }
+
         public int RecordsCount { get; set; }
 
         public decimal TotalExpensesAmount { get; set; }

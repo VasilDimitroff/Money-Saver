@@ -50,7 +50,7 @@
                         @foreach (var category in Model.Categories)
                         {
                             <tr class="card-shadow" onclick="window.location='/Category/Edit/@category.Id'">
-                                <td><a href="/Categories/Details/@category.Id" class="badge badge-primary">@category.Name</a></td>
+                                <td><a href="/Categories/Details/@category.Id" class="badge badge-@category.BadgeColor.ToString().ToLower()">@category.Name</a></td>
                                 <td>
                                     <a href="/Categories/Details/@category.Id"><span class="badge badge-warning text-light">@category.TotalRecordsCount</span></a>
                                 </td>

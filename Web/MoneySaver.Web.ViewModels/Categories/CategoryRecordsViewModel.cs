@@ -1,9 +1,11 @@
-﻿using MoneySaver.Web.ViewModels.Records;
-using System;
-using System.Collections.Generic;
-
-namespace MoneySaver.Web.ViewModels.Categories
+﻿namespace MoneySaver.Web.ViewModels.Categories
 {
+    using System;
+    using System.Collections.Generic;
+
+    using MoneySaver.Web.ViewModels.Records;
+    using MoneySaver.Web.ViewModels.Records.Enums;
+
     public class CategoryRecordsViewModel
     {
         public string Category { get; set; }
@@ -15,6 +17,8 @@ namespace MoneySaver.Web.ViewModels.Categories
         public int WalletId { get; set; }
 
         public string WalletName { get; set; }
+
+        public BadgeColor BadgeColor { get; set; }
 
         public string SearchTerm { get; set; }
 

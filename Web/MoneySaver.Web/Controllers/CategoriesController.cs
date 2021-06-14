@@ -51,6 +51,7 @@
                 Currency = category.Currency,
                 WalletId = category.WalletId,
                 WalletName = category.WalletName,
+                BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString()),
             };
 
             return this.View(model);

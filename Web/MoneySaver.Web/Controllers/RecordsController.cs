@@ -57,7 +57,7 @@
                 return this.Redirect($"/Wallets/Records/{walletId}");
             }
 
-            var recordDto = await this.recordsService.GetRecordByIdAsync(id, walletId);
+            var recordDto = await this.recordsService.GetRecordWithAllCategories(id, walletId);
 
             EditRecordViewModel model = new EditRecordViewModel()
             {

@@ -1,9 +1,9 @@
-﻿using System;
-
-using MoneySaver.Web.ViewModels.Records.Enums;
-
-namespace MoneySaver.Web.ViewModels.Wallets
+﻿namespace MoneySaver.Web.ViewModels.Wallets
 {
+    using System;
+
+    using MoneySaver.Web.ViewModels.Records.Enums;
+
     public class WalletSearchResultSingleRecordViewModel
     {
         public string Id { get; set; }
@@ -13,6 +13,8 @@ namespace MoneySaver.Web.ViewModels.Wallets
         public decimal Amount { get; set; }
 
         public string Category { get; set; }
+
+        public BadgeColor BadgeColor { get; set; }
 
         public int CategoryId { get; set; }
 

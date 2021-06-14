@@ -19,10 +19,12 @@
     public class CategoriesService : ICategoriesService
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly Random rand;
 
         public CategoriesService(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
+            this.rand = new Random();
         }
 
         public async Task<string> AddAsync(string categoryName, int walletId)
@@ -39,10 +41,14 @@
                 throw new ArgumentException(GlobalConstants.ExistingCategory);
             }
 
+            int randomNumber = this.rand.Next(1, 7);
+
             Category category = new Category
             {
                 Name = categoryName,
                 WalletId = wallet.Id,
+                CreatedOn = DateTime.UtcNow,
+                BadgeColor = (BadgeColor)randomNumber,
             };
 
             await this.dbContext.Categories.AddAsync(category);
@@ -84,6 +90,7 @@
                      Currency = r.Wallet.Currency.Code,
                      WalletId = r.WalletId,
                      WalletName = r.Wallet.Name,
+                     BadgeColor = r.BadgeColor,
                      Records = r.Records.Select(r => new CategoryRecordInfoDto
                      {
                          Id = r.Id,

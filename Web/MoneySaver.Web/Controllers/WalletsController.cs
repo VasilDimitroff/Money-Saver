@@ -86,6 +86,7 @@
                 Id = r.Id,
                 Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
                 Currency = r.Currency,
+                BadgeColor = Enum.Parse<BadgeColor>(r.BadgeColor.ToString()),
             })
                 .ToList();
 
@@ -154,7 +155,7 @@
                     CategoryId = r.CategoryId,
                     CategoryName = r.CategoryName,
                     Amount = r.Amount,
-                    CreatedOn = r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
+                    CreatedOn = r.CreatedOn.ToString("M", CultureInfo.InvariantCulture),
                     Description = r.Description,
                     Id = r.Id,
                 }),
@@ -204,6 +205,7 @@
                 {
                     Id = c.Id,
                     Name = c.Name,
+                    BadgeColor = Enum.Parse<BadgeColor>(c.BadgeColor),
                     TotalRecordsCount = c.RecordsCount,
                     TotalExpensesAmount = c.TotalExpensesAmount,
                     TotalIncomesAmount = c.TotalIncomesAmount,

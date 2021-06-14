@@ -5,8 +5,6 @@
 @model WalletSearchResultViewModel
 @{
     this.ViewData["Title"] = "All Records - " + Model.Wallet;
-    int counter = 0;
-    string badgeClassName = string.Empty;
 }
 <!-- partial -->
 <div class="card">
@@ -15,7 +13,7 @@
         <div class="row pb-5">
             <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
             <vc:wallet-statistics id="@Model.WalletId"></vc:wallet-statistics>
-            <span class="btn-group ml-auto pt-1 mr-4 d-md-block">Sort By:</span>
+            <span class="btn-group ml-auto pt-1 mr-4 d-md-block">Search By:</span>
             <div class="btn-group mr-2 border-0 d-none d-md-block pl-0">
                 <vc:get-records-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" id="@Model.WalletId"></vc:get-records-by-date>
             </div>
@@ -78,35 +76,9 @@
                                     </td>
                                     <td>@record.Wallet</td>
                                     <td>
-                                        @if (counter % 5 == 0)
-                                        {
-                                            badgeClassName = "warning";
-                                        }
+                                       
 
-                                        else if (counter % 3 == 0)
-                                        {
-                                            badgeClassName = "success";
-                                        }
-
-                                        else if (counter % 2 == 0)
-                                        {
-                                            badgeClassName = "primary";
-                                        }
-
-                                        else if (counter % 2 != 1)
-                                        {
-                                            badgeClassName = "info";
-                                        }
-
-                                        else
-                                        {
-                                            badgeClassName = "danger";
-                                        }
-
-                                        <a href="/Categories/Details/@record.CategoryId" class="badge badge-@badgeClassName">@record.Category</a>
-
-                                        @{counter++; }
-
+                                        <a href="/Categories/Details/@record.CategoryId" class="badge badge-@record.BadgeColor.ToString().ToLower()">@record.Category</a>
                                     </td>
                                     <td>
 

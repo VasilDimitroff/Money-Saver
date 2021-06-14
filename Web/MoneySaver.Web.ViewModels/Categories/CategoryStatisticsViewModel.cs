@@ -1,4 +1,6 @@
-﻿namespace MoneySaver.Web.ViewModels.Categories
+﻿using MoneySaver.Web.ViewModels.Records.Enums;
+
+namespace MoneySaver.Web.ViewModels.Categories
 {
     public class CategoryStatisticsViewModel
     {
@@ -8,7 +10,10 @@
 
         public int TotalRecordsCount { get; set; }
 
+        public BadgeColor BadgeColor { get; set; }
+
         public decimal TotalExpensesAmount { get; set; }
+
         public decimal TotalIncomesAmount { get; set; }
     }
 }

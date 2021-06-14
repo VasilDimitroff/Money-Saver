@@ -98,6 +98,7 @@
                      Type = r.Type.ToString(),
                      Wallet = wallet.Name,
                      Currency = r.Category.Wallet.Currency.Code,
+                     BadgeColor = r.Category.BadgeColor,
                  })
                  .OrderByDescending(x => x.CreatedOn)
                  .ToListAsync();
@@ -138,7 +139,7 @@
             return GlobalConstants.SuccessfullyRemovedRecord;
         }
 
-        public async Task<EditRecordInfoDto> GetRecordByIdAsync(string recordId, int walletId)
+        public async Task<EditRecordInfoDto> GetRecordWithAllCategories(string recordId, int walletId)
         {
             var allCategories = await this.dbContext.Categories
                 .Where(c => c.WalletId == walletId)

@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MoneySaver.Services.Data.Models.Categories
+﻿namespace MoneySaver.Services.Data.Models.Categories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    using MoneySaver.Data.Models.Enums;
+
     public class AllRecordsInCategoryDto
     {
         public string Category { get; set; }
@@ -15,6 +17,8 @@ namespace MoneySaver.Services.Data.Models.Categories
         public int WalletId { get; set; }
 
         public string WalletName { get; set; }
+
+        public BadgeColor BadgeColor { get; set; }
 
         public IEnumerable<CategoryRecordInfoDto> Records { get; set; }
     }

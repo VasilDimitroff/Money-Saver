@@ -96,6 +96,7 @@
                     {
                         Id = c.Id,
                         Name = c.Name,
+                        BadgeColor = c.BadgeColor.ToString(),
                         RecordsCount = c.Records.Count(),
                         TotalIncomesAmount = c.Records.Where(r => r.Type == RecordType.Income).Sum(r => r.Amount),
                         TotalExpensesAmount = c.Records.Where(r => r.Type == RecordType.Expense).Sum(r => r.Amount),
