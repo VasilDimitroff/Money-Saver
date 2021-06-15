@@ -8,6 +8,7 @@
     this.ViewData["Title"] = "Add Record";
     Model.CreatedOn = DateTime.UtcNow;
 }
+
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -32,7 +33,13 @@
                         </select>
                     </div>
                 *@
-                
+
+
+
+
+
+
+
                 <div class="form-group">
                     <label asp-for="Description">Description</label>
                     <input type="text" class="form-control" asp-for="Description" placeholder="Description">
@@ -73,8 +80,6 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/modal-demo.js"></script>
-
     <script src="~/vendors/js/vendor.bundle.base.js"></script>
     <script src="~/vendors/js/vendor.bundle.addons.js"></script>
     <!-- endinject -->

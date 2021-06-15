@@ -310,8 +310,15 @@
 
         public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId)
         {
+           
+            var startDate12AM = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0);
+
+            //var startOfDay = date.Date;
+
+           // var endOfDay = date.Date.AddHours(24);
+
             var records = await this.dbContext.Records
-                 .Where(r => r.CreatedOn >= startDate && r.CreatedOn <= endDate && r.Category.WalletId == walletId)
+                 .Where(r => r.CreatedOn >= startDate12AM && r.CreatedOn <= endDate && r.Category.WalletId == walletId)
                  .Select(r => new RecordInfoDto
                  {
                      Id = r.Id,
