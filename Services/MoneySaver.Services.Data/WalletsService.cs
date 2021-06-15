@@ -9,6 +9,7 @@
 
     using MoneySaver.Common;
     using MoneySaver.Data;
+    using MoneySaver.Data.Common.Repositories;
     using MoneySaver.Data.Models;
     using MoneySaver.Data.Models.Enums;
     using MoneySaver.Services.Data.Contracts;
@@ -23,6 +24,7 @@
 
         public WalletsService(ApplicationDbContext dbContext)
         {
+            //IRepository<Wallet> walletRepository
             this.dbContext = dbContext;
         }
 

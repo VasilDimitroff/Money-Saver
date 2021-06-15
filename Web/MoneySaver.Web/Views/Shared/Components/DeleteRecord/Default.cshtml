@@ -1,13 +1,14 @@
 ﻿@model MoneySaver.Web.ViewModels.ViewComponents.DeleteRecordComponentViewModel
 @*<a href="/Records/Delete?recordId=@Model.Id"><span class="btn btn-outline-danger btn-icon-text float-right" data-toggle="tooltip" data-placement="bottom" title="Delete record"><i class="mdi mdi-delete btn-icon-prepend"></i> Delete</span></a>*@
 
- <button type="button" class="btn btn-outline-danger btn-sm float-right" style="display: inline" data-placement="bottom" title="Delete record" data-toggle="modal" data-target="#defaultModal"><i class="mdi mdi-delete btn-icon-prepend"></i>Delete</button>
-    <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-       <form method="post" asp-controller="Records" asp-action="Delete">
+
+<button type="button" class="btn btn-outline-danger btn-sm float-right" style="display: inline" data-placement="bottom" title="Delete record" data-toggle="modal" data-target="#defaultModal"><i class="mdi mdi-delete btn-icon-prepend"></i>Delete</button>
+<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" asp-controller="Records" asp-action="Delete">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-danger" id="exampleModalLabel">Note! You're preparing to delete a record</h5>
+                    <h5 class="modal-title text-danger" id="exampleModalLabel">Note! You're preparing to delete a record</h5>  
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -18,9 +19,9 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                     <input type="hidden" asp-for="@Model.Id"></input>
-                    <button onclick="window.location.href='/Records/Delete/@Model.Id'" type="submit" class="btn btn-danger">Yes</button>
+                    <button onclick="window.location.href='/Records/Delete/@Model.Id'" type="submit" class="btn btn-danger"><i class="mdi mdi-delete btn-icon-prepend text-white"></i> Yes</button>
                 </div>
             </div>
         </div>
-        </form>
-    </div>
+    </form>
+</div>
