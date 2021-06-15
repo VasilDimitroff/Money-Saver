@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MoneySaver.Web.ViewModels.Wallets
+﻿namespace MoneySaver.Web.ViewModels.Wallets
 {
+    using MoneySaver.Web.ViewModels.Records.Enums;
+
     public class WalletDetailsRecordViewModel
     {
         public string Id { get; set; }
@@ -14,6 +11,8 @@ namespace MoneySaver.Web.ViewModels.Wallets
         public int CategoryId { get; set; }
 
         public string CategoryName { get; set; }
+
+        public BadgeColor CategoryBadgeColor { get; set; }
 
         public decimal Amount { get; set; }
 

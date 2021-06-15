@@ -23,7 +23,7 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<string> AddAsync(int categoryId, string description, decimal amount, string type)
+        public async Task<string> AddAsync(int categoryId, string description, decimal amount, string type, DateTime? createdOn)
         {
             Category category = await this.GetCategoryByIdAsync(categoryId);
 
@@ -60,10 +60,10 @@
                 Id = Guid.NewGuid().ToString(),
                 Amount = amount,
                 CategoryId = categoryId,
-                CreatedOn = DateTime.UtcNow,
+                CreatedOn = createdOn == null ? DateTime.UtcNow : createdOn.Value,
+                ModifiedOn = DateTime.UtcNow,
                 Description = description,
                 Type = recordType,
-                ModifiedOn = DateTime.UtcNow,
             };
 
             await this.EditWalletAmountAsync(wallet.Id, amount);
@@ -235,6 +235,7 @@
             record.Description = description;
             record.Amount = newAmount;
             record.CreatedOn = createdOn;
+            record.ModifiedOn = DateTime.UtcNow;
             record.Type = recordInputType;
             record.CategoryId = categoryId;
 

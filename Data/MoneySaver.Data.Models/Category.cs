@@ -5,7 +5,7 @@
     using MoneySaver.Data.Common.Models;
     using MoneySaver.Data.Models.Enums;
 
-    public class Category : BaseDeletableModel<int>
+    public class Category :BaseModel<int>
     {
         public Category()
         {

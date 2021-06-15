@@ -79,8 +79,8 @@
                 Amount = r.Amount,
                 Category = r.Category,
                 CategoryId = r.CategoryId,
-                CreatedOn = r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
-                ModifiedOn = r.ModifiedOn.HasValue ? r.ModifiedOn.Value.ToString("D", CultureInfo.InvariantCulture) : null,
+                CreatedOn = r.CreatedOn.ToString(CultureInfo.InvariantCulture),
+                ModifiedOn = r.ModifiedOn.HasValue ? r.ModifiedOn.Value.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture) : null,
                 Description = r.Description,
                 Wallet = r.Wallet,
                 Id = r.Id,
@@ -144,6 +144,7 @@
                 {
                     CategoryId = c.CategoryId,
                     CategoryName = c.CategoryName,
+                    BadgeColor = Enum.Parse<BadgeColor>(c.BadgeColor.ToString()),
                     RecordsCount = c.RecordsCount,
                     TotalExpenses = c.TotalExpenses,
                     TotalIncomes = c.TotalIncomes,
@@ -154,6 +155,7 @@
                 {
                     CategoryId = r.CategoryId,
                     CategoryName = r.CategoryName,
+                    CategoryBadgeColor = Enum.Parse<BadgeColor>(r.CategoryBadgeColor.ToString()),
                     Amount = r.Amount,
                     CreatedOn = r.CreatedOn.ToString("M", CultureInfo.InvariantCulture),
                     Description = r.Description,
@@ -176,7 +178,7 @@
                 Amount = r.Amount,
                 Category = r.Category,
                 CategoryId = r.CategoryId,
-                CreatedOn = r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
+                CreatedOn = r.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
                 Description = r.Description,
                 Wallet = r.Wallet,
                 Id = r.Id,
@@ -198,7 +200,7 @@
             StatisticsWalletViewModel model = new StatisticsWalletViewModel()
             {
                 WalletId = dbResult.WalletId,
-                ModifiedOn = dbResult.ModifiedOn.HasValue ? dbResult.ModifiedOn.Value.ToString("D", CultureInfo.InvariantCulture) : null,
+                ModifiedOn = dbResult.ModifiedOn.HasValue ? dbResult.ModifiedOn.Value.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture) : null,
                 TotalAmount = dbResult.TotalAmount,
                 WalletName = dbResult.WalletName,
                 Categories = dbResult.Categories.Select(c => new CategoryStatisticsViewModel

@@ -35,6 +35,7 @@
                 Name = x.Name,
                 Id = x.Id,
                 WalletName = x.WalletName,
+                BadgeColor = Enum.Parse<BadgeColor>(x.BadgeColor.ToString()),
             });
 
             model.WalletName = await this.walletsService.GetWalletNameAsync(walletId);
@@ -46,7 +47,7 @@
         public async Task<IActionResult> Add(AddRecordViewModel input)
         {
             var enumValueAsString = input.Type.ToString();
-            await this.recordsService.AddAsync(input.CategoryId, input.Description, input.Amount, enumValueAsString);
+            await this.recordsService.AddAsync(input.CategoryId, input.Description, input.Amount, enumValueAsString, input.CreatedOn);
             return this.Redirect($"/Wallets/Records/{input.WalletId}");
         }
 
@@ -89,10 +90,11 @@
             return this.Redirect($"/Wallets/Records/{input.WalletId}");
         }
 
-        public async Task<IActionResult> Delete(string recordId)
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
         {
-           int walletId = await this.walletsService.GetWalletIdByRecordIdAsync(recordId);
-           await this.recordsService.RemoveAsync(recordId);
+           int walletId = await this.walletsService.GetWalletIdByRecordIdAsync(id);
+           await this.recordsService.RemoveAsync(id);
 
             // return this.RedirectToAction("All", "Records", new { walletId, action = "Submit", submitAll = false });
            return this.Redirect($"/Wallets/Records/{walletId}");

@@ -40,7 +40,7 @@
                 .Select(r => new RecordsByCategoryViewModel
                 {
                     Amount = r.Amount,
-                    CreatedOn = r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
+                    CreatedOn = r.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
                     Description = r.Description,
                     Id = r.Id,
                     Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),

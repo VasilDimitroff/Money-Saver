@@ -2,11 +2,11 @@
 
 <form method="post" asp-controller="Wallets" asp-action="DateSorted">
     <span style="float: left;">
-        <input type="datetime-local" class="form-control" asp-for="StartDate" placeholder="Search Here" value="@Model.DefaultStartDate.ToString("yyyy-MM-dd")">
+        <input type="datetime-local" class="form-control" asp-for="StartDate" placeholder="Search Here" value="@Model.DefaultStartDate.ToString("MM/dd/yyyy hh:mm tt")">
     </span>
 
     <span style="float: left;">
-        <input type="datetime-local" class="form-control" asp-for="EndDate" placeholder="Search Here" value="@Model.DefaultEndDate.ToString("yyyy-MM-dd")">
+        <input type="datetime-local" class="form-control" asp-for="EndDate" placeholder="Search Here" value="@Model.DefaultEndDate.ToString("MM/dd/yyyy hh:mm tt")">
     </span>
 
     <input type="hidden" class="form-control" asp-for="@Model.Id">

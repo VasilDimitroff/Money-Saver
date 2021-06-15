@@ -6,7 +6,7 @@ namespace MoneySaver.ConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("This console app is fictive! Is exist only because there is an error when trying to create migration.");
         }
     }
 }

@@ -5,11 +5,11 @@
 @model WalletSearchResultViewModel
 @{
     this.ViewData["Title"] = "All Records - " + Model.Wallet;
-}
+} 
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">@Model.Wallet - All Records</h4>
+        <h4 class="card-title">@this.ViewData["Title"] </h4>
         <div class="row pb-5">
             <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
             <vc:wallet-statistics id="@Model.WalletId"></vc:wallet-statistics>
@@ -76,7 +76,7 @@
                                     </td>
                                     <td>@record.Wallet</td>
                                     <td>
-                                       
+
 
                                         <a href="/Categories/Details/@record.CategoryId" class="badge badge-@record.BadgeColor.ToString().ToLower()">@record.Category</a>
                                     </td>
@@ -90,15 +90,17 @@
                         }
                     </tbody>
                 </table>
+                <br />
+
                 @if (Model.Records.Count() == 0)
                 {
                     <br />
                     <div class="alert alert-warning" role="alert">
                         <span>No records found</span>
                     </div>
-
-                    <a class="btn btn-primary" href="javascript:history.back()">Back</a>
                 }
+
+                <a class="btn btn-light" href="javascript:history.back()" style="text-decoration: none; float: left;">Back</a>
                 <!-- Pagination-->
                 <div class="d-flex justify-content-center pt-5">
                     <nav>
@@ -119,6 +121,8 @@
 </div>
 <!-- content-wrapper ends -->
 @section Scripts {
+
+
     <script>
         $(document).ready(function () {
             // executes when HTML-Document is loaded and DOM is ready

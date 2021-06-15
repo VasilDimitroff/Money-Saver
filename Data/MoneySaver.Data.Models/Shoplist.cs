@@ -1,10 +1,13 @@
-﻿using MoneySaver.Data.Common.Models;
-using System;
-using System.Collections.Generic;
-
-namespace MoneySaver.Data.Models
+﻿namespace MoneySaver.Data.Models
 {
-    public class Shoplist : BaseDeletableModel<int>
+
+    using System;
+    using System.Collections.Generic;
+
+    using MoneySaver.Data.Common.Models;
+    using MoneySaver.Data.Models.Enums;
+
+    public class Shoplist : BaseModel<int>
     {
         public Shoplist()
         {
@@ -13,7 +16,7 @@ namespace MoneySaver.Data.Models
 
         public string Name { get; set; }
 
-        public bool IsClosed { get; set; }
+        public StatusType Status { get; set; }
 
         public string ApplicationUserId { get; set; }
 

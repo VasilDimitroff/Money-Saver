@@ -6,6 +6,7 @@
 @model AddRecordViewModel
 @{
     this.ViewData["Title"] = "Add Record";
+    Model.CreatedOn = DateTime.UtcNow;
 }
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
@@ -21,6 +22,17 @@
                             asp-items="@(new SelectList(Model.Categories,"Id","Name"))" class="js-example-basic-single" style="width:100%">
                     </select>
                 </div>
+                @* <div class="form-group">
+                        <label for="Category">Category</label>
+                        <select asp-for="CategoryId" class="js-example-basic-single" style="width:100%">
+                            @foreach (var category in Model.Categories)
+                            {
+                                <option>@category.Name</option>
+                            }
+                        </select>
+                    </div>
+                *@
+                
                 <div class="form-group">
                     <label asp-for="Description">Description</label>
                     <input type="text" class="form-control" asp-for="Description" placeholder="Description">
@@ -36,7 +48,8 @@
                             }
                             else
                             {
-                                <option>@name</option>    
+                                <option>@name</option>
+
                             }
                         }
                     </select>
@@ -45,17 +58,23 @@
                     <label asp-for="Amount">Amount</label>
                     <input type="number" class="form-control" asp-for="Amount" placeholder="Amount" value="Enter amount">
                 </div>
+                <div class="form-group">
+                    <label asp-for="@Model.CreatedOn">Created On (Default is now)</label>
+                    <input type="datetime-local" class="form-control" asp-for="@Model.CreatedOn" placeholder="@Model.CreatedOn" value="@Model.CreatedOn.ToString()">
+                </div>
                 <input type="hidden" asp-for="@Model.WalletId" /></input>
                 <button type="submit" class="btn btn-primary mr-2">
                     Submit
                 </button>
-                 <a class="btn btn-light" href="javascript:history.back()" style="text-decoration: none;">Back</a>
+                <a class="btn btn-light" href="javascript:history.back()" style="text-decoration: none;">Back</a>
             </form>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <script src="~/js/modal-demo.js"></script>
+
     <script src="~/vendors/js/vendor.bundle.base.js"></script>
     <script src="~/vendors/js/vendor.bundle.addons.js"></script>
     <!-- endinject -->

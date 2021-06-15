@@ -3,7 +3,6 @@
 @model WalletDetailsViewModel
 @{
     this.ViewData["Title"] = "Details - " + Model.WalletName;
-     int counter = 0;
     string badgeClassName = "success";
     //string balanceMessage = "Note! Your balance is negative!";
 }
@@ -98,33 +97,10 @@
                                 {
                                     <tr class="card-shadow" onclick="window.location = '/Category/Edit/@category.CategoryId'">
                                         <td class="py-1 pl-0">
-                                            <div class="d-flex align-items-center"> 
+                                            <div class="d-flex align-items-center">
                                                 <div class="ml-3">
-                                                    @if (counter % 5 == 0)
-                                                    {
-                                                        badgeClassName = "warning";
-                                                    }
 
-                                                    else if (counter % 3 == 0)
-                                                    {
-                                                        badgeClassName = "success";
-                                                    }
-
-                                                    else if (counter % 2 == 0)
-                                                    {
-                                                        badgeClassName = "primary";
-                                                    }
-
-                                                    else if (counter % 2 != 1)
-                                                    {
-                                                        badgeClassName = "info";
-                                                    }
-
-                                                    else
-                                                    {
-                                                        badgeClassName = "danger";
-                                                    }
-                                                    <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@badgeClassName">@category.CategoryName</p></a>
+                                                    <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
                                                     <p class="mb-0 text-muted text-small">@category.RecordsCount records in category</p>
                                                 </div>
                                             </div>
@@ -167,11 +143,11 @@
                                             <a href="/Category/Edit/@category.CategoryId"><span class="btn btn-outline-info btn-sm btn-icon-text" data-toggle="tooltip" data-placement="bottom" title="Edit record"><i class="mdi mdi-pencil btn-icon-prepend"></i>Edit</span></a>
                                         </td>
                                     </tr>
-                                    
-                                     counter = counter + 1;  
                                 }
                             </tbody>
                         </table>
+                        <br />
+                        <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>
                     </div>
                 </div>
             </div>
@@ -216,7 +192,7 @@
                                             {
                                                 string descriptionExcerpt = record.Description.Substring(0, 18) + "...";
                                                 record.Description = descriptionExcerpt;
-                                             }
+                                            }
 
                                             @record.Description
                                         </td>
@@ -237,17 +213,20 @@
                                             }
                                             <p class="text-@badgeClassName font-weight-bold">@record.Amount @Model.Currency</p>
                                         </td>
-                                        <td><a href="/Categories/Details/@record.CategoryId"><p class="mb-2 badge badge-@badgeClassName">@record.CategoryName</p></a></td>
+                                        <td><a href="/Categories/Details/@record.CategoryId"><p class="mb-2 badge badge-@record.CategoryBadgeColor.ToString().ToLower()">@record.CategoryName</p></a></td>
                                         <td> <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record></td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
-                        <br/>
-                        <div class="btn-group mr-2">
-                            <button class="btn btn-sm btn-primary" onclick="location.href='/Wallets/Records/@Model.WalletId'" type="button"><i class="mdi mdi-dots-horizontal"></i> More</button>
-                        </div>      
-                        <span class="mr-2">or</span> 
+                        <br />
+                        @if (Model.Records.Count() > 0)
+                        {
+                            <div class="btn-group mr-2">
+                                <button class="btn btn-sm btn-primary" onclick="location.href='/Wallets/Records/@Model.WalletId'" type="button"><i class="mdi mdi-dots-horizontal"></i> More</button>
+                            </div>
+                            <span class="mr-2">or</span>
+                        }  
                         <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
                     </div>  
                     </div>

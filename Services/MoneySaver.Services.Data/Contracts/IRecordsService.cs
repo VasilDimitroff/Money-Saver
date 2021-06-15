@@ -8,7 +8,7 @@
 
     public interface IRecordsService
     {
-        public Task<string> AddAsync(int categoryId, string description, decimal amount, string type);
+        public Task<string> AddAsync(int categoryId, string description, decimal amount, string type, DateTime? createdOn);
 
         public Task<string> RemoveAsync(string recordId);
 

@@ -4,14 +4,14 @@
 
 @model WalletSearchResultViewModel
 @{
-    this.ViewData["Title"] = "All Records - " + Model.Wallet;
+    this.ViewData["Title"] = "Records - " + Model.Wallet;
     int counter = 0;
     string badgeClassName = string.Empty;
 }
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">@Model.Wallet - All Records</h4>
+        <h4 class="card-title">@this.ViewData["Title"]</h4>
         <div class="row pb-5">
             <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
             <div class="btn-group mr-2">
@@ -117,13 +117,14 @@
                                     <!--<span class="btn btn-secondary btn-sm"><i class="fa fa-edit"></i> Edit</span>-->
                                 </td>
                                 <!--   <td>
-                                    <a href="/Records/Delete?recordId=@record.Id"><span class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>  Delete</span></a>
-                                </td>-->
+                        <a href="/Records/Delete?recordId=@record.Id"><span class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>  Delete</span></a>
+                    </td>-->
 
                             </tr>
                         }
                     </tbody>
                 </table>
+                <a class="btn btn-light" href="javascript:history.back()" style="text-decoration: none;">Back</a>
                 <!-- Pagination-->
                 <div class="d-flex justify-content-center pt-5">
                     <nav>
@@ -145,7 +146,7 @@
 <!-- content-wrapper ends -->
 @section Scripts {
     <script>
-    $(document).ready(function () {
+        $(document).ready(function () {
             // executes when HTML-Document is loaded and DOM is ready
             console.log("document is ready");
 

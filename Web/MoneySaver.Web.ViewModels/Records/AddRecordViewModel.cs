@@ -1,9 +1,12 @@
 ﻿namespace MoneySaver.Web.ViewModels.Records
 {
+    using System;
     using System.Collections.Generic;
+
     using MoneySaver.Web.ViewModels.Categories;
     using MoneySaver.Web.ViewModels.Wallets;
     using MoneySaver.Web.ViewModels.Records.Enums;
+
 
     public class AddRecordViewModel
     {
@@ -16,6 +19,8 @@
         public string WalletName { get; set; }
 
         public decimal Amount { get; set; }
+
+        public DateTime? CreatedOn { get; set; }
 
         public IEnumerable<CategoryNameIdViewModel> Categories { get; set; }
 

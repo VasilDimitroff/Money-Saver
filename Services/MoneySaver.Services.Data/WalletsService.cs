@@ -187,6 +187,7 @@
                         TotalExpenses = c.Records.Where(r => r.Type == RecordType.Expense).Sum(r => r.Amount),
                         TotalIncomes = c.Records.Where(r => r.Type == RecordType.Income).Sum(r => r.Amount),
                         RecordsCount = c.Records.Count(),
+                        BadgeColor = c.BadgeColor,
                     }),
                 })
                 .FirstOrDefaultAsync();
@@ -217,6 +218,7 @@
                     CategoryName = r.Category.Name,
                     CreatedOn = r.CreatedOn,
                     Description = r.Description,
+                    CategoryBadgeColor = r.Category.BadgeColor,
                 })
                 .ToListAsync();
 
@@ -255,6 +257,7 @@
                     Id = c.Id,
                     Name = c.Name,
                     WalletName = c.Wallet.Name,
+                    BadgeColor = c.BadgeColor,
                 })
                 .ToListAsync();
 
