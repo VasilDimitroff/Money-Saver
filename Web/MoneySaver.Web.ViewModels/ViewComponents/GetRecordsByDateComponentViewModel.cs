@@ -9,11 +9,11 @@
 
         public DateTime StartDate { get; set; }
 
-        public DateTime DefaultStartDate => DateTime.Today;
+        public DateTime DefaultStartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
-        public DateTime DefaultEndDate => DateTime.UtcNow;
+        public DateTime DefaultEndDate { get; set; }
 
-    }
+}
 }
