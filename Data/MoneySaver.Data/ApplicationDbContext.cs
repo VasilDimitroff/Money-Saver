@@ -32,13 +32,11 @@
 
         public DbSet<Currency> Currencies { get; set; }
 
-        public DbSet<Product> Products { get; set; }
-
-        public DbSet<ProductShoplist> ProductsShoplists { get; set; }
+        public DbSet<ToDoItem> Products { get; set; }
 
         public DbSet<Record> Records { get; set; }
 
-        public DbSet<Shoplist> Shoplists { get; set; }
+        public DbSet<ToDoList> Shoplists { get; set; }
 
         public DbSet<Stock> Stocks { get; set; }
 

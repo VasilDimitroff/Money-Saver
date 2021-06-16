@@ -7,11 +7,11 @@
     using MoneySaver.Data.Common.Models;
     using MoneySaver.Data.Models.Enums;
 
-    public class Shoplist : BaseModel<int>
+    public class ToDoList : BaseModel<int>
     {
-        public Shoplist()
+        public ToDoList()
         {
-            this.ProductsShoplist = new HashSet<ProductShoplist>();
+            this.ListItems = new HashSet<ToDoItem>();
         }
 
         public string Name { get; set; }
@@ -22,6 +22,6 @@
 
         public virtual ApplicationUser ApplicationUser { get; set; }
 
-        public virtual ICollection<ProductShoplist> ProductsShoplist { get; set; }
+        public virtual ICollection<ToDoItem> ListItems { get; set; }
     }
 }

@@ -1,0 +1,63 @@
+﻿@using MoneySaver.Web.ViewModels.Shoplists;
+@model AddToDoListInputModel
+@{
+    this.ViewData["Title"] = "Add To Do List";
+}
+<div class="col-lg-12">
+    <div class="card px-3">
+        <div class="card-body">
+            <h4 class="card-title">@this.ViewData["Title"]</h4>
+            <form method="post">
+                <div class="list-wrapper">
+                    <div id="AddItems">
+                        @*<span class="text-light"><a class="add btn btn-primary" onclick="AddItem()"><i class="fas fa-plus"></i>Add Task</a></span><br />
+                <br />
+            </div>
+            <br />
+                        *@
+                        <div class='input-group mb-3'>
+                            <span class='btn btn-primary btn-sm disabled'>Name</span>
+                            <label for='Name'></label>
+                            <input type='text' placeholder='Example: Products, Wishlist, Job tasks' asp-for="Name" class='form-control font-italic' />
+                        </div>
+                        <br />
+                        <p class="h6">Items:</p>
+                        <div class='input-group mb-3'>
+                            <div class='input-group-prepend'>
+                                <span onclick='AddItem()' class='btn btn-primary btn-sm'><i class='mdi mdi-plus'></i></span>
+                                <label for='ListItems[0]'></label>
+                            </div>
+                            <input type='text' placeholder='Enter a new item (of example: Milk, iPhone, Team meeting)' name='ListItems[0]' id='ListItems[0]' class='form-control font-italic' />
+                        </div>
+                    </div>
+                    <br />
+                    <vc:save-button></vc:save-button>
+                    <vc:back-button></vc:back-button>
+</form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        var index = 1;
+        function AddItem() {
+            $("#AddItems").
+                append("<div class='input-group mb-3'>" +
+                    "<div class='input-group-prepend'>" + "<span onclick='AddItem()' class='btn btn-primary btn-sm'><i class='mdi mdi-plus'></i></span>" +
+                    "<label for='ListItems" + index + "'" + "" +
+                    "</label>" +
+                    "</div>" +
+                "<input type='text' placeholder='Enter a new item' name='ListItems[" + index + "]' id='ListItems" + index + "'" + " class='form-control font-italic' />"
+                    + "</div>");
+            index++;
+        }
+
+               // AddItem().on('change', 'form-control', function () {
+               // });
+    </script>
+
+
+
+}

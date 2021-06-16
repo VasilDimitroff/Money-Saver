@@ -10,7 +10,7 @@
         public Category()
         {
             this.Records = new HashSet<Record>();
-            this.Products = new HashSet<Product>();
+            this.Products = new HashSet<ToDoItem>();
         }
 
         public int Id { get; set; }
@@ -25,6 +25,6 @@
 
         public virtual ICollection<Record> Records { get; set; }
 
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<ToDoItem> Products { get; set; }
     }
 }

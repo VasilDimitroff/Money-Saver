@@ -54,11 +54,8 @@
                 </div>
                 <input type="hidden" asp-for="@Model.Id" /></input>
                 <input type="hidden" asp-for="@Model.WalletId" /></input>
-                <button type="submit" class="btn btn-primary btn-sm mr-2 "><i class="mdi mdi-check btn-icon-prepend"></i> Save</button>
-
-
-                <a class="btn btn-light btn-sm" href="javascript:history.back()" style="text-decoration: none;">Back</a>
-
+                <vc:save-button></vc:save-button>
+                <vc:back-button></vc:back-button>
             </form>
             <vc:delete-record record-id="@Model.Id"></vc:delete-record>
         </div>
