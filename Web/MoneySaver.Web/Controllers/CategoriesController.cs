@@ -26,9 +26,28 @@
             return View();
         }
 
-        public IActionResult Add()
+        public async Task<IActionResult> Add(int walletId)
         {
-            return View();
+            var model = new AddCategoryInputModel();
+            model.Wallets = new List<WalletNameAndIdViewModel>();
+
+            var wallets = await this.categoriesService.GetAllWalletsWithNameAndIdAsync("first");
+
+            model.WalletId = walletId;
+
+            model.Wallets = wallets.Select(w => new WalletNameAndIdViewModel
+            {
+                WalletId = w.WalletId,
+                WalletName = w.WalletName,
+            })
+                .ToList();
+
+            return this.View(model);
+        }
+
+        public async Task<IActionResult> Post(AddCategoryInputModel input)
+        {
+            return this.View();
         }
 
         public async Task<IActionResult> Details(int id)

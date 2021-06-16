@@ -21,6 +21,7 @@ namespace MoneySaver.Web.Controllers
             {
 
             }
+
             return Json(ModelState);
         }
     }

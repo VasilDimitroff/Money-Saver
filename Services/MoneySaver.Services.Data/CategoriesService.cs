@@ -108,12 +108,32 @@
             return categ;
         }
 
-        //Func<int, bool> func = dbCatId => dbCatId == categoryId;
-
         private async Task<bool> IsCategoryExistAsync(int walletId, string categoryName)
         {
             return await this.dbContext.Categories
                 .AnyAsync(cat => cat.WalletId == walletId && cat.Name.ToLower() == categoryName.ToLower());
         }
+
+        public async Task<IEnumerable<WalletNameAndIdDto>> GetAllWalletsWithNameAndIdAsync(string userId)
+        {
+            var user = await this.dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                throw new ArgumentNullException(GlobalConstants.UserNotExist);
+            }
+
+            var wallets = await this.dbContext.Wallets
+                .Where(w => w.ApplicationUserId == userId)
+                .Select(w => new WalletNameAndIdDto
+                {
+                    WalletId = w.Id,
+                    WalletName = w.Name,
+                })
+                .ToListAsync();
+
+            return wallets;
+        }
     }
 }
+

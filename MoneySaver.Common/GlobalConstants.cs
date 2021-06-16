@@ -47,5 +47,7 @@
         public const string InvalidBudgetName = "Budget with name {0} doesn't exist in this wallet!";
 
         public const string InvalidCurrency = "Please select a valid currency!";
+
+        public const string UserNotExist = "User with this id do not exist";
     }
 }

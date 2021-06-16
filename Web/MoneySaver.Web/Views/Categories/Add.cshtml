@@ -1,1 +1,62 @@
-﻿
+﻿@using MoneySaver.Web.ViewModels.Records.Enums
+@using MoneySaver.Web.ViewModels.Categories
+@using MoneySaver.Web.ViewComponents
+@using System.Linq;
+@model AddCategoryInputModel
+@{
+    this.ViewData["Title"] = "Add Category";
+}
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add record</h4>
+            <p class="card-description">
+                Add Record to <strong>@this.ViewData["Title"]</strong>
+            </p>
+            <form class="forms-sample" asp-controller="Categories" asp-action="Add" method="post">
+                <div class="form-group">
+                    <label asp-for="Name">Name</label>
+                    <input type="text" class="form-control" asp-for="Name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label for="Category">Category</label>
+                    <select asp-for="WalletId"
+                            asp-items="@(new SelectList(Model.Wallets,"WalletId","WalletName"))" class="js-example-basic-single" style="width:100%">
+                    </select>
+                </div>
+                @* <div class="form-group">
+            <label for="Category">Category</label>
+            <select asp-for="CategoryId" class="js-example-basic-single" style="width:100%">
+                @foreach (var category in Model.Categories)
+                {
+                    <option>@category.Name</option>
+                }
+            </select>
+        </div>
+                *@    
+                <button type="submit" class="btn btn-primary btn-sm mr-2">
+                    Submit
+                </button>
+                <vc:back-button></vc:back-button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+    <!-- it make sidebar not collapsable
+    <script src="~/js/template.js"></script>
+    end of script-->
+    <script src="~/js/settings.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="~/js/file-upload.js"></script>
+    <script src="~/js/typeahead.js"></script>
+    <script src="~/js/select2.js"></script>
+}

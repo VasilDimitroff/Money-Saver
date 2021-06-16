@@ -36,14 +36,13 @@
 
         public DbSet<Record> Records { get; set; }
 
-        public DbSet<ToDoList> Shoplists { get; set; }
+        public DbSet<ToDoList> ToDoLists { get; set; }
 
         public DbSet<Stock> Stocks { get; set; }
 
         public DbSet<Wallet> Wallets { get; set; }
 
         public DbSet<UserTrade> UsersTrades { get; set; }
-
 
         public override int SaveChanges() => this.SaveChanges(true);
 

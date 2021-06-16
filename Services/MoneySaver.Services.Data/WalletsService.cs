@@ -24,7 +24,6 @@
 
         public WalletsService(ApplicationDbContext dbContext)
         {
-            //IRepository<Wallet> walletRepository
             this.dbContext = dbContext;
         }
 
