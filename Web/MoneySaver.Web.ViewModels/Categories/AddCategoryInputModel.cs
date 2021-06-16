@@ -6,13 +6,15 @@
     {
         public AddCategoryInputModel()
         {
-            this.Wallets = new HashSet<WalletNameAndIdViewModel>();
+            this.Wallets = new HashSet<AddCategoryWalletsListViewModel>();
         }
 
         public string Name { get; set; }
 
+        public string WalletName { get; set; }
+
         public int WalletId { get; set; }
 
-        public IEnumerable<WalletNameAndIdViewModel> Wallets { get; set; }
+        public IEnumerable<AddCategoryWalletsListViewModel> Wallets { get; set; }
     }
 }

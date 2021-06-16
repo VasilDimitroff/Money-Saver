@@ -3,10 +3,8 @@
     using MoneySaver.Data.Common.Models;
     using MoneySaver.Data.Models.Enums;
 
-    public class Record : BaseModel<int>
+    public class Record : BaseModel<string>
     {
-        public string Id { get; set; }
-
         public string Description { get; set; }
 
         public decimal Amount { get; set; }

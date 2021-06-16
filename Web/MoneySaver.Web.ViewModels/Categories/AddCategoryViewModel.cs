@@ -1,8 +1,8 @@
 ﻿namespace MoneySaver.Web.ViewModels.Categories
 {
-    public class WalletNameAndIdViewModel
+    public class AddCategoryWalletsListViewModel
     {
-        public int Id { get; set; }
+        public int WalletId { get; set; }
 
         public string WalletName { get; set; }
     }

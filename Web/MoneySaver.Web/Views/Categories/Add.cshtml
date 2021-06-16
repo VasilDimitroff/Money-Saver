@@ -4,14 +4,14 @@
 @using System.Linq;
 @model AddCategoryInputModel
 @{
-    this.ViewData["Title"] = "Add Category";
+    this.ViewData["Title"] = "Add Category " + "- " + @Model.WalletName;
 }
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Add record</h4>
+            <h4 class="card-title">@this.ViewData["Title"]</h4>
             <p class="card-description">
-                Add Record to <strong>@this.ViewData["Title"]</strong>
+                Add a new category to a wallet
             </p>
             <form class="forms-sample" asp-controller="Categories" asp-action="Add" method="post">
                 <div class="form-group">
@@ -20,20 +20,14 @@
                 </div>
                 <div class="form-group">
                     <label for="Category">Category</label>
-                    <select asp-for="WalletId"
-                            asp-items="@(new SelectList(Model.Wallets,"WalletId","WalletName"))" class="js-example-basic-single" style="width:100%">
+                    <select asp-for="@Model.WalletId" class="js-example-basic-single" style="width:100%">
+                        @foreach (var wallet in Model.Wallets)
+                        {
+                            <option value="@wallet.WalletId">@wallet.WalletName</option>
+                        }
                     </select>
                 </div>
-                @* <div class="form-group">
-            <label for="Category">Category</label>
-            <select asp-for="CategoryId" class="js-example-basic-single" style="width:100%">
-                @foreach (var category in Model.Categories)
-                {
-                    <option>@category.Name</option>
-                }
-            </select>
-        </div>
-                *@    
+
                 <button type="submit" class="btn btn-primary btn-sm mr-2">
                     Submit
                 </button>

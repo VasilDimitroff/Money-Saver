@@ -49,9 +49,10 @@
                 WalletId = wallet.Id,
                 CreatedOn = DateTime.UtcNow,
                 BadgeColor = (BadgeColor)randomNumber,
+                ModifiedOn = DateTime.UtcNow,
             };
 
-            await this.dbContext.Categories.AddAsync(category);
+            var result = await this.dbContext.Categories.AddAsync(category);
             await this.dbContext.SaveChangesAsync();
 
             return string.Format(GlobalConstants.SuccessfullyAddedCategory, category.Name);
@@ -108,12 +109,6 @@
             return categ;
         }
 
-        private async Task<bool> IsCategoryExistAsync(int walletId, string categoryName)
-        {
-            return await this.dbContext.Categories
-                .AnyAsync(cat => cat.WalletId == walletId && cat.Name.ToLower() == categoryName.ToLower());
-        }
-
         public async Task<IEnumerable<WalletNameAndIdDto>> GetAllWalletsWithNameAndIdAsync(string userId)
         {
             var user = await this.dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
@@ -134,6 +129,11 @@
 
             return wallets;
         }
+
+        private async Task<bool> IsCategoryExistAsync(int walletId, string categoryName)
+        {
+            return await this.dbContext.Categories
+                .AnyAsync(cat => cat.WalletId == walletId && cat.Name.ToLower() == categoryName.ToLower());
+        }
     }
 }
-

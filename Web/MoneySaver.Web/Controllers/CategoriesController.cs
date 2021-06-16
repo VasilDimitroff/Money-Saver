@@ -15,10 +15,12 @@
     public class CategoriesController : Controller
     {
         private readonly ICategoriesService categoriesService;
+        private readonly IWalletsService walletsService;
 
-        public CategoriesController(ICategoriesService categoriesService)
+        public CategoriesController(ICategoriesService categoriesService, IWalletsService walletsService)
         {
             this.categoriesService = categoriesService;
+            this.walletsService = walletsService;
         }
 
         public IActionResult All()
@@ -26,16 +28,15 @@
             return View();
         }
 
-        public async Task<IActionResult> Add(int walletId)
+        public async Task<IActionResult> Add(int id)
         {
             var model = new AddCategoryInputModel();
-            model.Wallets = new List<WalletNameAndIdViewModel>();
 
             var wallets = await this.categoriesService.GetAllWalletsWithNameAndIdAsync("first");
 
-            model.WalletId = walletId;
-
-            model.Wallets = wallets.Select(w => new WalletNameAndIdViewModel
+            model.WalletId = id;
+            model.WalletName = await this.walletsService.GetWalletNameAsync(id);
+            model.Wallets = wallets.Select(w => new AddCategoryWalletsListViewModel
             {
                 WalletId = w.WalletId,
                 WalletName = w.WalletName,
@@ -45,9 +46,11 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> Post(AddCategoryInputModel input)
+        [HttpPost]
+        public async Task<IActionResult> Add(AddCategoryInputModel input)
         {
-            return this.View();
+            await this.categoriesService.AddAsync(input.Name, input.WalletId);
+            return this.View(input);
         }
 
         public async Task<IActionResult> Details(int id)

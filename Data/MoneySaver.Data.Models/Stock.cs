@@ -10,8 +10,6 @@ namespace MoneySaver.Data.Models
             this.Trades = new HashSet<UserTrade>();
         }
 
-        public int Id { get; set; }
-
         public decimal Price { get; set; }
 
         public string CompanyName { get; set; }

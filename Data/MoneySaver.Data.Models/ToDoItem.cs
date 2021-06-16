@@ -1,13 +1,9 @@
-﻿using MoneySaver.Data.Common.Models;
-using System.Collections.Generic;
-
-namespace MoneySaver.Data.Models
+﻿namespace MoneySaver.Data.Models
 {
+    using MoneySaver.Data.Common.Models;
+
     public class ToDoItem : BaseDeletableModel<int>
     {
-
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         public int ToDoListId { get; set; }
