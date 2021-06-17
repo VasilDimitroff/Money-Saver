@@ -11,7 +11,7 @@
         <div class="card-body">
             <h4 class="card-title">@this.ViewData["Title"]</h4>
             <p class="card-description">
-                Add a new category to a wallet
+                Add a new category to <span class="font-weight-bold">@Model.WalletName</span>
             </p>
             <form class="forms-sample" asp-controller="Categories" asp-action="Add" method="post">
                 <div class="form-group">
