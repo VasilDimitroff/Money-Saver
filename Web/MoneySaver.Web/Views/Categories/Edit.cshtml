@@ -2,33 +2,32 @@
 @using MoneySaver.Web.ViewModels.Categories
 @using MoneySaver.Web.ViewComponents
 @using System.Linq;
-@model AddCategoryInputModel
+@model EditCategoryInputModel
 @{
-    this.ViewData["Title"] = "Add Category " + "- " + @Model.WalletName;
+    this.ViewData["Title"] = "Edit Category " + "- " + @Model.CategoryName;
 }
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">@this.ViewData["Title"]</h4>
             <p class="card-description">
-                Add a new category to a wallet
+                Edit category @Model.CategoryName
             </p>
-            <form class="forms-sample" asp-controller="Categories" asp-action="Add" method="post">
+            <form class="forms-sample" method="post">
                 <div class="form-group">
-                    <label asp-for="Name">Name</label>
-                    <input type="text" class="form-control form-control-lg" asp-for="Name" placeholder="Name">
+                    <label asp-for="CategoryName">Name</label>
+                    <input type="text" class="form-control form-control-lg" asp-for="CategoryName" placeholder="Name">
                 </div>
-                @* <div class="form-group">
-            <label for="Category">Wallet</label>
-            <select asp-for="@Model.WalletId" class="js-example-basic-single" style="width:100%">
-                @foreach (var wallet in Model.Wallets)
-                {
-                    <option value="@wallet.WalletId">@wallet.WalletName</option>
-                }
-            </select>
-        </div>
-                *@
-                <input type="hidden"asp-for="WalletId">
+                     <input type="hidden" asp-for="CategoryId">
+                <div class="form-group">
+                    <label for="Category">Wallet</label>
+                    <select asp-for="@Model.WalletId" class="js-example-basic-single" style="width:100%">
+                        @foreach (var wallet in Model.Wallets)
+                        {
+                            <option value="@wallet.WalletId">@wallet.WalletName</option>
+                        }
+                    </select>
+                </div>
                 <div class="form-group">
                     <label asp-for="BadgeColor">Badge Color</label>
                     <select class="form-control" style="width:100%" asp-for="BadgeColor" placeholder="Type">
@@ -129,6 +128,7 @@
             font-size: 16px;
         }
     </style>
+
     <script src="~/vendors/js/vendor.bundle.base.js"></script>
     <script src="~/vendors/js/vendor.bundle.addons.js"></script>
     <!-- endinject -->

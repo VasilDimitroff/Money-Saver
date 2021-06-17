@@ -19,15 +19,13 @@
     public class CategoriesService : ICategoriesService
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly Random rand;
 
         public CategoriesService(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
-            this.rand = new Random();
         }
 
-        public async Task<string> AddAsync(string categoryName, int walletId)
+        public async Task<string> AddAsync(string categoryName, int walletId, string badgeColor)
         {
             Wallet wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(x => x.Id == walletId);
 
@@ -41,14 +39,19 @@
                 throw new ArgumentException(GlobalConstants.ExistingCategory);
             }
 
-            int randomNumber = this.rand.Next(1, 7);
+            BadgeColor badge;
+
+            if (!Enum.TryParse<BadgeColor>(badgeColor, out badge))
+            {
+                throw new ArgumentException(GlobalConstants.BadgeColorNotValid);
+            }
 
             Category category = new Category
             {
                 Name = categoryName,
                 WalletId = wallet.Id,
                 CreatedOn = DateTime.UtcNow,
-                BadgeColor = (BadgeColor)randomNumber,
+                BadgeColor = badge,
                 ModifiedOn = DateTime.UtcNow,
             };
 
@@ -71,6 +74,37 @@
             await this.dbContext.SaveChangesAsync();
 
             return string.Format(GlobalConstants.SuccessfullyRemovedCategory, category.Name);
+        }
+
+        public async Task<string> EditAsync(int categoryId, string categoryName, int walletId, string badgeColor)
+        {
+            var category = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
+
+            if (category == null)
+            {
+                throw new ArgumentNullException(GlobalConstants.UnexistingCategory);
+            }
+
+            var wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(w => w.Id == walletId);
+
+            if (wallet == null)
+            {
+                throw new ArgumentNullException(GlobalConstants.WalletNotExist);
+            }
+
+            if (!Enum.TryParse<BadgeColor>(badgeColor, out BadgeColor badge))
+            {
+                throw new ArgumentException(GlobalConstants.BadgeColorNotValid);
+            }
+
+            category.BadgeColor = badge;
+            category.ModifiedOn = DateTime.UtcNow;
+            category.Name = categoryName;
+            category.WalletId = walletId;
+
+            await this.dbContext.SaveChangesAsync();
+
+            return GlobalConstants.CategorySuccessfullyUpdated;
         }
 
         public async Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId)
@@ -107,6 +141,28 @@
                  .FirstOrDefaultAsync();
 
             return categ;
+        }
+
+        public async Task<EditCategoryDto> GetCategoryInfoForEditAsync(int categoryId)
+        {
+            var category = await this.dbContext.Categories
+                .Where(c => c.Id == categoryId)
+                .Select(c => new EditCategoryDto
+                {
+                    BadgeColor = c.BadgeColor.ToString(),
+                    CategoryId = c.Id,
+                    CategoryName = c.Name,
+                    WalletId = c.WalletId,
+                    WalletName = c.Wallet.Name,
+                })
+                .FirstOrDefaultAsync();
+
+            if (category == null)
+            {
+                throw new ArgumentException(GlobalConstants.UnexistingCategory);
+            }
+
+            return category;
         }
 
         public async Task<IEnumerable<WalletNameAndIdDto>> GetAllWalletsWithNameAndIdAsync(string userId)

@@ -9,11 +9,15 @@
 
     public interface ICategoriesService
     {
-        public Task<string> AddAsync(string categoryName, int walletId);
+        public Task<string> AddAsync(string categoryName, int walletId, string badgeColor);
 
         public Task<string> RemoveAsync(int categoryId);
 
+        public Task<string> EditAsync(int categoryId, string categoryName, int walletId, string badgeColor);
+
         public Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId);
+
+        public Task<EditCategoryDto> GetCategoryInfoForEditAsync(int categoryId);
 
         public Task<IEnumerable<WalletNameAndIdDto>> GetAllWalletsWithNameAndIdAsync(string userId);
     }

@@ -95,7 +95,7 @@
                             <tbody>
                                 @foreach (var category in Model.Categories.Take(10))
                                 {
-                                    <tr class="card-shadow" onclick="window.location = '/Category/Edit/@category.CategoryId'">
+                                    <tr class="card-shadow" onclick="window.location='/Categories/Edit?id=@category.CategoryId&walletId=@Model.WalletId'">
                                         <td class="py-1 pl-0">
                                             <div class="d-flex align-items-center">
                                                 <div class="ml-3">
@@ -140,7 +140,7 @@
                                             <p class="text-@badgeClassName font-weight-bold">@category.TotalExpenses @Model.Currency</p>
                                         </td>
                                         <td>
-                                            <a href="/Category/Edit/@category.CategoryId"><span class="btn btn-outline-info btn-sm btn-icon-text" data-toggle="tooltip" data-placement="bottom" title="Edit record"><i class="mdi mdi-pencil btn-icon-prepend"></i>Edit</span></a>
+                                          <vc:edit-category category-id="@category.CategoryId" wallet-id="@Model.WalletId"></vc:edit-category>
                                         </td>
                                     </tr>
                                 }

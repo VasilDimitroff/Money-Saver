@@ -193,6 +193,11 @@
                 })
                 .FirstOrDefaultAsync();
 
+            if (targetWallet == null)
+            {
+                throw new ArgumentNullException(GlobalConstants.WalletNotExist);
+            }
+
             decimal totalWalletExpensesLast30days = this.dbContext.Records
                 .Where(r => r.Category.WalletId == walletId && r.Type == RecordType.Expense && r.CreatedOn <= DateTime.UtcNow && r.CreatedOn >= DateTime.UtcNow.AddDays(-30))
                 .Sum(r => r.Amount);
@@ -223,11 +228,6 @@
                 })
                 .ToListAsync();
 
-            if (targetWallet == null)
-            {
-                throw new ArgumentNullException(GlobalConstants.WalletNotExist);
-            }
-
             return targetWallet;
         }
 
@@ -242,6 +242,23 @@
                 .FirstOrDefaultAsync();
 
             if (wallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.WalletNotExist);
+            }
+
+            return wallet.Id;
+        }
+
+        public async Task<int> GetWalletIdByCategoryIdAsync(int categoryId)
+        {
+            var wallet = await this.dbContext.Categories
+                .Select(c => new WalletIdDto
+                {
+                    Id = c.WalletId,
+                })
+                .FirstOrDefaultAsync(x => x.Id == categoryId);
+
+            if (wallet.Id == 0)
             {
                 throw new ArgumentException(GlobalConstants.WalletNotExist);
             }

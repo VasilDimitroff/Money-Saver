@@ -34,15 +34,9 @@
                     </div>
                 *@
 
-
-
-
-
-
-
                 <div class="form-group">
                     <label asp-for="Description">Description</label>
-                    <input type="text" class="form-control" asp-for="Description" placeholder="Description">
+                    <input type="text" class="form-control form-control-lg" asp-for="Description" placeholder="Description">
                 </div>
                 <div class="form-group">
                     <label asp-for="Type">Type</label>
@@ -63,11 +57,11 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Amount">Amount</label>
-                    <input type="number" class="form-control" asp-for="Amount" placeholder="Amount" value="Enter amount">
+                    <input type="number" class="form-control form-control-lg" asp-for="Amount" placeholder="Amount" value="Enter amount">
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.CreatedOn">Created On (Default is now)</label>
-                    <input type="datetime-local" class="form-control" asp-for="@Model.CreatedOn" placeholder="@Model.CreatedOn" value="@Model.CreatedOn.ToString()">
+                    <input type="datetime-local" class="form-control form-control-lg" asp-for="@Model.CreatedOn" placeholder="@Model.CreatedOn" value="@Model.CreatedOn.ToString()">
                 </div>
                 <input type="hidden" asp-for="@Model.WalletId" /></input>
                 <button type="submit" class="btn btn-primary btn-sm mr-2">

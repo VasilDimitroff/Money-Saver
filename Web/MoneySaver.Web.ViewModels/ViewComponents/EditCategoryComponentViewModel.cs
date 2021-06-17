@@ -1,8 +1,8 @@
 ﻿namespace MoneySaver.Web.ViewModels.ViewComponents
 {
-    public class EditRecordComponentViewModel
+    public class EditCategoryComponentViewModel
     {
-        public string Id { get; set; }
+        public int CategoryId { get; set; }
 
         public int WalletId { get; set; }
     }

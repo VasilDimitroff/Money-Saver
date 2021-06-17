@@ -8,6 +8,8 @@
 
         public const string NullValueOfCategory = "Category Cannot Be Null";
 
+        public const string BadgeColorNotValid = "Entered Badge Color not valid";
+
         public const string NullValueOfWallet = "Wallet Cannot Be Null";
 
         public const string InvalidRecordType = "Invalid Record Type";
@@ -27,6 +29,8 @@
         public const string SuccessfullyAddedCategory = "Category with name {0} added successfully";
 
         public const string SuccessfullyRemovedCategory = "Category with name {0} removed successfully";
+
+        public const string CategorySuccessfullyUpdated = "The category is successfully updated";
 
         public const string UnexistingCategory = "Category do not exist";
 

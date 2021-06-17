@@ -15,6 +15,8 @@
 
         public int WalletId { get; set; }
 
+        public string BadgeColor { get; set; }
+
         public IEnumerable<AddCategoryWalletsListViewModel> Wallets { get; set; }
     }
 }

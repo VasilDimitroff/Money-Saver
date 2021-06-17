@@ -49,8 +49,36 @@
         [HttpPost]
         public async Task<IActionResult> Add(AddCategoryInputModel input)
         {
-            await this.categoriesService.AddAsync(input.Name, input.WalletId);
-            return this.View(input);
+            await this.categoriesService.AddAsync(input.Name, input.WalletId, input.BadgeColor);
+            return this.Redirect($"/Wallets/Details/{input.WalletId}");
+        }
+
+        public async Task<IActionResult> Edit(int id, int walletId)
+        {
+            var categoryInfo = await this.categoriesService.GetCategoryInfoForEditAsync(id);
+            var wallets = await this.categoriesService.GetAllWalletsWithNameAndIdAsync("first");
+
+            var model = new EditCategoryInputModel();
+            model.CategoryId = id;
+            model.CategoryName = categoryInfo.CategoryName;
+            model.BadgeColor = Enum.Parse<BadgeColor>(categoryInfo.BadgeColor);
+            model.WalletId = walletId;
+            model.Wallets = wallets.Select(w => new EditCategoryWalletsListViewModel
+            {
+                WalletId = w.WalletId,
+                WalletName = w.WalletName,
+            })
+                .ToList();
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditCategoryInputModel input)
+        {
+            await this.categoriesService.EditAsync(input.CategoryId, input.CategoryName, input.WalletId, input.BadgeColor.ToString());
+
+            return this.Redirect($"/Wallets/Details/{input.WalletId}");
         }
 
         public async Task<IActionResult> Details(int id)

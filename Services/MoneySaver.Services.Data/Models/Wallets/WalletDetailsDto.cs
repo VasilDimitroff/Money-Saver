@@ -5,6 +5,12 @@
 
     public class WalletDetailsDto
     {
+        public WalletDetailsDto()
+        {
+            this.Categories = new HashSet<WalletDetailsCategoryDto>();
+            this.Records = new HashSet<WalletDetailsRecordDto>();
+        }
+
         public int WalletId { get; set; }
 
         public string WalletName { get; set; }
