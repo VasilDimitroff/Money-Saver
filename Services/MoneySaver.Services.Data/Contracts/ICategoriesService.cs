@@ -11,13 +11,15 @@
     {
         public Task<string> AddAsync(string categoryName, int walletId, string badgeColor);
 
-        public Task<string> RemoveAsync(int categoryId);
+        public Task<string> RemoveAsync(int oldCategoryId, int newCategoryId);
 
         public Task<string> EditAsync(int categoryId, string categoryName, int walletId, string badgeColor);
 
         public Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId);
 
         public Task<EditCategoryDto> GetCategoryInfoForEditAsync(int categoryId);
+
+        public Task<DeleteCategoryDto> GetCategoryInfoForDeleteAsync(int categoryId, int walletId);
 
         public Task<IEnumerable<WalletNameAndIdDto>> GetAllWalletsWithNameAndIdAsync(string userId);
     }

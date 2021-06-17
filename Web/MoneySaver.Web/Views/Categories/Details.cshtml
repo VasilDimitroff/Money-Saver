@@ -80,7 +80,7 @@
                                     <a href="/Categories/Details?id=@Model.CategoryId" class="badge badge-@Model.BadgeColor.ToString().ToLower()">@Model.Category</a>
                                 </td>
                                 <td>
-                                    <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record> 
+                                    <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
                                 </td>
                             </tr>
                         }
@@ -92,9 +92,9 @@
                     <div class="alert alert-warning" role="alert">
                         <span>No records found</span>
                     </div>
-
-                    <vc:back-button></vc:back-button>
                 }
+                <br />
+                <vc:back-button></vc:back-button>
                 <!-- Pagination-->
                 <div class="d-flex justify-content-center pt-5">
                     <nav>
@@ -110,7 +110,7 @@
                 </div>
                 <!-- End Pagination-->
 
-               
+
             </div>
         </div>
     </div>

@@ -1,0 +1,82 @@
+﻿@using MoneySaver.Web.ViewModels.Records.Enums
+@using MoneySaver.Web.ViewModels.Categories
+@using MoneySaver.Web.ViewComponents
+@using System.Linq;
+@model DeleteCategoryInputModel
+@{
+    this.ViewData["Title"] = "Delete Category " + "- " + @Model.OldCategoryName;
+}
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">@this.ViewData["Title"]</h4>
+            <p class="card-description">
+            <p>
+                Before you delete the category you can move the records from it to other category.
+            </p>
+            <p>
+            Please, choose one of the listed categories to move current records from <span class="badge badge-@Model.OldCategoryBadgeColor.ToString().ToLower()">@Model.OldCategoryName</span>.
+            </p>
+            <p>
+                If you choose to delete the category with all records, this operation cannot be undo.
+            </p>
+            <br />
+            <form class="forms-sample" method="post" style="display: inline">
+                <input type="hidden" asp-for="OldCategoryId">
+                <div class="form-group">
+                    <label asp-for="@Model.NewCategoryId">Choose category where to move the records from the <span class="badge badge-@Model.OldCategoryBadgeColor.ToString().ToLower()">@Model.OldCategoryName</span> category:</label>
+                    <select asp-for="@Model.NewCategoryId" class="js-example-basic-single" style="width:100%">
+                        @foreach (var category in Model.Categories)
+                        {
+                            <option value="@category.CategoryId">@category.CategoryName</option>
+                        }
+                    </select>
+                </div>
+                @* <div class="form-group">
+            <label asp-for="@Model.NewCategoryId">Choose new category 2</label>
+            <select class="form-control" style="width:100%" asp-for="@Model.NewCategoryId" placeholder="New Category">
+                <option disabled selected class="default-option"> -- select a badge color -- </option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option class="optText-@category.BadgeColor.ToString().ToLower()" value="@category.CategoryId">@category.CategoryName</option>
+                }
+            </select>
+        </div>
+                *@
+
+                <button type="submit" style="white-space: normal !important; max-width: 155px; line-height: 20px;" class="btn btn-primary btn-sm mr-2">
+                    Move records and delete category
+                </button>
+
+            </form>
+            <form class="forms-sample" method="post" style="display: inline">
+                <input type="hidden" asp-for="OldCategoryId" value="@Model.OldCategoryId">
+                <input type="hidden" asp-for="NewCategoryId" value="-1">
+                <button type="submit" style="white-space: normal !important; max-width: 155px; line-height: 20px;" class="btn btn-danger btn-sm mr-2">
+                    Delete category and records
+                </button>
+            </form>
+            
+            <vc:back-button></vc:back-button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+    <!-- it make sidebar not collapsable
+    <script src="~/js/template.js"></script>
+    end of script-->
+    <script src="~/js/settings.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="~/js/file-upload.js"></script>
+    <script src="~/js/typeahead.js"></script>
+    <script src="~/js/select2.js"></script>
+}

@@ -81,6 +81,36 @@
             return this.Redirect($"/Wallets/Details/{input.WalletId}");
         }
 
+        public async Task<IActionResult> Delete(int id, int walletId)
+        {
+            var model = new DeleteCategoryInputModel();
+
+            var modelInfo = await this.categoriesService.GetCategoryInfoForDeleteAsync(id, walletId);
+
+            model.WalletId = modelInfo.WalletId;
+            model.WalletName = modelInfo.WalletName;
+            model.OldCategoryId = id;
+            model.OldCategoryName = modelInfo.OldCategoryName;
+            model.OldCategoryBadgeColor = Enum.Parse<BadgeColor>(modelInfo.OldCategoryBadgeColor.ToString());
+            model.Categories = modelInfo.Categories
+                .Select(c => new DeleteCategoryNameAndIdViewModel
+                {
+                    BadgeColor = Enum.Parse<BadgeColor>(c.BadgeColor.ToString()),
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.CategoryName,
+                })
+                .ToList();
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(DeleteCategoryInputModel input)
+        {
+            await this.categoriesService.RemoveAsync(input.OldCategoryId, input.NewCategoryId);
+            return this.Redirect($"/Wallets/Details/{input.WalletId}");
+        }
+
         public async Task<IActionResult> Details(int id)
         {
             var category = await this.categoriesService.GetRecordsByCategoryAsync(id);

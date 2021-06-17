@@ -61,19 +61,37 @@
             return string.Format(GlobalConstants.SuccessfullyAddedCategory, category.Name);
         }
 
-        public async Task<string> RemoveAsync(int categoryId)
+        public async Task<string> RemoveAsync(int oldCategoryId, int newCategoryId)
         {
-            Category category = await this.dbContext.Categories.FirstOrDefaultAsync(x => x.Id == categoryId);
+            var oldCategory = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == oldCategoryId);
 
-            if (category == null)
+            if (oldCategory == null)
             {
-                throw new ArgumentException(GlobalConstants.UnexistingCategory);
+                throw new ArgumentNullException(GlobalConstants.UnexistingCategory);
             }
 
-            this.dbContext.Categories.Remove(category);
+            if (newCategoryId == -1)
+            {
+                await this.DeleteRecordsFromCategoryAsync(oldCategoryId);
+            }
+            else
+            {
+                var newCategory = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == newCategoryId);
+
+                if (newCategory == null)
+                {
+                    throw new ArgumentNullException(GlobalConstants.UnexistingCategory);
+                }
+
+                await this.MoveCategoryOfRecordsAsync(oldCategoryId, newCategoryId);
+            }
+
+            var deletedCategoryName = oldCategory.Name;
+
+            this.dbContext.Categories.Remove(oldCategory);
             await this.dbContext.SaveChangesAsync();
 
-            return string.Format(GlobalConstants.SuccessfullyRemovedCategory, category.Name);
+            return string.Format(GlobalConstants.SuccessfullyRemovedCategory, deletedCategoryName);
         }
 
         public async Task<string> EditAsync(int categoryId, string categoryName, int walletId, string badgeColor)
@@ -165,6 +183,40 @@
             return category;
         }
 
+        public async Task<DeleteCategoryDto> GetCategoryInfoForDeleteAsync(int categoryId, int walletId)
+        {
+            var model = await this.dbContext.Categories
+                .Where(c => c.Id == categoryId)
+                .Select(c => new DeleteCategoryDto
+                {
+                    WalletId = c.WalletId,
+                    WalletName = c.Wallet.Name,
+                    OldCategoryId = c.Id,
+                    OldCategoryName = c.Name,
+                    OldCategoryBadgeColor = c.BadgeColor,
+                })
+                .FirstOrDefaultAsync();
+
+            if (model == null)
+            {
+                throw new ArgumentException(GlobalConstants.UnexistingCategory);
+            }
+
+            var categories = await this.dbContext.Categories
+                .Where(c => c.WalletId == walletId)
+                .Select(c => new DeleteCategoryNameAndIdDto
+                {
+                    BadgeColor = c.BadgeColor,
+                    CategoryId = c.Id,
+                    CategoryName = c.Name,
+                })
+                .ToListAsync();
+
+            model.Categories = categories;
+
+            return model;
+        }
+
         public async Task<IEnumerable<WalletNameAndIdDto>> GetAllWalletsWithNameAndIdAsync(string userId)
         {
             var user = await this.dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
@@ -190,6 +242,27 @@
         {
             return await this.dbContext.Categories
                 .AnyAsync(cat => cat.WalletId == walletId && cat.Name.ToLower() == categoryName.ToLower());
+        }
+
+        private async Task MoveCategoryOfRecordsAsync(int oldCategoryId, int newCategoryId)
+        {
+            var records = await this.dbContext.Records.Where(x => x.CategoryId == oldCategoryId).ToListAsync();
+
+            for (int i = 0; i < records.Count(); i++)
+            {
+                records[i].CategoryId = newCategoryId;
+            }
+
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        private async Task DeleteRecordsFromCategoryAsync(int categoryId)
+        {
+            var records = await this.dbContext.Records.Where(x => x.CategoryId == categoryId).ToListAsync();
+
+            this.dbContext.RemoveRange(records);
+
+            await this.dbContext.SaveChangesAsync();
         }
     }
 }

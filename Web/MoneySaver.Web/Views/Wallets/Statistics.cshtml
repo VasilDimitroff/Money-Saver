@@ -49,7 +49,7 @@
                     <tbody>
                         @foreach (var category in Model.Categories)
                         {
-                            <tr class="card-shadow" onclick="window.location='/Category/Edit/@category.Id'">
+                            <tr class="card-shadow" onclick="window.location = '/Categories/Edit?id=@category.Id&walletId=@Model.WalletId'">
                                 <td><a href="/Categories/Details/@category.Id" class="badge badge-@category.BadgeColor.ToString().ToLower()">@category.Name</a></td>
                                 <td>
                                     <a href="/Categories/Details/@category.Id"><span class="badge badge-warning text-light">@category.TotalRecordsCount</span></a>
@@ -80,14 +80,13 @@
                                     <span class="text-@badgeClassName"><strong>@category.TotalExpensesAmount @Model.Currency</strong></span>
                                 </td>
                                 <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Last added on"> @Model.ModifiedOn</span></td>
-                               
 
-                                    <td>
-                                        <a href="/Category/Edit/@category.Id"><span class="btn btn-outline-info btn-sm btn-icon-text" data-toggle="tooltip" data-placement="bottom" title="Edit record"><i class="mdi mdi-pencil btn-icon-prepend"></i>Edit</span></a>
-                                        &nbsp;
-                                        <!--<span class="btn btn-secondary btn-sm"><i class="fa fa-edit"></i> Edit</span>-->
-                                    </td>
-</tr>
+
+                                <td>
+                                    <vc:edit-category category-id="@category.Id" wallet-id="@Model.WalletId"></vc:edit-category>
+                                    <!--<span class="btn btn-secondary btn-sm"><i class="fa fa-edit"></i> Edit</span>-->
+                                </td>
+                            </tr>
                         }
                     </tbody>
                     <tfoot>
@@ -130,8 +129,10 @@
                         <span>There are no categories in wallet <strong>"@Model.WalletName</strong>".</span>
                     </div>
 
-                   <vc:back-button></vc:back-button>
+
                 }
+                <br />
+                <vc:back-button></vc:back-button>
                 <!-- Pagination-->
                 <div class="d-flex justify-content-center pt-5">
                     <nav>

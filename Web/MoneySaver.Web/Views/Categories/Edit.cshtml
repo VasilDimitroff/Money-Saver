@@ -20,7 +20,7 @@
                 </div>
                      <input type="hidden" asp-for="CategoryId">
                 <div class="form-group">
-                    <label for="Category">Wallet</label>
+                    <label asp-for="@Model.WalletId">Wallet</label>
                     <select asp-for="@Model.WalletId" class="js-example-basic-single" style="width:100%">
                         @foreach (var wallet in Model.Wallets)
                         {
