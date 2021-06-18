@@ -10,56 +10,82 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">@this.ViewData["Title"]</h4>
-            <p class="card-description">
-            <p>
-                Before you delete the category you can move the records from it to other category.
-            </p>
-            <p>
-            Please, choose one of the listed categories to move current records from <span class="badge badge-@Model.OldCategoryBadgeColor.ToString().ToLower()">@Model.OldCategoryName</span>.
-            </p>
-            <p>
-                If you choose to delete both the category with all records, this operation cannot be undo.
-            </p>
-            <br />
-            <form class="forms-sample" method="post" style="display: inline">
-                <input type="hidden" asp-for="OldCategoryId">
-                <div class="form-group">
-                    <label asp-for="@Model.NewCategoryId">Choose category where to move the records from the <span class="badge badge-@Model.OldCategoryBadgeColor.ToString().ToLower()">@Model.OldCategoryName</span> category:</label>
-                    <select asp-for="@Model.NewCategoryId" class="js-example-basic-single" style="width:100%">
-                        @foreach (var category in Model.Categories)
-                        {
-                            <option value="@category.CategoryId">@category.CategoryName</option>
-                        }
-                    </select>
+            <div class="card-description">
+                <div class="alert alert-info" role="alert">
+                    <span class="mdi mdi-information-outline" style="font-size: 15px;"> </span>
+                    Before you delete the category you can move the records from it to other category.
                 </div>
-                @* <div class="form-group">
-            <label asp-for="@Model.NewCategoryId">Choose new category 2</label>
-            <select class="form-control" style="width:100%" asp-for="@Model.NewCategoryId" placeholder="New Category">
-                <option disabled selected class="default-option"> -- select a badge color -- </option>
-                @foreach (var category in Model.Categories)
-                {
-                    <option class="optText-@category.BadgeColor.ToString().ToLower()" value="@category.CategoryId">@category.CategoryName</option>
-                }
-            </select>
-        </div>
-                *@
+                <div class="alert alert-warning" role="alert">
+                    <span class="mdi mdi-alert-outline" style="font-size: 15px;"> </span>
+                    <span> If you choose to delete both the category with all records, this operation cannot be undo.</span>
+                </div>
+                <br />
 
-                <button type="submit" style="white-space: normal !important; max-width: 165px; line-height: 20px;" class="btn btn-primary btn-sm mr-2">
-                    Safely Delete
-                </button>
 
-            </form>
-            <form class="forms-sample" method="post" style="display: inline">
-                <input type="hidden" asp-for="OldCategoryId" value="@Model.OldCategoryId">
-                <input type="hidden" asp-for="NewCategoryId" value="-1">
-                <button type="submit" style="white-space: normal !important; max-width: 165px; line-height: 20px;" class="btn btn-danger btn-sm mr-2">
-                    Delete Both
-                </button>
-            </form>
-            
-            <vc:back-button></vc:back-button>
-        </div>
-    </div>
+                <form class="forms-sample" method="post" style="display: inline">
+                    <input type="hidden" asp-for="OldCategoryId">
+                    <div class="form-group">
+                        <label asp-for="@Model.NewCategoryId"><span class="font-weight-bold">Choose category where to move the records from <span class="badge badge-@Model.OldCategoryBadgeColor.ToString().ToLower()">@Model.OldCategoryName</span> category:</span></label>
+                        <select asp-for="@Model.NewCategoryId" class="js-example-basic-single" style="width:100%">
+                            @foreach (var category in Model.Categories)
+                            {
+                                <option value="@category.CategoryId">@category.CategoryName</option>
+                            }
+                        </select>
+                    </div>
+                    @* <div class="form-group">
+                <label asp-for="@Model.NewCategoryId">Choose new category 2</label>
+                <select class="form-control" style="width:100%" asp-for="@Model.NewCategoryId" placeholder="New Category">
+                    <option disabled selected class="default-option"> -- select a badge color -- </option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option class="optText-@category.BadgeColor.ToString().ToLower()" value="@category.CategoryId">@category.CategoryName</option>
+                    }
+                </select>
+            </div>
+                    *@
+                    <button type="submit" style="white-space: normal !important; max-width: 165px; line-height: 20px;" class="btn btn-primary btn-sm mr-2">
+                        <span class="mdi mdi-folder-move" style="font-size: 15px;"></span> Move & Delete
+                    </button>
+                </form>
+                @*<form class="forms-sample" method="post" style="display: inline">
+            <input type="hidden" asp-for="OldCategoryId" value="@Model.OldCategoryId">
+            <input type="hidden" asp-for="NewCategoryId" value="-1">
+            <button type="submit" style="white-space: normal !important; max-width: 165px; line-height: 20px;" class="btn btn-danger btn-sm mr-2">
+                <span class="mdi mdi-delete-forever" style="font-size: 15px;"></span> Delete Both
+            </button>
+        </form>*@
+
+                @*Unsafely delete button and popup*@
+                <button type="button" class="btn btn-outline-danger btn-sm mr-2 float-right" style="white-space: normal !important; max-width: 165px; line-height: 20px;" data-placement="bottom" title="Delete category and records within" data-toggle="modal" data-target="#defaultModal"><span class="mdi mdi-delete-forever" style="font-size: 15px;"></span>Delete Both</button>
+                <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <form method="post">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-danger" id="exampleModalLabel">Note! This operation will result in permanently data loss!</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>If you confirm deleting category, you will delete also all records which are part from it.</p>
+                                    <p class="font-weight-bold">Are you sure you want to delete them?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                    <input type="hidden" asp-for="@Model.OldCategoryId" value="@Model.OldCategoryId">
+                                    <input type="hidden" asp-for="@Model.NewCategoryId" value="-1">
+                                    <button type="submit" type="submit" class="btn btn-outline-danger"><i class="mdi mdi-delete btn-icon-prepend text-white"></i> Yes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <vc:back-button></vc:back-button>
+            </div>
+            </div>
 </div>
 
 @section Scripts {

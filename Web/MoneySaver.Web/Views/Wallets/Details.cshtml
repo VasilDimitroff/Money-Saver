@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-12">
         <h3 class="text-dark text-center">@Model.WalletName - Overview</h3>
-        <br/>
+        <br />
         <div class="row">
             <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card text-center">
                 <div class="card">
@@ -70,189 +70,186 @@
         </div>
     </div>
 </div>
-        <div class="col-md-6 grid-margin grid-margin-md-0 stretch-card float-left">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Categories info</h4>
-                    <div class="table-responsive">
-                        <table class="table text-center">
-                            <thead>
-                                <tr>
-                                    <th class="pt-1 pl-0">
-                                        Category
-                                    </th>
-                                    <th class="pt-1">
-                                        Incomes
-                                    </th>
-                                    <th class="pt-1">
-                                        Expenses
-                                    </th>
-                                    <th class="pt-1">
-                                        Edit
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var category in Model.Categories.Take(10))
-                                {
-                                    <tr class="card-shadow" onclick="window.location='/Categories/Edit?id=@category.CategoryId&walletId=@Model.WalletId'">
-                                        <td class="py-1 pl-0">
-                                            <div class="d-flex align-items-center">
-                                                <div class="ml-3">
-
-                                                    <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
-                                                    <p class="mb-0 text-muted text-small">@category.RecordsCount records in category</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            @if (category.TotalIncomes < 0)
-                                            {
-                                                badgeClassName = "danger";
-                                            }
-
-                                            else if (category.TotalIncomes == 0)
-                                            {
-                                                badgeClassName = "secondary";
-                                            }
-
-                                            else
-                                            {
-                                                badgeClassName = "success";
-                                            }
-                                            <p class="text-@badgeClassName font-weight-bold">@category.TotalIncomes @Model.Currency</p>
-                                        </td>
-                                        <td>
-                                            @if (category.TotalExpenses < 0)
-                                            {
-                                                badgeClassName = "danger";
-                                            }
-
-                                            else if (category.TotalExpenses == 0)
-                                            {
-                                                badgeClassName = "secondary";
-                                            }
-
-                                            else
-                                            {
-                                                badgeClassName = "success";
-                                            }
-                                            <p class="text-@badgeClassName font-weight-bold">@category.TotalExpenses @Model.Currency</p>
-                                        </td>
-                                        <td>
-                                          <vc:edit-category category-id="@category.CategoryId" wallet-id="@Model.WalletId"></vc:edit-category>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        <br />
-                        <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 grid-margin grid-margin-md-0 stretch-card float-right">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Last 10 records</h4>
-                    <div class="table-responsive">
-                        <table class="table text-center">
-                            <thead>
-                                <tr>
-                                    <th class="pt-1">
-                                        Date
-                                    </th>
-                                    <th class="pt-1">
-                                        Description
-                                    </th>
-                                    <th class="pt-1">
-                                        Amount
-                                    </th>
-                                    <th class="pt-1">
-                                        Category
-                                    </th>
-                                    <th class="pt-1">
-                                        Edit
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var record in Model.Records.Take(10))
-                                {
-                                    <tr class="card-shadow" onclick="window.location = '/Records/Edit/@record.Id'">
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Last added on"> @record.CreatedOn</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            @if (record.Description.Length > 18)
-                                            {
-                                                string descriptionExcerpt = record.Description.Substring(0, 18) + "...";
-                                                record.Description = descriptionExcerpt;
-                                            }
-
-                                            @record.Description
-                                        </td>
-                                        <td>
-                                            @if (record.Amount < 0)
-                                            {
-                                                badgeClassName = "danger";
-                                            }
-
-                                            else if (record.Amount == 0)
-                                            {
-                                                badgeClassName = "secondary";
-                                            }
-
-                                            else
-                                            {
-                                                badgeClassName = "success";
-                                            }
-                                            <p class="text-@badgeClassName font-weight-bold">@record.Amount @Model.Currency</p>
-                                        </td>
-                                        <td><a href="/Categories/Details/@record.CategoryId"><p class="mb-2 badge badge-@record.CategoryBadgeColor.ToString().ToLower()">@record.CategoryName</p></a></td>
-                                        <td> <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record></td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        <br />
-                        @if (Model.Records.Count() > 0)
+<div class="col-md-6 grid-margin grid-margin-md-0 stretch-card float-left">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Categories info</h4>
+            <div class="table-responsive">
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th class="pt-1 pl-0">
+                                Category
+                            </th>
+                            <th class="pt-1">
+                                Incomes
+                            </th>
+                            <th class="pt-1">
+                                Expenses
+                            </th>
+                            <th class="pt-1">
+                                Edit
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var category in Model.Categories.Take(10))
                         {
-                            <div class="btn-group mr-2">
-                                <button class="btn btn-sm btn-primary" onclick="location.href='/Wallets/Records/@Model.WalletId'" type="button"><i class="mdi mdi-dots-horizontal"></i> More</button>
-                            </div>
-                            <span class="mr-2">or</span>
-                        }  
-                        <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
-                    </div>  
-                    </div>
+                            <tr class="card-shadow" onclick="window.location='/Categories/Edit?id=@category.CategoryId&walletId=@Model.WalletId'">
+                                <td class="py-1 pl-0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="ml-3">
+
+                                            <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
+                                            <p class="mb-0 text-muted text-small">@category.RecordsCount records in category</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (category.TotalIncomes < 0)
+                                    {
+                                        badgeClassName = "danger";
+                                    }
+
+                                    else if (category.TotalIncomes == 0)
+                                    {
+                                        badgeClassName = "secondary";
+                                    }
+
+                                    else
+                                    {
+                                        badgeClassName = "success";
+                                    }
+                                    <p class="text-@badgeClassName font-weight-bold">@category.TotalIncomes @Model.Currency</p>
+                                </td>
+                                <td>
+                                    @if (category.TotalExpenses < 0)
+                                    {
+                                        badgeClassName = "danger";
+                                    }
+
+                                    else if (category.TotalExpenses == 0)
+                                    {
+                                        badgeClassName = "secondary";
+                                    }
+
+                                    else
+                                    {
+                                        badgeClassName = "success";
+                                    }
+                                    <p class="text-@badgeClassName font-weight-bold">@category.TotalExpenses @Model.Currency</p>
+                                </td>
+                                <td>
+                                    <vc:edit-category category-id="@category.CategoryId" wallet-id="@Model.WalletId"></vc:edit-category>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <br />
+                <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>
             </div>
         </div>
+    </div>
+</div>
 
+<div class="col-md-6 grid-margin grid-margin-md-0 stretch-card float-right">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Last 10 records</h4>
+            <div class="table-responsive">
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th class="pt-1">
+                                Date
+                            </th>
+                            <th class="pt-1">
+                                Description
+                            </th>
+                            <th class="pt-1">
+                                Amount
+                            </th>
+                            <th class="pt-1">
+                                Category
+                            </th>
+                            <th class="pt-1">
+                                Edit
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var record in Model.Records.Take(10))
+                        {
+                            <tr class="card-shadow" onclick="window.location = '/Records/Edit/@record.Id'">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Last added on"> @record.CreatedOn</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (record.Description.Length > 18)
+                                    {
+                                        string descriptionExcerpt = record.Description.Substring(0, 18) + "...";
+                                        record.Description = descriptionExcerpt;
+                                    }
 
+                                    @record.Description
+                                </td>
+                                <td>
+                                    @if (record.Amount < 0)
+                                    {
+                                        badgeClassName = "danger";
+                                    }
 
-    @section Scripts
+                                    else if (record.Amount == 0)
+                                    {
+                                        badgeClassName = "secondary";
+                                    }
+
+                                    else
+                                    {
+                                        badgeClassName = "success";
+                                    }
+                                    <p class="text-@badgeClassName font-weight-bold">@record.Amount @Model.Currency</p>
+                                </td>
+                                <td><a href="/Categories/Details/@record.CategoryId"><p class="mb-2 badge badge-@record.CategoryBadgeColor.ToString().ToLower()">@record.CategoryName</p></a></td>
+                                <td> <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <br />
+                @if (Model.Records.Count() > 0)
+                {
+                    <div class="btn-group mr-2">
+                        <button class="btn btn-sm btn-primary" onclick="location.href='/Wallets/Records/@Model.WalletId'" type="button"><i class="mdi mdi-dots-horizontal"></i> More</button>
+                    </div>
+                    <span class="mr-2">or</span>
+                }
+                <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
     {
-        <script>
-            $(document).ready(function () {
-                // executes when HTML-Document is loaded and DOM is ready
-                console.log("document is ready");
+    <script>
+        $(document).ready(function () {
+            // executes when HTML-Document is loaded and DOM is ready
+            console.log("document is ready");
 
 
-                $(".card-shadow").hover(
-                    function () {
-                        $(this).addClass('shadow-sm').css('cursor', 'pointer');
-                    }, function () {
-                        $(this).removeClass('shadow-sm');
-                    }
-                );
+            $(".card-shadow").hover(
+                function () {
+                    $(this).addClass('shadow-sm').css('cursor', 'pointer');
+                }, function () {
+                    $(this).removeClass('shadow-sm');
+                }
+            );
 
-                // document ready
-            });
+            // document ready
+        });
 
-        </script>
-    }
+    </script>
+}

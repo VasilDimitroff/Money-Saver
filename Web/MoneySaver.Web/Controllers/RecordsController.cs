@@ -38,6 +38,7 @@
                 BadgeColor = Enum.Parse<BadgeColor>(x.BadgeColor.ToString()),
             });
 
+            model.WalletId = walletId;
             model.WalletName = await this.walletsService.GetWalletNameAsync(walletId);
 
             return this.View(model);

@@ -127,6 +127,11 @@
                 throw new ArgumentNullException(GlobalConstants.UnexistingCategory);
             }
 
+            if (await this.IsCategoryExistAsync(walletId, categoryName))
+            {
+                throw new ArgumentException(GlobalConstants.ExistingCategory);
+            }
+
             var wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(w => w.Id == walletId);
 
             if (wallet == null)

@@ -16,6 +16,13 @@
             <p class="card-description">
                 Add Record to <strong>@Model.WalletName</strong>
             </p>
+
+            @if (Model.Categories.Count() < 1)
+            {
+                <div class="alert alert-primary" role="alert">In wallet @Model.WalletName are no categories yet. Create your first one.</div>
+                <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>
+                <br/><br />
+            }
             <form class="forms-sample" asp-controller="Records" asp-action="Add" method="post">
                 <div class="form-group">
                     <span class="mdi mdi-tag text-primary"></span>
