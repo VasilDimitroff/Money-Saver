@@ -15,21 +15,24 @@
             </p>
             <form class="forms-sample" method="post">
                 <div class="form-group">
-                    <label asp-for="CategoryName">Name</label>
+                    <span class="mdi mdi-lead-pencil text-primary"></span>
+                    <label asp-for="CategoryName"><span class="font-weight-bold">Name</span></label>
                     <input type="text" class="form-control form-control-lg" asp-for="CategoryName" placeholder="Name">
                 </div>
                      <input type="hidden" asp-for="CategoryId">
+                     <div class="form-group">
+                         <span class="mdi mdi-wallet text-primary"></span>
+                         <label asp-for="@Model.WalletId"><span class="font-weight-bold">Wallet</span></label>
+                         <select asp-for="@Model.WalletId" class="js-example-basic-single" style="width:100%">
+                             @foreach (var wallet in Model.Wallets)
+                             {
+                                 <option value="@wallet.WalletId">@wallet.WalletName</option>
+                             }
+                         </select>
+                     </div>
                 <div class="form-group">
-                    <label asp-for="@Model.WalletId">Wallet</label>
-                    <select asp-for="@Model.WalletId" class="js-example-basic-single" style="width:100%">
-                        @foreach (var wallet in Model.Wallets)
-                        {
-                            <option value="@wallet.WalletId">@wallet.WalletName</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="BadgeColor">Badge Color</label>
+                    <span class="mdi mdi-format-color-fill text-primary"></span>
+                    <label asp-for="BadgeColor"><span class="font-weight-bold">Badge Color</span></label>
                     <select class="form-control" style="width:100%" asp-for="BadgeColor" placeholder="Type">
                         <option disabled selected class="default-option"> -- select a badge color -- </option>
                         @foreach (string name in Enum.GetNames(typeof(BadgeColor)))

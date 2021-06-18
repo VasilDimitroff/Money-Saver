@@ -18,28 +18,31 @@
             </p>
             <form class="forms-sample" asp-controller="Records" asp-action="Add" method="post">
                 <div class="form-group">
-                    <label for="Category">Category</label>
+                    <span class="mdi mdi-tag text-primary"></span>
+                    <label for="Category"><span class="font-weight-bold">Category</span></label>
                     <select asp-for="CategoryId"
                             asp-items="@(new SelectList(Model.Categories,"Id","Name"))" class="js-example-basic-single" style="width:100%">
                     </select>
                 </div>
                 @* <div class="form-group">
-                        <label for="Category">Category</label>
-                        <select asp-for="CategoryId" class="js-example-basic-single" style="width:100%">
-                            @foreach (var category in Model.Categories)
-                            {
-                                <option>@category.Name</option>
-                            }
-                        </select>
-                    </div>
+            <label for="Category">Category</label>
+            <select asp-for="CategoryId" class="js-example-basic-single" style="width:100%">
+                @foreach (var category in Model.Categories)
+                {
+                    <option>@category.Name</option>
+                }
+            </select>
+        </div>
                 *@
 
                 <div class="form-group">
-                    <label asp-for="Description">Description</label>
+                    <span class="mdi mdi-pencil text-primary"></span>
+                    <label asp-for="Description"><span class="font-weight-bold">Description</span></label>
                     <input type="text" class="form-control form-control-lg" asp-for="Description" placeholder="Description">
                 </div>
                 <div class="form-group">
-                    <label asp-for="Type">Type</label>
+                    <span class="mdi mdi-arrow-right-bold text-success"></span><span class="mdi mdi-arrow-left-bold text-danger"></span>
+                    <label asp-for="Type"><span class="font-weight-bold">Type</span></label>
                     <select class="js-example-basic-single" style="width:100%" asp-for="Type" placeholder="Type">
                         @foreach (string name in Enum.GetNames(typeof(RecordTypeInputModel)))
                         {
@@ -50,24 +53,25 @@
                             else
                             {
                                 <option>@name</option>
-
                             }
                         }
                     </select>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Amount">Amount</label>
+                    <span class="mdi mdi-currency-usd text-primary"></span>
+                    <label asp-for="Amount"><span class="font-weight-bold">Amount</span></label>
                     <input type="number" class="form-control form-control-lg" asp-for="Amount" placeholder="Amount" value="Enter amount">
                 </div>
                 <div class="form-group">
-                    <label asp-for="@Model.CreatedOn">Created On (Default is now)</label>
+                    <span class="mdi mdi-calendar-clock text-primary"></span>
+                    <label asp-for="@Model.CreatedOn"><span class="font-weight-bold">Created On (Default is now)</span></label>
                     <input type="datetime-local" class="form-control form-control-lg" asp-for="@Model.CreatedOn" placeholder="@Model.CreatedOn" value="@Model.CreatedOn.ToString()">
                 </div>
                 <input type="hidden" asp-for="@Model.WalletId" /></input>
-                <button type="submit" class="btn btn-primary btn-sm mr-2">
-                    Submit
+                <button type="submit" class="btn btn-primary btn-sm mr-2 mdi mdi-check text-light">
+                    Add
                 </button>
-               <vc:back-button></vc:back-button>
+                <vc:back-button></vc:back-button>
             </form>
         </div>
     </div>

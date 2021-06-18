@@ -15,7 +15,8 @@
             </p>
             <form class="forms-sample" asp-controller="Categories" asp-action="Add" method="post">
                 <div class="form-group">
-                    <label asp-for="Name">Name</label>
+                    <span class="mdi mdi-lead-pencil text-primary"></span>
+                    <label asp-for="Name"><span class="font-weight-bold">Name</span></label>
                     <input type="text" class="form-control form-control-lg" asp-for="Name" placeholder="Name">
                 </div>
                 @* <div class="form-group">
@@ -30,7 +31,8 @@
                 *@
                 <input type="hidden"asp-for="WalletId">
                 <div class="form-group">
-                    <label asp-for="BadgeColor">Badge Color</label>
+                    <span class="mdi mdi-format-color-fill text-primary"></span>
+                    <label asp-for="BadgeColor"><span class="font-weight-bold">Badge Color</span></label>
                     <select class="form-control" style="width:100%" asp-for="BadgeColor" placeholder="Type">
                         <option disabled selected class="default-option"> -- select a badge color -- </option>
                         @foreach (string name in Enum.GetNames(typeof(BadgeColor)))

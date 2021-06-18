@@ -18,7 +18,7 @@
             Please, choose one of the listed categories to move current records from <span class="badge badge-@Model.OldCategoryBadgeColor.ToString().ToLower()">@Model.OldCategoryName</span>.
             </p>
             <p>
-                If you choose to delete the category with all records, this operation cannot be undo.
+                If you choose to delete both the category with all records, this operation cannot be undo.
             </p>
             <br />
             <form class="forms-sample" method="post" style="display: inline">
@@ -44,16 +44,16 @@
         </div>
                 *@
 
-                <button type="submit" style="white-space: normal !important; max-width: 155px; line-height: 20px;" class="btn btn-primary btn-sm mr-2">
-                    Move records and delete category
+                <button type="submit" style="white-space: normal !important; max-width: 165px; line-height: 20px;" class="btn btn-primary btn-sm mr-2">
+                    Safely Delete
                 </button>
 
             </form>
             <form class="forms-sample" method="post" style="display: inline">
                 <input type="hidden" asp-for="OldCategoryId" value="@Model.OldCategoryId">
                 <input type="hidden" asp-for="NewCategoryId" value="-1">
-                <button type="submit" style="white-space: normal !important; max-width: 155px; line-height: 20px;" class="btn btn-danger btn-sm mr-2">
-                    Delete category and records
+                <button type="submit" style="white-space: normal !important; max-width: 165px; line-height: 20px;" class="btn btn-danger btn-sm mr-2">
+                    Delete Both
                 </button>
             </form>
             
