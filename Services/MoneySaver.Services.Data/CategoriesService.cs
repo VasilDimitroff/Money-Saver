@@ -19,10 +19,12 @@
     public class CategoriesService : ICategoriesService
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly IRecordsService recordsService;
 
-        public CategoriesService(ApplicationDbContext dbContext)
+        public CategoriesService(ApplicationDbContext dbContext, IRecordsService recordsService)
         {
             this.dbContext = dbContext;
+            this.recordsService = recordsService;
         }
 
         public async Task<string> AddAsync(string categoryName, int walletId, string badgeColor)
@@ -72,6 +74,28 @@
 
             if (newCategoryId == -1)
             {
+                decimal categoryAmount = 0;
+
+                var categories = this.dbContext.Categories.Include(c => c.Records)
+                    .Where(c => c.Id == oldCategoryId);
+
+                foreach (var category in categories)
+                {
+                    foreach (var record in category.Records)
+                    {
+                        categoryAmount += record.Amount;
+                    }
+                }
+
+                categoryAmount *= -1;
+
+                var walletId = await this.dbContext.Categories
+                    .Where(c => c.Id == oldCategoryId)
+                    .Select(c => c.WalletId)
+                    .FirstOrDefaultAsync();
+
+                await this.recordsService.EditWalletAmountAsync(walletId, categoryAmount);
+
                 await this.DeleteRecordsFromCategoryAsync(oldCategoryId);
             }
             else

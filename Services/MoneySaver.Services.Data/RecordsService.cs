@@ -317,7 +317,7 @@
             return GlobalConstants.RecordSuccessfullyUpdated;
         }
 
-        private async Task EditWalletAmountAsync(int walletId, decimal amount)
+        public async Task EditWalletAmountAsync(int walletId, decimal amount)
         {
             var wallet = await this.dbContext.Wallets
                 .FirstOrDefaultAsync(x => x.Id == walletId);

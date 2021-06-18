@@ -18,6 +18,6 @@
 
         public Task<string> UpdateRecord(string recordId, int categoryId, int walletId, string description, decimal oldAmount, decimal newAmount, string type, DateTime createdOn);
 
-
+        public Task EditWalletAmountAsync(int walletId, decimal amount);
     }
 }

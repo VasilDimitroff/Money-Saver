@@ -32,7 +32,7 @@
 
         public DbSet<Currency> Currencies { get; set; }
 
-        public DbSet<ToDoItem> Products { get; set; }
+        public DbSet<ToDoItem> ToDoItems { get; set; }
 
         public DbSet<Record> Records { get; set; }
 

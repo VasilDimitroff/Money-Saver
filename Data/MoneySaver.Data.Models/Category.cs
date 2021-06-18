@@ -11,7 +11,6 @@
         public Category()
         {
             this.Records = new HashSet<Record>();
-            this.Products = new HashSet<ToDoItem>();
         }
 
         public string Name { get; set; }
@@ -23,7 +22,5 @@
         public BadgeColor BadgeColor { get; set; }
 
         public virtual ICollection<Record> Records { get; set; }
-
-        public virtual ICollection<ToDoItem> Products { get; set; }
     }
 }
