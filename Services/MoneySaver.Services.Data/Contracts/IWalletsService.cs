@@ -12,7 +12,7 @@
 
         public Task<WalletCategoriesDto> GetWalletWithCategoriesAsync(int walletId);
 
-        public Task<string> AddAsync(string userId, string name, decimal initialMoney, string currencyName);
+        public Task<string> AddAsync(string userId, string name, decimal initialMoney, int currencyId);
 
         public Task<string> RemoveAsync(int walletId);
 

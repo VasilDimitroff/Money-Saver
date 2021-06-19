@@ -11,142 +11,147 @@
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">@this.ViewData["Title"] </h4>
-        <div class="row pb-5">
-            <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
-            <vc:wallet-statistics id="@Model.WalletId"></vc:wallet-statistics>
-            <span class="btn-group ml-auto pt-1 mr-4 d-md-block">Search By:</span>
-            <div class="btn-group mr-2 border-0 d-none d-md-block pl-0">
-                <vc:get-records-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" id="@Model.WalletId"></vc:get-records-by-date>
-            </div>
-            <div class="btn-group ml-4 mr-2 border-0 d-none d-md-block">
-                <vc:search-record search-term="@Model.SearchTerm" wallet-id="@Model.WalletId"></vc:search-record>
-            </div>
-        </div>
+
+
+        @* <vc:wallet-statistics id="@Model.WalletId"></vc:wallet-statistics>*@
+        @* <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>*@
+        <br/>
         <div class="col-12">
-            <div class="table-responsive">
-                <table id="order-listing" class="table text-center">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Description</th>
-                            <th>Type</th>
-                            <th>Amount</th>
-                            <th> Wallet</th>
-                            <th>Category</th>
-                            <th>Edit/Delete</th>
-                            <!-- <th>Delete</th>-->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var record in Model.Records)
-                        {
-
-                            <tr class="card-shadow" onclick="window.location='/Records/Edit?id=@record.Id&walletId=@Model.WalletId'">
-                                <a href="">
-                                    <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create/Modified date">@record.CreatedOn</td>
-                                    <td style="width: 25%;">@record.Description</td>
-                                    <td>
-                                        @if (record.Type == RecordTypeInputModel.Expense)
-                                        {
-                                            <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @record.Type</span>
-                                        }
-
-                                        else if (record.Type == RecordTypeInputModel.Income)
-                                        {
-
-                                            <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @record.Type</span>
-                                        }
-                                    </td>
-
-                                    <td>
-
-                                        @if (record.Amount < 0)
-                                        {
-                                            <p class="text-danger"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
-                                        }
-
-                                        else if (record.Amount == 0)
-                                        {
-                                            <p class="text-secondary"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
-                                        }
-
-                                        else
-                                        {
-                                            <p class="text-success bold"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
-                                        }
-                                    </td>
-                                    <td>@record.Wallet</td>
-                                    <td>
-
-
-                                        <a href="/Categories/Details/@record.CategoryId" class="badge badge-@record.BadgeColor.ToString().ToLower()">@record.Category</a>
-                                    </td>
-                                    <td>
-
-                                        <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
-                                    </td>
-                                </a>
-                            </tr>
-
-                        }
-                    </tbody>
-                </table>
-                <br />
-
-                @if (Model.Records.Count() == 0)
-                {
-                    <br />
-                    <div class="alert alert-warning" role="alert">
-                        <span>No records found</span>
-                    </div>
-                }
-
-                <vc:back-button></vc:back-button>
-                <!-- Pagination-->
-                <div class="d-flex justify-content-center pt-5">
-                    <nav>
-                        <ul class="pagination rounded-flat pagination-success">
-                            <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">4</a></li>
-                            <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
-                        </ul>
-                    </nav>
+            <div class="btn-group mr-2">
+                <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
+            </div>
+                <div class="btn-group mr-2">
+                    <vc:get-records-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" id="@Model.WalletId"></vc:get-records-by-date>
                 </div>
-                <!-- End Pagination-->
+                <div class="btn-group mr-2">
+                    <vc:search-record search-term="@Model.SearchTerm" wallet-id="@Model.WalletId"></vc:search-record>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table id="order-listing" class="table text-center table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th> Wallet</th>
+                                <th>Category</th>
+                                <th>Edit/Delete</th>
+                                <!-- <th>Delete</th>-->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var record in Model.Records)
+                            {
+
+                                <tr class="card-shadow" onclick="window.location='/Records/Edit?id=@record.Id&walletId=@Model.WalletId'">
+                                    <a href="">
+                                        <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create/Modified date">@record.CreatedOn</td>
+                                        <td style="width: 25%;">@record.Description</td>
+                                        <td>
+                                            @if (record.Type == RecordTypeInputModel.Expense)
+                                            {
+                                                <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @record.Type</span>
+                                            }
+
+                                            else if (record.Type == RecordTypeInputModel.Income)
+                                            {
+
+                                                <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @record.Type</span>
+                                            }
+                                        </td>
+
+                                        <td>
+
+                                            @if (record.Amount < 0)
+                                            {
+                                                <p class="text-danger"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                            }
+
+                                            else if (record.Amount == 0)
+                                            {
+                                                <p class="text-secondary"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                            }
+
+                                            else
+                                            {
+                                                <p class="text-success bold"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                            }
+                                        </td>
+                                        <td>@record.Wallet</td>
+                                        <td>
+
+
+                                            <a href="/Categories/Details/@record.CategoryId" class="badge badge-@record.BadgeColor.ToString().ToLower()">@record.Category</a>
+                                        </td>
+                                        <td>
+
+                                            <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
+                                        </td>
+                                    </a>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                    <br />
+
+                    @if (Model.Records.Count() == 0)
+                    {
+                        <br />
+                        <div class="alert alert-warning" role="alert">
+                            <span>No records found</span>
+                        </div>
+                    }
+
+                    <vc:back-button></vc:back-button>
+                    <!-- Pagination-->
+                    <div class="d-flex justify-content-center pt-5">
+                        <nav>
+                            <ul class="pagination rounded-flat pagination-success">
+                                <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- End Pagination-->
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<!-- content-wrapper ends -->
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            // executes when HTML-Document is loaded and DOM is ready
-            console.log("document is ready");
+        </div>
+            <!-- content-wrapper ends -->
+            @section Scripts {
+                <script>
+                    $(document).ready(function () {
+                        // executes when HTML-Document is loaded and DOM is ready
+                        console.log("document is ready");
 
 
-            $(".card-shadow").hover(
-                function () {
-                    $(this).addClass('shadow-sm').css('cursor', 'pointer');
-                }, function () {
-                    $(this).removeClass('shadow-sm');
-                }
-            );
+                        $(".card-shadow").hover(
+                            function () {
+                                $(this).addClass('shadow-sm').css('cursor', 'pointer');
+                            }, function () {
+                                $(this).removeClass('shadow-sm');
+                            }
+                        );
 
-            // document ready
-        });
-    </script>
+                        // document ready
+                    });
+                </script>
 
-    <script src="~/js/formpickers.js"></script>
-    <script src="~/js/form-addons.js"></script>
-    <script src="~/js/x-editable.js"></script>
-    <script src="~/js/dropify.js"></script>
-    <script src="~/js/dropzone.js"></script>
-    <script src="~/js/jquery-file-upload.js"></script>
-    <script src="~/js/formpickers.js"></script>
-    <script src="~/js/form-repeater.js"></script>
+                <script src="~/js/formpickers.js"></script>
+                <script src="~/js/form-addons.js"></script>
+                <script src="~/js/x-editable.js"></script>
+                <script src="~/js/dropify.js"></script>
+                <script src="~/js/dropzone.js"></script>
+                <script src="~/js/jquery-file-upload.js"></script>
+                <script src="~/js/formpickers.js"></script>
+                <script src="~/js/form-repeater.js"></script>
 
-}
+            }

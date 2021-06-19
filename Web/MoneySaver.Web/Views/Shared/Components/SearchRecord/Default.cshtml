@@ -1,8 +1,12 @@
 ﻿@model MoneySaver.Web.ViewModels.ViewComponents.SearchRecordComponentViewModel
 
-<form method="get" asp-controller="Wallets" asp-action="Search">
-    <span style="float: left;"><input type="text" class="form-control" asp-for="SearchTerm" asp-controller="Records" asp-action="Search" placeholder="Enter keyword"></span>
-    <input type="hidden" class="form-control" asp-for="Id">
+<form method="get" asp-controller="Wallets" asp-action="Search" class="form-inline">
+    <div class="input-group-sm mr-sm-1 mb-4">
+        <input type="text" class="form-control" asp-for="SearchTerm" asp-controller="Records" asp-action="Search" placeholder="Enter keyword">
+    </div>
+        <input type="hidden" class="form-control" asp-for="Id">
     &nbsp;
-    <input class="btn btn-primary btn-sm" type="submit" value="Search" />
+    <div class="input-group-sm mr-sm-1 mb-4">
+        <button type="submit" class="btn btn-primary btn-sm"><i class="mdi mdi-magnify btn-icon-prepend text-white"></i></button>
+    </div>
 </form>

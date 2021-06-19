@@ -27,7 +27,7 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<string> AddAsync(string userId, string name, decimal initialMoney, string currencyName)
+        public async Task<string> AddAsync(string userId, string name, decimal initialMoney, int currencyId)
         {
             Wallet wallet = await this.GetWalletAsync(userId, name);
 
@@ -36,7 +36,7 @@
                 throw new ArgumentException(GlobalConstants.WalletAlreadyExist);
             }
 
-            Currency currency = await this.GetCurrencyAsync(currencyName);
+            Currency currency = await this.GetCurrencyAsync(currencyId);
 
             if (currency == null)
             {
@@ -301,6 +301,7 @@
                      Type = r.Type.ToString(),
                      Wallet = r.Category.Wallet.Name,
                      Currency = r.Category.Wallet.Currency.Code,
+                     BadgeColor = r.Category.BadgeColor,
                  })
                  .ToListAsync();
 
@@ -320,6 +321,7 @@
                      Type = r.Type.ToString(),
                      Wallet = r.Category.Wallet.Name,
                      Currency = r.Category.Wallet.Currency.Code,
+                     BadgeColor = r.Category.BadgeColor,
                  })
                  .ToListAsync();
 
@@ -348,6 +350,7 @@
                      Type = r.Type.ToString(),
                      Wallet = r.Category.Wallet.Name,
                      Currency = r.Category.Wallet.Currency.Code,
+                     BadgeColor = r.Category.BadgeColor,
                  })
                  .ToListAsync();
 
@@ -362,9 +365,9 @@
             return wallet;
         }
 
-        private async Task<Currency> GetCurrencyAsync(string currencyName)
+        private async Task<Currency> GetCurrencyAsync(int currencyId)
         {
-           Currency currency = await this.dbContext.Currencies.FirstOrDefaultAsync(x => x.Name == currencyName);
+           Currency currency = await this.dbContext.Currencies.FirstOrDefaultAsync(x => x.Id == currencyId);
 
            return currency;
         }

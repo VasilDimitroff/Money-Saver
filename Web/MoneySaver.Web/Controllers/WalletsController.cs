@@ -9,6 +9,7 @@
     using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.ViewModels.Categories;
+    using MoneySaver.Web.ViewModels.Currencies;
     using MoneySaver.Web.ViewModels.Records;
     using MoneySaver.Web.ViewModels.Records.Enums;
     using MoneySaver.Web.ViewModels.Wallets;
@@ -17,11 +18,13 @@
     {
         private readonly IWalletsService walletsService;
         private readonly IRecordsService recordsService;
+        private readonly ICurrenciesService currenciesService;
 
-        public WalletsController(IWalletsService walletsService, IRecordsService recordsService)
+        public WalletsController(IWalletsService walletsService, IRecordsService recordsService, ICurrenciesService currenciesService)
         {
             this.walletsService = walletsService;
             this.recordsService = recordsService;
+            this.currenciesService = currenciesService;
         }
 
         /*
@@ -29,17 +32,7 @@
         {
             return View();
         }
-
-        public Task<IActionResult> Add()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public Task<IActionResult> Add()
-        {
-            return View();
-        }
+    
 
         public Task<IActionResult> Edit()
         {
@@ -62,12 +55,45 @@
         {
             return View();
         }
+        */
+        public async Task<IActionResult> Add(string userId)
+        {
+            userId = "first";
+            AddWalletInputModel model = new AddWalletInputModel()
+            {
+                ApplicationUserId = userId,
+                Amount = 0,
+                Name = string.Empty,
+            };
 
-        public Task<IActionResult> Details(int id)
+            var currencies = await this.currenciesService.GetAllAsync();
+
+            model.Currencies = currencies
+                .Select(c => new CurrencyViewModel
+                {
+                    Code = c.Code,
+                    CurrencyId = c.CurrencyId,
+                    Name = c.Name,
+                })
+                .ToList();
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(AddWalletInputModel input)
+        {
+            await this.walletsService
+                .AddAsync(input.ApplicationUserId, input.Name, input.Amount, input.CurrencyId);
+
+            return this.Redirect($"/Wallets/All/{input.ApplicationUserId}");
+        }
+
+        public async Task<IActionResult> Edit()
         {
             return View();
         }
-        */
+
         public async Task<IActionResult> Records(int id)
         {
             var model = new WalletSearchResultViewModel();
@@ -118,6 +144,7 @@
                 Id = r.Id,
                 Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
                 Currency = r.Currency,
+                BadgeColor = Enum.Parse<BadgeColor>(r.BadgeColor.ToString()),
             })
                 .ToList();
 
@@ -184,13 +211,14 @@
                 Id = r.Id,
                 Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
                 Currency = r.Currency,
+                BadgeColor = Enum.Parse<BadgeColor>(r.BadgeColor.ToString()),
             })
                 .ToList();
 
             model.WalletId = id;
             model.Wallet = await this.walletsService.GetWalletNameAsync(id);
 
-            return this.View("Records", model);
+            return this.View("~/Views/Wallets/Records.cshtml", model);
         }
 
         public async Task<IActionResult> Statistics(int id)

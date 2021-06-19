@@ -11,10 +11,10 @@
         <h3 class="text-dark text-center">@Model.WalletName - Overview</h3>
         <br />
         <div class="row">
-            <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card text-center">
+            <div class="col-lg-3 col-sm-6 col-md-6 grid-margin stretch-card text-center">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Balance : <span class="h3 text-info ml-2"><div class="pt-2">@Model.CurrentBalance @Model.Currency</div></span></h4>
+                        <h4 class="card-title">Balance : <span class="h4 text-info"><div class="pt-2">@Model.CurrentBalance @Model.Currency</div></span></h4>
                         <div class="d-flex justify-content-between">
                             <p class="text-muted">Last 30 days:</p>
                             <p class="text-info">@Model.TotalWalletBalanceLast30Days</p>
@@ -25,10 +25,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card text-center">
+            <div class="col-lg-3 col-sm-6 col-md-6 grid-margin stretch-card text-center">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Total Incomes: <span class="h3 text-success ml-2"><div class="pt-2">@Model.TotalWalletIncomes @Model.Currency</div></span></h4>
+                        <h4 class="card-title">Total Incomes: <span class="h4 text-success"><div class="pt-2">@Model.TotalWalletIncomes @Model.Currency</div></span></h4>
                         <div class="d-flex justify-content-between">
                             <p class="text-muted">Last 30 days:</p>
                             <p class="text-success">@Model.TotalWalletIncomesLast30Days</p>
@@ -39,10 +39,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card text-center">
+            <div class="col-lg-3 col-sm-6 col-md-6 grid-margin stretch-card text-center">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Total Expenses: <span class="h3 text-danger ml-2"><div class="pt-2">@Model.TotalWalletExpenses @Model.Currency</div></span></h4>
+                        <h4 class="card-title">Total Expenses: <span class="h4 text-danger"><div class="pt-2">@Model.TotalWalletExpenses @Model.Currency</div></span></h4>
                         <div class="d-flex justify-content-between">
                             <p class="text-muted">Last 30 days:</p>
                             <p class="text-danger">@Model.TotalWalletExpensesLast30Days</p>
@@ -53,10 +53,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-3 grid-margin stretch-card text-center">
+            <div class="col-lg-3 col-sm-6 col-md-6 grid-margin stretch-card text-center">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Total Records: <span class="h3 text-warning ml-2"><div class="pt-2">@Model.Records.Count()</div></span></h4>
+                        <h4 class="card-title">Total Records: <span class="h4 text-warning"><div class="pt-2">@Model.Records.Count()</div></span></h4>
                         <div class="d-flex justify-content-between">
                             <p class="text-muted">Last 30 days:</p>
                             <p class="text-muted">@Model.TotalRecordsCountLast30Days</p>
@@ -70,12 +70,13 @@
         </div>
     </div>
 </div>
-<div class="col-md-6 grid-margin grid-margin-md-0 stretch-card float-left">
+
+<div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card float-left">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Categories info</h4>
+            <h4 class="card-title">30 days incomes</h4>
             <div class="table-responsive">
-                <table class="table text-center">
+                <table class="table text-center table-bordered table-hover">
                     <thead>
                         <tr>
                             <th class="pt-1 pl-0">
@@ -153,12 +154,95 @@
     </div>
 </div>
 
-<div class="col-md-6 grid-margin grid-margin-md-0 stretch-card float-right">
+<div class="col-lg-6 col-12 col-sm-12 grid-margin stretch-card float-right mb-6">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">30 days Expenses</h4>
+            <div class="table-responsive">
+                <table class="table text-center table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="pt-1 pl-0">
+                                Category
+                            </th>
+                            <th class="pt-1">
+                                Incomes
+                            </th>
+                            <th class="pt-1">
+                                Expenses
+                            </th>
+                            <th class="pt-1">
+                                Edit
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var category in Model.Categories.Take(10))
+                        {
+                            <tr class="card-shadow" onclick="window.location='/Categories/Edit?id=@category.CategoryId&walletId=@Model.WalletId'">
+                                <td class="py-1 pl-0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="ml-3">
+
+                                            <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
+                                            <p class="mb-0 text-muted text-small">@category.RecordsCount records in category</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (category.TotalIncomes < 0)
+                                    {
+                                        badgeClassName = "danger";
+                                    }
+
+                                    else if (category.TotalIncomes == 0)
+                                    {
+                                        badgeClassName = "secondary";
+                                    }
+
+                                    else
+                                    {
+                                        badgeClassName = "success";
+                                    }
+                                    <p class="text-@badgeClassName font-weight-bold">@category.TotalIncomes @Model.Currency</p>
+                                </td>
+                                <td>
+                                    @if (category.TotalExpenses < 0)
+                                    {
+                                        badgeClassName = "danger";
+                                    }
+
+                                    else if (category.TotalExpenses == 0)
+                                    {
+                                        badgeClassName = "secondary";
+                                    }
+
+                                    else
+                                    {
+                                        badgeClassName = "success";
+                                    }
+                                    <p class="text-@badgeClassName font-weight-bold">@category.TotalExpenses @Model.Currency</p>
+                                </td>
+                                <td>
+                                    <vc:edit-category category-id="@category.CategoryId" wallet-id="@Model.WalletId"></vc:edit-category>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <br />
+                <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 grid-margin grid-margin-md-0 stretch-card">
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Last 10 records</h4>
             <div class="table-responsive">
-                <table class="table text-center">
+                <table class="table text-center table-bordered table-hover">
                     <thead>
                         <tr>
                             <th class="pt-1">
@@ -220,18 +304,23 @@
                     </tbody>
                 </table>
                 <br />
-                @if (Model.Records.Count() > 0)
-                {
-                    <div class="btn-group mr-2">
+                <div class="btn-group form-inline">
+                    @if (Model.Records.Count() > 0)
+                    {
+                    <div class="input-group-sm mr-sm-1 mb-4">
                         <button class="btn btn-sm btn-primary" onclick="location.href='/Wallets/Records/@Model.WalletId'" type="button"><i class="mdi mdi-dots-horizontal"></i> More</button>
-                    </div>
-                    <span class="mr-2">or</span>
-                }
-                <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
+
+                        </div>                       
+                        <span class="mr-2 ml-2 mb-4">  or</span>
+                    }
+
+                    <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 @section Scripts
     {
     <script>
