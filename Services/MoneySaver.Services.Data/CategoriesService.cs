@@ -267,6 +267,20 @@
             return wallets;
         }
 
+        public async Task<bool> IsUserOwnCategoryAsync(string userId, int categoryId)
+        {
+            var category = await this.dbContext.Categories
+                .Where(c => c.Id == categoryId && c.Wallet.ApplicationUserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (category == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private async Task<bool> IsCategoryExistAsync(int walletId, string categoryName)
         {
             return await this.dbContext.Categories

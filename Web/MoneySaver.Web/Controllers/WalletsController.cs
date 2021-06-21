@@ -25,7 +25,10 @@
         private readonly ICurrenciesService currenciesService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public WalletsController(IWalletsService walletsService, IRecordsService recordsService, ICurrenciesService currenciesService, UserManager<ApplicationUser> userManager)
+        public WalletsController(IWalletsService walletsService,
+            IRecordsService recordsService,
+            ICurrenciesService currenciesService, 
+            UserManager<ApplicationUser> userManager)
         {
             this.walletsService = walletsService;
             this.recordsService = recordsService;

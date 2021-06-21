@@ -332,6 +332,20 @@
             await this.dbContext.SaveChangesAsync();
         }
 
+        public async Task<bool> IsUserOwnRecordAsync(string userId, string recordId)
+        {
+            var record = await this.dbContext.Records
+                .Where(r => r.Id == recordId && r.Category.Wallet.ApplicationUserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (record == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private RecordType ParseRecordType(string type)
         {
             bool isTypeParsed = Enum.TryParse<RecordType>(type, out RecordType recordType);

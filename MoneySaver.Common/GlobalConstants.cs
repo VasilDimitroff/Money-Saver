@@ -40,6 +40,10 @@
 
         public const string NoPermissionForEditWallet = "You have no permissions to see or modify this wallet!";
 
+        public const string NoPermissionForViewOrEditCategory = "You have no permissions to see or modify this category!";
+
+        public const string NoPermissionForViewOrEditRecord = "You have no permissions to see or modify this record!";
+
         public const string WalletSuccessfullyAdded = "Wallet with name {0} successfully added!";
 
         public const string WalletSuccessfullyRemoved = "Wallet with name {0} successfully removed!";

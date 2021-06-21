@@ -22,5 +22,7 @@
         public Task<DeleteCategoryDto> GetCategoryInfoForDeleteAsync(int categoryId, int walletId);
 
         public Task<IEnumerable<WalletNameAndIdDto>> GetAllWalletsWithNameAndIdAsync(string userId);
+
+        public Task<bool> IsUserOwnCategoryAsync(string userId, int categoryId);
     }
 }

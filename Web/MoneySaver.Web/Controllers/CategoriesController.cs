@@ -5,8 +5,10 @@
     using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using MoneySaver.Common;
+    using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.ViewModels.Categories;
     using MoneySaver.Web.ViewModels.Records;
@@ -16,11 +18,13 @@
     {
         private readonly ICategoriesService categoriesService;
         private readonly IWalletsService walletsService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public CategoriesController(ICategoriesService categoriesService, IWalletsService walletsService)
+        public CategoriesController(ICategoriesService categoriesService, IWalletsService walletsService, UserManager<ApplicationUser> userManager)
         {
             this.categoriesService = categoriesService;
             this.walletsService = walletsService;
+            this.userManager = userManager;
         }
 
         public IActionResult All()
@@ -30,9 +34,16 @@
 
         public async Task<IActionResult> Add(int id)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
             var model = new AddCategoryInputModel();
 
-            var wallets = await this.categoriesService.GetAllWalletsWithNameAndIdAsync("first");
+            var wallets = await this.categoriesService.GetAllWalletsWithNameAndIdAsync(user.Id);
 
             model.WalletId = id;
             model.WalletName = await this.walletsService.GetWalletNameAsync(id);
@@ -49,14 +60,33 @@
         [HttpPost]
         public async Task<IActionResult> Add(AddCategoryInputModel input)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
             await this.categoriesService.AddAsync(input.Name, input.WalletId, input.BadgeColor);
             return this.Redirect($"/Wallets/Details/{input.WalletId}");
         }
 
         public async Task<IActionResult> Edit(int id, int walletId)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, walletId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
+            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
+            }
+
             var categoryInfo = await this.categoriesService.GetCategoryInfoForEditAsync(id);
-            var wallets = await this.categoriesService.GetAllWalletsWithNameAndIdAsync("first");
+            var wallets = await this.categoriesService.GetAllWalletsWithNameAndIdAsync(user.Id);
 
             var model = new EditCategoryInputModel();
             model.CategoryId = id;
@@ -76,6 +106,18 @@
         [HttpPost]
         public async Task<IActionResult> Edit(EditCategoryInputModel input)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
+            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, input.CategoryId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
+            }
+
             await this.categoriesService.EditAsync(input.CategoryId, input.CategoryName, input.WalletId, input.BadgeColor.ToString());
 
             return this.Redirect($"/Wallets/Details/{input.WalletId}");
@@ -83,6 +125,18 @@
 
         public async Task<IActionResult> Delete(int id, int walletId)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, walletId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
+            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
+            }
+
             var model = new DeleteCategoryInputModel();
 
             var modelInfo = await this.categoriesService.GetCategoryInfoForDeleteAsync(id, walletId);
@@ -107,12 +161,36 @@
         [HttpPost]
         public async Task<IActionResult> Delete(DeleteCategoryInputModel input)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
+            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, input.OldCategoryId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
+            }
+
+            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, input.NewCategoryId) && input.NewCategoryId != -1)
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
+            }
+
             await this.categoriesService.RemoveAsync(input.OldCategoryId, input.NewCategoryId);
             return this.Redirect($"/Wallets/Details/{input.WalletId}");
         }
 
         public async Task<IActionResult> Details(int id)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
+            }
+
             var category = await this.categoriesService.GetRecordsByCategoryAsync(id);
             CategoryRecordsViewModel model = new CategoryRecordsViewModel()
             {

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using MoneySaver.Services.Data.Models.Categories;
     using MoneySaver.Services.Data.Models.Records;
 
@@ -19,5 +20,7 @@
         public Task<string> UpdateRecord(string recordId, int categoryId, int walletId, string description, decimal oldAmount, decimal newAmount, string type, DateTime createdOn);
 
         public Task EditWalletAmountAsync(int walletId, decimal amount);
+
+        public Task<bool> IsUserOwnRecordAsync(string userId, string recordId);
     }
 }
