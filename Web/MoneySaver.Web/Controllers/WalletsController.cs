@@ -88,7 +88,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
             {
                 throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
             }
@@ -120,7 +120,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, input.Id))
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.Id))
             {
                 throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
             }
@@ -134,7 +134,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
             {
                 throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
             }
@@ -169,7 +169,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
             {
                 throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
             }
@@ -210,7 +210,7 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
             {
                 throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
             }
@@ -256,7 +256,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
             {
                 throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
             }
@@ -290,7 +290,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
             {
                 throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
             }
