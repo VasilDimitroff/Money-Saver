@@ -25,9 +25,10 @@
         private readonly ICurrenciesService currenciesService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public WalletsController(IWalletsService walletsService,
+        public WalletsController(
+            IWalletsService walletsService,
             IRecordsService recordsService,
-            ICurrenciesService currenciesService, 
+            ICurrenciesService currenciesService,
             UserManager<ApplicationUser> userManager)
         {
             this.walletsService = walletsService;
@@ -36,12 +37,7 @@
             this.userManager = userManager;
         }
 
-        /*
-        public Task<IActionResult> All()
-        {
-            return View();
-        }
-    
+        /* 
         public Task<IActionResult> Delete()
         {
             return View();
@@ -53,9 +49,29 @@
             return View();
         }
         */
+        public async Task<IActionResult> All()
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            var wallets = await this.walletsService.GetAllWalletsAsync(user.Id);
+
+            var modelWallets = new List<AllWalletsViewModel>();
+
+            modelWallets = wallets.Select(w => new AllWalletsViewModel
+            {
+                CurrentBalance = w.CurrentBalance,
+                TotalExpenses = w.TotalExpenses,
+                TotalIncomes = w.TotalIncomes,
+                WalletId = w.WalletId,
+                WalletName = w.WalletName,
+            })
+                .ToList();
+
+            return this.View(modelWallets);
+        }
+
         public async Task<IActionResult> Add()
         {
-
             AddWalletInputModel model = new AddWalletInputModel()
             {
                 Amount = 0,

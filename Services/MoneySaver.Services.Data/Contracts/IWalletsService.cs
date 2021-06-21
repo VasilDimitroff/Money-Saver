@@ -20,6 +20,8 @@
 
         public Task<EditWalletDto> GetWalletInfoForEditAsync(string userId, int walletId);
 
+        public Task<IEnumerable<AllWalletsDto>> GetAllWalletsAsync(string userId);
+
         public Task<string> GetWalletNameAsync(int walletId);
 
         public Task<int> GetWalletIdByRecordIdAsync(string recordId);

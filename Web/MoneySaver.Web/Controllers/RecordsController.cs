@@ -22,8 +22,9 @@
         private readonly IWalletsService walletsService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public RecordsController(IRecordsService recordsService,
-            IWalletsService walletsService, 
+        public RecordsController(
+            IRecordsService recordsService,
+            IWalletsService walletsService,
             UserManager<ApplicationUser> userManager)
         {
             this.recordsService = recordsService;

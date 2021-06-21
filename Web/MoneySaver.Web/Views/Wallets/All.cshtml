@@ -1,0 +1,29 @@
+﻿@using MoneySaver.Web.ViewModels.Wallets
+@model IEnumerable<AllWalletsViewModel>
+@{
+    this.ViewData["Title"] = "All Wallets";
+}
+
+<div class="row">
+    @foreach (var wallet in Model)
+	{
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">@wallet.WalletName</h4>
+
+                <h4 class="card-title">Balance: @wallet.CurrentBalance</h4>
+                <div class="d-flex justify-content-between">
+                    <p class="text-success">Total Incomes: @wallet.TotalIncomes</p>
+                    <p class="text-danger">Total Expenses: @wallet.TotalExpenses</p>
+                </div>
+                <br/>
+                <div class="col-12 form-inline justify-content-center">
+                    <vc:all-records-by-wallet wallet-id="@wallet.WalletId"></vc:all-records-by-wallet>
+                    <vc:wallet-statistics id="@wallet.WalletId"></vc:wallet-statistics>
+                </div>
+            </div>
+        </div>
+    </div>
+	}     
+</div>

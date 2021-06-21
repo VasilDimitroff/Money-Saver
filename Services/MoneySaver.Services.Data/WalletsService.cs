@@ -221,6 +221,29 @@
             return model;
         }
 
+        public async Task<IEnumerable<AllWalletsDto>> GetAllWalletsAsync(string userId)
+        {
+
+
+            var wallets = await this.dbContext.Wallets.Include(w => w.Categories).ThenInclude(c => c.Records)
+                .Where(w => w.ApplicationUserId == userId)
+                .ToListAsync();
+
+            var walletsDto = new List<AllWalletsDto>();
+
+            walletsDto = wallets.Select(w => new AllWalletsDto
+                {
+                    CurrentBalance = w.MoneyAmount,
+                    WalletId = w.Id,
+                    WalletName = w.Name,
+                    TotalExpenses = w.Categories.Sum(c => c.Records.Where(r => r.Type == RecordType.Expense).Sum(r => r.Amount)),
+                    TotalIncomes = w.Categories.Sum(c => c.Records.Where(r => r.Type == RecordType.Income).Sum(r => r.Amount)),
+                })
+                .ToList();
+
+            return walletsDto;
+        }
+
         public async Task<string> GetWalletNameAsync(int walletId)
         {
             var wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(x => x.Id == walletId);
