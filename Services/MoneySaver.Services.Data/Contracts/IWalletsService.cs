@@ -16,6 +16,10 @@
 
         public Task<string> RemoveAsync(int walletId);
 
+        public Task EditAsync(string userId, int walletId, string name, decimal amount, int currencyId);
+
+        public Task<EditWalletDto> GetWalletInfoForEditAsync(string userId, int walletId);
+
         public Task<string> GetWalletNameAsync(int walletId);
 
         public Task<int> GetWalletIdByRecordIdAsync(string recordId);
@@ -28,6 +32,8 @@
 
         public Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId);
 
-        public Task<WalletDetailsDto> GetWalletDetailsAsync(int walletId);
+        public Task<WalletDetailsDto> GetWalletDetailsAsync(string userId, int walletId);
+
+        public Task<bool> IsUserOwnWalletAsync(string userId, int walletId);
     }
 }

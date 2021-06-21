@@ -17,6 +17,7 @@
                     <input type="text" class="form-control form-control-lg" asp-for="Name" placeholder="Of example: Home Wallet, Bussiness Wallet">
                 </div>
                 <div class="form-group">
+                    <span class="mdi mdi-cash text-primary"></span>
                     <label for="@Model.CurrencyId">Currency</label>
                     <select asp-for="@Model.CurrencyId" class="js-example-basic-single" style="width:100%">
                         <option disabled selected>-- Choose currency for your wallet --</option>
@@ -31,7 +32,7 @@
                     <label asp-for="Amount"><span class="font-weight-bold">Amount</span></label>
                     <input type="number" class="form-control form-control-lg" asp-for="Amount" placeholder="Enter initial amount of the wallet" value="Enter amount">
                 </div>
-                <input type="hidden" asp-for="ApplicationUserId">
+                @*<input type="hidden" asp-for="ApplicationUserId" value="@Model.ApplicationUserId">*@
                 <button type="submit" class="btn btn-primary btn-sm mr-2">
                     Submit
                 </button>

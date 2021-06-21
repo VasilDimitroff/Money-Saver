@@ -5,8 +5,11 @@
     using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using MoneySaver.Common;
+    using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.ViewModels.Categories;
     using MoneySaver.Web.ViewModels.Currencies;
@@ -14,17 +17,20 @@
     using MoneySaver.Web.ViewModels.Records.Enums;
     using MoneySaver.Web.ViewModels.Wallets;
 
+    [Authorize]
     public class WalletsController : Controller
     {
         private readonly IWalletsService walletsService;
         private readonly IRecordsService recordsService;
         private readonly ICurrenciesService currenciesService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public WalletsController(IWalletsService walletsService, IRecordsService recordsService, ICurrenciesService currenciesService)
+        public WalletsController(IWalletsService walletsService, IRecordsService recordsService, ICurrenciesService currenciesService, UserManager<ApplicationUser> userManager)
         {
             this.walletsService = walletsService;
             this.recordsService = recordsService;
             this.currenciesService = currenciesService;
+            this.userManager = userManager;
         }
 
         /*
@@ -33,18 +39,6 @@
             return View();
         }
     
-
-        public Task<IActionResult> Edit()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public Task<IActionResult> Edit(int id)
-        {
-            return View();
-        }
-
         public Task<IActionResult> Delete()
         {
             return View();
@@ -56,12 +50,11 @@
             return View();
         }
         */
-        public async Task<IActionResult> Add(string userId)
+        public async Task<IActionResult> Add()
         {
-            userId = "first";
+
             AddWalletInputModel model = new AddWalletInputModel()
             {
-                ApplicationUserId = userId,
                 Amount = 0,
                 Name = string.Empty,
             };
@@ -83,19 +76,69 @@
         [HttpPost]
         public async Task<IActionResult> Add(AddWalletInputModel input)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
             await this.walletsService
-                .AddAsync(input.ApplicationUserId, input.Name, input.Amount, input.CurrencyId);
+                .AddAsync(user.Id, input.Name, input.Amount, input.CurrencyId);
 
             return this.Redirect($"/Wallets/All/{input.ApplicationUserId}");
         }
-
-        public async Task<IActionResult> Edit()
+ 
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
+            var model = new EditWalletViewModel();
+
+            var walletInfo = await this.walletsService.GetWalletInfoForEditAsync(user.Id, id);
+
+            model.Currencies = walletInfo.Currencies.Select(c => new CurrencyViewModel
+            {
+                Code = c.Code,
+                CurrencyId = c.CurrencyId,
+                Name = c.Name,
+            })
+                .ToList();
+
+            model.CurrencyId = walletInfo.CurrencyId;
+            model.Amount = walletInfo.Amount;
+            model.CurrentCurrencyName = walletInfo.CurrentCurrencyName;
+            model.CurrentCurrencyCode = walletInfo.CurrentCurrencyCode;
+            model.Name = walletInfo.Name;
+            model.Id = walletInfo.Id;
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditWalletViewModel input)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, input.Id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
+            await this.walletsService.EditAsync(user.Id, input.Id, input.Name, input.Amount, input.CurrencyId);
+
+            return this.Redirect($"/Wallets/All/{user.Id}");
         }
 
         public async Task<IActionResult> Records(int id)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
             var model = new WalletSearchResultViewModel();
 
             var records = await this.recordsService.GetRecordsByWalletAsync(id);
@@ -124,6 +167,13 @@
 
         public async Task<IActionResult> Search(int id, string searchTerm)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
             if (searchTerm == null)
             {
                 searchTerm = string.Empty;
@@ -157,7 +207,15 @@
 
         public async Task<IActionResult> Details(int id)
         {
-            var dtoResult = await this.walletsService.GetWalletDetailsAsync(id);
+
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
+            var dtoResult = await this.walletsService.GetWalletDetailsAsync(user.Id, id);
             WalletDetailsViewModel model = new WalletDetailsViewModel
             {
                 Currency = dtoResult.Currency,
@@ -196,6 +254,13 @@
         [HttpPost]
         public async Task<IActionResult> DateSorted(DateTime startDate, DateTime endDate, int id)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
             var model = new WalletSearchResultViewModel();
 
             var records = await this.walletsService.GetRecordsByDateRangeAsync(startDate, endDate, id);
@@ -223,6 +288,13 @@
 
         public async Task<IActionResult> Statistics(int id)
         {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
             var dbResult = await this.walletsService.GetWalletWithCategoriesAsync(id);
 
             StatisticsWalletViewModel model = new StatisticsWalletViewModel()

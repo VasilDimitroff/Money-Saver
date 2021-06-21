@@ -38,6 +38,8 @@
 
         public const string WalletAlreadyExist = "Wallet with this name already exist";
 
+        public const string NoPermissionForEditWallet = "You have no permissions to see or modify this wallet!";
+
         public const string WalletSuccessfullyAdded = "Wallet with name {0} successfully added!";
 
         public const string WalletSuccessfullyRemoved = "Wallet with name {0} successfully removed!";
@@ -53,5 +55,7 @@
         public const string InvalidCurrency = "Please select a valid currency!";
 
         public const string UserNotExist = "User with this id do not exist";
+
+        public const string CurrencyNotExist = "Currency with this id do not exist";
     }
 }
