@@ -4,35 +4,42 @@
 
 @model StatisticsWalletViewModel
 @{
-    this.ViewData["Title"] = "Statistics - " + Model.WalletName;
+    this.ViewData["Title"] = "Categories - " + Model.WalletName;
     string badgeClassName = string.Empty;
 }
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">@Model.WalletName - Incomes & Expenses Report</h4>
-        <p><i class="fa fa-wallet"></i>Current amount of @Model.WalletName:</p>
-        <br />
-        @if (Model.TotalAmount < 0)
-        {
-            badgeClassName = "danger";
-        }
+        <h4 class="card-title">@this.ViewData["Title"]</h4>
+        @*<p><i class="fa fa-wallet"></i>Current amount of @Model.WalletName:</p>
+                <br />
+                @if (Model.TotalAmount < 0)
+                {
+                    badgeClassName = "danger";
+                }
 
-        else if (Model.TotalAmount == 0)
-        {
-            badgeClassName = "secondary";
-        }
+                else if (Model.TotalAmount == 0)
+                {
+                    badgeClassName = "secondary";
+                }
 
-        else
-        {
-            badgeClassName = "success";
-        }
-    <h2> <span class="text-@badgeClassName">@Model.TotalAmount @Model.Currency</span></h2>
-        <br /> <br />
-               <div class="row pb-5">   
-                       <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
-                       <vc:all-records-by-wallet wallet-id="@Model.WalletId"></vc:all-records-by-wallet>
-               </div>
+                else
+                {
+                    badgeClassName = "success";
+                }
+            <h2> <span class="text-@badgeClassName">@Model.TotalAmount @Model.Currency</span></h2>
+            <br /> <br />*@
+        <div class="col-12">
+            <div class="row pb-2">
+                <div class="pr-1">
+                    <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
+                </div>
+                <div class="pr-1">
+                    <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>
+                </div>
+                <vc:all-records-by-wallet wallet-id="@Model.WalletId"></vc:all-records-by-wallet>
+            </div>
+        </div>
         <div class="col-12">
             <div class="table-responsive">
                 <table id="order-listing" class="table text-center table-bordered table-hover">
@@ -171,18 +178,4 @@
         });
 
     </script>
-
-
-
-
-
-    <script src="~/js/formpickers.js"></script>
-    <script src="~/js/form-addons.js"></script>
-    <script src="~/js/x-editable.js"></script>
-    <script src="~/js/dropify.js"></script>
-    <script src="~/js/dropzone.js"></script>
-    <script src="~/js/jquery-file-upload.js"></script>
-    <script src="~/js/formpickers.js"></script>
-    <script src="~/js/form-repeater.js"></script>
-
 }

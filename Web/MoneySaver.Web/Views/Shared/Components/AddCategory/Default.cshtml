@@ -1,5 +1,5 @@
 ﻿@model MoneySaver.Web.ViewModels.ViewComponents.AddCategoryComponentViewModel
 
-<div class="btn-group mr-2">
-    <button class="btn btn-sm btn-primary" onclick="location.href='/Categories/Add/@Model.WalletId'" type="button"><i class="mdi mdi-plus"></i> Category</button>
+<div class="input-group-sm mr-sm-1 mb-4">
+    <a class="btn btn-sm btn-primary" asp-controller="Categories" asp-action="Add" asp-route-id="@Model.WalletId"><i class="mdi mdi-plus"></i> Category</a>
 </div>

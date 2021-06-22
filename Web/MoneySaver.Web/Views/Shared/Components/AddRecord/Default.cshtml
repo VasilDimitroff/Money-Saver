@@ -1,5 +1,5 @@
 ﻿@model MoneySaver.Web.ViewModels.ViewComponents.AddRecordComponentViewModel
 
 <div class="input-group-sm mr-sm-1 mb-4">
-    <button class="btn btn-sm btn-primary" onclick="location.href='/Records/Add?walletId=@Model.WalletId'" type="button"><i class="mdi mdi-plus"></i> Record</button>
+    <a class="btn btn-sm btn-primary" href="/Records/Add?walletId=@Model.WalletId"><i class="mdi mdi-plus"></i> Record</a>
 </div>

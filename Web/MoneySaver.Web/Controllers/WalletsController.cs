@@ -64,6 +64,7 @@
                 TotalIncomes = w.TotalIncomes,
                 WalletId = w.WalletId,
                 WalletName = w.WalletName,
+                Currency = w.Currency,
             })
                 .ToList();
 
@@ -102,7 +103,7 @@
 
             return this.Redirect($"/Wallets/All/{input.ApplicationUserId}");
         }
- 
+
         public async Task<IActionResult> Edit(int id)
         {
             var user = await this.userManager.GetUserAsync(this.User);
@@ -305,7 +306,7 @@
             return this.View("~/Views/Wallets/Records.cshtml", model);
         }
 
-        public async Task<IActionResult> Statistics(int id)
+        public async Task<IActionResult> Categories(int id)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 

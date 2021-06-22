@@ -1,5 +1,5 @@
 ﻿@model MoneySaver.Web.ViewModels.ViewComponents.AllRecordsByWalletComponentViewModel
 
 <div class="input-group-sm mr-sm-1 mb-4">
-    <button class="btn btn-sm btn-primary" onclick="location.href='/Wallets/Records/@Model.WalletId'" type="button"><i class="mdi mdi-format-list-bulleted"></i> All Records</button>
+    <a class="btn btn-sm btn-primary" asp-controller="Wallets" asp-action="Records" asp-route-id="@Model.WalletId"><i class="mdi mdi-format-list-bulleted"></i> All Records</a>
 </div>

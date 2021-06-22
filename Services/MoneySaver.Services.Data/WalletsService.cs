@@ -225,7 +225,10 @@
         {
 
 
-            var wallets = await this.dbContext.Wallets.Include(w => w.Categories).ThenInclude(c => c.Records)
+            var wallets = await this.dbContext.Wallets
+                .Include(w => w.Currency)
+                .Include(w => w.Categories)
+                .ThenInclude(c => c.Records)
                 .Where(w => w.ApplicationUserId == userId)
                 .ToListAsync();
 
@@ -238,6 +241,7 @@
                     WalletName = w.Name,
                     TotalExpenses = w.Categories.Sum(c => c.Records.Where(r => r.Type == RecordType.Expense).Sum(r => r.Amount)),
                     TotalIncomes = w.Categories.Sum(c => c.Records.Where(r => r.Type == RecordType.Income).Sum(r => r.Amount)),
+                    Currency = w.Currency.Code,
                 })
                 .ToList();
 

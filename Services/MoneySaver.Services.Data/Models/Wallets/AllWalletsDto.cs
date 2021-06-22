@@ -8,6 +8,8 @@
 
         public decimal TotalIncomes { get; set; }
 
+        public string Currency { get; set; }
+
         public decimal CurrentBalance { get; set; }
 
         public decimal TotalExpenses { get; set; }

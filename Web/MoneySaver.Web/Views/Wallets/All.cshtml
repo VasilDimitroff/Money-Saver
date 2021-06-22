@@ -2,28 +2,85 @@
 @model IEnumerable<AllWalletsViewModel>
 @{
     this.ViewData["Title"] = "All Wallets";
-}
+    string addWalletButtonText = "Add new wallet";
 
+    if (Model.Count() < 1)
+    {
+        addWalletButtonText = "Create your first one!";
+    }
+}
 <div class="row">
     @foreach (var wallet in Model)
-	{
-    <div class="col-md-4 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">@wallet.WalletName</h4>
-
-                <h4 class="card-title">Balance: @wallet.CurrentBalance</h4>
-                <div class="d-flex justify-content-between">
-                    <p class="text-success">Total Incomes: @wallet.TotalIncomes</p>
-                    <p class="text-danger">Total Expenses: @wallet.TotalExpenses</p>
-                </div>
-                <br/>
-                <div class="col-12 form-inline justify-content-center">
-                    <vc:all-records-by-wallet wallet-id="@wallet.WalletId"></vc:all-records-by-wallet>
-                    <vc:wallet-statistics id="@wallet.WalletId"></vc:wallet-statistics>
+    {
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="text-center text-dark">
+                        <span class="mdi mdi-wallet text-primary"></span><span class="text-dark"> @wallet.WalletName</span>
+                    </h3>
+                    <br />
+                    <h4 class="text-center text-muted">Balance: <span class="text-info h3">@wallet.CurrentBalance @wallet.Currency</span></h4>
+                    <br />
+                    <div class="d-flex justify-content-between">
+                        <p><span class="mdi mdi-arrow-right-bold text-success"></span><span class="font-weight-bold">Total Incomes: </span> <span class="text-success h4"> @wallet.TotalIncomes @wallet.Currency</p>
+                        <p><span class="mdi mdi-arrow-left-bold text-danger"></span><span class="font-weight-bold">Total Expenses: </span> <span class="text-danger h4">@wallet.TotalExpenses @wallet.Currency</p>
+                    </div>
+                    <br /><br />
+                          <div class="col-12 form-inline justify-content-between">
+                              <vc:wallet-details wallet-id="@wallet.WalletId"></vc:wallet-details>
+                              <vc:all-records-by-wallet wallet-id="@wallet.WalletId"></vc:all-records-by-wallet>
+                              <vc:wallet-statistics id="@wallet.WalletId"></vc:wallet-statistics>
+                              <div class="input-group-sm mr-sm-1 mb-4 ">
+                                  <a class="btn btn-sm btn-outline-primary" asp-controller="Wallets" asp-action="Edit" asp-route-id="@wallet.WalletId">
+                                      <i class="mdi mdi-lead-pencil"></i> Edit
+                                  </a>
+                              </div>
+                          </div>
                 </div>
             </div>
         </div>
-    </div>
-	}     
+    }
+
+<div class="col-md-6 grid-margin stretch-card row-md-12 row-sm-12">
+
+    <br /><br /> <br /><br /><br /><br /><br /><br />
+       <div id="addWalletArea" class="col-12 row align-items-center">
+           @if (Model.Count() < 1)
+           {
+               <span class="text-center col-12"> You haven't a wallet in your account yet. </span>
+           }
+
+           <a id="addWalletButton" class="col-8 text-center" href="/Wallets/Add/">
+               @addWalletButtonText
+           </a>
+       </div>
+    <br /><br /><br /><br /><br /><br /><br /><br />
 </div>
+<style>
+    #addWalletArea {
+        margin-left:0;
+        border: 2px dashed #bbb;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        font-size: 25px;
+        color: #bbb;  
+    }
+
+    #addWalletButton {
+        border: 2px dashed #bbb;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        font-size: 25px;
+        color: #bbb;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+        #addWalletButton:hover {
+            background-color: #bbb;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
