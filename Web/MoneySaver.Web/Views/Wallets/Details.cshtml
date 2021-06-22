@@ -22,11 +22,12 @@
                 <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
             </div>
             <div class="pr-1">
-                <vc:all-records-by-wallet wallet-id="@Model.WalletId"></vc:all-records-by-wallet>
-            </div>
-            <div class="pr-1">
                 <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>
             </div>
+            <div class="pr-1">
+                <vc:all-records-by-wallet wallet-id="@Model.WalletId"></vc:all-records-by-wallet>
+            </div>
+
             <vc:wallet-statistics id="@Model.WalletId"></vc:wallet-statistics>
 
         </div>
@@ -169,7 +170,16 @@
                     </tbody>
                 </table>
                 <br />
-                <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>
+
+                <div class="btn-group form-inline">
+                    @if (Model.Categories.Count() > 0)
+                    {
+                        <vc:wallet-statistics id="@Model.WalletId"></vc:wallet-statistics>
+                        <span class="mr-2 ml-2 mb-4">  or </span>
+                    }
+
+                    <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>
+                </div>           
             </div>
         </div>
     </div>
