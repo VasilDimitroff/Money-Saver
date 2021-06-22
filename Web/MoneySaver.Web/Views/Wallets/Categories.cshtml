@@ -72,7 +72,16 @@
                                     {
                                         badgeClassName = "success";
                                     }
-                                    <span class="text-@badgeClassName"><strong>+ @category.TotalIncomesAmount @Model.Currency</strong></span>
+                                    <span class="text-@badgeClassName">
+                                        <strong>
+                                            @if (category.TotalIncomesAmount > 0)
+                                            {
+                                                <span>+</span>
+                                            }
+
+                                            @category.TotalIncomesAmount @Model.Currency
+                                        </strong>
+                                    </span>
                                 </td>
                                 <td>
                                     @if (category.TotalExpensesAmount == 0)
@@ -91,7 +100,6 @@
 
                                 <td>
                                     <vc:edit-category category-id="@category.Id" wallet-id="@Model.WalletId"></vc:edit-category>
-                                    <!--<span class="btn btn-secondary btn-sm"><i class="fa fa-edit"></i> Edit</span>-->
                                 </td>
                             </tr>
                         }
@@ -110,7 +118,12 @@
                                 {
                                     badgeClassName = "success";
                                 }
-                                <span class="text-@badgeClassName font-weight-bolder badge badge-outline-@badgeClassName">+ @Model.Incomes @Model.Currency</span>
+                                <span class="text-@badgeClassName font-weight-bolder badge badge-outline-@badgeClassName">
+                                    @if (@Model.Incomes > 0)
+                                    {
+                                        <span>+</span>
+                                    } @Model.Incomes @Model.Currency
+                                </span>
                             </td>
                             <td>
                                 @if (Model.Outcomes == 0)

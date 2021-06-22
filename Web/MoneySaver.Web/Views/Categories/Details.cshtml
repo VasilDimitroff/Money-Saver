@@ -9,8 +9,8 @@
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">@Model.Category - All Records - @Model.WalletName</h4>
-        <div class="row pb-5">
+        <h4 class="card-title"><span class="badge badge-@Model.BadgeColor.ToString().ToLower()">@Model.Category</span> - All Records - @Model.WalletName</h4>
+        <div class="row pb-3">
             <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
             <vc:wallet-statistics wallet-id="@Model.WalletId"></vc:wallet-statistics>
             <span class="btn-group ml-auto pt-1 mr-4 d-md-block">Sort By:</span>

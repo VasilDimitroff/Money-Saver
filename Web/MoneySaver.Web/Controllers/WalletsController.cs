@@ -37,18 +37,6 @@
             this.userManager = userManager;
         }
 
-        /* 
-        public Task<IActionResult> Delete()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public Task<IActionResult> Delete(int id)
-        {
-            return View();
-        }
-        */
         public async Task<IActionResult> All()
         {
             var user = await this.userManager.GetUserAsync(this.User);
@@ -101,7 +89,7 @@
             await this.walletsService
                 .AddAsync(user.Id, input.Name, input.Amount, input.CurrencyId);
 
-            return this.Redirect($"/Wallets/All/{input.ApplicationUserId}");
+            return this.Redirect("/Wallets/All");
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -147,7 +135,22 @@
 
             await this.walletsService.EditAsync(user.Id, input.Id, input.Name, input.Amount, input.CurrencyId);
 
-            return this.Redirect($"/Wallets/All/{user.Id}");
+            return this.Redirect($"/Wallets/All/");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
+            await this.walletsService.RemoveAsync(id);
+
+            return this.Redirect("/Wallets/All");
         }
 
         public async Task<IActionResult> Records(int id)

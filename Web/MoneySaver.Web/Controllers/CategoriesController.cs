@@ -27,11 +27,6 @@
             this.userManager = userManager;
         }
 
-        public IActionResult All()
-        {
-            return View();
-        }
-
         public async Task<IActionResult> Add(int id)
         {
             var user = await this.userManager.GetUserAsync(this.User);
@@ -68,7 +63,7 @@
             }
 
             await this.categoriesService.AddAsync(input.Name, input.WalletId, input.BadgeColor);
-            return this.Redirect($"/Wallets/Details/{input.WalletId}");
+            return this.Redirect($"/Wallets/Categories/{input.WalletId}");
         }
 
         public async Task<IActionResult> Edit(int id, int walletId)
@@ -120,7 +115,7 @@
 
             await this.categoriesService.EditAsync(input.CategoryId, input.CategoryName, input.WalletId, input.BadgeColor.ToString());
 
-            return this.Redirect($"/Wallets/Details/{input.WalletId}");
+            return this.Redirect($"/Wallets/Categories/{input.WalletId}");
         }
 
         public async Task<IActionResult> Delete(int id, int walletId)
@@ -179,7 +174,7 @@
             }
 
             await this.categoriesService.RemoveAsync(input.OldCategoryId, input.NewCategoryId);
-            return this.Redirect($"/Wallets/Details/{input.WalletId}");
+            return this.Redirect($"/Wallets/Categories/{input.WalletId}");
         }
 
         public async Task<IActionResult> Details(int id)

@@ -26,7 +26,7 @@
                         <p><span class="mdi mdi-arrow-left-bold text-danger"></span><span class="font-weight-bold">Total Expenses: </span> <span class="text-danger h4">@wallet.TotalExpenses @wallet.Currency</p>
                     </div>
                     <br /><br />
-                          <div class="col-12 form-inline justify-content-between">
+                          <div class="col-12 form-inline justify-content-center">
                               <vc:wallet-details wallet-id="@wallet.WalletId"></vc:wallet-details>
                               <vc:all-records-by-wallet wallet-id="@wallet.WalletId"></vc:all-records-by-wallet>
                               <vc:wallet-statistics id="@wallet.WalletId"></vc:wallet-statistics>
@@ -56,14 +56,16 @@
        </div>
     <br /><br /><br /><br /><br /><br /><br /><br />
 </div>
+
+@section Scripts {
 <style>
     #addWalletArea {
-        margin-left:0;
+        margin-left: 0;
         border: 2px dashed #bbb;
         -webkit-border-radius: 5px;
         border-radius: 5px;
         font-size: 25px;
-        color: #bbb;  
+        color: #bbb;
     }
 
     #addWalletButton {
@@ -72,15 +74,16 @@
         border-radius: 5px;
         font-size: 25px;
         color: #bbb;
-        padding-top: 10px;
-        padding-bottom: 10px;
+        padding-top: 20px;
+        padding-bottom: 20px;
         margin-left: auto;
         margin-right: auto;
     }
 
-        #addWalletButton:hover {
-            background-color: #bbb;
-            color: white;
-            text-decoration: none;
-        }
-    </style>
+     #addWalletButton:hover {
+         background-color: #bbb;
+         color: white;
+         text-decoration: none;
+     }
+</style>
+}  

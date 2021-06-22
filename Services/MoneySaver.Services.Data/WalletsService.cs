@@ -141,11 +141,18 @@
 
         public async Task<string> RemoveAsync(int walletId)
         {
-            var categories = await this.dbContext.Categories
-                .Where(c => c.WalletId == walletId)
-                .ToListAsync();
+            var wallet = await this.dbContext
+                .Wallets
+                .Include(c => c.Categories)
+                .ThenInclude(c => c.Records)
+                .FirstOrDefaultAsync(x => x.Id == walletId);
 
-            foreach (var category in categories)
+            if (wallet == null)
+            {
+                throw new ArgumentNullException(GlobalConstants.WalletNotExist);
+            }
+
+            foreach (var category in wallet.Categories)
             {
                 var records = category.Records.ToList();
 
@@ -154,13 +161,11 @@
                 this.dbContext.Categories.Remove(category);
             }
 
-            var walletForDelete = await this.dbContext.Wallets.FirstOrDefaultAsync(x => x.Id == walletId);
-
-            this.dbContext.Remove(walletForDelete);
+            this.dbContext.Remove(wallet);
 
             await this.dbContext.SaveChangesAsync();
 
-            return string.Format(GlobalConstants.WalletSuccessfullyRemoved, walletForDelete.Name);
+            return string.Format(GlobalConstants.WalletSuccessfullyRemoved, wallet.Name);
         }
 
         public async Task EditAsync(string userId, int walletId, string name, decimal amount, int currencyId)
@@ -180,7 +185,7 @@
             wallet.Name = name;
             wallet.CurrencyId = currencyId;
 
-                /*
+               
                 decimal sumOfRecordsAmount = 0m;
 
                 var categories = this.dbContext.Categories.Include(c => c.Records)
@@ -195,7 +200,7 @@
                 }
 
                 await this.recordsService.EditWalletAmountAsync(walletId, sumOfRecordsAmount);
-                */
+               
 
             await this.dbContext.SaveChangesAsync();
         }
