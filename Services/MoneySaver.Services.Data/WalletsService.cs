@@ -23,12 +23,18 @@
         private readonly ApplicationDbContext dbContext;
         private readonly IRecordsService recordsService;
         private readonly ICurrenciesService currenciesService;
+        private readonly ICategoriesService categoriesService;
 
-        public WalletsService(ApplicationDbContext dbContext, IRecordsService recordsService, ICurrenciesService currenciesService)
+        public WalletsService(
+            ApplicationDbContext dbContext,
+            IRecordsService recordsService,
+            ICurrenciesService currenciesService,
+            ICategoriesService categoriesService)
         {
             this.dbContext = dbContext;
             this.recordsService = recordsService;
             this.currenciesService = currenciesService;
+            this.categoriesService = categoriesService;
         }
 
         public async Task<string> AddAsync(string userId, string name, decimal initialMoney, int currencyId)
@@ -61,6 +67,14 @@
             await this.dbContext.AddAsync(newWallet);
 
             await this.dbContext.SaveChangesAsync();
+
+            var wallets = await this.dbContext.Wallets.Where(w => w.ApplicationUserId == userId).ToListAsync();
+
+            if (wallets.Count == 1)
+            {
+                await this.SeedWalletAsync(newWallet);
+
+            }
 
             return string.Format(GlobalConstants.WalletSuccessfullyAdded, newWallet.Name);
         }
@@ -479,6 +493,15 @@
            Currency currency = await this.dbContext.Currencies.FirstOrDefaultAsync(x => x.Id == currencyId);
 
            return currency;
+        }
+
+        private async Task SeedWalletAsync(Wallet wallet)
+        {
+            await this.categoriesService.AddAsync("Alcohol", wallet.Id, "Danger");
+            await this.categoriesService.AddAsync("Salary", wallet.Id, "Success");
+            await this.categoriesService.AddAsync("Health", wallet.Id, "Warning");
+            await this.categoriesService.AddAsync("Food", wallet.Id, "Info");
+            await this.categoriesService.AddAsync("Electronics", wallet.Id, "Dark");
         }
     }
 }
