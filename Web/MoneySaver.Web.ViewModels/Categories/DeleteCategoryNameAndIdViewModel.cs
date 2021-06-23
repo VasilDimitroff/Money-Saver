@@ -1,5 +1,7 @@
 ﻿namespace MoneySaver.Web.ViewModels.Categories
 {
+    using System.ComponentModel.DataAnnotations;
+
     using MoneySaver.Web.ViewModels.Records.Enums;
 
     public class DeleteCategoryNameAndIdViewModel

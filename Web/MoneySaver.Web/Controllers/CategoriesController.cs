@@ -55,6 +55,11 @@
         [HttpPost]
         public async Task<IActionResult> Add(AddCategoryInputModel input)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest();
+            }
+
             var user = await this.userManager.GetUserAsync(this.User);
 
             if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))
@@ -101,6 +106,11 @@
         [HttpPost]
         public async Task<IActionResult> Edit(EditCategoryInputModel input)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest();
+            }
+
             var user = await this.userManager.GetUserAsync(this.User);
 
             if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))
@@ -156,6 +166,11 @@
         [HttpPost]
         public async Task<IActionResult> Delete(DeleteCategoryInputModel input)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest();
+            }
+
             var user = await this.userManager.GetUserAsync(this.User);
 
             if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))

@@ -21,9 +21,9 @@
                 </div>
                 <br />
 
-
                 <form class="forms-sample" method="post" style="display: inline">
                     <input type="hidden" asp-for="OldCategoryId">
+                    <span class="text-danger" asp-validation-for="OldCategoryId"></span>
                     <div class="form-group">
                         <label asp-for="@Model.NewCategoryId"><span class="font-weight-bold">Choose category where to move the records from <span class="badge badge-@Model.OldCategoryBadgeColor.ToString().ToLower()">@Model.OldCategoryName</span> category:</span></label>
                         <select asp-for="@Model.NewCategoryId" class="js-example-basic-single" style="width:100%">
@@ -32,17 +32,18 @@
                                 <option value="@category.CategoryId">@category.CategoryName</option>
                             }
                         </select>
+                        <span class="text-danger" asp-validation-for="NewCategoryId"></span>
                     </div>
                     @* <div class="form-group">
-                <label asp-for="@Model.NewCategoryId">Choose new category 2</label>
-                <select class="form-control" style="width:100%" asp-for="@Model.NewCategoryId" placeholder="New Category">
-                    <option disabled selected class="default-option"> -- select a badge color -- </option>
-                    @foreach (var category in Model.Categories)
-                    {
-                        <option class="optText-@category.BadgeColor.ToString().ToLower()" value="@category.CategoryId">@category.CategoryName</option>
-                    }
-                </select>
-            </div>
+            <label asp-for="@Model.NewCategoryId">Choose new category 2</label>
+            <select class="form-control" style="width:100%" asp-for="@Model.NewCategoryId" placeholder="New Category">
+                <option disabled selected class="default-option"> -- select a badge color -- </option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option class="optText-@category.BadgeColor.ToString().ToLower()" value="@category.CategoryId">@category.CategoryName</option>
+                }
+            </select>
+        </div>
                     *@
                     <button type="submit" style="white-space: normal !important; max-width: 165px; line-height: 20px;" class="btn btn-primary btn-sm mr-2">
                         <span class="mdi mdi-folder-move" style="font-size: 15px;"></span> Move & Delete

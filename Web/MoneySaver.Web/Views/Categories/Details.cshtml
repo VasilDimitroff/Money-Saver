@@ -11,8 +11,10 @@
     <div class="card-body">
         <h4 class="card-title"><span class="badge badge-@Model.BadgeColor.ToString().ToLower()">@Model.Category</span> - All Records - @Model.WalletName</h4>
         <div class="row pb-3">
+            <div class="pr-1">
             <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
-            <vc:wallet-statistics wallet-id="@Model.WalletId"></vc:wallet-statistics>
+                </div>
+            <vc:edit-category category-id="@Model.CategoryId" wallet-id="@Model.WalletId"></vc:edit-category>
             <span class="btn-group ml-auto pt-1 mr-4 d-md-block">Sort By:</span>
             <div class="btn-group mr-2 border-0 d-none d-md-block pl-0">
                 @*MAKE NEW VIEW COMPONENT BASED ON CATEGORY*@
