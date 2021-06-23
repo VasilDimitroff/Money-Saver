@@ -84,6 +84,11 @@
         [HttpPost]
         public async Task<IActionResult> Add(AddWalletInputModel input)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest();
+            }
+
             var user = await this.userManager.GetUserAsync(this.User);
 
             await this.walletsService
@@ -126,6 +131,11 @@
         [HttpPost]
         public async Task<IActionResult> Edit(EditWalletViewModel input)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest();
+            }
+
             var user = await this.userManager.GetUserAsync(this.User);
 
             if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.Id))

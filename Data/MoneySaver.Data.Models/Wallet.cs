@@ -1,6 +1,7 @@
 ﻿namespace MoneySaver.Data.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using MoneySaver.Data.Common.Models;
 
@@ -12,14 +13,18 @@
             this.Categories = new HashSet<Category>();
         }
 
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public string ApplicationUserId { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
 
+        [Required]
         public decimal MoneyAmount { get; set; }
 
+        [Required]
         public int CurrencyId { get; set; }
 
         public virtual Currency Currency { get; set; }
