@@ -10,106 +10,115 @@
     }
 }
 <div class="row">
-    @foreach (var wallet in Model)
-    {
-            <div class="col-md-6 grid-margin stretch-card" onclick="window.location = '/Wallets/Details/@wallet.WalletId';">
-                <div class="card">
-                    <div class="card-body card-shadow">
-                        <div class="form-inline d-flex justify-content-center h3">
-                            <span class="text-dark"> @wallet.WalletName</span>
-                            <div class="input-group-sm d-flex justify-content-end ml-3">
-                                <a class="btn btn-sm btn-outline-primary" asp-controller="Wallets" asp-action="Edit" asp-route-id="@wallet.WalletId">
-                                    <i class="mdi mdi-lead-pencil"></i>
-                                </a>
+
+        <div class="card-body">
+            <div class="row">
+                @foreach (var wallet in Model)
+                {
+                    <div class="col-md-6 grid-margin stretch-card" onclick="window.location = '/Wallets/Details/@wallet.WalletId';">
+                        <div class="card hoverable">
+                            <div class="card-body card-shadow">
+                                <div class="form-inline d-flex justify-content-center h3">
+                                    <span class="text-dark"> @wallet.WalletName</span>
+                                    <div class="input-group-sm d-flex justify-content-end ml-3">
+                                        <a class="btn btn-sm btn-outline-primary" asp-controller="Wallets" asp-action="Edit" asp-route-id="@wallet.WalletId">
+                                            <i class="mdi mdi-lead-pencil"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <br />
+                                <h4 class="text-center text-muted">Balance: <span class="text-info h3">@wallet.CurrentBalance @wallet.Currency</span></h4>
+                                <br />
+                                <div class="d-flex justify-content-between">
+                                    <p><span class="mdi mdi-arrow-right-bold text-success"></span><span class="font-weight-bold">Incomes: </span> <span class="text-success h4"> @wallet.TotalIncomes @wallet.Currency</p>
+                                    <p><span class="mdi mdi-arrow-left-bold text-danger"></span><span class="font-weight-bold">Expenses: </span> <span class="text-danger h4">@wallet.TotalExpenses @wallet.Currency</p>
+                                </div>
+                                <br /><br />
+                                <div class="col-12 form-inline justify-content-center">
+                                    <div class="pr-1">
+                                        <vc:wallet-details wallet-id="@wallet.WalletId"></vc:wallet-details>
+                                    </div>
+                                    <div class="pr-1">
+                                        <vc:all-records-by-wallet wallet-id="@wallet.WalletId"></vc:all-records-by-wallet>
+                                    </div>
+                                    <vc:wallet-statistics id="@wallet.WalletId"></vc:wallet-statistics>
+                                </div>
                             </div>
-                        </div>
-                        <br />
-                        <h4 class="text-center text-muted">Balance: <span class="text-info h3">@wallet.CurrentBalance @wallet.Currency</span></h4>
-                        <br />
-                        <div class="d-flex justify-content-between">
-                            <p><span class="mdi mdi-arrow-right-bold text-success"></span><span class="font-weight-bold">Total Incomes: </span> <span class="text-success h4"> @wallet.TotalIncomes @wallet.Currency</p>
-                            <p><span class="mdi mdi-arrow-left-bold text-danger"></span><span class="font-weight-bold">Total Expenses: </span> <span class="text-danger h4">@wallet.TotalExpenses @wallet.Currency</p>
-                        </div>
-                        <br /><br />
-                        <div class="col-12 form-inline justify-content-center">
-                            <div class="pr-1">
-                                <vc:wallet-details wallet-id="@wallet.WalletId"></vc:wallet-details>
-                            </div>
-                            <div class="pr-1">
-                                <vc:all-records-by-wallet wallet-id="@wallet.WalletId"></vc:all-records-by-wallet>
-                            </div>
-                            <vc:wallet-statistics id="@wallet.WalletId"></vc:wallet-statistics>
                         </div>
                     </div>
-                </div>
-            </div>
-            }
+                }
 
-            <div class="col-md-6 grid-margin stretch-card row-md-12 row-sm-12">
+                <div class="col-md-6 grid-margin stretch-card row-md-12 row-sm-12">
 
-                <br /><br /> <br /><br /><br /><br /><br /><br />
-                <div id="addWalletArea" class="col-12 row align-items-center">
-                    @if (Model.Count() < 1)
-                    {
-                        <span class="text-center col-12"> You haven't a wallet in your account yet. </span>
-                    }
-
-                    <a id="addWalletButton" class="col-8 text-center" href="/Wallets/Add/">
-                        @addWalletButtonText
-                    </a>
-                </div>
-                <br /><br /><br /><br /><br /><br /><br /><br />
-            </div>
-
-            @section Scripts {
-                <style>
-                    #addWalletArea {
-                        margin-left: 0;
-                        border: 2px dashed #bbb;
-                        -webkit-border-radius: 5px;
-                        border-radius: 5px;
-                        font-size: 25px;
-                        color: #bbb;
-
-                    }
-
-                    #addWalletButton {
-                        border: 2px dashed #bbb;
-                        -webkit-border-radius: 5px;
-                        border-radius: 5px;
-                        font-size: 25px;
-                        color: #bbb;
-                        padding-top: 20px;
-                        padding-bottom: 20px;
-                        margin-left: auto;
-                        margin-right: auto;
-                        margin-bottom: 40px;
-                        margin-top: 40px;
-                    }
-
-                        #addWalletButton:hover {
-                            background-color: #bbb;
-                            color: white;
-                            text-decoration: none;
+                    <br /><br /> <br /><br /><br /><br /><br /><br />
+                    <div id="addWalletArea" class="col-12 row align-items-center hoverable">
+                        @if (Model.Count() < 1)
+                        {
+                            <span class="text-center col-12"> You haven't a wallet in your account yet. </span>
                         }
-                </style>
 
-                <script>
-                    $(document).ready(function () {
-                        // executes when HTML-Document is loaded and DOM is ready
-                        console.log("document is ready");
+                        <a id="addWalletButton" class="col-8 text-center" href="/Wallets/Add/">
+                            @addWalletButtonText
+                        </a>
+                    </div>
+                    <br /><br /><br /><br /><br /><br /><br /><br />
+                </div>
+            </div>
+    </div>
+        </div>
+        @section Scripts {
+            <style>
+                #addWalletArea {
+                    margin-left: 0;
+                    border: 2px dashed #bbb;
+                    -webkit-border-radius: 5px;
+                    border-radius: 5px;
+                    font-size: 25px;
+                    color: #bbb;
+                }
+
+                #addWalletButton {
+                    border: 2px dashed #bbb;
+                    -webkit-border-radius: 5px;
+                    border-radius: 5px;
+                    font-size: 25px;
+                    color: #bbb;
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    margin-bottom: 40px;
+                    margin-top: 40px;
+                }
+
+                    #addWalletButton:hover {
+                        background-color: #bbb;
+                        color: white;
+                        text-decoration: none;
+                    }
+
+                .hoverable:hover {
+                    background-color: #FAFAFA;
+                    box-shadow: 0px 0px 0px 1px #bbb inset;
+                }
+            </style>
+
+            <script>
+                $(document).ready(function () {
+                    // executes when HTML-Document is loaded and DOM is ready
+                    console.log("document is ready");
 
 
-                        $(".card-shadow").hover(
-                            function () {
-                                $(this).addClass('shadow-lg').css('cursor', 'pointer');
-                            }, function () {
-                                $(this).removeClass('shadow-lg');
-                            }
-                        );
+                    $(".card-shadow").hover(
+                        function () {
+                            $(this).addClass('shadow-sm').css('cursor', 'pointer');
+                        }, function () {
+                            $(this).removeClass('shadow-sm');
+                        }
+                    );
 
-                        // document ready
-                    });
+                    // document ready
+                });
 
-                </script>
-            }
+            </script>
+        }

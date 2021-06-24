@@ -4,13 +4,13 @@
     <nav>
         <ul class="pagination rounded-flat pagination-primary">
             <li class="page-item @if (!Model.HasPreviousPage) { <text>disabled</text> }">
-                <a class="page-link" href="/Wallets/Search?id=@Model.WalletId&searchTerm=@Model.SearchTerm&page=@Model.PreviousPageNumber"><i class="mdi mdi-chevron-left"></i></a>
+                <a class="page-link" href="/Wallets/DateSorted?startDate=@Model.StartDate&endDate=@Model.EndDate&id=@Model.WalletId&page=@Model.PreviousPageNumber"><i class="mdi mdi-chevron-left"></i></a>
             </li>
             @for (int i = Model.PageNumber - 4; i < Model.PageNumber; i++)
             {
                 if (i > 0)
                 {
-                    <li class="page-item"><a class="page-link" href="/Wallets/Search?id=@Model.WalletId&searchTerm=@Model.SearchTerm&page=@i">@i</a></li>
+                    <li class="page-item"><a class="page-link" href="/Wallets/DateSorted?startDate=@Model.StartDate&endDate=@Model.EndDate&id=@Model.WalletId&page=@i">@i</a></li>
                 }
             }
             <li class="page-item active" aria-current="page">
@@ -23,13 +23,11 @@
             {
                 if (i <= Model.PagesCount)
                 {
-                    <li class="page-item"><a class="page-link" href="/Wallets/Search?id=@Model.WalletId&searchTerm=@Model.SearchTerm&page=@i">@i</a></li>
-
-                    //int id, string searchTerm, int page = 1
+                    <li class="page-item"><a class="page-link" href="/Wallets/DateSorted?startDate=@Model.StartDate&endDate=@Model.EndDate&id=@Model.WalletId&page=@i">@i</a></li>
                 }
             }
             <li class="page-item @if (!Model.HasNextPage) { <text>disabled</text> }">
-                <a class="page-link" href="/Wallets/Search?id=@Model.WalletId&searchTerm=@Model.SearchTerm&page=@Model.NextPageNumber"><i class="mdi mdi-chevron-right"></i></a>
+                <a class="page-link" href="/Wallets/DateSorted?startDate=@Model.StartDate&endDate=@Model.EndDate&id=@Model.WalletId&page=@Model.NextPageNumber"><i class="mdi mdi-chevron-right"></i></a>
             </li>
         </ul>
     </nav>

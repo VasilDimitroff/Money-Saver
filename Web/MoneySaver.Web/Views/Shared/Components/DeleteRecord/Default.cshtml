@@ -2,7 +2,7 @@
 @*<a href="/Records/Delete?recordId=@Model.Id"><span class="btn btn-outline-danger btn-icon-text float-right" data-toggle="tooltip" data-placement="bottom" title="Delete record"><i class="mdi mdi-delete btn-icon-prepend"></i> Delete</span></a>*@
 
 
-<button type="button" class="btn btn-outline-danger btn-sm float-right" style="display: inline" data-placement="bottom" title="Delete record" data-toggle="modal" data-target="#defaultModal"><i class="mdi mdi-delete btn-icon-prepend"></i>Delete</button>
+<button type="button" class="btn btn-outline-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete record" data-toggle="modal" data-target="#defaultModal"><i class="mdi mdi-delete btn-icon-prepend"></i>Delete</button>
 <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="post" asp-controller="Records" asp-action="Delete">
         <div class="modal-dialog" role="document">

@@ -204,55 +204,8 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> Search(int id, string searchTerm, int page = 1)
-        {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
-            {
-                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
-            }
-
-            if (searchTerm == null)
-            {
-                searchTerm = string.Empty;
-            }
-
-            var model = new WalletSearchResultViewModel();
-
-            const int ItemsPerPage = 12;
-
-            model.ItemsPerPage = ItemsPerPage;
-            model.PageNumber = page;           
-
-            var records = await this.walletsService.GetRecordsByKeywordAsync(searchTerm, id, page, ItemsPerPage);
-
-            model.Records = records.Select(r => new WalletSearchResultSingleRecordViewModel
-            {
-                Amount = r.Amount,
-                Category = r.Category,
-                CategoryId = r.CategoryId,
-                CreatedOn = r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
-                Description = r.Description,
-                Wallet = r.Wallet,
-                Id = r.Id,
-                Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
-                Currency = r.Currency,
-                BadgeColor = Enum.Parse<BadgeColor>(r.BadgeColor.ToString()),
-            })
-                .ToList();
-
-            model.RecordsCount = this.walletsService.GetSearchRecordsCount(searchTerm, id);
-            model.SearchTerm = searchTerm;
-            model.WalletId = id;
-            model.Wallet = await this.walletsService.GetWalletNameAsync(id);
-
-            return this.View(model);
-        }
-
         public async Task<IActionResult> Details(int id)
         {
-
             var user = await this.userManager.GetUserAsync(this.User);
 
             if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
@@ -296,8 +249,53 @@
             return this.View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> DateSorted(DateTime startDate, DateTime endDate, int id)
+        public async Task<IActionResult> Search(int id, string searchTerm, int page = 1)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+            }
+
+            if (searchTerm == null)
+            {
+                searchTerm = string.Empty;
+            }
+
+            var model = new WalletSearchResultViewModel();
+
+            const int ItemsPerPage = 12;
+
+            model.ItemsPerPage = ItemsPerPage;
+            model.PageNumber = page;
+
+            var records = await this.walletsService.GetRecordsByKeywordAsync(searchTerm, id, page, ItemsPerPage);
+
+            model.Records = records.Select(r => new WalletSearchResultSingleRecordViewModel
+            {
+                Amount = r.Amount,
+                Category = r.Category,
+                CategoryId = r.CategoryId,
+                CreatedOn = r.CreatedOn.ToString("D", CultureInfo.InvariantCulture),
+                Description = r.Description,
+                Wallet = r.Wallet,
+                Id = r.Id,
+                Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
+                Currency = r.Currency,
+                BadgeColor = Enum.Parse<BadgeColor>(r.BadgeColor.ToString()),
+            })
+                .ToList();
+
+            model.RecordsCount = this.walletsService.GetSearchRecordsCount(searchTerm, id);
+            model.SearchTerm = searchTerm;
+            model.WalletId = id;
+            model.Wallet = await this.walletsService.GetWalletNameAsync(id);
+
+            return this.View(model);
+        }
+
+        public async Task<IActionResult> DateSorted(DateTime startDate, DateTime endDate, int id, int page = 1)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
@@ -308,7 +306,12 @@
 
             var model = new WalletSearchResultViewModel();
 
-            var records = await this.walletsService.GetRecordsByDateRangeAsync(startDate, endDate, id);
+            const int ItemsPerPage = 12;
+
+            model.ItemsPerPage = ItemsPerPage;
+            model.PageNumber = page;
+
+            var records = await this.walletsService.GetRecordsByDateRangeAsync(startDate, endDate, id, page, ItemsPerPage);
 
             model.Records = records.Select(r => new WalletSearchResultSingleRecordViewModel
             {
@@ -325,10 +328,17 @@
             })
                 .ToList();
 
+            model.RecordsCount = this.walletsService.GetDateSortedRecordsCount(startDate, endDate, id);
             model.WalletId = id;
             model.Wallet = await this.walletsService.GetWalletNameAsync(id);
 
-            return this.View("~/Views/Wallets/Records.cshtml", model);
+            var startDate12AM = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0);
+            var endDate12PM = new DateTime(endDate.Year, endDate.Month, endDate.Day, 23, 59, 59);
+
+            model.StartDate = startDate12AM;
+            model.EndDate = endDate12PM;
+
+            return this.View(model);
         }
 
         public async Task<IActionResult> Categories(int id)

@@ -3,13 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using MoneySaver.Services.Data.Models.Categories;
     using MoneySaver.Services.Data.Models.Records;
     using MoneySaver.Services.Data.Models.Wallets;
 
     public interface IWalletsService
     {
-
         public Task<WalletCategoriesDto> GetWalletWithCategoriesAsync(int walletId);
 
         public Task<string> AddAsync(string userId, string name, decimal initialMoney, int currencyId);
@@ -34,7 +34,7 @@
 
         public Task<IEnumerable<CategoryBasicInfoDto>> GetWalletCategoriesAsync(int walletId);
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId);
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId, int page, int itemsPerPage);
 
         public Task<WalletDetailsDto> GetWalletDetailsAsync(string userId, int walletId);
 
@@ -43,5 +43,7 @@
         public int GetCount(int walletId);
 
         public int GetSearchRecordsCount(string searchTerm, int walletId);
+
+        public int GetDateSortedRecordsCount(DateTime startDate, DateTime endDate, int walletId);
     }
 }

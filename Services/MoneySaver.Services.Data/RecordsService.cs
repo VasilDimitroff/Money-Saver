@@ -67,45 +67,12 @@
             };
 
             await this.EditWalletAmountAsync(wallet.Id, amount);
-           // wallet.MoneyAmount += amount;
 
+           // wallet.MoneyAmount += amount;
             await this.dbContext.Records.AddAsync(record);
             await this.dbContext.SaveChangesAsync();
 
             return GlobalConstants.RecordSuccessfullyAdded;
-        }
-
-
-        //For delete???
-        public async Task<IEnumerable<RecordInfoDto>> GetPagedRecordsByWalletIdAsync(int walletId)
-        {
-            var wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(w => w.Id == walletId);
-
-            if (wallet == null)
-            {
-                throw new ArgumentException(GlobalConstants.WalletNotExist);
-            }
-
-            var records = await this.dbContext.Records
-                 .Where(r => r.Category.WalletId == walletId)
-                 .Select(r => new RecordInfoDto
-                 {
-                     Id = r.Id,
-                     Amount = (r.Type == RecordType.Income) ? r.Amount : Math.Abs(r.Amount) * (-1),
-                     Category = r.Category.Name,
-                     CategoryId = r.CategoryId,
-                     CreatedOn = r.CreatedOn,
-                     ModifiedOn = r.ModifiedOn,
-                     Description = r.Description,
-                     Type = r.Type.ToString(),
-                     Wallet = wallet.Name,
-                     Currency = r.Category.Wallet.Currency.Code,
-                     BadgeColor = r.Category.BadgeColor,
-                 })
-                 .OrderByDescending(x => x.CreatedOn)
-                 .ToListAsync();
-
-            return records;
         }
 
         public async Task<string> RemoveAsync(string recordId)

@@ -242,8 +242,6 @@
 
         public async Task<IEnumerable<AllWalletsDto>> GetAllWalletsAsync(string userId)
         {
-
-
             var wallets = await this.dbContext.Wallets
                 .Include(w => w.Currency)
                 .Include(w => w.Categories)
@@ -281,7 +279,6 @@
 
         public async Task<WalletDetailsDto> GetWalletDetailsAsync(string userId, int walletId)
         {
-
             WalletDetailsDto targetWallet = await this.dbContext.Wallets
             .Where(w => w.Id == walletId)
             .Select(w => new WalletDetailsDto
@@ -470,17 +467,31 @@
             return records;
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId)
+        public int GetDateSortedRecordsCount(DateTime startDate, DateTime endDate, int walletId)
         {
             var startDate12AM = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0);
             var endDate12PM = new DateTime(endDate.Year, endDate.Month, endDate.Day, 23, 59, 59);
 
-            //var startOfDay = date.Date;
+            int count = this.dbContext.Records
+                .Where(r => r.CreatedOn >= startDate12AM && r.CreatedOn <= endDate12PM && r.Category.WalletId == walletId)
+                .Count();
+
+            return count;
+        }
+
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int walletId, int page, int itemsPerPage = 12)
+        {
+            var startDate12AM = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0);
+            var endDate12PM = new DateTime(endDate.Year, endDate.Month, endDate.Day, 23, 59, 59);
+
+            // var startOfDay = date.Date;
 
            // var endOfDay = date.Date.AddHours(24);
 
             var records = await this.dbContext.Records
                  .Where(r => r.CreatedOn >= startDate12AM && r.CreatedOn <= endDate12PM && r.Category.WalletId == walletId)
+                 .OrderByDescending(x => x.CreatedOn)
+                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                  .Select(r => new RecordInfoDto
                  {
                      Id = r.Id,
