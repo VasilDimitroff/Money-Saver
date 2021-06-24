@@ -133,10 +133,10 @@
             }
 
             int walletId = await this.walletsService.GetWalletIdByRecordIdAsync(id);
-           await this.recordsService.RemoveAsync(id);
+            await this.recordsService.RemoveAsync(id);
 
             // return this.RedirectToAction("All", "Records", new { walletId, action = "Submit", submitAll = false });
-           return this.Redirect($"/Wallets/Records/{walletId}");
+            return this.Redirect($"/Wallets/Records/{walletId}");
         }
     }
 }

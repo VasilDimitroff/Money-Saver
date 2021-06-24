@@ -1,5 +1,6 @@
-﻿using MoneySaver.Data.Common.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using MoneySaver.Data.Common.Models;
 
 namespace MoneySaver.Data.Models
 {

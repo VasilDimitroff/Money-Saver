@@ -154,6 +154,54 @@
             return GlobalConstants.CategorySuccessfullyUpdated;
         }
 
+        /*
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int categoryId, int page, int itemsPerPage = 12)
+        {
+            keyword = keyword.ToLower().Trim();
+
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                var allRecords = await this.GetRecordsByCategoryAsync(page, walletId, itemsPerPage);
+
+                return allRecords;
+            }
+
+            var category = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
+
+            if (category == null)
+            {
+                throw new ArgumentException(GlobalConstants.UnexistingCategory);
+            }
+
+            var categ = await this.dbContext.Categories
+                 .Where(c => c.Id == categoryId)
+                 .Select(r => new AllRecordsInCategoryDto
+                 {
+                     Category = r.Name,
+                     CategoryId = r.Id,
+                     Currency = r.Wallet.Currency.Code,
+                     WalletId = r.WalletId,
+                     WalletName = r.Wallet.Name,
+                     BadgeColor = r.BadgeColor,
+                     Records = r.Records.Select(r => new CategoryRecordInfoDto
+                     {
+                         Id = r.Id,
+                         Amount = r.Amount,
+                         CreatedOn = r.CreatedOn,
+                         Description = r.Description,
+                         Type = r.Type,
+                     })
+                     .OrderByDescending(rec => rec.CreatedOn)
+                     .ThenBy(rec => rec.Amount)
+                     .ToList(),
+                 })
+                 .FirstOrDefaultAsync();
+
+            return categ;
+        }
+
+        */
+
         public async Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId)
         {
             var category = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);

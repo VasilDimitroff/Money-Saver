@@ -3,12 +3,11 @@
     using System;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Data.Common.Repositories;
     using MoneySaver.Data.Models;
     using MoneySaver.Services.Data;
     using MoneySaver.Web.ViewModels.Settings;
-
-    using Microsoft.AspNetCore.Mvc;
 
     public class SettingsController : BaseController
     {

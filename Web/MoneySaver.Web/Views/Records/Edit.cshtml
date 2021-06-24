@@ -49,7 +49,7 @@
                 <div class="form-group">
                     <span class="mdi mdi-currency-usd text-primary"></span>
                     <label asp-for="@Model.Amount"><span class="font-weight-bold">Amount</span></label>
-                    <input type="hidden" asp-for="@Model.OldAmount" /></input>
+                    <input type="hidden" asp-for="@Model.OldAmount" />
                     <input type="number" class="form-control form-control-lg" asp-for="@Model.Amount" placeholder="@Model.Amount" value="@Model.Amount">
                 </div>
                 <div class="form-group">
@@ -57,8 +57,8 @@
                     <label asp-for="@Model.CreatedOn"><span class="font-weight-bold">CreatedOn</span></label>
                     <input type="datetime-local" class="form-control form-control-lg" asp-for="@Model.CreatedOn" placeholder="@Model.CreatedOn">
                 </div>
-                <input type="hidden" asp-for="@Model.Id" /></input>
-                <input type="hidden" asp-for="@Model.WalletId" /></input>
+                <input type="hidden" asp-for="@Model.Id" />
+                <input type="hidden" asp-for="@Model.WalletId" />
                 <vc:save-button></vc:save-button>
                 <vc:back-button></vc:back-button>
             </form>

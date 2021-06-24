@@ -2,10 +2,9 @@
 {
     using System.Diagnostics;
 
-    using MoneySaver.Web.ViewModels;
-
     using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Services.Data.Contracts;
+    using MoneySaver.Web.ViewModels;
 
     public class HomeController : BaseController
     {
@@ -18,14 +17,13 @@
 
         public IActionResult Index()
         {
-
             try
             {
                // this.recordsService.AddAsync(userId, description, amount, category, type, wallet);
             }
             catch (System.Exception ex)
             {
-                BadRequest(ex.Message);
+                this.BadRequest(ex.Message);
             }
 
             return this.View();
@@ -45,7 +43,6 @@
 
         public IActionResult AddRecord()
         {
-   
             return this.View();
         }
     }

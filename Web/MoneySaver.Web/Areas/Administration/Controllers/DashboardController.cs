@@ -1,9 +1,8 @@
 ﻿namespace MoneySaver.Web.Areas.Administration.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Services.Data;
     using MoneySaver.Web.ViewModels.Administration.Dashboard;
-
-    using Microsoft.AspNetCore.Mvc;
 
     public class DashboardController : AdministrationController
     {

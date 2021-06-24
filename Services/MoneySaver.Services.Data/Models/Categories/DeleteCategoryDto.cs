@@ -1,7 +1,8 @@
 ﻿namespace MoneySaver.Services.Data.Models.Categories
 {
-    using MoneySaver.Data.Models.Enums;
     using System.Collections.Generic;
+
+    using MoneySaver.Data.Models.Enums;
 
     public class DeleteCategoryDto
     {

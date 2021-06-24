@@ -6,7 +6,7 @@
     using MoneySaver.Web.ViewModels.Records;
     using MoneySaver.Web.ViewModels.Records.Enums;
 
-    public class CategoryRecordsViewModel
+    public class CategoryRecordsViewModel : SearchPagingViewModel
     {
         public string Category { get; set; }
 
@@ -14,17 +14,9 @@
 
         public string Currency { get; set; }
 
-        public int WalletId { get; set; }
-
         public string WalletName { get; set; }
 
         public BadgeColor BadgeColor { get; set; }
-
-        public string SearchTerm { get; set; }
-
-        public DateTime StartDate { get; set; }
-
-        public DateTime EndDate { get; set; }
 
         public IEnumerable<RecordsByCategoryViewModel> Records { get; set; }
     }

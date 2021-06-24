@@ -1,7 +1,8 @@
 ﻿namespace MoneySaver.Services.Data.Models.Records
 {
-    using MoneySaver.Data.Models.Enums;
     using System;
+
+    using MoneySaver.Data.Models.Enums;
 
     public class RecordInfoDto
     {

@@ -5,6 +5,7 @@
     using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Common;
@@ -221,6 +222,57 @@
                 WalletName = category.WalletName,
                 BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString()),
             };
+
+            return this.View(model);
+        }
+
+        public async Task<IActionResult> Search(int id, string searchTerm, int page = 1)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, id))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
+            }
+
+            if (searchTerm == null)
+            {
+                searchTerm = string.Empty;
+            }
+
+            CategoryRecordsViewModel model = new CategoryRecordsViewModel();
+
+            const int ItemsPerPage = 12;
+
+            model.ItemsPerPage = ItemsPerPage;
+            model.PageNumber = page;
+
+            /*
+            // !!!
+            var category = await this.categoriesService.GetRecordsByCategoryAsync(searchTerm, id, page, ItemsPerPage);
+
+            model.Category = category.Category;
+            model.CategoryId = category.CategoryId;
+            model.Currency = category.Currency;
+            model.WalletId = category.WalletId;
+            model.WalletName = category.WalletName;
+            model.BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString());
+
+            //!!
+            model.RecordsCount = this.walletsService.GetSearchRecordsCount(searchTerm, id);
+            model.SearchTerm = searchTerm;
+
+            model.Records = category.Records
+                .Select(r => new RecordsByCategoryViewModel
+                {
+                    Amount = r.Amount,
+                    CreatedOn = r.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
+                    Description = r.Description,
+                    Id = r.Id,
+                    Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
+                })
+                .ToList();
+             */
 
             return this.View(model);
         }

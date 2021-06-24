@@ -73,7 +73,6 @@
             if (wallets.Count == 1)
             {
                 await this.SeedWalletAsync(newWallet);
-
             }
 
             return string.Format(GlobalConstants.WalletSuccessfullyAdded, newWallet.Name);
@@ -82,8 +81,7 @@
         public async Task<WalletCategoriesDto> GetWalletWithCategoriesAsync(int walletId)
         {
             // EF Core can't translate the query for total amount, total expenses and total incomes
-            //decimal total = 0;
-
+            // decimal total = 0;
             var targetWallet = await this.dbContext.Wallets.Include(x => x.Categories).ThenInclude(x => x.Records)
                 .FirstOrDefaultAsync(x => x.Id == walletId);
 
@@ -97,7 +95,6 @@
             //        }
             //    }
             // }
-
             Record lastRecord = await this.dbContext.Records
                 .OrderByDescending(r => r.CreatedOn)
                 .FirstOrDefaultAsync();
@@ -152,7 +149,6 @@
         }
 
         // TODO: ID WE HAVE BUDGETS, MUST DELETE THEM IN THIS METHOD!
-
         public async Task<string> RemoveAsync(int walletId)
         {
             var wallet = await this.dbContext
@@ -199,13 +195,12 @@
             wallet.Name = name;
             wallet.CurrencyId = currencyId;
 
-               
-                decimal sumOfRecordsAmount = 0m;
+            decimal sumOfRecordsAmount = 0m;
 
-                var categories = this.dbContext.Categories.Include(c => c.Records)
-                   .Where(c => c.WalletId == walletId);
+            var categories = this.dbContext.Categories.Include(c => c.Records)
+               .Where(c => c.WalletId == walletId);
 
-                foreach (var category in categories)
+            foreach (var category in categories)
                 {
                     foreach (var record in category.Records)
                     {
@@ -213,8 +208,7 @@
                     }
                 }
 
-                await this.recordsService.EditWalletAmountAsync(walletId, sumOfRecordsAmount);
-               
+            await this.recordsService.EditWalletAmountAsync(walletId, sumOfRecordsAmount);
 
             await this.dbContext.SaveChangesAsync();
         }
@@ -487,7 +481,6 @@
             // var startOfDay = date.Date;
 
            // var endOfDay = date.Date.AddHours(24);
-
             var records = await this.dbContext.Records
                  .Where(r => r.CreatedOn >= startDate12AM && r.CreatedOn <= endDate12PM && r.Category.WalletId == walletId)
                  .OrderByDescending(x => x.CreatedOn)

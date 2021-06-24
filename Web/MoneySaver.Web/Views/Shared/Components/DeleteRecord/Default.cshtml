@@ -18,7 +18,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                    <input type="hidden" asp-for="@Model.Id"></input>
+                    <input type="hidden" asp-for="@Model.Id">
                     <button onclick="window.location.href='/Records/Delete/@Model.Id'" type="submit" class="btn btn-outline-danger"><i class="mdi mdi-delete btn-icon-prepend text-white"></i> Yes</button>
                 </div>
             </div>
