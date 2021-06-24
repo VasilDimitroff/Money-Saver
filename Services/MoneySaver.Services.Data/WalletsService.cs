@@ -391,14 +391,24 @@
             return categories;
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int walletId)
+        public int GetCount(int walletId)
         {
-            keyword = keyword.ToLower().Trim();
+            return this.dbContext.Records.Count(x => x.Category.WalletId == walletId);
+        }
 
-            if (string.IsNullOrWhiteSpace(keyword))
+        public async Task<IEnumerable<RecordInfoDto>> GetAllRecordsAsync(int page, int walletId, int itemsPerPage = 12)
+        {
+            var wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(w => w.Id == walletId);
+
+            if (wallet == null)
             {
-                var allRecords = await this.dbContext.Records
+                throw new ArgumentException(GlobalConstants.WalletNotExist);
+            }
+
+            var records = await this.dbContext.Records
                  .Where(r => r.Category.WalletId == walletId)
+                 .OrderByDescending(x => x.CreatedOn)
+                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                  .Select(r => new RecordInfoDto
                  {
                      Id = r.Id,
@@ -406,19 +416,42 @@
                      Category = r.Category.Name,
                      CategoryId = r.CategoryId,
                      CreatedOn = r.CreatedOn,
+                     ModifiedOn = r.ModifiedOn,
                      Description = r.Description,
                      Type = r.Type.ToString(),
-                     Wallet = r.Category.Wallet.Name,
+                     Wallet = wallet.Name,
                      Currency = r.Category.Wallet.Currency.Code,
                      BadgeColor = r.Category.BadgeColor,
                  })
+                 .OrderByDescending(x => x.CreatedOn)
                  .ToListAsync();
+
+            return records;
+        }
+
+        public int GetSearchRecordsCount(string searchTerm, int walletId)
+        {
+            int count = this.dbContext.Records
+                .Where(r => r.Description.ToLower().Contains(searchTerm.ToLower()) && r.Category.WalletId == walletId)
+                .Count();
+            return count;
+        }
+
+        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int walletId, int page, int itemsPerPage = 12)
+        {
+            keyword = keyword.ToLower().Trim();
+
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                var allRecords = await this.GetAllRecordsAsync(page, walletId, itemsPerPage);
 
                 return allRecords;
             }
 
             var records = await this.dbContext.Records
-                 .Where(r => r.Description.Contains(keyword.ToLower()) && r.Category.WalletId == walletId)
+                 .Where(r => r.Description.ToLower().Contains(keyword.ToLower()) && r.Category.WalletId == walletId)
+                 .OrderByDescending(x => x.CreatedOn)
+                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                  .Select(r => new RecordInfoDto
                  {
                      Id = r.Id,

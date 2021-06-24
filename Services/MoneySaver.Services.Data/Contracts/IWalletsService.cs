@@ -18,6 +18,8 @@
 
         public Task EditAsync(string userId, int walletId, string name, decimal amount, int currencyId);
 
+        public Task<IEnumerable<RecordInfoDto>> GetAllRecordsAsync(int page, int walletId, int itemsPerPage);
+
         public Task<EditWalletDto> GetWalletInfoForEditAsync(string userId, int walletId);
 
         public Task<IEnumerable<AllWalletsDto>> GetAllWalletsAsync(string userId);
@@ -28,7 +30,7 @@
 
         public Task<int> GetWalletIdByCategoryIdAsync(int categoryId);
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int walletId);
+        public Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int walletId, int page, int itemsPerPage);
 
         public Task<IEnumerable<CategoryBasicInfoDto>> GetWalletCategoriesAsync(int walletId);
 
@@ -37,5 +39,9 @@
         public Task<WalletDetailsDto> GetWalletDetailsAsync(string userId, int walletId);
 
         public Task<bool> IsUserOwnWalletAsync(string userId, int walletId);
+
+        public int GetCount(int walletId);
+
+        public int GetSearchRecordsCount(string searchTerm, int walletId);
     }
 }

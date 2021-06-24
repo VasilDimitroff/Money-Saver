@@ -75,7 +75,9 @@
             return GlobalConstants.RecordSuccessfullyAdded;
         }
 
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByWalletAsync(int walletId)
+
+        //For delete???
+        public async Task<IEnumerable<RecordInfoDto>> GetPagedRecordsByWalletIdAsync(int walletId)
         {
             var wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(w => w.Id == walletId);
 

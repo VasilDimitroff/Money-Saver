@@ -3,13 +3,9 @@
     using System;
     using System.Collections.Generic;
 
-    public class WalletSearchResultViewModel
+    public class WalletSearchResultViewModel : SearchPagingViewModel
     {
-        public int WalletId { get; set; }
-
         public string Wallet { get; set; }
-
-        public string SearchTerm { get; set; }
 
         public DateTime StartDate { get; set; }
 

@@ -163,7 +163,7 @@
             return this.Redirect("/Wallets/All");
         }
 
-        public async Task<IActionResult> Records(int id)
+        public async Task<IActionResult> Records(int id, int page = 1)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
@@ -174,7 +174,13 @@
 
             var model = new WalletSearchResultViewModel();
 
-            var records = await this.recordsService.GetRecordsByWalletAsync(id);
+            const int ItemsPerPage = 12;
+
+            var records = await this.walletsService.GetAllRecordsAsync(page, id, ItemsPerPage);
+
+            model.ItemsPerPage = ItemsPerPage;
+            model.PageNumber = page;
+            model.RecordsCount = this.walletsService.GetCount(id);
 
             model.Records = records.Select(r => new WalletSearchResultSingleRecordViewModel
             {
@@ -198,7 +204,7 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> Search(int id, string searchTerm)
+        public async Task<IActionResult> Search(int id, string searchTerm, int page = 1)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
@@ -214,7 +220,12 @@
 
             var model = new WalletSearchResultViewModel();
 
-            var records = await this.walletsService.GetRecordsByKeywordAsync(searchTerm, id);
+            const int ItemsPerPage = 12;
+
+            model.ItemsPerPage = ItemsPerPage;
+            model.PageNumber = page;           
+
+            var records = await this.walletsService.GetRecordsByKeywordAsync(searchTerm, id, page, ItemsPerPage);
 
             model.Records = records.Select(r => new WalletSearchResultSingleRecordViewModel
             {
@@ -231,11 +242,12 @@
             })
                 .ToList();
 
+            model.RecordsCount = this.walletsService.GetSearchRecordsCount(searchTerm, id);
             model.SearchTerm = searchTerm;
             model.WalletId = id;
             model.Wallet = await this.walletsService.GetWalletNameAsync(id);
 
-            return this.View("Records", model);
+            return this.View(model);
         }
 
         public async Task<IActionResult> Details(int id)

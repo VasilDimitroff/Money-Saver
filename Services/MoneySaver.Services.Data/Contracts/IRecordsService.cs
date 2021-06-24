@@ -13,7 +13,7 @@
 
         public Task<string> RemoveAsync(string recordId);
 
-        public Task<IEnumerable<RecordInfoDto>> GetRecordsByWalletAsync(int walletId);
+        public Task<IEnumerable<RecordInfoDto>> GetPagedRecordsByWalletIdAsync(int walletId);
 
         public Task<EditRecordInfoDto> GetRecordWithAllCategories(string recordId, int walletId);
 
