@@ -39,7 +39,7 @@
                 </div>
                 <div class="form-group">
                     <span class="mdi mdi-currency-usd text-primary"></span>
-                    <label asp-for="Amount"><span class="font-weight-bold">Initial Amount</span></label>
+                    <label asp-for="Amount"><span class="font-weight-bold">Current Amount</span></label>
                     <input type="number" class="form-control form-control-lg" asp-for="Amount" value="@Model.Amount">
                     <span class="text-danger" asp-validation-for="Amount"></span>
                   </div>
@@ -75,10 +75,6 @@
                             </div>
                         </form>
                     </div>
-
-
-
-
                 </div>
     </div>
 </div>

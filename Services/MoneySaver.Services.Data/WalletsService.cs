@@ -195,6 +195,9 @@
             wallet.Name = name;
             wallet.CurrencyId = currencyId;
 
+            /*
+            //This code change wallet amount with the sum of all records inside
+
             decimal sumOfRecordsAmount = 0m;
 
             var categories = this.dbContext.Categories.Include(c => c.Records)
@@ -209,6 +212,8 @@
                 }
 
             await this.recordsService.EditWalletAmountAsync(walletId, sumOfRecordsAmount);
+
+            */
 
             await this.dbContext.SaveChangesAsync();
         }
