@@ -10,8 +10,6 @@
     {
         public string Category { get; set; }
 
-        public int CategoryId { get; set; }
-
         public string Currency { get; set; }
 
         public string WalletName { get; set; }

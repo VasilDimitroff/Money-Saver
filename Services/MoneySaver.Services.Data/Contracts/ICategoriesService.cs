@@ -15,7 +15,9 @@
 
         public Task<string> EditAsync(int categoryId, string categoryName, int walletId, string badgeColor);
 
-        public Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId);
+        public int GetRecordsCount(int categoryId);
+
+        public Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId, int page, int itemsPerPage = 12);
 
         public Task<EditCategoryDto> GetCategoryInfoForEditAsync(int categoryId);
 

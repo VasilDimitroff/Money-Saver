@@ -193,7 +193,7 @@
             return this.Redirect($"/Wallets/Categories/{input.WalletId}");
         }
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, int page = 1)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
@@ -202,7 +202,9 @@
                 throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
             }
 
-            var category = await this.categoriesService.GetRecordsByCategoryAsync(id);
+            const int ItemsPerPage = 12;
+
+            var category = await this.categoriesService.GetRecordsByCategoryAsync(id, page, ItemsPerPage);
             CategoryRecordsViewModel model = new CategoryRecordsViewModel()
             {
                 Records = category.Records
@@ -216,12 +218,16 @@
                 })
                 .ToList(),
                 Category = category.Category,
-                CategoryId = category.CategoryId,
+                CategoryId = id,
                 Currency = category.Currency,
                 WalletId = category.WalletId,
                 WalletName = category.WalletName,
                 BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString()),
             };
+
+            model.ItemsPerPage = ItemsPerPage;
+            model.PageNumber = page;
+            model.RecordsCount = this.categoriesService.GetRecordsCount(id);
 
             return this.View(model);
         }

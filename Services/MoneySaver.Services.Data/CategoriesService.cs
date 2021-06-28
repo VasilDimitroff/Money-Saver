@@ -202,7 +202,7 @@
 
         */
 
-        public async Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId)
+        public async Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId, int page, int itemsPerPage = 12)
         {
             var category = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
 
@@ -221,21 +221,33 @@
                      WalletId = r.WalletId,
                      WalletName = r.Wallet.Name,
                      BadgeColor = r.BadgeColor,
-                     Records = r.Records.Select(r => new CategoryRecordInfoDto
-                     {
-                         Id = r.Id,
-                         Amount = r.Amount,
-                         CreatedOn = r.CreatedOn,
-                         Description = r.Description,
-                         Type = r.Type,
-                     })
-                     .OrderByDescending(rec => rec.CreatedOn)
-                     .ThenBy(rec => rec.Amount)
+                     Records = r.Records
+                        .OrderByDescending(x => x.CreatedOn)
+                        .ThenBy(rec => rec.Amount)
+                        .Skip((page - 1) * itemsPerPage)
+                        .Take(itemsPerPage)
+                        .Select(r => new CategoryRecordInfoDto
+                         {
+                             Id = r.Id,
+                             Amount = r.Amount,
+                             CreatedOn = r.CreatedOn,
+                             Description = r.Description,
+                             Type = r.Type,
+                         }) 
                      .ToList(),
                  })
                  .FirstOrDefaultAsync();
 
             return categ;
+        }
+
+        public int GetRecordsCount(int categoryId)
+        {
+            return this.dbContext.Categories
+                .Include(x => x.Records)
+                .Where(x => x.Id == categoryId)
+                .FirstOrDefault().Records
+                .Count();
         }
 
         public async Task<EditCategoryDto> GetCategoryInfoForEditAsync(int categoryId)
