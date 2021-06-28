@@ -17,7 +17,11 @@
 
         public int GetRecordsCount(int categoryId);
 
+        public int GetSearchRecordsCount(string searchTerm, int id);
+
         public Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId, int page, int itemsPerPage = 12);
+
+        public Task<AllRecordsInCategoryDto> GetRecordsByKeywordAsync(string keyword, int categoryId, int page, int itemsPerPage = 12);
 
         public Task<EditCategoryDto> GetCategoryInfoForEditAsync(int categoryId);
 

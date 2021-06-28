@@ -232,11 +232,11 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> Search(int id, string searchTerm, int page = 1)
+        public async Task<IActionResult> Search(int categoryId, string searchTerm, int page = 1)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, id))
+            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, categoryId))
             {
                 throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
             }
@@ -246,29 +246,12 @@
                 searchTerm = string.Empty;
             }
 
-            CategoryRecordsViewModel model = new CategoryRecordsViewModel();
-
             const int ItemsPerPage = 12;
 
-            model.ItemsPerPage = ItemsPerPage;
-            model.PageNumber = page;
-
-            /*
-            // !!!
-            var category = await this.categoriesService.GetRecordsByCategoryAsync(searchTerm, id, page, ItemsPerPage);
-
-            model.Category = category.Category;
-            model.CategoryId = category.CategoryId;
-            model.Currency = category.Currency;
-            model.WalletId = category.WalletId;
-            model.WalletName = category.WalletName;
-            model.BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString());
-
-            //!!
-            model.RecordsCount = this.walletsService.GetSearchRecordsCount(searchTerm, id);
-            model.SearchTerm = searchTerm;
-
-            model.Records = category.Records
+            var category = await this.categoriesService.GetRecordsByKeywordAsync(searchTerm, categoryId, page, ItemsPerPage);
+            CategoryRecordsViewModel model = new CategoryRecordsViewModel()
+            {
+                Records = category.Records
                 .Select(r => new RecordsByCategoryViewModel
                 {
                     Amount = r.Amount,
@@ -277,8 +260,19 @@
                     Id = r.Id,
                     Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
                 })
-                .ToList();
-             */
+                .ToList(),
+                Category = category.Category,
+                CategoryId = categoryId,
+                Currency = category.Currency,
+                WalletId = category.WalletId,
+                WalletName = category.WalletName,
+                BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString()),
+                SearchTerm = searchTerm,
+            };
+
+            model.ItemsPerPage = ItemsPerPage;
+            model.PageNumber = page;
+            model.RecordsCount = this.categoriesService.GetSearchRecordsCount(searchTerm, categoryId);
 
             return this.View(model);
         }

@@ -440,7 +440,7 @@
             }
 
             var records = await this.dbContext.Records
-                 .Where(r => r.Description.ToLower().Contains(keyword.ToLower()) && r.Category.WalletId == walletId)
+                 .Where(r => r.Description.ToLower().Contains(keyword) && r.Category.WalletId == walletId)
                  .OrderByDescending(x => x.CreatedOn)
                  .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
                  .Select(r => new RecordInfoDto

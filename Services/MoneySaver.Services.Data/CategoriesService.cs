@@ -154,14 +154,13 @@
             return GlobalConstants.CategorySuccessfullyUpdated;
         }
 
-        /*
-        public async Task<IEnumerable<RecordInfoDto>> GetRecordsByKeywordAsync(string keyword, int categoryId, int page, int itemsPerPage = 12)
+        public async Task<AllRecordsInCategoryDto> GetRecordsByKeywordAsync(string keyword, int categoryId, int page, int itemsPerPage = 12)
         {
             keyword = keyword.ToLower().Trim();
 
             if (string.IsNullOrWhiteSpace(keyword))
             {
-                var allRecords = await this.GetRecordsByCategoryAsync(page, walletId, itemsPerPage);
+                var allRecords = await this.GetRecordsByCategoryAsync(categoryId, page, itemsPerPage);
 
                 return allRecords;
             }
@@ -183,24 +182,26 @@
                      WalletId = r.WalletId,
                      WalletName = r.Wallet.Name,
                      BadgeColor = r.BadgeColor,
-                     Records = r.Records.Select(r => new CategoryRecordInfoDto
-                     {
-                         Id = r.Id,
-                         Amount = r.Amount,
-                         CreatedOn = r.CreatedOn,
-                         Description = r.Description,
-                         Type = r.Type,
-                     })
-                     .OrderByDescending(rec => rec.CreatedOn)
-                     .ThenBy(rec => rec.Amount)
+                     Records = r.Records
+                        .Where(r => r.Description.ToLower().Contains(keyword))
+                        .OrderByDescending(x => x.CreatedOn)
+                        .ThenBy(rec => rec.Amount)
+                        .Skip((page - 1) * itemsPerPage)
+                        .Take(itemsPerPage)
+                        .Select(r => new CategoryRecordInfoDto
+                         {
+                             Id = r.Id,
+                             Amount = r.Amount,
+                             CreatedOn = r.CreatedOn,
+                             Description = r.Description,
+                             Type = r.Type,
+                         })
                      .ToList(),
                  })
                  .FirstOrDefaultAsync();
 
             return categ;
         }
-
-        */
 
         public async Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId, int page, int itemsPerPage = 12)
         {
@@ -233,7 +234,7 @@
                              CreatedOn = r.CreatedOn,
                              Description = r.Description,
                              Type = r.Type,
-                         }) 
+                         })
                      .ToList(),
                  })
                  .FirstOrDefaultAsync();
@@ -243,11 +244,18 @@
 
         public int GetRecordsCount(int categoryId)
         {
-            return this.dbContext.Categories
-                .Include(x => x.Records)
-                .Where(x => x.Id == categoryId)
-                .FirstOrDefault().Records
+            return this.dbContext.Records
+                .Where(x => x.CategoryId == categoryId)
                 .Count();
+        }
+
+        public int GetSearchRecordsCount(string searchTerm, int id)
+        {
+            string keyword = searchTerm.ToLower().Trim();
+
+            return this.dbContext.Records
+               .Where(x => x.CategoryId == id && x.Description.ToLower().Contains(keyword))
+               .Count();
         }
 
         public async Task<EditCategoryDto> GetCategoryInfoForEditAsync(int categoryId)
