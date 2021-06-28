@@ -203,6 +203,49 @@
             return categ;
         }
 
+        public async Task<AllRecordsInCategoryDto> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int categoryId, int page, int itemsPerPage = 12)
+        {
+            var startDate12AM = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0);
+            var endDate12PM = new DateTime(endDate.Year, endDate.Month, endDate.Day, 23, 59, 59);
+
+            var category = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
+
+            if (category == null)
+            {
+                throw new ArgumentException(GlobalConstants.UnexistingCategory);
+            }
+
+            var categ = await this.dbContext.Categories
+                .Where(c => c.Id == categoryId)
+                .Select(r => new AllRecordsInCategoryDto
+                {
+                    Category = r.Name,
+                    CategoryId = r.Id,
+                    Currency = r.Wallet.Currency.Code,
+                    WalletId = r.WalletId,
+                    WalletName = r.Wallet.Name,
+                    BadgeColor = r.BadgeColor,
+                    Records = r.Records
+                       .Where(r => r.CreatedOn >= startDate12AM && r.CreatedOn <= endDate12PM)
+                       .OrderByDescending(x => x.CreatedOn)
+                       .ThenBy(rec => rec.Amount)
+                       .Skip((page - 1) * itemsPerPage)
+                       .Take(itemsPerPage)
+                       .Select(r => new CategoryRecordInfoDto
+                       {
+                           Id = r.Id,
+                           Amount = r.Amount,
+                           CreatedOn = r.CreatedOn,
+                           Description = r.Description,
+                           Type = r.Type,
+                       })
+                    .ToList(),
+                })
+                .FirstOrDefaultAsync();
+
+            return categ;
+        }
+
         public async Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId, int page, int itemsPerPage = 12)
         {
             var category = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
@@ -256,6 +299,18 @@
             return this.dbContext.Records
                .Where(x => x.CategoryId == id && x.Description.ToLower().Contains(keyword))
                .Count();
+        }
+
+        public int GetDateSortedRecordsCount(DateTime startDate, DateTime endDate, int categoryId)
+        {
+            var startDate12AM = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0);
+            var endDate12PM = new DateTime(endDate.Year, endDate.Month, endDate.Day, 23, 59, 59);
+
+            int count = this.dbContext.Records
+                .Where(r => r.CreatedOn >= startDate12AM && r.CreatedOn <= endDate12PM && r.CategoryId == categoryId)
+                .Count();
+
+            return count;
         }
 
         public async Task<EditCategoryDto> GetCategoryInfoForEditAsync(int categoryId)

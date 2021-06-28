@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations;
 
     using MoneySaver.Web.ViewModels.Categories;
     using MoneySaver.Web.ViewModels.Records.Enums;
@@ -32,6 +32,5 @@
 
         [Required]
         public RecordTypeInputModel Type { get; set; }
-
     }
 }

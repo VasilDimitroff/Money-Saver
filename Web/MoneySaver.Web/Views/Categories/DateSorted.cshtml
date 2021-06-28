@@ -4,14 +4,15 @@
 
 @model CategoryRecordsViewModel
 @{
-    this.ViewData["Title"] = "All Records - " + Model.Category + " - " + "Page " + Model.PageNumber + " - "+ Model.WalletName;
+    this.ViewData["Title"] = "Records between " + Model.StartDate.ToShortDateString() + " and " + Model.EndDate.ToShortDateString() + " in " + Model.Category + " - Page " + Model.PageNumber + " - "  + Model.WalletName;
 }
 <!-- partial -->
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">
-            Category <a href="/Categories/Details/@Model.CategoryId"><span class="badge badge-@Model.BadgeColor.ToString().ToLower()">@Model.Category</span></a>
-            - All Records
+            Records between <span class="font-weight-bold text-info">@Model.StartDate.ToShortDateString()</span>
+            and <span class="font-weight-bold text-info">@Model.EndDate.ToShortDateString()</span>
+            in category <a href="/Categories/Details/@Model.CategoryId"><span class="badge badge-@Model.BadgeColor.ToString().ToLower()">@Model.Category</span></a>
             - Page <span class="font-weight-bold text-info">@Model.PageNumber</span>
             - @Model.WalletName
         </h4>
@@ -104,7 +105,7 @@
                 <!-- Pagination-->
                 <!-- Pagination-->
                 <div style="display: inline;">
-                        <partial name="_CategoryPagingPartial" model="@Model" />
+                    <partial name="_DateSortedCategoryPagingPartial" model="@Model" />
                     <!-- End Pagination-->
                 </div>
                 <!-- End Pagination-->

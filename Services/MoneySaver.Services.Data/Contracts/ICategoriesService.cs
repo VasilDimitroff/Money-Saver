@@ -1,5 +1,6 @@
 ﻿namespace MoneySaver.Services.Data.Contracts
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -19,9 +20,13 @@
 
         public int GetSearchRecordsCount(string searchTerm, int id);
 
+        public int GetDateSortedRecordsCount(DateTime startDate, DateTime endDate, int categoryId);
+
         public Task<AllRecordsInCategoryDto> GetRecordsByCategoryAsync(int categoryId, int page, int itemsPerPage = 12);
 
         public Task<AllRecordsInCategoryDto> GetRecordsByKeywordAsync(string keyword, int categoryId, int page, int itemsPerPage = 12);
+
+        public Task<AllRecordsInCategoryDto> GetRecordsByDateRangeAsync(DateTime startDate, DateTime endDate, int categoryId, int page, int itemsPerPage = 12);
 
         public Task<EditCategoryDto> GetCategoryInfoForEditAsync(int categoryId);
 

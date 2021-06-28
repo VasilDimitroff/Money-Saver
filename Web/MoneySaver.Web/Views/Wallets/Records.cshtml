@@ -4,17 +4,13 @@
 
 @model WalletSearchResultViewModel
 @{
-    this.ViewData["Title"] = "All Records - " + Model.Wallet;
+    this.ViewData["Title"] = "All Records " + " - " + "Page " + Model.PageNumber + " - " + Model.Wallet;
 }
 
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">@this.ViewData["Title"] </h4>
-
-
-        @* <vc:wallet-statistics id="@Model.WalletId"></vc:wallet-statistics>*@
-        @* <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>*@
+        <h4 class="card-title">All Records - Page <span class="font-weight-bold text-info">@Model.PageNumber</span> - @Model.Wallet</h4>
         <br/>
         <div class="col-12">
                 <div class="btn-group mr-2">

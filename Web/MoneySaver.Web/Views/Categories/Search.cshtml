@@ -4,12 +4,17 @@
 
 @model CategoryRecordsViewModel
 @{
-    this.ViewData["Title"] = "All Records - " + Model.Category + " - " + Model.WalletName;
+    this.ViewData["Title"] = "Search results for " + Model.SearchTerm + " - " + Model.Category + " - Page " + Model.PageNumber + " - " + Model.WalletName;
 }
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">Category <span class="badge badge-@Model.BadgeColor.ToString().ToLower()">@Model.Category</span> - All Records - @Model.WalletName</h4>
+        <h4 class="card-title">
+            Search results for "<span class="font-weight-bold text-info">@Model.SearchTerm</span>"
+            in category <a href="/Categories/Details/@Model.CategoryId"><span class="badge badge-@Model.BadgeColor.ToString().ToLower()">@Model.Category</span></a>
+            - Page <span class="font-weight-bold text-info">@Model.PageNumber</span>
+            - @Model.WalletName
+        </h4>
         <div class="col-12">
             <div class="btn-group mr-1">
                 <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
@@ -18,7 +23,7 @@
                 <vc:edit-category category-id="@Model.CategoryId" wallet-id="@Model.WalletId"></vc:edit-category>
             </div>
             <div class="btn-group mr-4">
-                <vc:get-records-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" id="@Model.WalletId"></vc:get-records-by-date>
+                <vc:get-records-in-category-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" category-id="Model.CategoryId"></vc:get-records-in-category-by-date>
             </div>
             <div class="btn-group mr-2">
                <vc:search-records-in-category category-id="@Model.CategoryId" search-term="@Model.SearchTerm"></vc:search-records-in-category>

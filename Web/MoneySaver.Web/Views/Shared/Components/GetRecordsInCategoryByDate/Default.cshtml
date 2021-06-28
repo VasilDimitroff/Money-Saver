@@ -1,12 +1,12 @@
-﻿@model MoneySaver.Web.ViewModels.ViewComponents.GetRecordsByDateComponentViewModel
-<form method="get" asp-controller="Wallets" asp-action="DateSorted" class="form-inline">
+﻿@model MoneySaver.Web.ViewModels.ViewComponents.GetRecordsInCategoryByDateComponentViewModel
+<form method="get" asp-controller="Categories" asp-action="DateSorted" class="form-inline">
     <div class="input-group-sm mr-sm-1 mb-4">
         <input type="date" style="display:inline;" class="form-control input-sm " asp-for="StartDate" placeholder="Search Here" value="@Model.DefaultStartDate">
     </div>
     <div class="input-group-sm mr-sm-1 mb-4">
         <input type="date" style="display:inline;" class="form-control input-sm" asp-for="EndDate" placeholder="Search Here" value="@Model.DefaultEndDate">
     </div>
-    <input type="hidden" class="form-control input-sm" asp-for="Id">
+    <input type="hidden" class="form-control input-sm" asp-for="CategoryId">
     &nbsp;
     <div class="input-group-sm mr-sm-1 mb-4">
         <button style="display:inline;" type="submit" class="btn btn-primary btn-sm"><i class="mdi mdi-magnify btn-icon-prepend text-white"></i></button>

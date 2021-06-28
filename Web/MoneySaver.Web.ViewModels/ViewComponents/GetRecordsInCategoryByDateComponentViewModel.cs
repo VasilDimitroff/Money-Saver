@@ -2,9 +2,9 @@
 {
     using System;
 
-    public class GetRecordsByDateComponentViewModel
+    public class GetRecordsInCategoryByDateComponentViewModel
     {
-        public int Id { get; set; }
+        public int CategoryId { get; set; }
 
         public DateTime StartDate { get; set; }
 

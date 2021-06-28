@@ -274,5 +274,48 @@
 
             return this.View(model);
         }
+
+        public async Task<IActionResult> DateSorted(DateTime startDate, DateTime endDate, int categoryId, int page = 1)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, categoryId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
+            }
+
+            var category = await this.categoriesService.GetRecordsByDateRangeAsync(startDate, endDate, categoryId, page, ItemsPerPage);
+            CategoryRecordsViewModel model = new CategoryRecordsViewModel()
+            {
+                Records = category.Records
+                .Select(r => new RecordsByCategoryViewModel
+                {
+                    Amount = r.Amount,
+                    CreatedOn = r.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
+                    Description = r.Description,
+                    Id = r.Id,
+                    Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
+                })
+                .ToList(),
+                Category = category.Category,
+                CategoryId = categoryId,
+                Currency = category.Currency,
+                WalletId = category.WalletId,
+                WalletName = category.WalletName,
+                BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString()),
+            };
+
+            var startDate12AM = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0);
+            var endDate12PM = new DateTime(endDate.Year, endDate.Month, endDate.Day, 23, 59, 59);
+
+            model.StartDate = startDate12AM;
+            model.EndDate = endDate12PM;
+
+            model.ItemsPerPage = ItemsPerPage;
+            model.PageNumber = page;
+            model.RecordsCount = this.categoriesService.GetDateSortedRecordsCount(startDate, endDate, categoryId);
+
+            return this.View(model);
+        }
     }
 }

@@ -4,14 +4,18 @@
 
 @model WalletSearchResultViewModel
 @{
-    this.ViewData["Title"] = "All Records - " + Model.Wallet;
+    this.ViewData["Title"] = "Records between " + Model.StartDate.ToShortDateString() + " and " + Model.EndDate.ToShortDateString() + " - " + "Page " + Model.PageNumber + " - " + Model.Wallet;
 }
 
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">@this.ViewData["Title"] </h4>
-
+        <h4 class="card-title">
+            Records between <span class="font-weight-bold text-info">@Model.StartDate.ToShortDateString()</span>
+            and <span class="font-weight-bold text-info">@Model.EndDate.ToShortDateString()</span>
+            - Page <span class="font-weight-bold text-info">@Model.PageNumber</span>
+            - @Model.Wallet
+        </h4>
 
         @* <vc:wallet-statistics id="@Model.WalletId"></vc:wallet-statistics>*@
         @* <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>*@
@@ -47,46 +51,46 @@
                         {
 
                             <tr class="card-shadow" onclick="window.location='/Records/Edit?id=@record.Id&walletId=@Model.WalletId'">
-                                    <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create/Modified date">@record.CreatedOn</span></td>
-                                    <td style="width: 25%;">@record.Description</td>
-                                    <td>
-                                        @if (record.Type == RecordTypeInputModel.Expense)
-                                        {
-                                            <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @record.Type</span>
-                                        }
+                                <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create/Modified date">@record.CreatedOn</span></td>
+                                <td style="width: 25%;">@record.Description</td>
+                                <td>
+                                    @if (record.Type == RecordTypeInputModel.Expense)
+                                    {
+                                        <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @record.Type</span>
+                                    }
 
-                                        else if (record.Type == RecordTypeInputModel.Income)
-                                        {
+                                    else if (record.Type == RecordTypeInputModel.Income)
+                                    {
 
-                                            <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @record.Type</span>
-                                        }
-                                    </td>
+                                        <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @record.Type</span>
+                                    }
+                                </td>
 
-                                    <td>
+                                <td>
 
-                                        @if (record.Amount < 0)
-                                        {
-                                            <p class="text-danger"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
-                                        }
+                                    @if (record.Amount < 0)
+                                    {
+                                        <p class="text-danger"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                    }
 
-                                        else if (record.Amount == 0)
-                                        {
-                                            <p class="text-secondary"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
-                                        }
+                                    else if (record.Amount == 0)
+                                    {
+                                        <p class="text-secondary"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                    }
 
-                                        else
-                                        {
-                                            <p class="text-success bold"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
-                                        }
-                                    </td>
-                                    <td>@record.Wallet</td>
-                                    <td>
-                                        <a href="/Categories/Details/@record.CategoryId" class="badge badge-@record.BadgeColor.ToString().ToLower()">@record.Category</a>
-                                    </td>
-                                    <td>
+                                    else
+                                    {
+                                        <p class="text-success bold"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                    }
+                                </td>
+                                <td>@record.Wallet</td>
+                                <td>
+                                    <a href="/Categories/Details/@record.CategoryId" class="badge badge-@record.BadgeColor.ToString().ToLower()">@record.Category</a>
+                                </td>
+                                <td>
 
-                                        <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
-                                    </td>
+                                    <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
+                                </td>
                             </tr>
 
                         }
