@@ -15,13 +15,13 @@
         [Required]
         public int CategoryId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Category Name is required")]
         public string CategoryName { get; set; }
 
         [Required]
         public int WalletId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Badge Color is required")]
         public BadgeColor BadgeColor { get; set; }
 
         public IEnumerable<EditCategoryWalletsListViewModel> Wallets { get; set; }

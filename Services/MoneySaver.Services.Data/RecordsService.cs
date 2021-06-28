@@ -60,7 +60,7 @@
                 Id = Guid.NewGuid().ToString(),
                 Amount = amount,
                 CategoryId = categoryId,
-                CreatedOn = createdOn == null ? DateTime.UtcNow : createdOn.Value,
+                CreatedOn = createdOn == null || createdOn == default ? DateTime.UtcNow : createdOn.Value,
                 ModifiedOn = DateTime.UtcNow,
                 Description = description,
                 Type = recordType,
@@ -167,6 +167,11 @@
             if (category == null)
             {
                 throw new ArgumentException(GlobalConstants.UnexistingCategory);
+            }
+
+            if (createdOn == default)
+            {
+                createdOn = DateTime.UtcNow;
             }
 
             RecordType recordInputType = this.ParseRecordType(type);

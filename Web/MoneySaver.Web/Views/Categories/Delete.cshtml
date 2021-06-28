@@ -22,6 +22,7 @@
                 <br />
 
                 <form class="forms-sample" method="post" style="display: inline">
+                    <div class="text-danger" asp-validation-summary="All"></div>
                     <input type="hidden" asp-for="OldCategoryId">
                     <span class="text-danger" asp-validation-for="OldCategoryId"></span>
                     <div class="form-group">
@@ -77,7 +78,7 @@
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                                     <input type="hidden" asp-for="@Model.OldCategoryId" value="@Model.OldCategoryId">
                                     <input type="hidden" asp-for="@Model.NewCategoryId" value="-1">
-                                    <button type="submit" type="submit" class="btn btn-outline-danger">Yes</button>
+                                    <button type="submit" class="btn btn-outline-danger">Yes</button>
                                 </div>
                             </div>
                         </div>

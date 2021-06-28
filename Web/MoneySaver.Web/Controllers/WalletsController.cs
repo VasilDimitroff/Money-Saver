@@ -21,6 +21,8 @@
     [Authorize]
     public class WalletsController : Controller
     {
+        private const int ItemsPerPage = 12;
+
         private readonly IWalletsService walletsService;
         private readonly IRecordsService recordsService;
         private readonly ICurrenciesService currenciesService;
@@ -175,8 +177,6 @@
 
             var model = new WalletSearchResultViewModel();
 
-            const int ItemsPerPage = 12;
-
             var records = await this.walletsService.GetAllRecordsAsync(page, id, ItemsPerPage);
 
             model.ItemsPerPage = ItemsPerPage;
@@ -266,8 +266,6 @@
 
             var model = new WalletSearchResultViewModel();
 
-            const int ItemsPerPage = 12;
-
             model.ItemsPerPage = ItemsPerPage;
             model.PageNumber = page;
 
@@ -306,8 +304,6 @@
             }
 
             var model = new WalletSearchResultViewModel();
-
-            const int ItemsPerPage = 12;
 
             model.ItemsPerPage = ItemsPerPage;
             model.PageNumber = page;

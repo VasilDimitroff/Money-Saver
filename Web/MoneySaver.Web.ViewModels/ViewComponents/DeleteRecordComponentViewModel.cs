@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MoneySaver.Web.ViewModels.ViewComponents
+﻿namespace MoneySaver.Web.ViewModels.ViewComponents
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class DeleteRecordComponentViewModel
     {
+        [Required]
         public string Id { get; set; }
     }
 }

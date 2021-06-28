@@ -17,6 +17,8 @@
 
     public class CategoriesController : Controller
     {
+        private const int ItemsPerPage = 12;
+
         private readonly ICategoriesService categoriesService;
         private readonly IWalletsService walletsService;
         private readonly UserManager<ApplicationUser> userManager;
@@ -202,8 +204,6 @@
                 throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
             }
 
-            const int ItemsPerPage = 12;
-
             var category = await this.categoriesService.GetRecordsByCategoryAsync(id, page, ItemsPerPage);
             CategoryRecordsViewModel model = new CategoryRecordsViewModel()
             {
@@ -245,8 +245,6 @@
             {
                 searchTerm = string.Empty;
             }
-
-            const int ItemsPerPage = 12;
 
             var category = await this.categoriesService.GetRecordsByKeywordAsync(searchTerm, categoryId, page, ItemsPerPage);
             CategoryRecordsViewModel model = new CategoryRecordsViewModel()

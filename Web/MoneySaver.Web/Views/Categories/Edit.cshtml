@@ -13,7 +13,7 @@
             <p class="card-description">
                 Edit category <span class="badge badge-@Model.BadgeColor.ToString().ToLower()">@Model.CategoryName</span>
             </p>
-            <form class="forms-sample" style="display: inline" method="post">
+            <form class="forms-sample" style="display: inline" asp-controller="Categories" asp-action="Edit" method="post">
                 <div class="text-danger" asp-validation-summary="All"></div>
                 <div class="form-group">
                     <span class="mdi mdi-lead-pencil text-primary"></span>

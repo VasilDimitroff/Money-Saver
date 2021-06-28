@@ -349,23 +349,6 @@
             return wallet.Id;
         }
 
-        public async Task<int> GetWalletIdByCategoryIdAsync(int categoryId)
-        {
-            var wallet = await this.dbContext.Categories
-                .Select(c => new WalletIdDto
-                {
-                    Id = c.WalletId,
-                })
-                .FirstOrDefaultAsync(x => x.Id == categoryId);
-
-            if (wallet.Id == 0)
-            {
-                throw new ArgumentException(GlobalConstants.WalletNotExist);
-            }
-
-            return wallet.Id;
-        }
-
         public async Task<IEnumerable<CategoryBasicInfoDto>> GetWalletCategoriesAsync(int walletId)
         {
             var categories = await this.dbContext.Categories
