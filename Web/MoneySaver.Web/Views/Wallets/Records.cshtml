@@ -42,7 +42,7 @@
                             @foreach (var record in Model.Records)
                             {
 
-                                <tr class="card-shadow" onclick="window.location='/Records/Edit?id=@record.Id&walletId=@Model.WalletId'">
+                                <tr class="card-shadow">
                                         <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create/Modified date">@record.CreatedOn</span></td>
                                         <td style="max-width: 25%;">@record.Description</td>
                                         <td>
@@ -82,8 +82,8 @@
                                             <a href="/Categories/Details/@record.CategoryId" class="badge badge-@record.BadgeColor.ToString().ToLower()">@record.Category</a>
                                         </td>
                                         <td>
-
                                             <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
+                                           <vc:delete-record-small-button record-id="@record.Id"></vc:delete-record-small-button>
                                         </td>
                                 </tr>
 

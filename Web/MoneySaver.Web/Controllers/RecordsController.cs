@@ -136,7 +136,7 @@
             await this.recordsService.RemoveAsync(id);
 
             // return this.RedirectToAction("All", "Records", new { walletId, action = "Submit", submitAll = false });
-            return this.Redirect($"/Wallets/Details/{walletId}");
+            return this.Redirect($"/Wallets/Records/{walletId}");
         }
     }
 }

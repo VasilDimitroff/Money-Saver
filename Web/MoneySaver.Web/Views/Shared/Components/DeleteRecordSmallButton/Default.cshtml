@@ -1,0 +1,28 @@
+﻿@model MoneySaver.Web.ViewModels.ViewComponents.DeleteRecordSmallButtonComponentViewModel
+@*<a href="/Records/Delete?recordId=@Model.Id"><span class="btn btn-outline-danger btn-icon-text float-right" data-toggle="tooltip" data-placement="bottom" title="Delete record"><i class="mdi mdi-delete btn-icon-prepend"></i> Delete</span></a>*@
+
+
+<button type="button" class="btn btn-outline-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete record" data-toggle="modal" data-target="#defaultModal-small"><i class="mdi mdi-delete btn-icon-prepend"></i></button>
+<div class="modal fade" id="defaultModal-small" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-small" aria-hidden="true">
+    <form method="post" asp-controller="Records" asp-action="Delete">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="exampleModalLabel-small">Note! You're preparing to delete a record</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this record?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <input type="hidden" asp-for="@Model.RecordId">
+                    <span class="text-danger" asp-validation-for="RecordId"></span>
+                    <button onclick="window.location.href='/Records/Delete/@Model.RecordId'" type="submit" class="btn btn-outline-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
