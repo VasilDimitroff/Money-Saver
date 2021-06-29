@@ -94,10 +94,10 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
 
-            await this.walletsService
+            int walletId = await this.walletsService
                 .AddAsync(user.Id, input.Name, input.Amount, input.CurrencyId);
 
-            return this.Redirect("/Wallets/All");
+            return this.Redirect($"/Wallets/Details/{walletId}");
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -148,7 +148,7 @@
 
             await this.walletsService.EditAsync(user.Id, input.Id, input.Name, input.Amount, input.CurrencyId);
 
-            return this.Redirect($"/Wallets/All/");
+            return this.Redirect($"/Wallets/Details/{input.Id}");
         }
 
         [HttpPost]
@@ -246,6 +246,30 @@
                     Id = r.Id,
                 }),
             };
+
+            var incomesLast30Days = await this.walletsService.GetWalletCategoriesIncomesLast30DaysAsync(id);
+
+            model.MonthIncomes = incomesLast30Days.Select(c => new CategoryIncomesLast30DaysWalletDetailsViewModel
+            {
+                BadgeColor = Enum.Parse<BadgeColor>(c.BadgeColor.ToString()),
+                CategoryId = c.CategoryId,
+                CategoryName = c.CategoryName,
+                TotalIncomesLast30days = c.TotalIncomesLast30Days,
+                TotalIncomeRecordsLast30Days = c.TotalIncomeRecordsLast30Days,
+            })
+                .ToList();
+
+            var outcomesLast30Days = await this.walletsService.GetWalletCategoriesExpensesLast30DaysAsync(id);
+
+            model.MonthExpenses = outcomesLast30Days.Select(c => new CategoryExpensesLast30DaysWalletDetailsViewModel
+            {
+                BadgeColor = Enum.Parse<BadgeColor>(c.BadgeColor.ToString()),
+                CategoryId = c.CategoryId,
+                CategoryName = c.CategoryName,
+                TotalExpensesLast30Days = c.TotalExpensesLast30Days,
+                TotalExpenseRecordsLast30Days = c.TotalExpenseRecordsLast30Days,
+            })
+                .ToList();
 
             return this.View(model);
         }

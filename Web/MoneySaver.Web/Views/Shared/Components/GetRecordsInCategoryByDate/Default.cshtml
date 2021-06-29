@@ -1,14 +1,26 @@
 ﻿@model MoneySaver.Web.ViewModels.ViewComponents.GetRecordsInCategoryByDateComponentViewModel
-<form method="get" asp-controller="Categories" asp-action="DateSorted" class="form-inline">
+
+<style>
+        .date-label {
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+</style>
+<form method="get" asp-controller="Categories" asp-action="DateSorted" class="form-inline mt-1">
     <div class="input-group-sm mr-sm-1 mb-4">
+        <label asp-for="StartDate" class="date-label">Start Date</label>
         <input type="date" style="display:inline;" class="form-control input-sm " asp-for="StartDate" placeholder="Search Here" value="@Model.DefaultStartDate">
+        <span class="d-block text-danger" asp-validation-for="StartDate"></span>
     </div>
     <div class="input-group-sm mr-sm-1 mb-4">
+        <label asp-for="EndDate" class="date-label">End Date</label>
         <input type="date" style="display:inline;" class="form-control input-sm" asp-for="EndDate" placeholder="Search Here" value="@Model.DefaultEndDate">
+        <span class="d-block text-danger" asp-validation-for="EndDate"></span>
     </div>
     <input type="hidden" class="form-control input-sm" asp-for="CategoryId">
+    <span class="d-block text-danger" asp-validation-for="CategoryId"></span>
     &nbsp;
-    <div class="input-group-sm mr-sm-1 mb-4">
+    <div class="input-group-sm mr-sm-1 lg-mb-4 sm-mb-3 mt-1 sm-mt-3">
         <button style="display:inline;" type="submit" class="btn btn-primary btn-sm"><i class="mdi mdi-magnify btn-icon-prepend text-white"></i></button>
     </div>
 </form>

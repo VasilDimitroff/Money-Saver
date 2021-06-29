@@ -37,7 +37,7 @@
             this.categoriesService = categoriesService;
         }
 
-        public async Task<string> AddAsync(string userId, string name, decimal initialMoney, int currencyId)
+        public async Task<int> AddAsync(string userId, string name, decimal initialMoney, int currencyId)
         {
             Wallet wallet = await this.GetWalletAsync(userId, name);
 
@@ -75,7 +75,7 @@
                 await this.SeedWalletAsync(newWallet);
             }
 
-            return string.Format(GlobalConstants.WalletSuccessfullyAdded, newWallet.Name);
+            return newWallet.Id;
         }
 
         public async Task<WalletCategoriesDto> GetWalletWithCategoriesAsync(int walletId)
@@ -500,6 +500,56 @@
             }
 
             return true;
+        }
+
+        public async Task<IEnumerable<CategoryExpensesLast30DaysWalletDetailsDto>> GetWalletCategoriesExpensesLast30DaysAsync(int walletId)
+        {
+            var startDate = DateTime.UtcNow.AddDays(-30);
+            var endDate = DateTime.UtcNow;
+
+            var categories = await this.dbContext.Categories
+                .Where(c => c.WalletId == walletId)
+                .Select(c => new CategoryExpensesLast30DaysWalletDetailsDto
+                {
+                    CategoryId = c.Id,
+                    BadgeColor = c.BadgeColor,
+                    CategoryName = c.Name,
+                    TotalExpenseRecordsLast30Days = c.Records
+                        .Where(r => r.Type == RecordType.Expense && r.CreatedOn >= startDate && r.CreatedOn <= endDate)
+                        .Count(),
+                    TotalExpensesLast30Days = c.Records
+                        .OrderByDescending(x => x.CreatedOn)
+                        .Where(r => r.Type == RecordType.Expense && r.CreatedOn >= startDate && r.CreatedOn <= endDate)
+                        .Sum(r => r.Amount),
+                })
+                .ToListAsync();
+
+            return categories;
+        }
+
+        public async Task<IEnumerable<CategoryIncomesLast30DaysWalletDetailsDto>> GetWalletCategoriesIncomesLast30DaysAsync(int walletId)
+        {
+            var startDate = DateTime.UtcNow.AddDays(-30);
+            var endDate = DateTime.UtcNow;
+
+            var categories = await this.dbContext.Categories
+                .Where(c => c.WalletId == walletId)
+                .Select(c => new CategoryIncomesLast30DaysWalletDetailsDto
+                {
+                    CategoryId = c.Id,
+                    BadgeColor = c.BadgeColor,
+                    CategoryName = c.Name,
+                    TotalIncomeRecordsLast30Days = c.Records
+                        .Where(r => r.Type == RecordType.Income && r.CreatedOn >= startDate && r.CreatedOn <= endDate)
+                        .Count(),
+                    TotalIncomesLast30Days = c.Records
+                        .OrderByDescending(x => x.CreatedOn)
+                        .Where(r => r.Type == RecordType.Income && r.CreatedOn >= startDate && r.CreatedOn <= endDate)
+                        .Sum(r => r.Amount),
+                })
+                .ToListAsync();
+
+            return categories;
         }
 
         private async Task<Wallet> GetWalletAsync(string userId, string walletName)

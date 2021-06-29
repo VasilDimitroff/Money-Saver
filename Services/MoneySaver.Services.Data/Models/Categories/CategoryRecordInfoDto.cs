@@ -15,6 +15,5 @@
         public RecordType Type { get; set; }
 
         public DateTime CreatedOn { get; set; }
-
     }
 }

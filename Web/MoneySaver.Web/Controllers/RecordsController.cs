@@ -71,7 +71,7 @@
 
             var enumValueAsString = input.Type.ToString();
             await this.recordsService.AddAsync(input.CategoryId, input.Description, input.Amount, enumValueAsString, input.CreatedOn);
-            return this.Redirect($"/Wallets/Records/{input.WalletId}");
+            return this.Redirect($"/Wallets/Details/{input.WalletId}");
         }
 
         public async Task<IActionResult> Edit(string id, int walletId)
@@ -119,7 +119,7 @@
             }
 
             await this.recordsService.UpdateRecord(input.Id, input.CategoryId, input.WalletId, input.Description, input.OldAmount, input.Amount, input.Type, input.CreatedOn);
-            return this.Redirect($"/Wallets/Records/{input.WalletId}");
+            return this.Redirect($"/Wallets/Details/{input.WalletId}");
         }
 
         [HttpPost]
@@ -136,7 +136,7 @@
             await this.recordsService.RemoveAsync(id);
 
             // return this.RedirectToAction("All", "Records", new { walletId, action = "Submit", submitAll = false });
-            return this.Redirect($"/Wallets/Records/{walletId}");
+            return this.Redirect($"/Wallets/Details/{walletId}");
         }
     }
 }

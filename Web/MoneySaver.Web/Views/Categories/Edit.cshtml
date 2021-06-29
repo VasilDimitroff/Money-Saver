@@ -23,17 +23,19 @@
                 </div>
                 <input type="hidden" asp-for="CategoryId">
                 <span class="text-danger" asp-validation-for="CategoryId"></span>
-                <div class="form-group">
-                    <span class="mdi mdi-wallet text-primary"></span>
-                    <label asp-for="@Model.WalletId"><span class="font-weight-bold">Wallet</span></label>
-                    <select asp-for="@Model.WalletId" class="js-example-basic-single" style="width:100%">
-                        @foreach (var wallet in Model.Wallets)
-                        {
-                            <option value="@wallet.WalletId">@wallet.WalletName</option>
-                        }
-                    </select>
-                    <span class="text-danger" asp-validation-for="WalletId"></span>
-                </div>
+                @* <div class="form-group">
+            <span class="mdi mdi-wallet text-primary"></span>
+            <label asp-for="@Model.WalletId"><span class="font-weight-bold">Wallet</span></label>
+            <select asp-for="@Model.WalletId" class="js-example-basic-single" style="width:100%">
+                @foreach (var wallet in Model.Wallets)
+                {
+                    <option value="@wallet.WalletId">@wallet.WalletName</option>
+                }
+            </select>
+            <span class="text-danger" asp-validation-for="WalletId"></span>
+        </div>
+                *@
+                <input type="hidden" asp-for="WalletId">
                 <div class="form-group">
                     <span class="mdi mdi-format-color-fill text-primary"></span>
                     <label asp-for="BadgeColor"><span class="font-weight-bold">Badge Color</span></label>

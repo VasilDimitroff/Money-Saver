@@ -15,19 +15,21 @@
             - Page <span class="font-weight-bold text-info">@Model.PageNumber</span>
             - @Model.WalletName
         </h4>
-        <div class="col-12">
-            <div class="btn-group mr-1">
-                <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
-            </div>
-            <div class="btn-group mr-2">
-                <vc:edit-category category-id="@Model.CategoryId" wallet-id="@Model.WalletId"></vc:edit-category>
-            </div>
-            <div class="btn-group mr-4">
-                <vc:get-records-in-category-by-date start-date="@Model.StartDate" end-date="@Model.EndDate"  category-id="@Model.CategoryId"></vc:get-records-in-category-by-date>
-            </div>
-            <div class="btn-group mr-2">
-               <vc:search-records-in-category category-id="@Model.CategoryId" search-term="@Model.SearchTerm"></vc:search-records-in-category>
-            </div>
+        <div class="col-12 mb-3 form-inline">
+                    <div class="input-group mr-2 mr-sm-1 mt-2">            
+                        <div class="btn-group mr-2">
+                            <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
+                        </div>
+                        <div class="btn-group mr-2">
+                            <vc:edit-category category-id="@Model.CategoryId" wallet-id="@Model.WalletId"></vc:edit-category>
+                        </div>
+                    </div>
+                    <div class="btn-group mr-4">
+                        <vc:get-records-in-category-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" category-id="@Model.CategoryId"></vc:get-records-in-category-by-date>
+                    </div>
+                    <div class="btn-group mr-2">
+                        <vc:search-records-in-category category-id="@Model.CategoryId" search-term="@Model.SearchTerm"></vc:search-records-in-category>
+                    </div>
         </div>
         <div class="col-12">
             <div class="table-responsive">
@@ -50,7 +52,7 @@
                             <tr class="card-shadow" onclick="window.location='/Records/Edit?id=@record.Id&walletId=@Model.WalletId'">
 
                                 <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create date">@record.CreatedOn</span></td>
-                                <td style="width: 25%;">@record.Description</td>
+                                <td style="max-width: 25%;">@record.Description</td>
                                 <td>
                                     @if (record.Type == RecordTypeInputModel.Expense)
                                     {

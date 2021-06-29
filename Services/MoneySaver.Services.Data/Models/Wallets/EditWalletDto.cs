@@ -4,7 +4,6 @@
 
     using MoneySaver.Services.Data.Models.Currencies;
 
-
     public class EditWalletDto
     {
         public EditWalletDto()

@@ -116,17 +116,12 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))
-            {
-                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
-            }
-
             if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, input.CategoryId))
             {
                 throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
             }
 
-            await this.categoriesService.EditAsync(input.CategoryId, input.CategoryName, input.WalletId, input.BadgeColor.ToString());
+            await this.categoriesService.EditAsync(input.CategoryId, input.CategoryName, input.BadgeColor.ToString());
 
             return this.Redirect($"/Wallets/Categories/{input.WalletId}");
         }

@@ -14,7 +14,7 @@
 
         public Task<string> RemoveAsync(int oldCategoryId, int newCategoryId);
 
-        public Task<string> EditAsync(int categoryId, string categoryName, int walletId, string badgeColor);
+        public Task<string> EditAsync(int categoryId, string categoryName, string badgeColor);
 
         public int GetRecordsCount(int categoryId);
 

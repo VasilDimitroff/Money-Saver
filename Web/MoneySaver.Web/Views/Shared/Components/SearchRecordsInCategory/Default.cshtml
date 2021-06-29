@@ -1,12 +1,18 @@
 ﻿@model MoneySaver.Web.ViewModels.ViewComponents.SearchRecordsByCategoryComponentViewModel
-
-<form method="get" asp-controller="Categories" asp-action="Search" class="form-inline">
+    <style>
+        .search-label {
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+    </style>
+<form method="get" asp-controller="Categories" asp-action="Search" class="form-inline mt-1">
     <div class="input-group-sm mr-sm-1 mb-4">
+         <label asp-for="SearchTerm" class="search-label">Search by keyword</label>
         <input type="text" class="form-control" asp-for="SearchTerm" placeholder="Search by keyword">
     </div>
     <input type="hidden" class="form-control" asp-for="CategoryId">
     &nbsp;
-    <div class="input-group-sm mr-sm-1 mb-4">
+    <div class="input-group-sm mr-sm-1 lg-mb-4 sm-mb-3 mt-1 sm-mt-3">
         <button type="submit" class="btn btn-primary btn-sm"><i class="mdi mdi-magnify btn-icon-prepend text-white"></i></button>
     </div>
 </form>

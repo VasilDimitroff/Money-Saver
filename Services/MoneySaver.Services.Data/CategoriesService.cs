@@ -118,25 +118,13 @@
             return string.Format(GlobalConstants.SuccessfullyRemovedCategory, deletedCategoryName);
         }
 
-        public async Task<string> EditAsync(int categoryId, string categoryName, int walletId, string badgeColor)
+        public async Task<string> EditAsync(int categoryId, string categoryName, string badgeColor)
         {
             var category = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
 
             if (category == null)
             {
                 throw new ArgumentNullException(GlobalConstants.UnexistingCategory);
-            }
-
-            if (await this.IsCategoryExistAsync(walletId, categoryName))
-            {
-                throw new ArgumentException(GlobalConstants.ExistingCategory);
-            }
-
-            var wallet = await this.dbContext.Wallets.FirstOrDefaultAsync(w => w.Id == walletId);
-
-            if (wallet == null)
-            {
-                throw new ArgumentNullException(GlobalConstants.WalletNotExist);
             }
 
             if (!Enum.TryParse<BadgeColor>(badgeColor, out BadgeColor badge))
@@ -147,7 +135,6 @@
             category.BadgeColor = badge;
             category.ModifiedOn = DateTime.UtcNow;
             category.Name = categoryName;
-            category.WalletId = walletId;
 
             await this.dbContext.SaveChangesAsync();
 
