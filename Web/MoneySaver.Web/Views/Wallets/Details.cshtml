@@ -325,20 +325,19 @@
                                 Expenses
                             </th>
                             <th class="pt-1">
-                                Edit
+                                Edit / Delete
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var category in Model.Categories.OrderByDescending(x => x.RecordsCount))
                         {
-                            <tr class="card-shadow" onclick="window.location='/Categories/Edit?id=@category.CategoryId&walletId=@Model.WalletId'">
+                            <tr class="card-shadow" onclick="window.location='/Categories/Details/@category.CategoryId'">
                                 <td class="py-1 pl-0">
                                     <div class="d-flex align-items-center">
                                         <div class="ml-3">
-
                                             <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
-                                            <p class="mb-0 text-muted text-small">@category.RecordsCount records in category</p>
+                                            <span class="text-muted text-small">@category.RecordsCount records</span>
                                         </div>
                                     </div>
                                 </td>
@@ -378,6 +377,7 @@
                                 </td>
                                 <td>
                                     <vc:edit-category category-id="@category.CategoryId" wallet-id="@Model.WalletId"></vc:edit-category>
+                                    <vc:delete-category category-id="@category.CategoryId" wallet-id="@Model.WalletId"></vc:delete-category>
                                 </td>
                             </tr>
                         }

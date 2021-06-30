@@ -33,15 +33,20 @@
                                     <p><span class="mdi mdi-arrow-left-bold text-danger"></span><span class="font-weight-bold">Expenses: </span> <span class="text-danger h4">@wallet.TotalExpenses @wallet.Currency</span></p>
                                 </div>
                                 <br /><br />
-                                <div class="col-12 form-inline justify-content-center">
-                                    <div class="pr-1">
-                                        <vc:wallet-details wallet-id="@wallet.WalletId"></vc:wallet-details>
-                                    </div>
-                                    <div class="pr-1">
-                                        <vc:all-records-by-wallet wallet-id="@wallet.WalletId"></vc:all-records-by-wallet>
-                                    </div>
-                                    <vc:wallet-statistics id="@wallet.WalletId"></vc:wallet-statistics>
-                                </div>
+                                      <div class="col-12 form-inline justify-content-center">
+                                          <div class="pr-1 pb-1">
+                                              <vc:wallet-details wallet-id="@wallet.WalletId"></vc:wallet-details>
+                                          </div>
+                                          <div class="pr-1 pb-1">
+                                              <vc:add-record wallet-id="@wallet.WalletId"></vc:add-record>
+                                          </div>
+                                          <div class="pr-1 pb-1">
+                                              <vc:all-records-by-wallet wallet-id="@wallet.WalletId"></vc:all-records-by-wallet>
+                                          </div>
+                                          <div class="pb-1">
+                                              <vc:wallet-statistics id="@wallet.WalletId"></vc:wallet-statistics>
+                                          </div>
+                                      </div>
                             </div>
                         </div>
                     </div>
