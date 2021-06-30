@@ -11,7 +11,7 @@
         <div class="card-body">
             <h4 class="card-title">@this.ViewData["Title"]</h4>
             <p class="card-description">
-                Edit category <span class="badge badge-@Model.BadgeColor.ToString().ToLower()">@Model.CategoryName</span>
+                Edit category <a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.CategoryId" class="badge badge-@Model.BadgeColor.ToString().ToLower()">@Model.CategoryName</a>
             </p>
             <form class="forms-sample" style="display: inline" asp-controller="Categories" asp-action="Edit" method="post">
                 <div class="text-danger" asp-validation-summary="All"></div>

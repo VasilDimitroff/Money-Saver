@@ -14,7 +14,7 @@
             Records between <span class="font-weight-bold text-info">@Model.StartDate.ToShortDateString()</span>
             and <span class="font-weight-bold text-info">@Model.EndDate.ToShortDateString()</span>
             - Page <span class="font-weight-bold text-info">@Model.PageNumber</span>
-            - @Model.Wallet
+            - <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a>
         </h4>
 
         @* <vc:wallet-statistics id="@Model.WalletId"></vc:wallet-statistics>*@
@@ -40,7 +40,6 @@
                             <th>Description</th>
                             <th>Type</th>
                             <th>Amount</th>
-                            <th> Wallet</th>
                             <th>Category</th>
                             <th>Edit/Delete</th>
                             <!-- <th>Delete</th>-->
@@ -50,9 +49,9 @@
                         @foreach (var record in Model.Records)
                         {
 
-                            <tr class="card-shadow" onclick="window.location='/Records/Edit?id=@record.Id&walletId=@Model.WalletId'">
+                            <tr class="card-shadow">
                                 <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create/Modified date">@record.CreatedOn</span></td>
-                                <td style="width: 25%;">@record.Description</td>
+                                <td style="max-width: 25%;">@record.Description</td>
                                 <td>
                                     @if (record.Type == RecordTypeInputModel.Expense)
                                     {
@@ -83,13 +82,13 @@
                                         <p class="text-success bold"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
                                     }
                                 </td>
-                                <td>@record.Wallet</td>
                                 <td>
                                     <a href="/Categories/Details/@record.CategoryId" class="badge badge-@record.BadgeColor.ToString().ToLower()">@record.Category</a>
                                 </td>
                                 <td>
 
                                     <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
+                                    <vc:delete-record-small-button record-id="@record.Id"></vc:delete-record-small-button>
                                 </td>
                             </tr>
 

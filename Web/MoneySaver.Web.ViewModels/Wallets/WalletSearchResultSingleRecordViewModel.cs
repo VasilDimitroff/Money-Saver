@@ -3,6 +3,7 @@
     using System;
 
     using MoneySaver.Web.ViewModels.Records.Enums;
+    using MoneySaver.Web.ViewModels.ViewComponents;
 
     public class WalletSearchResultSingleRecordViewModel
     {

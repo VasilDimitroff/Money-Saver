@@ -14,7 +14,8 @@
         <div class="card-body">
             <h4 class="card-title">Add record</h4>
             <p class="card-description">
-                Add Record to <strong>@Model.WalletName</strong>
+                Add Record to
+                <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a>
             </p>
 
             @if (Model.Categories.Count() < 1)

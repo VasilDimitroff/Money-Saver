@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
     using MoneySaver.Web.ViewModels.Currencies;
 
     public class EditWalletViewModel

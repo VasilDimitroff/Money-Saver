@@ -8,7 +8,7 @@
         public IViewComponentResult Invoke(string recordId)
         {
             DeleteRecordSmallButtonComponentViewModel viewModel = new DeleteRecordSmallButtonComponentViewModel();
-            viewModel.RecordId = recordId;
+            viewModel.Id = recordId;
             return this.View(viewModel);
         }
     }

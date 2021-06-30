@@ -1,9 +1,8 @@
 ﻿namespace MoneySaver.Web.ViewModels.Settings
 {
+    using AutoMapper;
     using MoneySaver.Data.Models;
     using MoneySaver.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {

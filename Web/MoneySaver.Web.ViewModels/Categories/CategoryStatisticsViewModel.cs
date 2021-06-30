@@ -1,7 +1,7 @@
-﻿using MoneySaver.Web.ViewModels.Records.Enums;
-
-namespace MoneySaver.Web.ViewModels.Categories
+﻿namespace MoneySaver.Web.ViewModels.Categories
 {
+    using MoneySaver.Web.ViewModels.Records.Enums;
+
     public class CategoryStatisticsViewModel
     {
         public int Id { get; set; }

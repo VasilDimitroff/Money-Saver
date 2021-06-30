@@ -10,7 +10,10 @@
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">All Records - Page <span class="font-weight-bold text-info">@Model.PageNumber</span> - @Model.Wallet</h4>
+        <h4 class="card-title">All Records 
+        - Page <span class="font-weight-bold text-info">@Model.PageNumber</span>
+        - <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a>
+        </h4>
         <br/>
         <div class="col-12 mb-3">
             <div class="btn-group mr-3 mr-sm-1 mb-3 mt-4">
@@ -32,7 +35,6 @@
                                 <th>Description</th>
                                 <th>Type</th>
                                 <th>Amount</th>
-                                <th> Wallet</th>
                                 <th>Category</th>
                                 <th>Edit/Delete</th>
                                 <!-- <th>Delete</th>-->
@@ -75,7 +77,6 @@
                                                 <p class="text-success bold"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
                                             }
                                         </td>
-                                        <td>@record.Wallet</td>
                                         <td>
 
 
@@ -83,7 +84,7 @@
                                         </td>
                                         <td>
                                             <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
-                                           <vc:delete-record-small-button record-id="@record.Id"></vc:delete-record-small-button>
+                                            <vc:delete-record-small-button record-id="@record.Id"></vc:delete-record-small-button>
                                         </td>
                                 </tr>
 

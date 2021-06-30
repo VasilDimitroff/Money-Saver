@@ -14,7 +14,8 @@
         <div class="card-body">
             <h4 class="card-title">@ViewData["Title"]</h4>
             <p class="card-description">
-                Edit record from <strong>@Model.WalletName</strong>
+                Edit record from
+                <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a>
             </p>
             <form class="forms-sample" style="display: inline" asp-controller="Records" asp-action="Edit" method="post">
                 <div class="text-danger" asp-validation-summary="All"></div>

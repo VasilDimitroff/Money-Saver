@@ -241,14 +241,14 @@
                                 Category
                             </th>
                             <th class="pt-1">
-                                Edit
+                                Edit/Delete
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var record in Model.Records.Take(10))
                         {
-                            <tr class="card-shadow" onclick="window.location = '/Records/Edit/@record.Id'">
+                            <tr class="card-shadow">
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Last added on"> @record.CreatedOn</span>
@@ -281,7 +281,10 @@
                                     <p class="text-@badgeClassName font-weight-bold">@record.Amount @Model.Currency</p>
                                 </td>
                                 <td><a href="/Categories/Details/@record.CategoryId"><p class="mb-2 badge badge-@record.CategoryBadgeColor.ToString().ToLower()">@record.CategoryName</p></a></td>
-                                <td> <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record></td>
+                                <td>
+                                    <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
+                                    <vc:delete-record-small-button record-id="@record.Id"></vc:delete-record-small-button>
+                                </td>
                             </tr>
                         }
                     </tbody>

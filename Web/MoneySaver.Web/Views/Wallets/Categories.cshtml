@@ -10,7 +10,7 @@
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">Categories - <a style="text-decoration: none;"  asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></h4>
+        <h4 class="card-title">Categories - <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></h4>
         @*<p><i class="fa fa-wallet"></i>Current amount of @Model.WalletName:</p>
             <br />
             @if (Model.TotalAmount < 0)
@@ -28,7 +28,7 @@
                 badgeClassName = "success";
             }
         <h2> <span class="text-@badgeClassName">@Model.TotalAmount @Model.Currency</span></h2>*@
-        <br /> <br />
+        <br /> 
         <div class="col-12">
             <div class="row pb-2">
                 <div class="pr-1">

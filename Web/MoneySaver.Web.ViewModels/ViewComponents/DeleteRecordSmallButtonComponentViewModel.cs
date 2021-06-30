@@ -5,6 +5,6 @@
     public class DeleteRecordSmallButtonComponentViewModel
     {
         [Required]
-        public string RecordId { get; set; }
+        public string Id { get; set; }
     }
 }
