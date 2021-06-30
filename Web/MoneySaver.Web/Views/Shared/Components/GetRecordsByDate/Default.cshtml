@@ -7,7 +7,7 @@
     }
 
 </style>
-<form method="get" asp-controller="Wallets" asp-action="DateSorted" class="form-inline mt-1">
+<form method="get" asp-controller="Wallets" asp-action="DateSorted" class="form-inline">
     <div class="input-group-sm mr-sm-1 mb-4">
         <label asp-for="StartDate" class="date-label">Start Date</label>
         <input type="date" style="display:inline;" class="form-control input-sm " asp-for="StartDate" placeholder="Search Here" value="@Model.DefaultStartDate">
@@ -21,7 +21,7 @@
     <input type="hidden" class="form-control input-sm" asp-for="Id">
     <span class="d-block text-danger" asp-validation-for="Id"></span>
     &nbsp;
-    <div class="input-group-sm mr-sm-1 lg-mb-4 sm-mb-3 mt-1 sm-mt-3">
+    <div class="input-group-sm mr-sm-1 lg-mb-4 sm-mb-3 mt-1">
         <button style="display:inline;" type="submit" class="btn btn-primary btn-sm"><i class="mdi mdi-magnify btn-icon-prepend text-white"></i></button>
     </div>
 </form>

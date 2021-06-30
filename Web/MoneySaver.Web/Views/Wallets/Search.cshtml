@@ -10,14 +10,27 @@
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">
-            Search results for "<span class="font-weight-bold text-info">@Model.SearchTerm</span>"
-            - Page <span class="font-weight-bold text-info">@Model.PageNumber</span>
-            - <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a>
-        </h4>
-        <br />
+        <div class="template-demo mb-5">        
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Records" asp-route-id="@Model.WalletId">Records</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <span>
+                            Result for "<span class="text-warning">@Model.SearchTerm</span>"
+                            @if (Model.PageNumber > 1)
+                            {
+                                <text> - Page @Model.PageNumber</text>
+                            }
+                        </span>
+                    </li>
+                </ol>
+            </nav>
+        </div>
         <div class="col-12 mb-3">
-            <div class="btn-group mr-3 mr-sm-1 mb-3 mt-4">
+            <div class="btn-group mr-3 mr-sm-1 mb-2 mt-2">
                 <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
             </div>
             <div class="btn-group mr-2">

@@ -10,106 +10,128 @@
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">All Records 
-        - Page <span class="font-weight-bold text-info">@Model.PageNumber</span>
-        - <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a>
+        @*
+        <h4 class="card-title">
+            All Records
+            - Page <span class="font-weight-bold text-info">@Model.PageNumber</span>
+            - <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a>
         </h4>
-        <br/>
-        <div class="col-12 mb-3">
-            <div class="btn-group mr-3 mr-sm-1 mb-3 mt-4">
-                    <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
-                </div>
-                <div class="btn-group mr-2">
-                    <vc:get-records-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" id="@Model.WalletId"></vc:get-records-by-date>
-                </div>
-                <div class="btn-group mr-2">
-                    <vc:search-record search-term="@Model.SearchTerm" wallet-id="@Model.WalletId"></vc:search-record>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="table-responsive">
-                    <table id="order-listing" class="table text-center table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Description</th>
-                                <th>Type</th>
-                                <th>Amount</th>
-                                <th>Category</th>
-                                <th>Edit/Delete</th>
-                                <!-- <th>Delete</th>-->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var record in Model.Records)
-                            {
-
-                                <tr class="card-shadow">
-                                        <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create date">@record.CreatedOn</span></td>
-                                        <td style="max-width: 25%;">@record.Description</td>
-                                        <td>
-                                            @if (record.Type == RecordTypeInputModel.Expense)
-                                            {
-                                                <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @record.Type</span>
-                                            }
-
-                                            else if (record.Type == RecordTypeInputModel.Income)
-                                            {
-
-                                                <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @record.Type</span>
-                                            }
-                                        </td>
-
-                                        <td>
-
-                                            @if (record.Amount < 0)
-                                            {
-                                                <p class="text-danger"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
-                                            }
-
-                                            else if (record.Amount == 0)
-                                            {
-                                                <p class="text-secondary"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
-                                            }
-
-                                            else
-                                            {
-                                                <p class="text-success bold"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
-                                            }
-                                        </td>
-                                        <td>
-
-
-                                            <a href="/Categories/Details/@record.CategoryId" class="badge badge-@record.BadgeColor.ToString().ToLower()">@record.Category</a>
-                                        </td>
-                                        <td>
-                                            <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
-                                            <vc:delete-record-small-button record-id="@record.Id"></vc:delete-record-small-button>
-                                        </td>
-                                </tr>
-
-                            }
-                        </tbody>
-                    </table>
-                    <br />
-
-                    @if (Model.Records.Count() == 0)
+        *@
+        <div class="template-demo mb-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a></li>
+                    @if (@Model.PageNumber == 1)
                     {
-                        <br />
-                        <div class="alert alert-warning" role="alert">
-                            <span>No records found</span>
-                        </div>
+                        <li class="breadcrumb-item active" aria-current="page"><span>Records</span></li>
                     }
-                  
-                    <vc:back-button></vc:back-button>
-                    <!-- Pagination-->
-                            <div style="display: inline;">
+
+                    else
+                    {
+                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Records" asp-route-id="@Model.WalletId">Records</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><span>Page @Model.PageNumber</span></li>
+                    }
+
+                </ol>
+            </nav>
+        </div>
+        <div class="col-12 mb-3">
+            <div class="btn-group mr-3 mr-sm-1 mb-2 mt-2">
+                <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
+            </div>
+            <div class="btn-group mr-2">
+                <vc:get-records-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" id="@Model.WalletId"></vc:get-records-by-date>
+            </div>
+            <div class="btn-group mr-2">
+                <vc:search-record search-term="@Model.SearchTerm" wallet-id="@Model.WalletId"></vc:search-record>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="table-responsive">
+                <table id="order-listing" class="table text-center table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Edit/Delete</th>
+                            <!-- <th>Delete</th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var record in Model.Records)
+                        {
+
+                            <tr class="card-shadow">
+                                <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create date">@record.CreatedOn</span></td>
+                                <td style="max-width: 25%;">@record.Description</td>
+                                <td>
+                                    @if (record.Type == RecordTypeInputModel.Expense)
+                                    {
+                                        <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @record.Type</span>
+                                    }
+
+                                    else if (record.Type == RecordTypeInputModel.Income)
+                                    {
+
+                                        <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @record.Type</span>
+                                    }
+                                </td>
+
+                                <td>
+
+                                    @if (record.Amount < 0)
+                                    {
+                                        <p class="text-danger"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                    }
+
+                                    else if (record.Amount == 0)
+                                    {
+                                        <p class="text-secondary"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                    }
+
+                                    else
+                                    {
+                                        <p class="text-success bold"><strong>@record.Amount.ToString("f2") @record.Currency</strong></p>
+                                    }
+                                </td>
+                                <td>
+
+
+                                    <a href="/Categories/Details/@record.CategoryId" class="badge badge-@record.BadgeColor.ToString().ToLower()">@record.Category</a>
+                                </td>
+                                <td>
+                                    <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
+                                    <vc:delete-record-small-button record-id="@record.Id"></vc:delete-record-small-button>
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+                <br />
+
+                @if (Model.Records.Count() == 0)
+                {
+                    <br />
+                    <div class="alert alert-warning" role="alert">
+                        <span>No records found</span>
+                    </div>
+                }
+
+                <vc:back-button></vc:back-button>
+                <!-- Pagination-->
+                <div style="display: inline;">
                     <partial name="_PagingPartial" model="@Model" />
                     <!-- End Pagination-->
-                                </div>
                 </div>
             </div>
         </div>
+    </div>
         </div>
             <!-- content-wrapper ends -->
             @section Scripts {
