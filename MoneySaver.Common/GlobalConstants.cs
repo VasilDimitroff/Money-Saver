@@ -61,5 +61,7 @@
         public const string UserNotExist = "User with this id do not exist";
 
         public const string CurrencyNotExist = "Currency with this id do not exist";
+
+        public const string ActiveListWithThisNameAlreadyExisting = "List with Active status and this name already exist";
     }
 }

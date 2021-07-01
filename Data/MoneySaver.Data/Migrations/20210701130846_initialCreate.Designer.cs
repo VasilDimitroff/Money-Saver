@@ -10,8 +10,8 @@ using MoneySaver.Data;
 namespace MoneySaver.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210616214026_InheritanceOfModelChanged")]
-    partial class InheritanceOfModelChanged
+    [Migration("20210701130846_initialCreate")]
+    partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -245,35 +245,6 @@ namespace MoneySaver.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("MoneySaver.Data.Models.Budget", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("WalletId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WalletId");
-
-                    b.ToTable("Budgets");
-                });
-
             modelBuilder.Entity("MoneySaver.Data.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -291,7 +262,9 @@ namespace MoneySaver.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("WalletId")
                         .HasColumnType("int");
@@ -336,7 +309,9 @@ namespace MoneySaver.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -417,51 +392,7 @@ namespace MoneySaver.Data.Migrations
 
             modelBuilder.Entity("MoneySaver.Data.Models.ToDoItem", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ToDoListId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("ToDoListId");
-
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("MoneySaver.Data.Models.ToDoList", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("ApplicationUserId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
@@ -471,6 +402,36 @@ namespace MoneySaver.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ToDoListId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ToDoListId");
+
+                    b.ToTable("ToDoItems");
+                });
+
+            modelBuilder.Entity("MoneySaver.Data.Models.ToDoList", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -515,6 +476,7 @@ namespace MoneySaver.Data.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
@@ -523,12 +485,6 @@ namespace MoneySaver.Data.Migrations
                     b.Property<int>("CurrencyId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -536,15 +492,15 @@ namespace MoneySaver.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("CurrencyId");
-
-                    b.HasIndex("IsDeleted");
 
                     b.ToTable("Wallets");
                 });
@@ -600,17 +556,6 @@ namespace MoneySaver.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MoneySaver.Data.Models.Budget", b =>
-                {
-                    b.HasOne("MoneySaver.Data.Models.Wallet", "Wallet")
-                        .WithMany("Budgets")
-                        .HasForeignKey("WalletId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Wallet");
-                });
-
             modelBuilder.Entity("MoneySaver.Data.Models.Category", b =>
                 {
                     b.HasOne("MoneySaver.Data.Models.Wallet", "Wallet")
@@ -635,15 +580,9 @@ namespace MoneySaver.Data.Migrations
 
             modelBuilder.Entity("MoneySaver.Data.Models.ToDoItem", b =>
                 {
-                    b.HasOne("MoneySaver.Data.Models.Category", null)
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId");
-
                     b.HasOne("MoneySaver.Data.Models.ToDoList", "ToDoList")
                         .WithMany("ListItems")
-                        .HasForeignKey("ToDoListId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ToDoListId");
 
                     b.Navigation("ToDoList");
                 });
@@ -652,7 +591,9 @@ namespace MoneySaver.Data.Migrations
                 {
                     b.HasOne("MoneySaver.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Shoplists")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
                 });
@@ -680,7 +621,9 @@ namespace MoneySaver.Data.Migrations
                 {
                     b.HasOne("MoneySaver.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Wallets")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("MoneySaver.Data.Models.Currency", "Currency")
                         .WithMany("Wallets")
@@ -710,8 +653,6 @@ namespace MoneySaver.Data.Migrations
 
             modelBuilder.Entity("MoneySaver.Data.Models.Category", b =>
                 {
-                    b.Navigation("Products");
-
                     b.Navigation("Records");
                 });
 
@@ -732,8 +673,6 @@ namespace MoneySaver.Data.Migrations
 
             modelBuilder.Entity("MoneySaver.Data.Models.Wallet", b =>
                 {
-                    b.Navigation("Budgets");
-
                     b.Navigation("Categories");
                 });
 #pragma warning restore 612, 618

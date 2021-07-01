@@ -49,7 +49,7 @@
                         <div class="card-body">
                             <h4 class="card-title">Balance : <span class="h4 text-info"><span class="pt-2">@Model.CurrentBalance @Model.Currency</span></span></h4>
                             <div class="d-flex justify-content-between">
-                                <p class="text-muted">Last 30 days:</p>
+                                <p class="text-muted">30 days change:</p>
                                 <p class="text-info">@Model.TotalWalletBalanceLast30Days</p>
                             </div>
                             <div class="progress progress-md">
@@ -117,7 +117,9 @@
                                 <th class="pt-1">
                                     Incomes Amount
                                 </th>
-
+                                <th class="pt-1">
+                                   Percent
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -149,19 +151,22 @@
                                         }
                                         <p class="text-@badgeClassName font-weight-bold">
                                             @category.TotalIncomesLast30days  @Model.Currency
-                                            @{
-                                                decimal percentOfAllWalletIncomes = 0;
-
-                                                if (Model.TotalWalletIncomesLast30Days != 0)
-                                                {
-                                                    percentOfAllWalletIncomes = Math.Round(category.TotalIncomesLast30days / Model.TotalWalletIncomesLast30Days * 100);
-                                                }
-                                            }
-
-                                            @percentOfAllWalletIncomes %
                                         </p>
                                     </td>
+                                    <td>
+                                        <p class="font-weight-bold text-info">
+                                        @{
+                                            decimal percentOfAllWalletIncomes = 0;
 
+                                            if (Model.TotalWalletIncomesLast30Days != 0)
+                                            {
+                                                percentOfAllWalletIncomes = Math.Round((category.TotalIncomesLast30days / Model.TotalWalletIncomesLast30Days * 100), 1);
+                                            }
+                                        }
+
+                                        @percentOfAllWalletIncomes %
+                                            </p>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -193,41 +198,59 @@
                                 <th class="pt-1">
                                     Expenses Amount
                                 </th>
-
+                                <th class="pt-1">
+                                    Percent
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var category in Model.MonthExpenses.Where(c => c.TotalExpensesLast30Days != 0).OrderBy(c => c.TotalExpensesLast30Days))
                             {
-                                <tr class="card-shadow" onclick="window.location='/Categories/Details/' + @category.CategoryId">
-                                    <td class="py-1 pl-0">
-                                        <div class="d-flex align-items-center">
-                                            <div class="ml-3">
+                            <tr class="card-shadow" onclick="window.location='/Categories/Details/' + @category.CategoryId">
+                                <td class="py-1 pl-0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="ml-3">
 
-                                                <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
-                                                <span class="text-muted text-small">@category.TotalExpenseRecordsLast30Days expenses</span>
-                                            </div>
+                                            <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
+                                            <span class="text-muted text-small">@category.TotalExpenseRecordsLast30Days expenses</span>
                                         </div>
-                                    </td>
-                                    <td>
-                                        @if (category.TotalExpensesLast30Days < 0)
-                                        {
-                                            badgeClassName = "danger";
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (category.TotalExpensesLast30Days < 0)
+                                    {
+                                        badgeClassName = "danger";
+                                    }
+
+                                    else if (category.TotalExpensesLast30Days == 0)
+                                    {
+                                        badgeClassName = "secondary";
+                                    }
+
+                                    else
+                                    {
+                                        badgeClassName = "success";
+                                    }
+                                    <p class="text-@badgeClassName font-weight-bold">@category.TotalExpensesLast30Days @Model.Currency</p>
+                                </td>
+                                <td>
+                                    <p class="font-weight-bold text-info">
+                                        @{
+                                            decimal percentOfAllWalletExpenses = 0;
+
+                                            if (Model.TotalWalletExpensesLast30Days != 0)
+                                            {
+                                                percentOfAllWalletExpenses = 
+                                                    Math.Round(
+                                                        (Math.Abs(category.TotalExpensesLast30Days) / Math.Abs(Model.TotalWalletExpensesLast30Days) * 100)
+                                                        , 1);
+                                            }
                                         }
 
-                                        else if (category.TotalExpensesLast30Days == 0)
-                                        {
-                                            badgeClassName = "secondary";
-                                        }
-
-                                        else
-                                        {
-                                            badgeClassName = "success";
-                                        }
-                                        <p class="text-@badgeClassName font-weight-bold">@category.TotalExpensesLast30Days @Model.Currency</p>
-                                    </td>
-
-                                </tr>
+                                        @percentOfAllWalletExpenses %
+                                    </p>
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>
@@ -275,13 +298,13 @@
                                 <tr class="card-shadow">
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Last added on"> @record.CreatedOn</span>
+                                            <span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Added on"> @record.CreatedOn</span>
                                         </div>
                                     </td>
                                     <td>
-                                        @if (record.Description.Length > 18)
+                                        @if (record.Description.Length > 25)
                                         {
-                                            string descriptionExcerpt = record.Description.Substring(0, 18) + "...";
+                                            string descriptionExcerpt = record.Description.Substring(0, 25) + "...";
                                             record.Description = descriptionExcerpt;
                                         }
 

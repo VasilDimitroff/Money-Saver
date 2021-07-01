@@ -26,8 +26,6 @@
 
         public DbSet<Setting> Settings { get; set; }
 
-        public DbSet<Budget> Budgets { get; set; }
-
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Currency> Currencies { get; set; }

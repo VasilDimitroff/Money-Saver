@@ -25,4 +25,8 @@
     <ProjectReference Include="..\MoneySaver.Services.Mapping\MoneySaver.Services.Mapping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\ToDoLists\" />
+  </ItemGroup>
+
 </Project>

@@ -5,11 +5,10 @@
 
     using MoneySaver.Data.Common.Models;
 
-    public class Wallet : BaseDeletableModel<int>
+    public class Wallet : BaseModel<int>
     {
         public Wallet()
         {
-            this.Budgets = new HashSet<Budget>();
             this.Categories = new HashSet<Category>();
         }
 
@@ -30,8 +29,6 @@
         public int CurrencyId { get; set; }
 
         public virtual Currency Currency { get; set; }
-
-        public virtual ICollection<Budget> Budgets { get; set; }
 
         public virtual ICollection<Category> Categories { get; set; }
     }

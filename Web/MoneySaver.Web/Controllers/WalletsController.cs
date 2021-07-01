@@ -241,7 +241,7 @@
                     CategoryName = r.CategoryName,
                     CategoryBadgeColor = Enum.Parse<BadgeColor>(r.CategoryBadgeColor.ToString()),
                     Amount = r.Amount,
-                    CreatedOn = r.CreatedOn.ToString("M", CultureInfo.InvariantCulture),
+                    CreatedOn = r.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
                     Description = r.Description,
                     Id = r.Id,
                 }),
