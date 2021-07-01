@@ -15,5 +15,7 @@
         public decimal TotalExpensesAmount { get; set; }
 
         public decimal TotalIncomesAmount { get; set; }
+
+        public string ModifiedOn { get; set; }
     }
 }

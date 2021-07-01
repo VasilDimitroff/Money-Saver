@@ -20,8 +20,6 @@
 
         public decimal Outcomes { get; set; }
 
-        public string ModifiedOn { get; set; }
-
         public int RecordsCount => this.Categories.Sum(c => c.TotalRecordsCount);
 
         public ICollection<CategoryStatisticsViewModel> Categories { get; set; }

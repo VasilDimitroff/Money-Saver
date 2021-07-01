@@ -23,7 +23,7 @@
                     <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
                     <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
                     <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a></li>
-                    @if (@Model.PageNumber == 1)
+                    @if (Model.PageNumber == 1)
                     {
                         <li class="breadcrumb-item active" aria-current="page"><span>Records</span></li>
                     }

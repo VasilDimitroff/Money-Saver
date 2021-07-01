@@ -376,8 +376,6 @@
             StatisticsWalletViewModel model = new StatisticsWalletViewModel()
             {
                 WalletId = dbResult.WalletId,
-                ModifiedOn = dbResult.ModifiedOn.HasValue ? dbResult.ModifiedOn.Value.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture) : null,
-                TotalAmount = dbResult.TotalAmount,
                 WalletName = dbResult.WalletName,
                 Categories = dbResult.Categories.Select(c => new CategoryStatisticsViewModel
                 {
@@ -387,6 +385,7 @@
                     TotalRecordsCount = c.RecordsCount,
                     TotalExpensesAmount = c.TotalExpensesAmount,
                     TotalIncomesAmount = c.TotalIncomesAmount,
+                    ModifiedOn = c.ModifiedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
                 })
                 .ToList(),
                 Incomes = dbResult.Incomes,

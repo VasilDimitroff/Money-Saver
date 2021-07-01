@@ -9,15 +9,28 @@
 <!-- partial -->
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">
-            Records between <span class="font-weight-bold text-info">@Model.StartDate.ToShortDateString()</span>
-            and <span class="font-weight-bold text-info">@Model.EndDate.ToShortDateString()</span>
-            in category <a href="/Categories/Details/@Model.CategoryId"><span class="badge badge-@Model.BadgeColor.ToString().ToLower()">@Model.Category</span></a>
-            - Page <span class="font-weight-bold text-info">@Model.PageNumber</span>
-            - <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a>
-        </h4>
+        <div class="template-demo mb-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.CategoryId">@Model.Category</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <span>
+                            Date Range: <span class="text-warning">@Model.StartDate.ToShortDateString()</span>
+                            - <span class="text-warning">@Model.EndDate.ToShortDateString()</span>
+                            @if (Model.PageNumber > 1)
+                            {
+                                <text> - Page @Model.PageNumber</text>
+                            }
+                        </span>
+                    </li>
+                </ol>
+            </nav>
+        </div>
         <div class="col-12 mb-3 form-inline">
-            <div class="input-group mr-2 mr-sm-1 mt-2 mb-1">
+            <div class="input-group mr-2 mr-sm-1 mt-2 mb-2">
                 <div class="btn-group mr-2">
                     <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
                 </div>
