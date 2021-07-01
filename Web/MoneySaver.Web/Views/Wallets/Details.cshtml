@@ -147,7 +147,19 @@
                                         {
                                             badgeClassName = "success";
                                         }
-                                        <p class="text-@badgeClassName font-weight-bold">@category.TotalIncomesLast30days @Model.Currency</p>
+                                        <p class="text-@badgeClassName font-weight-bold">
+                                            @category.TotalIncomesLast30days  @Model.Currency
+                                            @{
+                                                decimal percentOfAllWalletIncomes = 0;
+
+                                                if (Model.TotalWalletIncomesLast30Days != 0)
+                                                {
+                                                    percentOfAllWalletIncomes = Math.Round(category.TotalIncomesLast30days / Model.TotalWalletIncomesLast30Days * 100);
+                                                }
+                                            }
+
+                                            @percentOfAllWalletIncomes %
+                                        </p>
                                     </td>
 
                                 </tr>

@@ -47,7 +47,7 @@
                         <tbody>
                             @foreach (var category in Model.Categories)
                             {
-                                <tr class="card-shadow" onclick="window.location = '/Categories/Edit?id=@category.Id&walletId=@Model.WalletId'">
+                                <tr class="card-shadow" onclick="window.location = '/Categories/Details/@category.Id'">
                                     <td><a href="/Categories/Details/@category.Id" class="badge badge-@category.BadgeColor.ToString().ToLower()">@category.Name</a></td>
                                     <td>
                                         <a href="/Categories/Details/@category.Id"><span class="badge badge-warning text-light">@category.TotalRecordsCount</span></a>
@@ -86,7 +86,7 @@
                                         }
                                         <span class="text-@badgeClassName"><strong>@category.TotalExpensesAmount @Model.Currency</strong></span>
                                     </td>
-                                    <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Last added on"> @category.ModifiedOn</span></td>
+                                    <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Last added on">@category.ModifiedOn</span></td>
 
 
                                     <td>
@@ -140,11 +140,8 @@
                         <div class="alert alert-warning" role="alert">
                             <span>There are no categories in wallet <strong>"@Model.WalletName</strong>".</span>
                         </div>
-
-
                     }
                     <br />
-                    <vc:back-button></vc:back-button>
                     <!-- Pagination-->
                     <!-- End Pagination-->
                 </div>

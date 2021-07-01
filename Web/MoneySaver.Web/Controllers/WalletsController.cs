@@ -385,7 +385,7 @@
                     TotalRecordsCount = c.RecordsCount,
                     TotalExpensesAmount = c.TotalExpensesAmount,
                     TotalIncomesAmount = c.TotalIncomesAmount,
-                    ModifiedOn = c.ModifiedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
+                    ModifiedOn = c.ModifiedOn == null ? "No records yet" : c.ModifiedOn.Value.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
                 })
                 .ToList(),
                 Incomes = dbResult.Incomes,

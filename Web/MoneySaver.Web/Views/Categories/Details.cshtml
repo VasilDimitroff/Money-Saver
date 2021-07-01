@@ -15,6 +15,7 @@
                     <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
                     <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
                     <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Categories" asp-route-id="@Model.WalletId">Categories</a></li>
                     @if (Model.PageNumber == 1)
                     {
                         <li class="breadcrumb-item active" aria-current="page"><span>@Model.Category</span></li>
@@ -117,7 +118,6 @@
                     </div>
                 }
                 <br />
-                <vc:back-button></vc:back-button>
                 <!-- Pagination-->
                 <!-- Pagination-->
                 <div style="display: inline;">

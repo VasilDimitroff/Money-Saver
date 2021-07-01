@@ -8,6 +8,11 @@
 
     public class StatisticsWalletViewModel
     {
+        public StatisticsWalletViewModel()
+        {
+            this.Categories = new HashSet<CategoryStatisticsViewModel>();
+        }
+
         public int WalletId { get; set; }
 
         public string WalletName { get; set; }

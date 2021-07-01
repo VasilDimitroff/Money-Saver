@@ -13,5 +13,6 @@
         public decimal TotalIncomesLast30days { get; set; }
 
         public int TotalIncomeRecordsLast30Days { get; set; }
+
     }
 }

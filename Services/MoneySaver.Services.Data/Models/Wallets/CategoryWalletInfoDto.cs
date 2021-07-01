@@ -10,7 +10,7 @@
 
         public string BadgeColor { get; set; }
 
-        public DateTime ModifiedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
 
         public int RecordsCount { get; set; }
 

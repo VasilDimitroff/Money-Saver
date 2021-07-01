@@ -1,10 +1,16 @@
 ﻿namespace MoneySaver.Services.Data.Models.Wallets
 {
     using System;
+
     using System.Collections.Generic;
 
     public class WalletCategoriesDto
     {
+        public WalletCategoriesDto()
+        {
+            this.Categories = new HashSet<CategoryWalletInfoDto>();
+        }
+
         public int WalletId { get; set; }
 
         public string WalletName { get; set; }
