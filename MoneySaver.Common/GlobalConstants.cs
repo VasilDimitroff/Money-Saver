@@ -58,10 +58,18 @@
 
         public const string InvalidCurrency = "Please select a valid currency!";
 
-        public const string UserNotExist = "User with this id do not exist";
+        public const string UserNotExist = "User with this id does not exist";
 
-        public const string CurrencyNotExist = "Currency with this id do not exist";
+        public const string CurrencyNotExist = "Currency with this id does not exist";
 
         public const string ActiveListWithThisNameAlreadyExisting = "List with Active status and this name already exist";
+
+        public const string NoPermissionForEditList = "You have no permissions to see or modify this list!";
+
+        public const string NoPermissionForEditListItem = "You have no permissions to see or modify this list item!";
+
+        public const string ListNotExist = "List not exist!";
+
+        public const string ListItemWithThisIdNotExist = "List item with this Id does not exist";
     }
 }

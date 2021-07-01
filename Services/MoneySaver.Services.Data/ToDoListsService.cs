@@ -63,19 +63,70 @@
             return list.Id;
         }
 
-        public async Task EditAsync(string userId, string name, IEnumerable<string> listItems)
+        public async Task EditAsync(string userId, string listId, IEnumerable<string> listItems)
         {
-            throw new NotImplementedException();
+            if (!await this.IsUserOwnListAsync(userId, listId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditList);
+            }
+
+            var list = await this.dbContext.ToDoLists.FirstOrDefaultAsync(x => x.Id == listId);
+
+            if (list == null)
+            {
+                throw new ArgumentException(GlobalConstants.ListNotExist);
+            }
+
+            return;
         }
 
         public async Task RemoveListAsync(string userId, string listId)
         {
-            throw new NotImplementedException();
+            if (!await this.IsUserOwnListAsync(userId, listId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditList);
+            }
+
+            var list = await this.dbContext.ToDoLists.FirstOrDefaultAsync(x => x.Id == listId);
+
+            if (list == null)
+            {
+                throw new ArgumentException(GlobalConstants.ListNotExist);
+            }
+
+            var itemsForDelete = new List<ToDoItem>();
+
+            foreach (var item in list.ListItems)
+            {
+                itemsForDelete.Add(item);
+            }
+
+            this.dbContext.ToDoItems.RemoveRange(itemsForDelete);
+
+            this.dbContext.ToDoLists.Remove(list);
+
+            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task RemoveListItemAsync(string userId, string listItemId)
         {
-            throw new NotImplementedException();
+            var listItem = await this.dbContext.ToDoItems.FirstOrDefaultAsync(li => li.Id == listItemId);
+
+            if (listItem == null)
+            {
+                throw new ArgumentException(GlobalConstants.ListItemWithThisIdNotExist);
+            }
+
+            var listId = listItem.ToDoListId;
+
+            if (!await this.IsUserOwnListAsync(userId, listId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditListItem);
+            }
+
+            this.dbContext.ToDoItems.Remove(listItem);
+
+            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task<bool> IsUserOwnListAsync(string userId, string listId)

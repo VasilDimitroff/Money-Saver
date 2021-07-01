@@ -9,7 +9,7 @@ namespace MoneySaver.Services.Data.Contracts
     {
         public Task<string> AddAsync(string userId, string name, IEnumerable<string> listItems);
 
-        public Task EditAsync(string userId, string name, IEnumerable<string> listItems);
+        public Task EditAsync(string userId, string listId, IEnumerable<string> listItems);
 
         public Task RemoveListAsync(string userId, string listId);
 
