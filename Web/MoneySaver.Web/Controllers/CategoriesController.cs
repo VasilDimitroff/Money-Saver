@@ -78,11 +78,6 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
-            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, walletId))
-            {
-                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
-            }
-
             if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, id))
             {
                 throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
@@ -90,12 +85,14 @@
 
             var categoryInfo = await this.categoriesService.GetCategoryInfoForEditAsync(id);
             var wallets = await this.categoriesService.GetAllWalletsWithNameAndIdAsync(user.Id);
+            var walletName = await this.walletsService.GetWalletNameAsync(walletId);
 
             var model = new EditCategoryInputModel();
             model.CategoryId = id;
             model.CategoryName = categoryInfo.CategoryName;
             model.BadgeColor = Enum.Parse<BadgeColor>(categoryInfo.BadgeColor);
             model.WalletId = walletId;
+            model.WalletName = walletName;
             model.Wallets = wallets.Select(w => new EditCategoryWalletsListViewModel
             {
                 WalletId = w.WalletId,

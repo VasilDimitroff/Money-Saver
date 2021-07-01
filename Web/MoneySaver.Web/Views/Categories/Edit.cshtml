@@ -9,7 +9,18 @@
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">@this.ViewData["Title"]</h4>
+            <div class="template-demo mb-5">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Categories" asp-route-id="@Model.WalletId">Categories</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.CategoryId">@Model.CategoryName</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><span>Edit</span></li>
+                    </ol>
+                </nav>
+            </div>
             <p class="card-description">
                 Edit category <a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.CategoryId" class="badge badge-@Model.BadgeColor.ToString().ToLower()">@Model.CategoryName</a>
             </p>
@@ -24,16 +35,16 @@
                 <input type="hidden" asp-for="CategoryId">
                 <span class="text-danger" asp-validation-for="CategoryId"></span>
                 @* <div class="form-group">
-            <span class="mdi mdi-wallet text-primary"></span>
-            <label asp-for="@Model.WalletId"><span class="font-weight-bold">Wallet</span></label>
-            <select asp-for="@Model.WalletId" class="js-example-basic-single" style="width:100%">
-                @foreach (var wallet in Model.Wallets)
-                {
-                    <option value="@wallet.WalletId">@wallet.WalletName</option>
-                }
-            </select>
-            <span class="text-danger" asp-validation-for="WalletId"></span>
-        </div>
+                <span class="mdi mdi-wallet text-primary"></span>
+                <label asp-for="@Model.WalletId"><span class="font-weight-bold">Wallet</span></label>
+                <select asp-for="@Model.WalletId" class="js-example-basic-single" style="width:100%">
+                    @foreach (var wallet in Model.Wallets)
+                    {
+                        <option value="@wallet.WalletId">@wallet.WalletName</option>
+                    }
+                </select>
+                <span class="text-danger" asp-validation-for="WalletId"></span>
+            </div>
                 *@
                 <input type="hidden" asp-for="WalletId">
                 <div class="form-group">

@@ -6,14 +6,23 @@
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">@this.ViewData["Title"]</h4>
+            <div class="template-demo mb-5">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.Id">@Model.Name</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><span>Edit</span></li>
+                    </ol>
+                </nav>
+            </div>
             <p class="card-description">
-                @this.ViewData["Title"]
+                Edit <a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.Id" class="badge badge-primary">@Model.Name</a>
             </p>
             <form class="forms-sample" style="display: inline" asp-controller="Wallets" asp-action="Edit" method="post">
-                 <div class="text-danger" asp-validation-summary="All"></div>
+                <div class="text-danger" asp-validation-summary="All"></div>
                 <input type="hidden" asp-for="Id" value="@Model.Id">
-                 <span class="text-danger" asp-validation-for="Id"></span>
+                <span class="text-danger" asp-validation-for="Id"></span>
                 <div class="form-group">
                     <span class="mdi mdi-lead-pencil text-primary"></span>
                     <label asp-for="Name"><span class="font-weight-bold">Name</span></label>
@@ -42,8 +51,8 @@
                     <label asp-for="Amount"><span class="font-weight-bold">Current Amount</span></label>
                     <input type="number" class="form-control form-control-lg" asp-for="Amount" value="@Model.Amount">
                     <span class="text-danger" asp-validation-for="Amount"></span>
-                  </div>
-                    <br/><br/>
+                </div>
+                <br /><br />
                 <button type="submit" class="btn btn-primary btn-sm mr-2">
                     <i class="mdi mdi-check"></i> Save
                 </button>
@@ -51,31 +60,31 @@
             </form>
 
 
-        @*Delete wallet button*@
-                    <button type="button" class="btn btn-outline-danger btn-sm mr-2 float-right" data-placement="bottom" title="Delete wallet with categories and records within" data-toggle="modal" data-target="#defaultModal"><span class="mdi mdi-delete-forever" style="font-size: 15px;"></span>Delete</button>
-                    <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <form method="post" asp-controller="Wallets" asp-action="Delete" asp-route-id="@Model.Id">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title text-danger" id="exampleModalLabel">Note! This operation will result in permanently data loss!</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>If you confirm deleting wallet, you will delete also all categories and records which are part from it. This operation cannot be undo!</p>
-                                        <p class="font-weight-bold">Are you sure you want to delete the wallet?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                        <button type="submit" class="btn btn-outline-danger">Yes</button>
-                                    </div>
-                                </div>
+            @*Delete wallet button*@
+            <button type="button" class="btn btn-outline-danger btn-sm mr-2 float-right" data-placement="bottom" title="Delete wallet with categories and records within" data-toggle="modal" data-target="#defaultModal"><span class="mdi mdi-delete-forever" style="font-size: 15px;"></span>Delete</button>
+            <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <form method="post" asp-controller="Wallets" asp-action="Delete" asp-route-id="@Model.Id">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-danger" id="exampleModalLabel">Note! This operation will result in permanently data loss!</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                        </form>
+                            <div class="modal-body">
+                                <p>If you confirm deleting wallet, you will delete also all categories and records which are part from it. This operation cannot be undo!</p>
+                                <p class="font-weight-bold">Are you sure you want to delete the wallet?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                <button type="submit" class="btn btn-outline-danger">Yes</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 

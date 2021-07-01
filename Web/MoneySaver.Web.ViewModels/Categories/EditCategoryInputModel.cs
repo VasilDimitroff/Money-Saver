@@ -21,6 +21,8 @@
         [Required]
         public int WalletId { get; set; }
 
+        public string WalletName { get; set; }
+
         [Required(ErrorMessage = "Badge Color is required")]
         public BadgeColor BadgeColor { get; set; }
 
