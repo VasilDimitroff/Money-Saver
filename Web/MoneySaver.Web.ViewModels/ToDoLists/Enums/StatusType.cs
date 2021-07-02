@@ -1,4 +1,4 @@
-﻿namespace MoneySaver.Data.Models.Enums
+﻿namespace MoneySaver.Web.ViewModels.ToDoLists.Enums
 {
     public enum StatusType
     {

@@ -11,6 +11,7 @@
     using MoneySaver.Data.Models;
     using MoneySaver.Data.Models.Enums;
     using MoneySaver.Services.Data.Contracts;
+    using MoneySaver.Services.Data.Models.ToDoLists;
 
     public class ToDoListsService : IToDoListsService
     {
@@ -52,6 +53,7 @@
                     ToDoListId = list.Id,
                     CreatedOn = DateTime.UtcNow,
                     ModifiedOn = DateTime.UtcNow,
+                    Status = StatusType.Active,
                 };
 
                 list.ListItems.Add(item);
@@ -126,6 +128,58 @@
 
             this.dbContext.ToDoItems.Remove(listItem);
 
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<ToDoListDto>> GetAll(string userId)
+        {
+            var lists = await this.dbContext.ToDoLists
+                .Where(l => l.ApplicationUserId == userId)
+                .Select(l => new ToDoListDto
+                {
+                    Id = l.Id,
+                    Name = l.Name,
+                    Status = l.Status,
+                    CreatedOn = l.CreatedOn,
+                    ListItems = l.ListItems.Select(li => new ToDoItemDto
+                    {
+                        Id = li.Id,
+                        Name = li.Name,
+                        Status = li.Status,
+                    })
+                    .ToList(),
+                })
+                .ToListAsync();
+
+            return lists;
+        }
+
+        public async Task ChangeItemStatusAsync(string userId, string listItemId)
+        {
+            var listItem = await this.dbContext.ToDoItems.FirstOrDefaultAsync(li => li.Id == listItemId);
+
+            if (listItem == null)
+            {
+                throw new ArgumentException(GlobalConstants.ListItemWithThisIdNotExist);
+            }
+
+            var listId = listItem.ToDoListId;
+
+            if (!await this.IsUserOwnListAsync(userId, listId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditListItem);
+            }
+
+            if (listItem.Status == StatusType.Active)
+            {
+                listItem.Status = StatusType.Completed;
+            }
+            else
+            {
+                listItem.Status = StatusType.Active;
+            }
+
+            //  this.dbContext.Update(listItem);
             await this.dbContext.SaveChangesAsync();
         }
 

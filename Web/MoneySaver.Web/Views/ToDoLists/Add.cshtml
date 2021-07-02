@@ -16,9 +16,9 @@
 
                         *@
                         <div class='input-group mb-3'>
-                            <span class='btn btn-primary disabled'>Name</span>
+                            <span class='btn btn-primary active'>Name</span>
                             <label for='Name'></label>
-                            <input type='text' placeholder='Example: Products, Wishlist, Job tasks' asp-for="Name" class='form-control font-italic' />
+                            <input type='text' placeholder='Example: Products, Wishlist, Job tasks' asp-for="Name" class='form-control' />
                         </div>
                         <br />
                         <p class="h6">Items:</p>
@@ -27,7 +27,7 @@
                                 <span onclick='AddItem()' class='btn btn-primary'><i class='mdi mdi-plus'></i></span>
                                 <label for='ListItems[0]'></label>
                             </div>
-                            <input type='text' placeholder='Enter a new item (of example: Milk, iPhone, Team meeting)' name='ListItems[0]' id='ListItems[0]' class='form-control font-italic' />
+                            <input type='text' placeholder='Enter a new item (of example: Milk, iPhone, Team meeting)' name='ListItems[0]' id='ListItems[0]' class='form-control' />
                         </div>
                     </div>
                     <br />
@@ -51,7 +51,7 @@
                     "<label for='ListItems" + index + "'" + "" +
                     "</label>" +
                     "</div>" +
-                "<input type='text' placeholder='Enter a new item' name='ListItems[" + index + "]' id='ListItems" + index + "'" + " class='form-control font-italic' />"
+                "<input type='text' placeholder='Enter a new item' name='ListItems[" + index + "]' id='ListItems" + index + "'" + " class='form-control' />"
                     + "</div>");
             index++;
         }

@@ -1,0 +1,131 @@
+﻿@using MoneySaver.Web.ViewModels.ToDoLists;
+@using MoneySaver.Web.ViewModels.ToDoLists.Enums;
+@model IEnumerable<ToDoListViewModel>
+@{
+    this.ViewData["Title"] = "All Lists";
+    this.ViewData["ReturnUrl"] = "/ToDoLists/All";
+}
+
+<style>
+    .check {
+        padding: 5px;
+    }
+
+    #addListArea {
+        margin-left: 0;
+        border: 2px dashed #bbb;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        font-size: 25px;
+        color: #bbb;
+    }
+
+    #addListButton {
+        border: 2px dashed #bbb;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        font-size: 25px;
+        color: #bbb;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 40px;
+        margin-top: 40px;
+    }
+
+        #addListButton:hover {
+            background-color: #bbb;
+            color: white;
+            text-decoration: none;
+        }
+
+    .hoverable:hover {
+        background-color: #FAFAFA;
+        box-shadow: 0px 0px 0px 1px #bbb inset;
+    }
+
+   .colored {
+       float: right;
+       margin-right: 0;
+   }
+</style>
+
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Lists</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="form-inline d-flex justify-content-center h3 pb-3">
+    All Lists
+</div>
+<div class="row">
+    @foreach (var list in Model)
+    {
+        <div class="col-lg-6 col-12 col-sm-12 col-md-6 grid-margin grid-margin stretch-card float-left">
+            <div class="card px-3">
+                <div class="card-body">
+                    <div class="card-title d-flex">
+                        @list.Name
+                    </div>
+                    <div class="list-wrapper">
+                        <ul class="d-flex flex-column-reverse todo-list">
+                            @foreach (var item in list.ListItems)
+                            {
+                                string completedClass = "none";
+                                string outlineClass = "outline-primary";
+                                string colorXButtonClass = "muted";
+
+                                @if (item.Status == StatusType.Completed)
+                                {
+                                    completedClass = "completed";
+                                    outlineClass = "primary";
+                                    colorXButtonClass = "primary";
+                                }
+                                <li class="@completedClass">
+                                    <div class="form-check">
+                                        <form method="post" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-controller="ToDoLists" asp-action="ChangeItemStatus" asp-route-id="@item.Id">
+                                            <button type="submit" class="check btn btn-@outlineClass btn-sm"><span class="mdi mdi-check"></span></button>
+                                            @item.Name
+                                        </form>
+                                    </div>
+                                    <div class="col d-flex justify-content-end">
+                                        <form method="get">
+                                            <a asp-route-returnurl="@ViewData["ReturnUrl"]" asp-controller="ToDoLists" asp-action="DeleteItem" asp-route-id="@item.Id"><i style="font-size: 1.73em;" class="mdi mdi-close-circle-outline text-@colorXButtonClass"></i></a>
+                                        </form>
+                                    </div>
+                                </li>
+                                <div class="divider"></div>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="col-md-6 grid-margin stretch-card row-md-12 row-sm-12">
+
+        <br /><br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <div id="addListArea" class="col-12 row align-items-center">
+            @if (Model.Count() < 1)
+            {
+                <span class="text-center col-12"> You haven't a list in your account yet. </span>
+            }
+
+            <a id="addListButton" class="col-8 text-center" asp-controller="ToDoLists" asp-action="Add">
+                Add New List
+            </a>
+        </div>
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    </div>
+
+</div>
+@section Scripts {
+
+} 
