@@ -13,6 +13,7 @@
         [Required]
         public string Name { get; set; }
 
+        //When adding new list or when fill list
         public IEnumerable<string> ListItems { get; set; }
     }
 }

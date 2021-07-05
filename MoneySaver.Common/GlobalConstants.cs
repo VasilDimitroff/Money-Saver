@@ -71,5 +71,7 @@
         public const string ListNotExist = "List not exist!";
 
         public const string ListItemWithThisIdNotExist = "List item with this Id does not exist";
+
+        public const string ListContainsEmptyItems = "List cannot contains empty items";
     }
 }

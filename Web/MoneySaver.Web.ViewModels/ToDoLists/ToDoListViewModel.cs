@@ -2,24 +2,27 @@
 {
     using System;
     using System.Collections.Generic;
-
+    using System.ComponentModel.DataAnnotations;
     using MoneySaver.Web.ViewModels.ToDoLists.Enums;
 
-    public class ToDoListViewModel
+    public class ToDoListViewModel : AddToDoListInputModel
     {
         public ToDoListViewModel()
         {
-            this.ListItems = new HashSet<ToDoItemViewModel>();
+            this.Items = new HashSet<ToDoItemViewModel>();
         }
 
+        [Required]
         public string Id { get; set; }
 
-        public string Name { get; set; }
-
+        [Required]
         public StatusType Status { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
-        public IEnumerable<ToDoItemViewModel> ListItems { get; set; }
+        public int ItemsToShow { get; set; }
+
+        //When viewing, addding or edit via edit view list
+        public IEnumerable<ToDoItemViewModel> Items { get; set; }
     }
 }

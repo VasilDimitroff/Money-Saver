@@ -1,24 +1,26 @@
 ﻿@using MoneySaver.Web.ViewModels.ToDoLists;
 @model AddToDoListInputModel
 @{
-    this.ViewData["Title"] = "Add To Do List";
+    this.ViewData["Title"] = "Add New List";
 }
 <div class="col-lg-12">
     <div class="card px-3">
         <div class="card-body">
             <h4 class="card-title">@this.ViewData["Title"]</h4>
             <form method="post">
+                <div class="text-danger" asp-validation-summary="All"></div>
                 <div class="list-wrapper">
                     <div id="AddItems">
                         @*<span class="text-light"><a class="add btn btn-primary" onclick="AddItem()"><i class="fas fa-plus"></i>Add Task</a></span><br />
-                <br />
-            </div>
+                    <br />
+                </div>
 
                         *@
                         <div class='input-group mb-3'>
                             <span class='btn btn-primary active'>Name</span>
                             <label for='Name'></label>
                             <input type='text' placeholder='Example: Products, Wishlist, Job tasks' asp-for="Name" class='form-control' />
+                            <span class="text-danger" asp-validation-for="Name"></span>
                         </div>
                         <br />
                         <p class="h6">Items:</p>
@@ -34,7 +36,7 @@
                     <vc:save-button></vc:save-button>
                     <vc:back-button></vc:back-button>
                 </div>
-</form>
+            </form>
         </div>
         </div>
     </div>
@@ -51,7 +53,7 @@
                     "<label for='ListItems" + index + "'" + "" +
                     "</label>" +
                     "</div>" +
-                "<input type='text' placeholder='Enter a new item' name='ListItems[" + index + "]' id='ListItems" + index + "'" + " class='form-control' />"
+                    "<input type='text' placeholder='Enter a new item' name='ListItems[" + index + "]' id='ListItems" + index + "'" + " class='form-control' />"
                     + "</div>");
             index++;
         }

@@ -24,6 +24,13 @@
 
         public async Task<string> AddAsync(string userId, string name, IEnumerable<string> listItems)
         {
+            bool isNullValues = listItems.Any(x => string.IsNullOrWhiteSpace(x) || x == null);
+
+            if (isNullValues)
+            {
+                throw new ArgumentException(GlobalConstants.ListContainsEmptyItems);
+            }
+
             bool hasActiveListWithThisName = await this.dbContext.ToDoLists
                 .AnyAsync(l => l.Name.ToLower() == name.ToLower() && l.Status == StatusType.Active);
 
@@ -65,21 +72,39 @@
             return list.Id;
         }
 
-        public async Task EditAsync(string userId, string listId, IEnumerable<string> listItems)
+        public async Task EditAsync(string userId, ToDoListDto list)
         {
-            if (!await this.IsUserOwnListAsync(userId, listId))
+            if (!await this.IsUserOwnListAsync(userId, list.Id))
             {
                 throw new ArgumentException(GlobalConstants.NoPermissionForEditList);
             }
 
-            var list = await this.dbContext.ToDoLists.FirstOrDefaultAsync(x => x.Id == listId);
+            var targetList = await this.dbContext.ToDoLists.FirstOrDefaultAsync(x => x.Id == list.Id);
 
-            if (list == null)
+            if (targetList == null)
             {
                 throw new ArgumentException(GlobalConstants.ListNotExist);
             }
 
-            return;
+            bool isNullValues = list.ListItems.Any(x => string.IsNullOrWhiteSpace(x.Name) || x == null);
+
+            if (isNullValues)
+            {
+                throw new ArgumentException(GlobalConstants.ListContainsEmptyItems);
+            }
+
+            targetList.Name = list.Name;
+            targetList.Status = list.Status;
+            targetList.ListItems = list.ListItems.Select(li => new ToDoItem
+            {
+                Id = li.Id == null ? Guid.NewGuid().ToString() : li.Id,
+                Name = li.Name,
+                Status = li.Status,
+                ToDoListId = list.Id,
+            })
+                .ToHashSet();
+
+            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task RemoveListAsync(string userId, string listId)
@@ -89,7 +114,7 @@
                 throw new ArgumentException(GlobalConstants.NoPermissionForEditList);
             }
 
-            var list = await this.dbContext.ToDoLists.FirstOrDefaultAsync(x => x.Id == listId);
+            var list = await this.dbContext.ToDoLists.Include(l => l.ListItems).FirstOrDefaultAsync(x => x.Id == listId);
 
             if (list == null)
             {
@@ -131,10 +156,10 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<ToDoListDto>> GetAll(string userId)
+        public async Task<IEnumerable<ToDoListDto>> GetAllActive(string userId)
         {
             var lists = await this.dbContext.ToDoLists
-                .Where(l => l.ApplicationUserId == userId)
+                .Where(l => l.ApplicationUserId == userId && l.Status == StatusType.Active)
                 .Select(l => new ToDoListDto
                 {
                     Id = l.Id,

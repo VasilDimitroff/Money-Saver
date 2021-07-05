@@ -1,13 +1,13 @@
 ﻿@model MoneySaver.Web.ViewModels.ViewComponents.DeleteRecordSmallButtonComponentViewModel
 @*<a href="/Records/Delete?recordId=@Model.Id"><span class="btn btn-outline-danger btn-icon-text float-right" data-toggle="tooltip" data-placement="bottom" title="Delete record"><i class="mdi mdi-delete btn-icon-prepend"></i> Delete</span></a>*@
 
-<button type="button" class="btn btn-outline-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete record" data-toggle="modal" data-target="#defaultModal-small"><i class="mdi mdi-delete btn-icon-prepend"></i></button>
-<div class="modal fade" id="defaultModal-small" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-small" aria-hidden="true">
+<button type="button" class="btn btn-outline-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete record" data-toggle="modal" data-target="#defaultModal-small-@Model.Id"><i class="mdi mdi-delete btn-icon-prepend"></i></button>
+<div class="modal fade" id="defaultModal-small-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-small-@Model.Id" aria-hidden="true">
     <form method="post" asp-controller="Records" asp-action="Delete" asp-route-id="@Model.Id">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-danger" id="exampleModalLabel-small">Note! You're preparing to delete a record</h5>
+                    <h5 class="modal-title text-danger" id="exampleModalLabel-small-@Model.Id">Note! You're preparing to delete a record</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

@@ -11,13 +11,13 @@
     {
         public Task<string> AddAsync(string userId, string name, IEnumerable<string> listItems);
 
-        public Task EditAsync(string userId, string listId, IEnumerable<string> listItems);
+        public Task EditAsync(string userId, ToDoListDto list);
 
         public Task RemoveListAsync(string userId, string listId);
 
         public Task RemoveListItemAsync(string userId, string listItemId);
 
-        public Task<IEnumerable<ToDoListDto>> GetAll(string userId);
+        public Task<IEnumerable<ToDoListDto>> GetAllActive(string userId);
 
         public Task ChangeItemStatusAsync(string userId, string listItemId);
 
