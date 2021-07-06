@@ -6,14 +6,28 @@
 <div class="col-lg-12">
     <div class="card px-3">
         <div class="card-body">
-            <h4 class="card-title">@this.ViewData["Title"]</h4>
+            <div class="bg-white">
+                <div class="template-demo mb-4">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="breadcrumb-item"><a asp-controller="ToDoLists" asp-action="All">Lists</a></li>
+                            <li class="breadcrumb-item active" aria-current="page"><span>Add New</span></li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <br/>
+            <h4 class="card-title">
+               New List 
+            </h4>
             <form method="post">
                 <div class="text-danger" asp-validation-summary="All"></div>
                 <div class="list-wrapper">
                     <div id="AddItems">
                         @*<span class="text-light"><a class="add btn btn-primary" onclick="AddItem()"><i class="fas fa-plus"></i>Add Task</a></span><br />
-                    <br />
-                </div>
+                        <br />
+                    </div>
 
                         *@
                         <div class='input-group mb-3'>

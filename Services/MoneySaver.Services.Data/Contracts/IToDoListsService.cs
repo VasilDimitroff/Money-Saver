@@ -19,6 +19,10 @@
 
         public Task<IEnumerable<ToDoListDto>> GetAllActive(string userId);
 
+        public Task<ToDoListDto> GetByIdAsync(string userId, string listId);
+
+        public Task<string> GetListIdAsync(string listItemId);
+
         public Task ChangeItemStatusAsync(string userId, string listItemId);
 
         public Task<bool> IsUserOwnListAsync(string userId, string listId);

@@ -45,8 +45,35 @@
             return this.Redirect("/ToDoLists/All");
         }
 
-        //TODO: create view component to exclude script for adding new items => id must be different in every list
-        //In categories and everwhere where use modal for edit/delete - TOO!
+        // TODO: create view component to exclude script for adding new items => id must be different in every list
+        // In categories and everwhere where use modal for edit/delete - TOO!
+        public async Task<IActionResult> Edit(string id)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            var dto = await this.toDoListsService.GetByIdAsync(user.Id, id);
+
+            var model = new ToDoListViewModel()
+            {
+                Id = dto.Id,
+                CreatedOn = dto.CreatedOn,
+                Name = dto.Name,
+                Status = Enum.Parse<StatusType>(dto.Status.ToString()),
+                ItemsToShow = dto.ListItems.Count(),
+                Items = dto.ListItems.Select(li => new ToDoItemViewModel
+                {
+                    Id = li.Id,
+                    Name = li.Name,
+                    Status = Enum.Parse<StatusType>(li.Status.ToString()),
+                    CreatedOn = li.CreatedOn,
+                })
+                .OrderBy(li => li.CreatedOn)
+                .ToList(),
+            };
+
+            return this.View(model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Edit(ToDoListViewModel list, string returnUrl, int itemsToShow = 5)
         {
@@ -90,12 +117,21 @@
             };
 
             await this.toDoListsService.EditAsync(user.Id, listAsDto);
+            itemsToShow += list.ListItems.Count();
 
-            return this.Redirect($"/ToDoLists/All?items={itemsToShow}");
+            if (returnUrl == "/ToDoLists/All")
+            {
+                return this.Redirect($"/ToDoLists/All?items={itemsToShow}");
+            }
+            else if (returnUrl == $"/ToDoLists/Edit/{list.Id}")
+            {
+                return this.Redirect($"/ToDoLists/Edit/{list.Id}");
+            }
+
+            return this.Content("No");
         }
 
-
-        public async Task<IActionResult> Delete(string id, int itemsToShow = 5)
+        public async Task<IActionResult> Delete(string id, string returnUrl, int itemsToShow = 5)
         {
             if (this.ModelState.IsValid)
             {
@@ -105,18 +141,23 @@
 
             await this.toDoListsService.RemoveListAsync(user.Id, id);
 
-            return this.Redirect($"/ToDoLists/All?items={itemsToShow}");
+            return this.Redirect($"/ToDoLists/All");
         }
 
-        public async Task<IActionResult> DeleteItem(string id, string returnUrl, int itemsToShow = 5)
+        public async Task<IActionResult> DeleteItem(string id, string divId, string returnUrl, int itemsToShow = 5)
         {
             var user = await this.userManager.GetUserAsync(this.User);
+            var listId = await this.toDoListsService.GetListIdAsync(id);
 
             await this.toDoListsService.RemoveListItemAsync(user.Id, id);
 
             if (returnUrl == "/ToDoLists/All")
             {
-                return this.Redirect($"/ToDoLists/All?items={itemsToShow}");
+                return this.Redirect($"/ToDoLists/All?items={itemsToShow}#{divId}");
+            }
+            else if (returnUrl == $"/ToDoLists/Edit/{listId}")
+            {
+                return this.Redirect($"/ToDoLists/Edit/{listId}");
             }
 
             return this.Content("No");
@@ -146,22 +187,33 @@
                     Id = li.Id,
                     Name = li.Name,
                     Status = Enum.Parse<StatusType>(li.Status.ToString()),
+                    CreatedOn = li.CreatedOn,
                 })
+                .OrderBy(li => li.CreatedOn)
                 .ToList(),
             })
+                .OrderBy(li => li.CreatedOn)
                 .ToList();
+
             return this.View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangeItemStatus(string id, string returnUrl, int itemsToShow = 5)
+        public async Task<IActionResult> ChangeItemStatus(string id, string divId, string returnUrl, int itemsToShow = 5)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
+            await this.toDoListsService.ChangeItemStatusAsync(user.Id, id);
+
+            var listId = await this.toDoListsService.GetListIdAsync(id);
+
             if (returnUrl == "/ToDoLists/All")
             {
-                await this.toDoListsService.ChangeItemStatusAsync(user.Id, id);
-                return this.Redirect($"/ToDoLists/All?items={itemsToShow}");
+                return this.Redirect($"/ToDoLists/All?items={itemsToShow}#{divId}");
+            }
+            else if (returnUrl == $"/ToDoLists/Edit/{listId}")
+            {
+                return this.Redirect($"/ToDoLists/Edit/{listId}");
             }
 
             return this.Content("No");

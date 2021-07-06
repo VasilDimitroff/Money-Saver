@@ -1,5 +1,6 @@
 ﻿namespace MoneySaver.Web.ViewModels.ToDoLists
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
 
     using MoneySaver.Web.ViewModels.ToDoLists.Enums;
@@ -10,6 +11,8 @@
 
         [Required]
         public string Name { get; set; }
+
+        public DateTime CreatedOn { get; set; }
 
         public StatusType Status { get; set; }
     }

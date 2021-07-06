@@ -15,6 +15,8 @@
         [Required]
         public string Id { get; set; }
 
+        public string DivId => this.Name;
+
         [Required]
         public StatusType Status { get; set; }
 
