@@ -4,6 +4,7 @@
 @{
     this.ViewData["Title"] = "Edit List " + Model.Name;
     this.ViewData["ReturnUrl"] = "/ToDoLists/Edit/" + Model.Id;
+    string status = "Completed";
 }
 <div class="col-lg-12">
     <div class="card px-3">
@@ -21,35 +22,41 @@
             </div>
             <div class="card-title d-flex">
                 <div class="card-title col-12">
-                    <div class="btn-group mr-2 mr-sm-1 mb-2 mt-2">
-                        Edit @Model.Name
+                    <div class="btn-group mr-2 mr-sm-1 mt-2 mb-2">
+                       @Model.Name
                     </div>
-                    <div class="btn-group mr-2">
-                        <a asp-controller="ToDoLists" asp-action="Delete" asp-route-id="@Model.Id"><span class="btn btn-sm btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Complete list"><i class="mdi mdi-checkbox-multiple-marked-outline"></i>Complete</span></a>
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-outline-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete list" data-toggle="modal" data-target="#defaultModal-small-@Model.Id"><i class="mdi mdi-delete btn-icon-prepend"></i></button>
-                        <div class="modal fade" id="defaultModal-small-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-small-@Model.Id" aria-hidden="true">
-                            <form method="get" asp-controller="ToDoLists" asp-action="Delete" asp-route-id="@Model.Id">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-danger" id="exampleModalLabel-small-@Model.Id">Note! You're preparing to delete a list</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Are you sure you want to delete this list?</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                            <span class="text-danger" asp-validation-for="@Model.Id"></span>
-                                            <button type="submit" class="btn btn-outline-danger">Yes</button>
+                    <div class="float-right">
+                        <div class="float-right">
+                            <button type="button" class="btn btn-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete list" data-toggle="modal" data-target="#defaultModal-small-@Model.Id"><i class="mdi mdi-delete btn-icon-prepend"></i>Delete</button>
+                            <div class="modal fade" id="defaultModal-small-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-small-@Model.Id" aria-hidden="true">
+                                <form method="get" asp-controller="ToDoLists" asp-action="Delete" asp-route-id="@Model.Id">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-danger" id="exampleModalLabel-small-@Model.Id">Note! You're preparing to delete a list</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete this list?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                <span class="text-danger" asp-validation-for="@Model.Id"></span>
+                                                <button type="submit" class="btn btn-outline-danger">Yes</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="float-right mr-2">
+                            @if (Model.Status == StatusType.Completed)
+                            {
+                                status = "Active";
+                            }
+                            <a asp-controller="ToDoLists" asp-action="ChangeListStatus" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-route-divid="@Model.DivId" asp-route-id="@Model.Id"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Complete list"><i class="mdi mdi-checkbox-multiple-marked-outline"></i>Mark as @status</span></a>
                         </div>
                     </div>
                 </div>
@@ -77,21 +84,21 @@
 
                         <li class="@completedClass">
                             <span class="form-check">
-                                <form class="form-inline" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-route-itemstoshow="@Model.ItemsToShow" asp-controller="ToDoLists" asp-action="ChangeItemStatus" asp-route-id="@item.Id">
+                                <form class="form-inline" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-controller="ToDoLists" asp-action="ChangeItemStatus" asp-route-id="@item.Id">
                                     <button type="submit" class="check btn btn-@outlineClass btn-sm mr-3"><span class="mdi mdi-check"></span></button>
                                     @item.Name
                                 </form>
                             </span>
                             <div class="col d-flex justify-content-end">
                                 <form method="get">
-                                    <a asp-route-returnurl="@ViewData["ReturnUrl"]" asp-controller="ToDoLists" asp-action="DeleteItem" asp-route-itemstoshow="@Model.ItemsToShow" asp-route-id="@item.Id"><i style="font-size: 1.73em;" class="mdi mdi-close-circle-outline text-@colorXButtonClass"></i></a>
+                                    <a asp-route-returnurl="@ViewData["ReturnUrl"]" asp-controller="ToDoLists" asp-action="DeleteItem" asp-route-id="@item.Id"><i style="font-size: 1.73em;" class="mdi mdi-close-circle-outline text-@colorXButtonClass"></i></a>
                                 </form>
                             </div>
                         </li>
                         <div class="divider"></div>
                     }
                 </ul>
-                <form method="post" asp-controller="ToDoLists" asp-action="Edit" asp-route-itemstoshow="@Model.ItemsToShow" asp-route-id="@Model.Id" asp-route-status="@Model.Status" asp-route-name="@Model.Name" asp-route-returnurl="@ViewData["ReturnUrl"]">
+                <form method="post" asp-controller="ToDoLists" asp-action="Edit" asp-route-id="@Model.Id" asp-route-status="@Model.Status" asp-route-name="@Model.Name" asp-route-returnurl="@ViewData["ReturnUrl"]">
                     <div class="text-danger" asp-validation-summary="All"></div>
                     <div class="list-wrapper">
                         <div id="AddItems-@Model.Id">
@@ -103,10 +110,12 @@
                                 <input type='text' placeholder='Add a new item' name='ListItems[0]' id='ListItems[0]' class='form-control' />
                             </div>
                         </div>
+                        <br />
                         <vc:save-button></vc:save-button>
                     </div>
                 </form>
-        </div>
+               
+            </div>
     </div>
 </div>
     </div>
@@ -118,11 +127,11 @@
         function AddItem() {
             $("#AddItems-@Model.Id").
                 append("<div class='input-group mb-3'>" +
-                    "<div class='input-group-prepend'>" + "<span onclick='AddItem()' class='btn btn-sm btn-primary'><i class='mdi mdi-plus'></i></span>" +
+                "<div class='input-group-prepend'>" + "<span onclick='AddItem()' class='btn btn-sm btn-primary' style='padding-top: 13px;'><i class='mdi mdi-plus'></i></span>" +
                     "<label for='ListItems" + index + "'" + "" +
                     "</label>" +
                     "</div>" +
-                    "<input type='text' placeholder='Enter a new item' name='ListItems[" + index + "]' id='ListItems" + index + "'" + " class='form-control' />"
+                    "<input type='text' placeholder='Add a new item' name='ListItems[" + index + "]' id='ListItems" + index + "'" + " class='form-control' />"
                     + "</div>");
             index++;
         }

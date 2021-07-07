@@ -25,6 +25,8 @@
 
         public Task ChangeItemStatusAsync(string userId, string listItemId);
 
+        public Task<ToDoListDto> ChangeListStatusAsync(string userId, string listId);
+
         public Task<bool> IsUserOwnListAsync(string userId, string listId);
     }
 }

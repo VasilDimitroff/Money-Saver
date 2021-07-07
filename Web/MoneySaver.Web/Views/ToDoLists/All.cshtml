@@ -61,50 +61,19 @@
         </nav>
     </div>
 </div>
-<div class="form-inline d-flex justify-content-center h3 pb-3">
+<div class="form-inline d-flex justify-content-center h3 pb-1">
     All Lists
 </div>
 <div class="row">
-    @foreach (var list in Model)
+    @foreach (var list in Model.OrderByDescending(x => x.CreatedOn))
     {
-        <div class="col-lg-6 col-12 col-sm-12 col-md-6 grid-margin grid-margin stretch-card float-left" id="@list.DivId">
+        <div class="col-lg-6 col-12 col-sm-12 col-md-12 grid-margin grid-margin stretch-card float-left" id="@list.DivId">
             <div class="card px-3">
                 <div class="card-body">
                     <div class="card-title d-flex">
                         <div class="card-title col-12">
-                            <div class="btn-group mr-2 mr-sm-1 mb-2 mt-2">
+                            <div class="btn-group mr-2 mr-sm-1 mt-2">
                                 @list.Name
-                            </div>
-                            <div class="btn-group mr-2">
-                                <a asp-controller="ToDoLists" asp-action="Delete" asp-route-id="@list.Id"><span class="btn btn-sm btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Complete list"><i class="mdi mdi-checkbox-multiple-marked-outline"></i>Complete</span></a>
-                            </div>
-                            <div class="btn-group mr-2">
-                                <a asp-controller="ToDoLists" asp-action="Edit" asp-route-id="@list.Id"><span class="btn btn-sm btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Edit list"><i class="mdi mdi-pencil"></i>Edit</span></a>
-                            </div>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-outline-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete list" data-toggle="modal" data-target="#defaultModal-small-@list.Id"><i class="mdi mdi-delete btn-icon-prepend"></i></button>
-                                <div class="modal fade" id="defaultModal-small-@list.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-small-@list.Id" aria-hidden="true">
-                                    <form method="get" asp-controller="ToDoLists" asp-action="Delete" asp-route-id="@list.Id">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title text-danger" id="exampleModalLabel-small-@list.Id">Note! You're preparing to delete a list</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Are you sure you want to delete this list?</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                                    <span class="text-danger" asp-validation-for="@list.Id"></span>
-                                                    <button type="submit" class="btn btn-outline-danger">Yes</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -115,7 +84,7 @@
                                 <p>@list.Name is empty.</p>
                             }
                             <div class="divider mb-3"></div>
-                            @foreach (var item in list.Items.Take(list.ItemsToShow))
+                            @foreach (var item in list.Items)
                             {
 
                                 string completedClass = "none";
@@ -131,33 +100,48 @@
 
                                 <li class="@completedClass">
                                     <span class="form-check">
-                                        <form class="form-inline" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-route-divid="@list.DivId" asp-route-itemstoshow="@list.ItemsToShow" asp-controller="ToDoLists" asp-action="ChangeItemStatus" asp-route-id="@item.Id">
+                                        <form class="form-inline" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-route-divid="@list.DivId" asp-controller="ToDoLists" asp-action="ChangeItemStatus" asp-route-id="@item.Id">
                                             <button type="submit" class="check btn btn-@outlineClass btn-sm mr-3"><span class="mdi mdi-check"></span></button>
                                             @item.Name
                                         </form>
                                     </span>
                                     <div class="col d-flex justify-content-end">
                                         <form method="get">
-                                            <a asp-route-returnurl="@ViewData["ReturnUrl"]" asp-controller="ToDoLists" asp-action="DeleteItem" asp-route-divid="@list.DivId" asp-route-itemstoshow="@list.ItemsToShow" asp-route-id="@item.Id"><i style="font-size: 1.73em;" class="mdi mdi-close-circle-outline text-@colorXButtonClass"></i></a>
+                                            <a asp-route-returnurl="@ViewData["ReturnUrl"]" asp-controller="ToDoLists" asp-action="DeleteItem" asp-route-divid="@list.DivId" asp-route-id="@item.Id"><i style="font-size: 1.73em;" class="mdi mdi-close-circle-outline text-@colorXButtonClass"></i></a>
                                         </form>
                                     </div>
                                 </li>
                                 <div class="divider"></div>
                             }
                         </ul>
-                        @if (list.Items.Count() > 5)
-                        {
-                            if (list.ItemsToShow > 5)
-                            {
-                                <a class="btn btn-sm btn-primary" asp-controller="ToDoLists" asp-route-divid="@list.DivId" asp-action="All" asp-route-items="5">Show Алл</a>
-                            }
-
-                            else
-                            {
-                                <a class="btn btn-sm btn-primary" asp-controller="ToDoLists" asp-route-divid="@list.DivId" asp-action="All" asp-route-items="@list.Items.Count()">Show All</a>
-                            }
-                        }
-
+                        <br/>
+                        <a asp-controller="ToDoLists" asp-action="ChangeListStatus" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-route-divid="@list.DivId" asp-route-id="@list.Id"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Complete list"><i class="mdi mdi-checkbox-multiple-marked-outline"></i>Mark as Complete</span></a>
+                        <a asp-controller="ToDoLists" asp-action="Edit" asp-route-id="@list.Id"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit list"><i class="mdi mdi-pencil"></i>Edit</span></a>
+                        <div class="float-right">
+                            <button type="button" class="btn btn-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete list" data-toggle="modal" data-target="#defaultModal-small-@list.Id"><i class="mdi mdi-delete btn-icon-prepend"></i>Delete</button>
+                            <div class="modal fade" id="defaultModal-small-@list.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-small-@list.Id" aria-hidden="true">
+                                <form method="get" asp-controller="ToDoLists" asp-action="Delete" asp-route-id="@list.Id">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-danger" id="exampleModalLabel-small-@list.Id">Note! You're preparing to delete a list</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete this list?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                <span class="text-danger" asp-validation-for="@list.Id"></span>
+                                                <button type="submit" class="btn btn-outline-danger">Yes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

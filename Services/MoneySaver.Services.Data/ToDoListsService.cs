@@ -258,6 +258,63 @@
             await this.dbContext.SaveChangesAsync();
         }
 
+        public async Task<ToDoListDto> ChangeListStatusAsync(string userId, string listId)
+        {
+            var list = await this.dbContext.ToDoLists
+                .Include(x => x.ListItems)
+                .FirstOrDefaultAsync(x => x.Id == listId);
+
+            if (list == null)
+            {
+                throw new ArgumentException(GlobalConstants.ListNotExist);
+            }
+
+            if (!await this.IsUserOwnListAsync(userId, listId))
+            {
+                throw new ArgumentException(GlobalConstants.NoPermissionForEditList);
+            }
+
+            foreach (var li in list.ListItems)
+            {
+                if (list.Status == StatusType.Active)
+                {
+                    li.Status = StatusType.Completed;
+                }
+                else
+                {
+                    li.Status = StatusType.Active;
+                }
+            }
+
+            if (list.Status == StatusType.Active)
+            {
+                list.Status = StatusType.Completed;
+            }
+            else
+            {
+                list.Status = StatusType.Active;
+            }
+
+            var dto = new ToDoListDto()
+            {
+                Id = list.Id,
+                CreatedOn = list.CreatedOn,
+                Name = list.Name,
+                Status = list.Status,
+                ListItems = list.ListItems.Select(x => new ToDoItemDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Status = x.Status,
+                    CreatedOn = x.CreatedOn,
+                })
+                .ToList(),
+            };
+
+            await this.dbContext.SaveChangesAsync();
+            return dto;
+        }
+
         public async Task<string> GetListIdAsync(string listItemId)
         {
             var listItem = await this.dbContext.ToDoItems

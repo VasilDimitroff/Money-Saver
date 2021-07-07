@@ -59,7 +59,6 @@
                 CreatedOn = dto.CreatedOn,
                 Name = dto.Name,
                 Status = Enum.Parse<StatusType>(dto.Status.ToString()),
-                ItemsToShow = dto.ListItems.Count(),
                 Items = dto.ListItems.Select(li => new ToDoItemViewModel
                 {
                     Id = li.Id,
@@ -75,7 +74,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(ToDoListViewModel list, string returnUrl, int itemsToShow = 5)
+        public async Task<IActionResult> Edit(ToDoListViewModel list, string returnUrl)
         {
             if (this.ModelState.IsValid)
             {
@@ -117,11 +116,10 @@
             };
 
             await this.toDoListsService.EditAsync(user.Id, listAsDto);
-            itemsToShow += list.ListItems.Count();
 
             if (returnUrl == "/ToDoLists/All")
             {
-                return this.Redirect($"/ToDoLists/All?items={itemsToShow}");
+                return this.Redirect($"/ToDoLists/All");
             }
             else if (returnUrl == $"/ToDoLists/Edit/{list.Id}")
             {
@@ -144,7 +142,7 @@
             return this.Redirect($"/ToDoLists/All");
         }
 
-        public async Task<IActionResult> DeleteItem(string id, string divId, string returnUrl, int itemsToShow = 5)
+        public async Task<IActionResult> DeleteItem(string id, string divId, string returnUrl)
         {
             var user = await this.userManager.GetUserAsync(this.User);
             var listId = await this.toDoListsService.GetListIdAsync(id);
@@ -153,7 +151,7 @@
 
             if (returnUrl == "/ToDoLists/All")
             {
-                return this.Redirect($"/ToDoLists/All?items={itemsToShow}#{divId}");
+                return this.Redirect($"/ToDoLists/All#{divId}");
             }
             else if (returnUrl == $"/ToDoLists/Edit/{listId}")
             {
@@ -163,7 +161,7 @@
             return this.Content("No");
         }
 
-        public async Task<IActionResult> All(int items = 5)
+        public async Task<IActionResult> All()
         {
             if (this.ModelState.IsValid)
             {
@@ -181,7 +179,6 @@
                 Name = l.Name,
                 Status = Enum.Parse<StatusType>(l.Status.ToString()),
                 CreatedOn = l.CreatedOn,
-                ItemsToShow = items,
                 Items = l.ListItems.Select(li => new ToDoItemViewModel
                 {
                     Id = li.Id,
@@ -199,7 +196,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangeItemStatus(string id, string divId, string returnUrl, int itemsToShow = 5)
+        public async Task<IActionResult> ChangeItemStatus(string id, string divId, string returnUrl)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
@@ -209,11 +206,29 @@
 
             if (returnUrl == "/ToDoLists/All")
             {
-                return this.Redirect($"/ToDoLists/All?items={itemsToShow}#{divId}");
+                return this.Redirect($"/ToDoLists/All#{divId}");
             }
             else if (returnUrl == $"/ToDoLists/Edit/{listId}")
             {
                 return this.Redirect($"/ToDoLists/Edit/{listId}");
+            }
+
+            return this.Content("No");
+        }
+
+        public async Task<IActionResult> ChangeListStatus(string id, string divId, string returnUrl)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            var result = await this.toDoListsService.ChangeListStatusAsync(user.Id, id);
+
+            if (returnUrl == "/ToDoLists/All")
+            {
+                return this.Redirect($"/ToDoLists/All#{divId}");
+            }
+            else if (returnUrl == $"/ToDoLists/Edit/{id}")
+            {
+                return this.Redirect($"/ToDoLists/Edit/{id}");
             }
 
             return this.Content("No");

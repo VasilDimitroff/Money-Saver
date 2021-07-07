@@ -22,7 +22,7 @@
 
         public DateTime CreatedOn { get; set; }
 
-        public int ItemsToShow { get; set; }
+        //public int ItemsToShow { get; set; }
 
         //When viewing, addding or edit via edit view list
         public IEnumerable<ToDoItemViewModel> Items { get; set; }
