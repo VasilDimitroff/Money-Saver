@@ -161,15 +161,33 @@
             return this.Content("No");
         }
 
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(int getStatus = 1)
         {
+            // if getStatus == 1 => Return all lists
+            // if getStatus == 2 => return Active
+            // if getStatus == 3 => return Completed
             if (this.ModelState.IsValid)
             {
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
 
-            var dtoLists = await this.toDoListsService.GetAllActive(user.Id);
+            List<ToDoListDto> dtoLists = new List<ToDoListDto>();
+
+            if (getStatus == 1)
+            {
+                dtoLists = (List<ToDoListDto>)await this.toDoListsService.GetAllAsync(user.Id);
+            }
+
+            if (getStatus == 2)
+            {
+               dtoLists = (List<ToDoListDto>)await this.toDoListsService.GetAllActive(user.Id);
+            }
+
+            if (getStatus == 3)
+            {
+                dtoLists = (List<ToDoListDto>)await this.toDoListsService.GetAllCompletedAsync(user.Id);
+            }
 
             var model = new List<ToDoListViewModel>();
 
@@ -179,6 +197,7 @@
                 Name = l.Name,
                 Status = Enum.Parse<StatusType>(l.Status.ToString()),
                 CreatedOn = l.CreatedOn,
+                GetStatus = getStatus,
                 Items = l.ListItems.Select(li => new ToDoItemViewModel
                 {
                     Id = li.Id,
@@ -216,7 +235,7 @@
             return this.Content("No");
         }
 
-        public async Task<IActionResult> ChangeListStatus(string id, string divId, string returnUrl)
+        public async Task<IActionResult> ChangeListStatus(string id,string divId, string returnUrl, int getStatus = 1)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
@@ -224,7 +243,7 @@
 
             if (returnUrl == "/ToDoLists/All")
             {
-                return this.Redirect($"/ToDoLists/All#{divId}");
+                return this.Redirect($"/ToDoLists/All?getstatus={getStatus}#{divId}");
             }
             else if (returnUrl == $"/ToDoLists/Edit/{id}")
             {

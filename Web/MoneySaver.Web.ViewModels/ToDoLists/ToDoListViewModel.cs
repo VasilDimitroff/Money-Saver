@@ -22,6 +22,8 @@
 
         public DateTime CreatedOn { get; set; }
 
+        public int GetStatus { get; set; }
+
         //public int ItemsToShow { get; set; }
 
         //When viewing, addding or edit via edit view list

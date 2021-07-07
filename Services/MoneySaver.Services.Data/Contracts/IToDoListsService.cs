@@ -17,7 +17,11 @@
 
         public Task RemoveListItemAsync(string userId, string listItemId);
 
+        public Task<IEnumerable<ToDoListDto>> GetAllAsync(string userId);
+
         public Task<IEnumerable<ToDoListDto>> GetAllActive(string userId);
+
+        public Task<IEnumerable<ToDoListDto>> GetAllCompletedAsync(string userId);
 
         public Task<ToDoListDto> GetByIdAsync(string userId, string listId);
 

@@ -172,10 +172,58 @@
             await this.dbContext.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<ToDoListDto>> GetAllAsync(string userId)
+        {
+            var lists = await this.dbContext.ToDoLists
+                .Where(l => l.ApplicationUserId == userId)
+                .Select(l => new ToDoListDto
+                {
+                    Id = l.Id,
+                    Name = l.Name,
+                    Status = l.Status,
+                    CreatedOn = l.CreatedOn,
+                    ListItems = l.ListItems.Select(li => new ToDoItemDto
+                    {
+                        Id = li.Id,
+                        Name = li.Name,
+                        Status = li.Status,
+                        CreatedOn = li.CreatedOn,
+                    })
+                    .ToList(),
+                })
+                .ToListAsync();
+
+            return lists;
+        }
+
         public async Task<IEnumerable<ToDoListDto>> GetAllActive(string userId)
         {
             var lists = await this.dbContext.ToDoLists
                 .Where(l => l.ApplicationUserId == userId && l.Status == StatusType.Active)
+                .Select(l => new ToDoListDto
+                {
+                    Id = l.Id,
+                    Name = l.Name,
+                    Status = l.Status,
+                    CreatedOn = l.CreatedOn,
+                    ListItems = l.ListItems.Select(li => new ToDoItemDto
+                    {
+                        Id = li.Id,
+                        Name = li.Name,
+                        Status = li.Status,
+                        CreatedOn = li.CreatedOn,
+                    })
+                    .ToList(),
+                })
+                .ToListAsync();
+
+            return lists;
+        }
+
+        public async Task<IEnumerable<ToDoListDto>> GetAllCompletedAsync(string userId)
+        {
+            var lists = await this.dbContext.ToDoLists
+                .Where(l => l.ApplicationUserId == userId && l.Status == StatusType.Completed)
                 .Select(l => new ToDoListDto
                 {
                     Id = l.Id,
