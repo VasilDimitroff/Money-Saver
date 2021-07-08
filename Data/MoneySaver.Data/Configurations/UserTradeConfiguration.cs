@@ -1,8 +1,9 @@
 ﻿namespace MoneySaver.Data.Configurations
 {
-    using MoneySaver.Data.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+    using MoneySaver.Data.Models;
 
     public class UserTradeConfiguration : IEntityTypeConfiguration<UserTrade>
     {
@@ -19,9 +20,9 @@
                 .OnDelete(DeleteBehavior.Restrict);
 
             userTrade
-                .HasOne(trade => trade.Stock)
-               .WithMany(stock => stock.Trades)
-               .HasForeignKey(trade => trade.StockId)
+                .HasOne(trade => trade.Company)
+               .WithMany(company => company.Traders)
+               .HasForeignKey(trade => trade.CompanyTicker)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
         }

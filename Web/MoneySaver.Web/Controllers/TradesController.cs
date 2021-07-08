@@ -6,7 +6,9 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.ViewModels.Trades;
 
@@ -14,10 +16,17 @@
     public class TradesController : Controller
     {
         private readonly ICompaniesService companiesService;
+        private readonly ITradesService tradesService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public TradesController(ICompaniesService companiesService)
+        public TradesController(
+            ICompaniesService companiesService,
+            ITradesService tradesService,
+            UserManager<ApplicationUser> userManager)
         {
             this.companiesService = companiesService;
+            this.tradesService = tradesService;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> Buy()
@@ -42,18 +51,15 @@
         [HttpPost]
         public async Task<IActionResult> Buy(BuyStockInputModel input)
         {
-            var companies = await this.companiesService.GetAllCompaniesAsync();
-            var model = new BuyStockInputModel
+            if (this.ModelState.IsValid)
             {
-                Companies = companies.Select(c => new CompanyViewModel
-                {
-                    Name = c.Name,
-                    Ticker = c.Ticker,
-                })
-                .ToList(),
-            };
+            }
 
-            return this.View(model);
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            await this.tradesService.CreateBuyTradeAsync(user.Id, input.SelectedCompany.Ticker, input.Quantity, input.Price);
+
+            return this.Redirect("/Trades/All");
         }
     }
 }

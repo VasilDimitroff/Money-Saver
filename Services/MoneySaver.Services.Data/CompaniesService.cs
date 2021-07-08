@@ -8,6 +8,7 @@
     using Microsoft.EntityFrameworkCore;
     using MoneySaver.Common;
     using MoneySaver.Data;
+    using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Services.Data.Models.Companies;
 
@@ -33,7 +34,7 @@
             return companies;
         }
 
-        public async Task<GetCompanyDto> GetCompanyByTickerAsync(string ticker)
+        public async Task<Company> GetCompanyByTickerAsync(string ticker)
         {
             var company = await this.dbContext.Companies.FindAsync(ticker);
 
@@ -42,13 +43,7 @@
                 throw new ArgumentException(GlobalConstants.InvalidCompanyTicker);
             }
 
-            var companyDto = new GetCompanyDto()
-            {
-                Name = company.Name,
-                Ticker = company.Ticker,
-            };
-
-            return companyDto;
+            return company;
         }
     }
 }

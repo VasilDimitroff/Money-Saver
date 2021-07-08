@@ -1,26 +1,32 @@
-﻿using System;
-
-using MoneySaver.Data.Models.Enums;
-
-namespace MoneySaver.Data.Models
+﻿namespace MoneySaver.Data.Models
 {
-    public class UserTrade
-    {
-        public string Id { get; set; }
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
+    using MoneySaver.Data.Common.Models;
+    using MoneySaver.Data.Models.Enums;
+
+    public class UserTrade : BaseModel<string>
+    {
+        [Required]
         public string ApplicationUserId { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
 
-        public int StockId { get; set; }
+        [Required]
+        [ForeignKey(nameof(Company))]
+        public string CompanyTicker { get; set; }
 
-        public virtual Stock Stock { get; set; }
+        public virtual Company Company { get; set; }
 
-        public int Quantity { get; set; }
+        [Required]
+        public decimal Price { get; set; }
 
+        [Required]
+        public int StockQuantity { get; set; }
+
+        [Required]
         public TradeType Type { get; set; }
-
-        public DateTime TradeDate { get; set; }
-
     }
 }

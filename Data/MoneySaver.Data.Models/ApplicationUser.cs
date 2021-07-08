@@ -16,7 +16,7 @@ namespace MoneySaver.Data.Models
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.Trades = new HashSet<UserTrade>();
-            this.Shoplists = new HashSet<ToDoList>();
+            this.Lists = new HashSet<ToDoList>();
             this.Wallets = new HashSet<Wallet>();
         }
 
@@ -38,7 +38,7 @@ namespace MoneySaver.Data.Models
 
         public virtual ICollection<UserTrade> Trades { get; set; }
 
-        public virtual ICollection<ToDoList> Shoplists { get; set; }
+        public virtual ICollection<ToDoList> Lists { get; set; }
 
         public virtual ICollection<Wallet> Wallets { get; set; }
     }
