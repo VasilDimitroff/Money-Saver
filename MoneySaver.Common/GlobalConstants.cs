@@ -73,5 +73,7 @@
         public const string ListItemWithThisIdNotExist = "List item with this Id does not exist";
 
         public const string ListContainsEmptyItems = "List cannot contains empty items";
+
+        public const string InvalidCompanyTicker = "Company ticker is invalid! Please make sure you've entered the ticker correctly and that it is not empty";
     }
 }

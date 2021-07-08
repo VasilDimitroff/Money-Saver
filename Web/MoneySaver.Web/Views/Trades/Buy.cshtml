@@ -1,0 +1,71 @@
+﻿@using MoneySaver.Web.ViewModels.Trades
+
+@model BuyStockInputModel
+@{
+    this.ViewData["Title"] = "Buy Trade";
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="template-demo mb-5">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="Trades" asp-action="All">Trades</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><span>Buy</span></li>
+                    </ol>
+                </nav>
+            </div>
+            <p class="card-title">
+                Add new Buy Trade
+            </p>
+            <form class="forms-sample" asp-controller="Trades" asp-action="Buy" method="post">
+                <div class="text-danger" asp-validation-summary="All"></div>
+                <div class="form-group">
+                    <span class="mdi mdi-tag text-primary"></span>
+                    <label asp-for="@Model.SelectedCompany.Ticker">Company</label>
+                    <select asp-for="@Model.SelectedCompany.Ticker" class="js-example-basic-single" style="width:100%">
+                        @foreach (var company in Model.Companies)
+                        {
+                            <option value="@company.Ticker">@company.Name (Ticker: @company.Ticker)</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <span class="mdi mdi-currency-usd text-primary"></span>
+                    <label asp-for="@Model.Price"><span class="font-weight-bold">Price per share</span></label>
+                    <input type="number" class="form-control form-control-lg" asp-for="@Model.Price" placeholder="Price per share" value="0">
+                    <span class="text-danger" asp-validation-for="@Model.Price"></span>
+                </div>
+                <div class="form-group">
+                    <span class="mdi mdi-hexagon-multiple text-primary"></span>
+                    <label asp-for="@Model.Quantity"><span class="font-weight-bold">Quantity</span></label>
+                    <input type="text" class="form-control form-control-lg" asp-for="@Model.Quantity" placeholder="Quantity">
+                    <span class="text-danger" asp-validation-for="@Model.Quantity"></span>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm mr-2 mdi mdi-check text-light">
+                    Add Trade
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="~/js/off-canvas.js"></script>
+    <script src="~/js/hoverable-collapse.js"></script>
+    <!-- it make sidebar not collapsable
+    <script src="~/js/template.js"></script>
+    end of script-->
+    <script src="~/js/settings.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="~/js/file-upload.js"></script>
+    <script src="~/js/typeahead.js"></script>
+    <script src="~/js/select2.js"></script>
+}
