@@ -1,19 +1,23 @@
 ﻿using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using MoneySaver.Data.Common.Models;
 
 namespace MoneySaver.Data.Models
 {
-    public class Stock : BaseDeletableModel<int>
+    public class Stock : BaseModel<int>
     {
         public Stock()
         {
             this.Trades = new HashSet<UserTrade>();
         }
 
+        [Required]
         public decimal Price { get; set; }
 
-        public int CompanyId { get; set; }
+        [Required]
+        [ForeignKey(nameof(Company))]
+        public string CompanyTicker { get; set; }
 
         public virtual Company Company { get; set; }
 

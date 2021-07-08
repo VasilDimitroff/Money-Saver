@@ -30,6 +30,7 @@
                               new CurrencySeeder(),
                               new WalletsSeeder(),
                               new CategoriesSeeder(),
+                              new CompaniesSeeder(),
                           };
 
             foreach (var seeder in seeders)

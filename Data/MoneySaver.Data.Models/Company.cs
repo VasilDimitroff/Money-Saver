@@ -17,7 +17,8 @@
         [Required]
         public string Ticker { get; set; }
 
-        public int Name { get; set; }
+        [Required]
+        public string Name { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

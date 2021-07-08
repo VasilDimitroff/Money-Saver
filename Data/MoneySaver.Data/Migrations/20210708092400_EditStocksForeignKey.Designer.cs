@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoneySaver.Data;
 
 namespace MoneySaver.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210708092400_EditStocksForeignKey")]
+    partial class EditStocksForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -383,12 +385,20 @@ namespace MoneySaver.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("CompanyTicker")
-                        .IsRequired()
+                    b.Property<int>("CompanyTicker")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CompanyTicker1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -398,7 +408,9 @@ namespace MoneySaver.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyTicker");
+                    b.HasIndex("CompanyTicker1");
+
+                    b.HasIndex("IsDeleted");
 
                     b.ToTable("Stocks");
                 });
@@ -604,9 +616,7 @@ namespace MoneySaver.Data.Migrations
                 {
                     b.HasOne("MoneySaver.Data.Models.Company", "Company")
                         .WithMany("Stocks")
-                        .HasForeignKey("CompanyTicker")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CompanyTicker1");
 
                     b.Navigation("Company");
                 });
