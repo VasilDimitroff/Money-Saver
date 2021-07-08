@@ -9,7 +9,7 @@
         public void Configure(EntityTypeBuilder<UserTrade> userTrade)
         {
             userTrade
-                .HasKey(ut => new { ut.ApplicationUserId, ut.StockId });
+                .HasKey(ut => new { ut.Id });
 
             userTrade
                 .HasOne(trade => trade.ApplicationUser)

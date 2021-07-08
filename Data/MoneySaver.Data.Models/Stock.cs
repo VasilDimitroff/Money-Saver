@@ -13,7 +13,9 @@ namespace MoneySaver.Data.Models
 
         public decimal Price { get; set; }
 
-        public string CompanyName { get; set; }
+        public int CompanyId { get; set; }
+
+        public virtual Company Company { get; set; }
 
         public virtual ICollection<UserTrade> Trades { get; set; }
     }

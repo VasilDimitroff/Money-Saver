@@ -6,6 +6,8 @@ namespace MoneySaver.Data.Models
 {
     public class UserTrade
     {
+        public string Id { get; set; }
+
         public string ApplicationUserId { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }

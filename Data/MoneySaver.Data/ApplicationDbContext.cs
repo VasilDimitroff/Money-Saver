@@ -38,6 +38,8 @@
 
         public DbSet<Stock> Stocks { get; set; }
 
+        public DbSet<Company> Companies { get; set; }
+
         public DbSet<Wallet> Wallets { get; set; }
 
         public DbSet<UserTrade> UsersTrades { get; set; }
