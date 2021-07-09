@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Common;
@@ -15,6 +16,7 @@
     using MoneySaver.Web.ViewModels.Records;
     using MoneySaver.Web.ViewModels.Records.Enums;
 
+    [Authorize]
     public class CategoriesController : Controller
     {
         private const int ItemsPerPage = 12;

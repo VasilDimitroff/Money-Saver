@@ -10,8 +10,8 @@ using MoneySaver.Data;
 namespace MoneySaver.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210708092400_EditStocksForeignKey")]
-    partial class EditStocksForeignKey
+    [Migration("20210709071451_initialCreate")]
+    partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -378,43 +378,6 @@ namespace MoneySaver.Data.Migrations
                     b.ToTable("Settings");
                 });
 
-            modelBuilder.Entity("MoneySaver.Data.Models.Stock", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("CompanyTicker")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CompanyTicker1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyTicker1");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("Stocks");
-                });
-
             modelBuilder.Entity("MoneySaver.Data.Models.ToDoItem", b =>
                 {
                     b.Property<string>("Id")
@@ -481,14 +444,24 @@ namespace MoneySaver.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<string>("CompanyTicker")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("StockId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TradeDate")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("StockQuantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -497,7 +470,9 @@ namespace MoneySaver.Data.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("StockId");
+                    b.HasIndex("CompanyTicker");
+
+                    b.HasIndex("CurrencyId");
 
                     b.ToTable("UsersTrades");
                 });
@@ -612,15 +587,6 @@ namespace MoneySaver.Data.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("MoneySaver.Data.Models.Stock", b =>
-                {
-                    b.HasOne("MoneySaver.Data.Models.Company", "Company")
-                        .WithMany("Stocks")
-                        .HasForeignKey("CompanyTicker1");
-
-                    b.Navigation("Company");
-                });
-
             modelBuilder.Entity("MoneySaver.Data.Models.ToDoItem", b =>
                 {
                     b.HasOne("MoneySaver.Data.Models.ToDoList", "ToDoList")
@@ -633,7 +599,7 @@ namespace MoneySaver.Data.Migrations
             modelBuilder.Entity("MoneySaver.Data.Models.ToDoList", b =>
                 {
                     b.HasOne("MoneySaver.Data.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Shoplists")
+                        .WithMany("Lists")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -649,15 +615,23 @@ namespace MoneySaver.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("MoneySaver.Data.Models.Stock", "Stock")
+                    b.HasOne("MoneySaver.Data.Models.Company", "Company")
+                        .WithMany("Traders")
+                        .HasForeignKey("CompanyTicker")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MoneySaver.Data.Models.Currency", "Currency")
                         .WithMany("Trades")
-                        .HasForeignKey("StockId")
+                        .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
 
-                    b.Navigation("Stock");
+                    b.Navigation("Company");
+
+                    b.Navigation("Currency");
                 });
 
             modelBuilder.Entity("MoneySaver.Data.Models.Wallet", b =>
@@ -683,11 +657,11 @@ namespace MoneySaver.Data.Migrations
                 {
                     b.Navigation("Claims");
 
+                    b.Navigation("Lists");
+
                     b.Navigation("Logins");
 
                     b.Navigation("Roles");
-
-                    b.Navigation("Shoplists");
 
                     b.Navigation("Trades");
 
@@ -701,17 +675,14 @@ namespace MoneySaver.Data.Migrations
 
             modelBuilder.Entity("MoneySaver.Data.Models.Company", b =>
                 {
-                    b.Navigation("Stocks");
+                    b.Navigation("Traders");
                 });
 
             modelBuilder.Entity("MoneySaver.Data.Models.Currency", b =>
                 {
-                    b.Navigation("Wallets");
-                });
-
-            modelBuilder.Entity("MoneySaver.Data.Models.Stock", b =>
-                {
                     b.Navigation("Trades");
+
+                    b.Navigation("Wallets");
                 });
 
             modelBuilder.Entity("MoneySaver.Data.Models.ToDoList", b =>

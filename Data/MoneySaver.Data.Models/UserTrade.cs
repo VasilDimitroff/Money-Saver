@@ -27,6 +27,11 @@
         public int StockQuantity { get; set; }
 
         [Required]
+        public int CurrencyId { get; set; }
+
+        public virtual Currency Currency { get; set; }
+
+        [Required]
         public TradeType Type { get; set; }
     }
 }

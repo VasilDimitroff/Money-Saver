@@ -78,6 +78,6 @@
 
         public const string UserIsNotHolder = "User with this Id has no shares of this company";
 
-        public const string NotEnoughQuantity = "You're trying to sell more stocks than you hold!";
+        public const string NotEnoughQuantity = "You haven't enough stock quantity in this currency by this company!";
     }
 }

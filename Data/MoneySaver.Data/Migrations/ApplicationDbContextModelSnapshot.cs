@@ -449,6 +449,9 @@ namespace MoneySaver.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -466,6 +469,8 @@ namespace MoneySaver.Data.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("CompanyTicker");
+
+                    b.HasIndex("CurrencyId");
 
                     b.ToTable("UsersTrades");
                 });
@@ -614,9 +619,17 @@ namespace MoneySaver.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("MoneySaver.Data.Models.Currency", "Currency")
+                        .WithMany("Trades")
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Company");
+
+                    b.Navigation("Currency");
                 });
 
             modelBuilder.Entity("MoneySaver.Data.Models.Wallet", b =>
@@ -665,6 +678,8 @@ namespace MoneySaver.Data.Migrations
 
             modelBuilder.Entity("MoneySaver.Data.Models.Currency", b =>
                 {
+                    b.Navigation("Trades");
+
                     b.Navigation("Wallets");
                 });
 

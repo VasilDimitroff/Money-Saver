@@ -25,6 +25,13 @@
                .HasForeignKey(trade => trade.CompanyTicker)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
+
+            userTrade
+                .HasOne(trade => trade.Currency)
+                .WithMany(currency => currency.Trades)
+                .HasForeignKey(trade => trade.CurrencyId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

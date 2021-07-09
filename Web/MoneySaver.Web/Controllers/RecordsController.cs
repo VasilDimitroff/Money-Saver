@@ -4,7 +4,7 @@
     using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -16,6 +16,7 @@
     using MoneySaver.Web.ViewModels.Records.Enums;
     using MoneySaver.Web.ViewModels.Wallets;
 
+    [Authorize]
     public class RecordsController : Controller
     {
         private readonly IRecordsService recordsService;

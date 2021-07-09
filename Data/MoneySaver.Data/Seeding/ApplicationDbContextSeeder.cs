@@ -28,8 +28,6 @@
                               new RolesSeeder(),
                               new SettingsSeeder(),
                               new CurrencySeeder(),
-                              new WalletsSeeder(),
-                              new CategoriesSeeder(),
                               new CompaniesSeeder(),
                           };
 

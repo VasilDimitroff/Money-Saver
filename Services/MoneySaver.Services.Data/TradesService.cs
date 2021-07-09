@@ -16,13 +16,16 @@
         private readonly ApplicationDbContext dbContext;
         private readonly ICompaniesService companiesService;
 
-        public TradesService(ApplicationDbContext dbContext, ICompaniesService companiesService)
+        public TradesService(
+            ApplicationDbContext dbContext,
+            ICompaniesService companiesService
+            )
         {
             this.dbContext = dbContext;
             this.companiesService = companiesService;
         }
 
-        public async Task CreateBuyTradeAsync(string userId, string companyTicker, int quantity, decimal pricePerShare)
+        public async Task CreateBuyTradeAsync(string userId, string companyTicker, int quantity, decimal pricePerShare, int currencyId)
         {
             var company = await this.companiesService.GetCompanyByTickerAsync(companyTicker);
 
@@ -41,13 +44,14 @@
                 Price = pricePerShare,
                 StockQuantity = quantity,
                 Type = TradeType.Buy,
+                CurrencyId = currencyId,
             };
 
             await this.dbContext.UsersTrades.AddAsync(userTrade);
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task CreateSellTradeAsync(string userId, string companyTicker, int quantity, decimal pricePerShare)
+        public async Task CreateSellTradeAsync(string userId, string companyTicker, int quantity, decimal pricePerShare, int currencyId)
         {
             var company = await this.companiesService.GetCompanyByTickerAsync(companyTicker);
 
@@ -56,7 +60,7 @@
                 pricePerShare *= -1;
             }
 
-            int currentlyHoldings = this.GetCompanyStocksHoldingsCount(userId, companyTicker, quantity);
+            int currentlyHoldings = this.GetCompanyStocksHoldingsCount(userId, companyTicker, quantity, currencyId);
 
             if (currentlyHoldings < quantity)
             {
@@ -73,20 +77,27 @@
                 Price = pricePerShare,
                 StockQuantity = quantity,
                 Type = TradeType.Sell,
+                CurrencyId = currencyId,
             };
 
             await this.dbContext.UsersTrades.AddAsync(userTrade);
             await this.dbContext.SaveChangesAsync();
         }
 
-        public int GetCompanyStocksHoldingsCount(string userId, string companyTicker, int quantity)
+        public int GetCompanyStocksHoldingsCount(string userId, string companyTicker, int quantity, int currencyId)
         {
             int totalBuyQuantity = this.dbContext.UsersTrades
-                .Where(ut => ut.ApplicationUserId == userId && ut.CompanyTicker == companyTicker && ut.Type == TradeType.Buy)
+                .Where(ut => ut.ApplicationUserId == userId
+                    && ut.CompanyTicker == companyTicker
+                    && ut.Type == TradeType.Buy
+                    && ut.CurrencyId == currencyId)
                 .Sum(ut => ut.StockQuantity);
 
             int totalSellQuantity = this.dbContext.UsersTrades
-                .Where(ut => ut.ApplicationUserId == userId && ut.CompanyTicker == companyTicker && ut.Type == TradeType.Sell)
+                .Where(ut => ut.ApplicationUserId == userId
+                    && ut.CompanyTicker == companyTicker
+                    && ut.Type == TradeType.Sell
+                    && ut.CurrencyId == currencyId)
                 .Sum(ut => ut.StockQuantity);
 
             int currentlyHoldingQuantity = totalBuyQuantity - totalSellQuantity;
