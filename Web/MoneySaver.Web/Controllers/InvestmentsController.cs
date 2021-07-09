@@ -5,14 +5,16 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    public class InvestmentsController
+    [Authorize]
+    public class InvestmentsController : Controller
     {
         /*
         public Task<IActionResult> AddWallet()
         {
-            
+            return this.View();
         }
         */
     }

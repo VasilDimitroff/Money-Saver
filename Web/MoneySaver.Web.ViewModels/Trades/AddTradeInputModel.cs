@@ -26,14 +26,10 @@
 
         public CompanyViewModel SelectedCompany { get; set; }
 
-        [Required]
-        [Range(1, 1000000)]
-        public int SelectedCurrencyId { get; set; }
-
         public decimal Amount => this.Price * this.Quantity;
 
         public ICollection<CompanyViewModel> Companies { get; set; }
 
-        public IEnumerable<CurrencyViewModel> Currencies { get; set; }
+
     }
 }

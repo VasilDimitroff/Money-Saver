@@ -1,7 +1,6 @@
-﻿@using MoneySaver.Web.ViewModels.Trades
-@using MoneySaver.Web.ViewModels.Trades.Enums
+﻿@using MoneySaver.Web.ViewModels.Investments
 
-@model AddTradeInputModel
+@model AddInvestmentWalletInputModel
 @{
     this.ViewData["Title"] = "Add Trade";
 }
@@ -24,27 +23,16 @@
             <form class="forms-sample" asp-controller="Trades" asp-action="Add" method="post">
                 <div class="text-danger" asp-validation-summary="All"></div>
                 <div class="form-group">
-                    <span class="mdi mdi-copyright text-primary"></span>
-                    <label asp-for="@Model.SelectedCompany.Ticker"><span class="font-weight-bold">Company</span></label>
-                    <select asp-for="@Model.SelectedCompany.Ticker" class="js-example-basic-single" style="width:100%">
-                        @foreach (var company in Model.Companies)
+                    <span class="mdi mdi-cash text-primary"></span>
+                    <label asp-for="@Model.SelectedCurrencyId">Currency</label>
+                    <select asp-for="@Model.SelectedCurrencyId" class="js-example-basic-single" style="width:100%">
+                        <option disabled selected>-- Select the currency of the trade --</option>
+                        @foreach (var currency in Model.Currencies)
                         {
-                            <option value="@company.Ticker">@company.Name (Ticker: @company.Ticker)</option>
+                            <option value="@currency.CurrencyId">@currency.Name (@currency.Code)</option>
                         }
                     </select>
-                    <p class="pt-3 text-muted">Couldn't find the company you've searched? <a asp-controller="Companies" asp-action="Add">Add new company</a></p>
-                </div>
-                <div class="form-group">
-                    <span class="mdi mdi-arrow-right-bold text-success"></span><span class="mdi mdi-arrow-left-bold text-danger"></span>
-                    <label asp-for="Type"><span class="font-weight-bold">Buy / Sell</span></label>
-                    <select class="js-example-basic-single" style="width:100%" asp-for="Type" placeholder="Type">
-                        <option disabled selected>-- Choose Trade Type --</option>
-                        @foreach (string type in Enum.GetNames(typeof(TradeType)))
-                        {
-                           <option>@type</option>
-                        }
-                    </select>
-                    <span class="text-danger" asp-validation-for="Type"></span>
+                    <span class="text-danger" asp-validation-for="@Model.SelectedCurrencyId"></span>
                 </div>
                 <div class="form-group">
                     <span class="mdi mdi-currency-usd text-primary"></span>
