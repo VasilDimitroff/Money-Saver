@@ -10,7 +10,7 @@
     {
         public Company()
         {
-            this.Traders = new HashSet<UserTrade>();
+            this.Traders = new HashSet<Trade>();
         }
 
         [Key]
@@ -24,6 +24,6 @@
 
         public DateTime? ModifiedOn { get; set; }
 
-        public virtual ICollection<UserTrade> Traders { get; set; }
+        public virtual ICollection<Trade> Traders { get; set; }
     }
 }

@@ -78,6 +78,8 @@
 
         public const string UserIsNotHolder = "User with this Id has no shares of this company";
 
+        public const string CannotEditInvestmentWallet = "You have no permissions to read or edit this investment wallet.";
+
         public const string NotEnoughQuantity = "You haven't enough stock quantity in this currency by this company!";
     }
 }

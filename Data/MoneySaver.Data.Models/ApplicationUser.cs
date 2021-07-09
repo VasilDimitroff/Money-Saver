@@ -15,9 +15,9 @@ namespace MoneySaver.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
-            this.Trades = new HashSet<UserTrade>();
             this.Lists = new HashSet<ToDoList>();
             this.Wallets = new HashSet<Wallet>();
+            this.InvestmentWallets = new HashSet<InvestmentWallet>();
         }
 
         // Audit info
@@ -36,10 +36,10 @@ namespace MoneySaver.Data.Models
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
-        public virtual ICollection<UserTrade> Trades { get; set; }
-
         public virtual ICollection<ToDoList> Lists { get; set; }
 
         public virtual ICollection<Wallet> Wallets { get; set; }
+
+        public virtual ICollection<InvestmentWallet> InvestmentWallets { get; set; }
     }
 }

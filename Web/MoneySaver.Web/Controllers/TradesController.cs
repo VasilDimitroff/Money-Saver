@@ -74,6 +74,7 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
 
+            /*
             if (input.Type == TradeType.Buy)
             {
                 await this.tradesService.CreateBuyTradeAsync(user.Id, input.SelectedCompany.Ticker, input.Quantity, input.Price, input.SelectedCurrencyId);
@@ -82,6 +83,7 @@
             {
                 await this.tradesService.CreateSellTradeAsync(user.Id, input.SelectedCompany.Ticker, input.Quantity, input.Price, input.SelectedCurrencyId);
             }
+            */
 
             return this.Redirect("/Trades/All");
         }

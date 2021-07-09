@@ -229,36 +229,25 @@ namespace MoneySaver.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UsersTrades",
+                name: "InvestmentWallets",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CompanyTicker = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    StockQuantity = table.Column<int>(type: "int", nullable: false),
-                    CurrencyId = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    CurrencyId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsersTrades", x => x.Id);
+                    table.PrimaryKey("PK_InvestmentWallets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UsersTrades_AspNetUsers_ApplicationUserId",
+                        name: "FK_InvestmentWallets_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_UsersTrades_Companies_CompanyTicker",
-                        column: x => x.CompanyTicker,
-                        principalTable: "Companies",
-                        principalColumn: "Ticker",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UsersTrades_Currencies_CurrencyId",
+                        name: "FK_InvestmentWallets_Currencies_CurrencyId",
                         column: x => x.CurrencyId,
                         principalTable: "Currencies",
                         principalColumn: "Id",
@@ -313,6 +302,36 @@ namespace MoneySaver.Data.Migrations
                         name: "FK_ToDoItems_ToDoLists_ToDoListId",
                         column: x => x.ToDoListId,
                         principalTable: "ToDoLists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Trades",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CompanyTicker = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    StockQuantity = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    InvestmentWalletId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Trades", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Trades_Companies_CompanyTicker",
+                        column: x => x.CompanyTicker,
+                        principalTable: "Companies",
+                        principalColumn: "Ticker",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Trades_InvestmentWallets_InvestmentWalletId",
+                        column: x => x.InvestmentWalletId,
+                        principalTable: "InvestmentWallets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -418,6 +437,16 @@ namespace MoneySaver.Data.Migrations
                 column: "WalletId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_InvestmentWallets_ApplicationUserId",
+                table: "InvestmentWallets",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InvestmentWallets_CurrencyId",
+                table: "InvestmentWallets",
+                column: "CurrencyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Records_CategoryId",
                 table: "Records",
                 column: "CategoryId");
@@ -438,19 +467,14 @@ namespace MoneySaver.Data.Migrations
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsersTrades_ApplicationUserId",
-                table: "UsersTrades",
-                column: "ApplicationUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UsersTrades_CompanyTicker",
-                table: "UsersTrades",
+                name: "IX_Trades_CompanyTicker",
+                table: "Trades",
                 column: "CompanyTicker");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsersTrades_CurrencyId",
-                table: "UsersTrades",
-                column: "CurrencyId");
+                name: "IX_Trades_InvestmentWalletId",
+                table: "Trades",
+                column: "InvestmentWalletId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Wallets_ApplicationUserId",
@@ -490,7 +514,7 @@ namespace MoneySaver.Data.Migrations
                 name: "ToDoItems");
 
             migrationBuilder.DropTable(
-                name: "UsersTrades");
+                name: "Trades");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -503,6 +527,9 @@ namespace MoneySaver.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Companies");
+
+            migrationBuilder.DropTable(
+                name: "InvestmentWallets");
 
             migrationBuilder.DropTable(
                 name: "Wallets");

@@ -40,7 +40,9 @@
 
         public DbSet<Wallet> Wallets { get; set; }
 
-        public DbSet<UserTrade> UsersTrades { get; set; }
+        public DbSet<InvestmentWallet> InvestmentWallets { get; set; }
+
+        public DbSet<Trade> Trades { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

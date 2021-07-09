@@ -10,7 +10,7 @@ using MoneySaver.Data;
 namespace MoneySaver.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210709071451_initialCreate")]
+    [Migration("20210709094410_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -314,6 +314,29 @@ namespace MoneySaver.Data.Migrations
                     b.ToTable("Currencies");
                 });
 
+            modelBuilder.Entity("MoneySaver.Data.Models.InvestmentWallet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.ToTable("InvestmentWallets");
+                });
+
             modelBuilder.Entity("MoneySaver.Data.Models.Record", b =>
                 {
                     b.Property<string>("Id")
@@ -435,13 +458,9 @@ namespace MoneySaver.Data.Migrations
                     b.ToTable("ToDoLists");
                 });
 
-            modelBuilder.Entity("MoneySaver.Data.Models.UserTrade", b =>
+            modelBuilder.Entity("MoneySaver.Data.Models.Trade", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CompanyTicker")
@@ -451,7 +470,7 @@ namespace MoneySaver.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CurrencyId")
+                    b.Property<int>("InvestmentWalletId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedOn")
@@ -468,13 +487,11 @@ namespace MoneySaver.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("CompanyTicker");
 
-                    b.HasIndex("CurrencyId");
+                    b.HasIndex("InvestmentWalletId");
 
-                    b.ToTable("UsersTrades");
+                    b.ToTable("Trades");
                 });
 
             modelBuilder.Entity("MoneySaver.Data.Models.Wallet", b =>
@@ -576,6 +593,25 @@ namespace MoneySaver.Data.Migrations
                     b.Navigation("Wallet");
                 });
 
+            modelBuilder.Entity("MoneySaver.Data.Models.InvestmentWallet", b =>
+                {
+                    b.HasOne("MoneySaver.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("InvestmentWallets")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MoneySaver.Data.Models.Currency", "Currency")
+                        .WithMany("InvestmentWallets")
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Currency");
+                });
+
             modelBuilder.Entity("MoneySaver.Data.Models.Record", b =>
                 {
                     b.HasOne("MoneySaver.Data.Models.Category", "Category")
@@ -607,31 +643,23 @@ namespace MoneySaver.Data.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("MoneySaver.Data.Models.UserTrade", b =>
+            modelBuilder.Entity("MoneySaver.Data.Models.Trade", b =>
                 {
-                    b.HasOne("MoneySaver.Data.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Trades")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("MoneySaver.Data.Models.Company", "Company")
                         .WithMany("Traders")
                         .HasForeignKey("CompanyTicker")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("MoneySaver.Data.Models.Currency", "Currency")
+                    b.HasOne("MoneySaver.Data.Models.InvestmentWallet", "InvestmentWallet")
                         .WithMany("Trades")
-                        .HasForeignKey("CurrencyId")
+                        .HasForeignKey("InvestmentWalletId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
-
                     b.Navigation("Company");
 
-                    b.Navigation("Currency");
+                    b.Navigation("InvestmentWallet");
                 });
 
             modelBuilder.Entity("MoneySaver.Data.Models.Wallet", b =>
@@ -657,13 +685,13 @@ namespace MoneySaver.Data.Migrations
                 {
                     b.Navigation("Claims");
 
+                    b.Navigation("InvestmentWallets");
+
                     b.Navigation("Lists");
 
                     b.Navigation("Logins");
 
                     b.Navigation("Roles");
-
-                    b.Navigation("Trades");
 
                     b.Navigation("Wallets");
                 });
@@ -680,9 +708,14 @@ namespace MoneySaver.Data.Migrations
 
             modelBuilder.Entity("MoneySaver.Data.Models.Currency", b =>
                 {
-                    b.Navigation("Trades");
+                    b.Navigation("InvestmentWallets");
 
                     b.Navigation("Wallets");
+                });
+
+            modelBuilder.Entity("MoneySaver.Data.Models.InvestmentWallet", b =>
+                {
+                    b.Navigation("Trades");
                 });
 
             modelBuilder.Entity("MoneySaver.Data.Models.ToDoList", b =>

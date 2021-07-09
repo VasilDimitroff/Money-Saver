@@ -7,7 +7,7 @@
         public Currency()
         {
             this.Wallets = new HashSet<Wallet>();
-            this.Trades = new HashSet<UserTrade>();
+            this.InvestmentWallets = new HashSet<InvestmentWallet>();
         }
 
         public int Id { get; set; }
@@ -18,6 +18,6 @@
 
         public virtual ICollection<Wallet> Wallets { get; set; }
 
-        public virtual ICollection<UserTrade> Trades { get; set; }
+        public virtual ICollection<InvestmentWallet> InvestmentWallets { get; set; }
     }
 }

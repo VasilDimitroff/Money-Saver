@@ -7,12 +7,8 @@
     using MoneySaver.Data.Common.Models;
     using MoneySaver.Data.Models.Enums;
 
-    public class UserTrade : BaseModel<string>
+    public class Trade : BaseModel<string>
     {
-        [Required]
-        public string ApplicationUserId { get; set; }
-
-        public virtual ApplicationUser ApplicationUser { get; set; }
 
         [Required]
         [ForeignKey(nameof(Company))]
@@ -27,11 +23,11 @@
         public int StockQuantity { get; set; }
 
         [Required]
-        public int CurrencyId { get; set; }
-
-        public virtual Currency Currency { get; set; }
+        public TradeType Type { get; set; }
 
         [Required]
-        public TradeType Type { get; set; }
+        public int InvestmentWalletId { get; set; }
+
+        public virtual InvestmentWallet InvestmentWallet { get; set; }
     }
 }
