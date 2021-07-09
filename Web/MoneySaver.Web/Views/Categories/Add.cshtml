@@ -33,14 +33,14 @@
                     <span class="text-danger" asp-validation-for="Name"></span>
                 </div>
                 @* <div class="form-group">
-            <label for="Category">Wallet</label>
-            <select asp-for="@Model.WalletId" class="js-example-basic-single" style="width:100%">
-                @foreach (var wallet in Model.Wallets)
-                {
-                    <option value="@wallet.WalletId">@wallet.WalletName</option>
-                }
-            </select>
-        </div>
+                        <label for="Category">Wallet</label>
+                        <select asp-for="@Model.WalletId" class="js-example-basic-single" style="width:100%">
+                            @foreach (var wallet in Model.Wallets)
+                            {
+                                <option value="@wallet.WalletId">@wallet.WalletName</option>
+                            }
+                        </select>
+                    </div>
                 *@
                 <input type="hidden" asp-for="WalletId">
                 <span class="text-danger" asp-validation-for="WalletId"></span>
@@ -145,19 +145,6 @@
             font-size: 16px;
         }
     </style>
-    <script src="~/vendors/js/vendor.bundle.base.js"></script>
     <script src="~/vendors/js/vendor.bundle.addons.js"></script>
-    <!-- endinject -->
-    <!-- inject:js -->
-    <script src="~/js/off-canvas.js"></script>
-    <script src="~/js/hoverable-collapse.js"></script>
-    <!-- it make sidebar not collapsable
-    <script src="~/js/template.js"></script>
-    end of script-->
-    <script src="~/js/settings.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page-->
-    <script src="~/js/file-upload.js"></script>
-    <script src="~/js/typeahead.js"></script>
     <script src="~/js/select2.js"></script>
 }

@@ -75,5 +75,9 @@
         public const string ListContainsEmptyItems = "List cannot contains empty items";
 
         public const string InvalidCompanyTicker = "Company ticker is invalid! Please make sure you've entered the ticker correctly and that it is not empty";
+
+        public const string UserIsNotHolder = "User with this Id has no shares of this company";
+
+        public const string NotEnoughQuantity = "You're trying to sell more stocks than you hold!";
     }
 }

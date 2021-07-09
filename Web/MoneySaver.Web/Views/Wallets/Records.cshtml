@@ -11,11 +11,11 @@
 <div class="card">
     <div class="card-body">
         @*
-        <h4 class="card-title">
-            All Records
-            - Page <span class="font-weight-bold text-info">@Model.PageNumber</span>
-            - <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a>
-        </h4>
+            <h4 class="card-title">
+                All Records
+                - Page <span class="font-weight-bold text-info">@Model.PageNumber</span>
+                - <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a>
+            </h4>
         *@
         <div class="template-demo mb-5">
             <nav aria-label="breadcrumb">
@@ -129,34 +129,26 @@
             </div>
         </div>
     </div>
-        </div>
-            <!-- content-wrapper ends -->
-            @section Scripts {
-                <script>
-                    $(document).ready(function () {
-                        // executes when HTML-Document is loaded and DOM is ready
-                        console.log("document is ready");
+</div>
+<!-- content-wrapper ends -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // executes when HTML-Document is loaded and DOM is ready
+            console.log("document is ready");
 
 
-                        $(".card-shadow").hover(
-                            function () {
-                                $(this).addClass('shadow-sm').css('cursor', 'pointer');
-                            }, function () {
-                                $(this).removeClass('shadow-sm');
-                            }
-                        );
+            $(".card-shadow").hover(
+                function () {
+                    $(this).addClass('shadow-sm').css('cursor', 'pointer');
+                }, function () {
+                    $(this).removeClass('shadow-sm');
+                }
+            );
 
-                        // document ready
-                    });
-                </script>
-
-                <script src="~/js/formpickers.js"></script>
-                <script src="~/js/form-addons.js"></script>
-                <script src="~/js/x-editable.js"></script>
-                <script src="~/js/dropify.js"></script>
-                <script src="~/js/dropzone.js"></script>
-                <script src="~/js/jquery-file-upload.js"></script>
-                <script src="~/js/formpickers.js"></script>
-                <script src="~/js/form-repeater.js"></script>
-
-            }
+            // document ready
+        });
+    </script>
+    <script src="~/vendors/js/vendor.bundle.addons.js"></script>
+    <script src="~/js/select2.js"></script>
+}

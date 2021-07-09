@@ -4,9 +4,9 @@
     using System.ComponentModel.DataAnnotations;
     using MoneySaver.Web.ViewModels.Trades.Enums;
 
-    public class BuyStockInputModel
+    public class AddTradeInputModel
     {
-        public BuyStockInputModel()
+        public AddTradeInputModel()
         {
             this.Companies = new HashSet<CompanyViewModel>();
         }
@@ -16,9 +16,11 @@
 
         public decimal Price { get; set; }
 
+        public TradeType Type { get; set; }
+
         public CompanyViewModel SelectedCompany { get; set; }
 
-        public decimal TradeAmount => this.Price * this.Quantity;
+        public decimal Amount => this.Price * this.Quantity;
 
         public ICollection<CompanyViewModel> Companies { get; set; }
     }

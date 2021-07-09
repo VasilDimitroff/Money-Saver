@@ -1,8 +1,9 @@
 ﻿@using MoneySaver.Web.ViewModels.Trades
+@using MoneySaver.Web.ViewModels.Trades.Enums
 
-@model BuyStockInputModel
+@model AddTradeInputModel
 @{
-    this.ViewData["Title"] = "Buy Trade";
+    this.ViewData["Title"] = "Add Trade";
 }
 
 <div class="col-12 grid-margin stretch-card">
@@ -13,14 +14,14 @@
                     <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
                         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
                         <li class="breadcrumb-item"><a asp-controller="Trades" asp-action="All">Trades</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><span>Buy</span></li>
+                        <li class="breadcrumb-item active" aria-current="page"><span>Add Trade</span></li>
                     </ol>
                 </nav>
             </div>
             <p class="card-title">
-                Add new Buy Trade
+                Add new Trade
             </p>
-            <form class="forms-sample" asp-controller="Trades" asp-action="Buy" method="post">
+            <form class="forms-sample" asp-controller="Trades" asp-action="Add" method="post">
                 <div class="text-danger" asp-validation-summary="All"></div>
                 <div class="form-group">
                     <span class="mdi mdi-copyright text-primary"></span>
@@ -32,6 +33,24 @@
                         }
                     </select>
                     <p class="pt-3 text-muted">Couldn't find the company you've searched? <a asp-controller="Companies" asp-action="Add">Add new company</a></p>
+                </div>
+                <div class="form-group">
+                    <span class="mdi mdi-arrow-right-bold text-success"></span><span class="mdi mdi-arrow-left-bold text-danger"></span>
+                    <label asp-for="Type"><span class="font-weight-bold">Buy / Sell</span></label>
+                    <select class="js-example-basic-single" style="width:100%" asp-for="Type" placeholder="Type">
+                        @foreach (string type in Enum.GetNames(typeof(TradeType)))
+                        {
+                            if (type == TradeType.Buy.ToString())
+                            {
+                                <option selected>@type</option>
+                            }
+                            else
+                            {
+                                <option>@type</option>
+                            }
+                        }
+                    </select>
+                    <span class="text-danger" asp-validation-for="Type"></span>
                 </div>
                 <div class="form-group">
                     <span class="mdi mdi-currency-usd text-primary"></span>
@@ -54,19 +73,6 @@
 </div>
 
 @section Scripts {
-    <script src="~/vendors/js/vendor.bundle.base.js"></script>
     <script src="~/vendors/js/vendor.bundle.addons.js"></script>
-    <!-- endinject -->
-    <!-- inject:js -->
-    <script src="~/js/off-canvas.js"></script>
-    <script src="~/js/hoverable-collapse.js"></script>
-    <!-- it make sidebar not collapsable
-    <script src="~/js/template.js"></script>
-    end of script-->
-    <script src="~/js/settings.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page-->
-    <script src="~/js/file-upload.js"></script>
-    <script src="~/js/typeahead.js"></script>
     <script src="~/js/select2.js"></script>
 }

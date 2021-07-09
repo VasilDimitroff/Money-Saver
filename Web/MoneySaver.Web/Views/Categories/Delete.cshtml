@@ -47,27 +47,27 @@
                         <span class="text-danger" asp-validation-for="NewCategoryId"></span>
                     </div>
                     @* <div class="form-group">
-                    <label asp-for="@Model.NewCategoryId">Choose new category 2</label>
-                    <select class="form-control" style="width:100%" asp-for="@Model.NewCategoryId" placeholder="New Category">
-                        <option disabled selected class="default-option"> -- select a badge color -- </option>
-                        @foreach (var category in Model.Categories)
-                        {
-                            <option class="optText-@category.BadgeColor.ToString().ToLower()" value="@category.CategoryId">@category.CategoryName</option>
-                        }
-                    </select>
-                </div>
+                            <label asp-for="@Model.NewCategoryId">Choose new category 2</label>
+                            <select class="form-control" style="width:100%" asp-for="@Model.NewCategoryId" placeholder="New Category">
+                                <option disabled selected class="default-option"> -- select a badge color -- </option>
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <option class="optText-@category.BadgeColor.ToString().ToLower()" value="@category.CategoryId">@category.CategoryName</option>
+                                }
+                            </select>
+                        </div>
                     *@
                     <button type="submit" style="white-space: normal !important; max-width: 165px; line-height: 20px;" class="btn btn-primary btn-sm mr-2">
                         <span class="mdi mdi-folder-move" style="font-size: 15px;"></span> Move & Delete
                     </button>
                 </form>
                 @*<form class="forms-sample" method="post" style="display: inline">
-                <input type="hidden" asp-for="OldCategoryId" value="@Model.OldCategoryId">
-                <input type="hidden" asp-for="NewCategoryId" value="-1">
-                <button type="submit" style="white-space: normal !important; max-width: 165px; line-height: 20px;" class="btn btn-danger btn-sm mr-2">
-                    <span class="mdi mdi-delete-forever" style="font-size: 15px;"></span> Delete Both
-                </button>
-            </form>*@
+                        <input type="hidden" asp-for="OldCategoryId" value="@Model.OldCategoryId">
+                        <input type="hidden" asp-for="NewCategoryId" value="-1">
+                        <button type="submit" style="white-space: normal !important; max-width: 165px; line-height: 20px;" class="btn btn-danger btn-sm mr-2">
+                            <span class="mdi mdi-delete-forever" style="font-size: 15px;"></span> Delete Both
+                        </button>
+                    </form>*@
 
                 @*Unsafely delete button and popup*@
                 <button type="button" class="btn btn-outline-danger btn-sm mr-2 float-right" style="white-space: normal !important; max-width: 165px; line-height: 20px;" data-placement="bottom" title="Delete category and records within" data-toggle="modal" data-target="#defaultModal"><span class="mdi mdi-delete-forever" style="font-size: 15px;"></span>Delete Both</button>
@@ -97,24 +97,10 @@
                 </div>
             </div>
         </div>
-</div>
     </div>
+</div>
 
 @section Scripts {
-
-    <script src="~/vendors/js/vendor.bundle.base.js"></script>
     <script src="~/vendors/js/vendor.bundle.addons.js"></script>
-    <!-- endinject -->
-    <!-- inject:js -->
-    <script src="~/js/off-canvas.js"></script>
-    <script src="~/js/hoverable-collapse.js"></script>
-    <!-- it make sidebar not collapsable
-    <script src="~/js/template.js"></script>
-    end of script-->
-    <script src="~/js/settings.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page-->
-    <script src="~/js/file-upload.js"></script>
-    <script src="~/js/typeahead.js"></script>
     <script src="~/js/select2.js"></script>
 }

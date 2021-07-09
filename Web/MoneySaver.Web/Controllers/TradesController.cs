@@ -11,6 +11,7 @@
     using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.ViewModels.Trades;
+    using MoneySaver.Web.ViewModels.Trades.Enums;
 
     [Authorize]
     public class TradesController : Controller
@@ -29,10 +30,10 @@
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> Buy()
+        public async Task<IActionResult> Add()
         {
             var companies = await this.companiesService.GetAllCompaniesAsync();
-            var model = new BuyStockInputModel
+            var model = new AddTradeInputModel
             {
                 Companies = companies.Select(c => new CompanyViewModel
                 {
@@ -49,7 +50,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Buy(BuyStockInputModel input)
+        public async Task<IActionResult> Add(AddTradeInputModel input)
         {
             if (this.ModelState.IsValid)
             {
@@ -57,7 +58,14 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
 
-            await this.tradesService.CreateBuyTradeAsync(user.Id, input.SelectedCompany.Ticker, input.Quantity, input.Price);
+            if (input.Type == TradeType.Buy)
+            {
+                await this.tradesService.CreateBuyTradeAsync(user.Id, input.SelectedCompany.Ticker, input.Quantity, input.Price);
+            }
+            else
+            {
+                await this.tradesService.CreateSellTradeAsync(user.Id, input.SelectedCompany.Ticker, input.Quantity, input.Price);
+            }
 
             return this.Redirect("/Trades/All");
         }
