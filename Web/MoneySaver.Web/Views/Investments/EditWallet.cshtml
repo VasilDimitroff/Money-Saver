@@ -20,7 +20,7 @@
             <p class="card-title">
                 Edit <span class="font-weight-bold">@Model.Name</span>
             </p>
-            <form class="forms-sample" asp-controller="Investments" asp-action="EditWallet" asp-route-id="@Model.Id" method="post">
+            <form class="forms-sample" style="display: inline" asp-controller="Investments" asp-action="EditWallet" asp-route-id="@Model.Id" method="post">
                 <div class="text-danger" asp-validation-summary="All"></div>
                 <div class="form-group">
                     <span class="mdi mdi-lead-pencil text-primary"></span>
@@ -42,9 +42,37 @@
                     <span class="text-danger" asp-validation-for="@Model.SelectedCurrency.CurrencyId"></span>
                 </div>
                 <button type="submit" class="btn btn-primary btn-sm mr-2 mdi mdi-check text-light">
-                     Save
+                    Save
                 </button>
             </form>
+
+
+            @*Delete wallet button*@
+            <button type="button" class="btn btn-outline-danger btn-sm mr-2 float-right" data-placement="bottom" title="Delete wallet with categories and records within" data-toggle="modal" data-target="#defaultModal"><span class="mdi mdi-delete-forever" style="font-size: 15px;"></span>Delete</button>
+            <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <form method="post" asp-controller="Investments" asp-action="DeleteWallet" asp-route-id="@Model.Id">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-danger" id="exampleModalLabel">Note! This operation will result in permanently data loss!</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>If you confirm deleting investment wallet <span class="font-weight-bold">@Model.Name</span>, you will delete also all trades which are part from it. This operation cannot be undo!</span>
+                                <p class="font-weight-bold">Are you sure you want to delete the investment wallet?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                <button type="submit" class="btn btn-outline-danger">Yes</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
         </div>
     </div>
 </div>

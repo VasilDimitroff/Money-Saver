@@ -114,6 +114,20 @@
             return this.Redirect("/Investments/All");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteWallet(int id)
+        {
+            if (this.ModelState.IsValid)
+            {
+            }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            await this.investmentsWalletsService.RemoveAsync(user.Id, id);
+
+            return this.Redirect("/Investments/All");
+        }
+
         public async Task<IActionResult> All()
         {
             if (this.ModelState.IsValid)

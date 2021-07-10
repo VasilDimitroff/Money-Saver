@@ -121,7 +121,32 @@
 
         public async Task RemoveAsync(string userId, int investmentWalletId)
         {
-            throw new NotImplementedException();
+            var investmentWallet = await this.dbContext.InvestmentWallets
+                 .Include(iw => iw.Trades)
+                 .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
+
+            if (investmentWallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.InvestmentWalletNotExist);
+            }
+
+            if (!await this.IsUserOwnInvestmentWalletAsync(userId, investmentWalletId))
+            {
+                throw new ArgumentException(GlobalConstants.NotPermissionsToEditInvestmentWallet);
+            }
+
+            var tradesForDelete = new List<Trade>();
+
+            foreach (var trade in investmentWallet.Trades)
+            {
+                tradesForDelete.Add(trade);
+            }
+
+            this.dbContext.RemoveRange(tradesForDelete);
+
+            this.dbContext.InvestmentWallets.Remove(investmentWallet);
+
+            this.dbContext.SaveChanges();
         }
 
         public async Task<IEnumerable<InvestmentWalletDto>> GetAllAsync(string userId)
