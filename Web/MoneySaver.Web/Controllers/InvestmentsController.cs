@@ -66,7 +66,52 @@
             await this.investmentsWalletsService
                 .AddAsync(user.Id, input.Name, input.SelectedCurrencyId);
 
-            return this.Redirect("/Investments/Wallets");
+            return this.Redirect("/Investments/All");
+        }
+
+        public async Task<IActionResult> EditWallet(int id)
+        {
+            if (this.ModelState.IsValid)
+            {
+            }
+
+            var currenciesDto = await this.currenciesService.GetAllAsync();
+            var currentCurrency = await this.investmentsWalletsService.GetInvestmentCurrencyAsync(id);
+
+            var model = new EditInvestmentWalletInputModel()
+            {
+                Id = id,
+                Name = await this.investmentsWalletsService.GetInvestmentWalletNameAsync(id),
+                SelectedCurrency = new CurrencyViewModel
+                {
+                    CurrencyId = currentCurrency.CurrencyId,
+                    Code = currentCurrency.Code,
+                    Name = currentCurrency.Name,
+                },
+                Currencies = currenciesDto.Select(c => new CurrencyViewModel
+                {
+                    Code = c.Code,
+                    CurrencyId = c.CurrencyId,
+                    Name = c.Name,
+                })
+                .ToList(),
+            };
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditWallet(EditInvestmentWalletInputModel input)
+        {
+            if (this.ModelState.IsValid)
+            {
+            }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            await this.investmentsWalletsService.EditAsync(user.Id, input.Id, input.SelectedCurrency.CurrencyId, input.Name);
+
+            return this.Redirect("/Investments/All");
         }
 
         public async Task<IActionResult> All()

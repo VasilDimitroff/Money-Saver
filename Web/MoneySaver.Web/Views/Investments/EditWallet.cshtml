@@ -1,8 +1,8 @@
 ﻿@using MoneySaver.Web.ViewModels.Investments
 
-@model AddInvestmentWalletInputModel
+@model EditInvestmentWalletInputModel
 @{
-    this.ViewData["Title"] = "Add Investment Wallet";
+    this.ViewData["Title"] = "Edit Investment Wallet";
 }
 
 <div class="col-12 grid-margin stretch-card">
@@ -13,14 +13,14 @@
                     <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
                         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
                         <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="All">Investment Wallets</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><span>Add New</span></li>
+                        <li class="breadcrumb-item active" aria-current="page"><span>Edit</span></li>
                     </ol>
                 </nav>
             </div>
             <p class="card-title">
-                New Investment Wallet
+                Edit <span class="font-weight-bold">@Model.Name</span>
             </p>
-            <form class="forms-sample" asp-controller="Investments" asp-action="AddWallet" method="post">
+            <form class="forms-sample" asp-controller="Investments" asp-action="EditWallet" asp-route-id="@Model.Id" method="post">
                 <div class="text-danger" asp-validation-summary="All"></div>
                 <div class="form-group">
                     <span class="mdi mdi-lead-pencil text-primary"></span>
@@ -30,19 +30,19 @@
                 </div>
                 <div class="form-group">
                     <span class="mdi mdi-cash text-primary"></span>
-                    <label asp-for="@Model.SelectedCurrencyId">Currency</label>
+                    <label asp-for="@Model.SelectedCurrency.CurrencyId">Currency</label>
                     <p><small class="text-muted mt-1">Note! All trades in this investment wallet should be in the chosen currency.</small></p>
-                    <select asp-for="@Model.SelectedCurrencyId" class="js-example-basic-single" style="width:100%">
-                        <option disabled selected>-- Select the currency of the trade --</option>
+                    <select asp-for="@Model.SelectedCurrency.CurrencyId" class="js-example-basic-single" style="width:100%">
+                        <option selected value="@Model.SelectedCurrency.CurrencyId">@Model.SelectedCurrency.Name (@Model.SelectedCurrency.Code)</option>
                         @foreach (var currency in Model.Currencies)
                         {
                             <option value="@currency.CurrencyId">@currency.Name (@currency.Code)</option>
                         }
                     </select>
-                    <span class="text-danger" asp-validation-for="@Model.SelectedCurrencyId"></span>
+                    <span class="text-danger" asp-validation-for="@Model.SelectedCurrency.CurrencyId"></span>
                 </div>
                 <button type="submit" class="btn btn-primary btn-sm mr-2 mdi mdi-check text-light">
-                    Add Investment Wallet
+                     Save
                 </button>
             </form>
         </div>

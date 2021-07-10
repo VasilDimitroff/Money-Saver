@@ -26,16 +26,16 @@
 
         public async Task AddAsync(string userId, string name, int currencyId)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentException(GlobalConstants.EmptyInvestmentsWalletName);
-            }
-
             var currency = await this.dbContext.Currencies.FirstOrDefaultAsync(c => c.Id == currencyId);
 
             if (currency == null)
             {
                 throw new ArgumentException(GlobalConstants.CurrencyNotExist);
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = "Unnamed Wallet";
             }
 
             var investmentWallet = new InvestmentWallet
@@ -50,9 +50,73 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task EditAsync(string userId, int investmentWalletId)
+        public async Task<string> GetInvestmentWalletNameAsync(int investmentWalletId)
         {
-            throw new NotImplementedException();
+            var investmentWallet = await this.dbContext.InvestmentWallets
+               .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
+
+            if (investmentWallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.InvestmentWalletNotExist);
+            }
+
+            return investmentWallet.Name;
+        }
+
+        public async Task<CurrencyInfoDto> GetInvestmentCurrencyAsync(int investmentWalletId)
+        {
+            var investmentWallet = await this.dbContext.InvestmentWallets
+                .Include(iw => iw.Currency)
+                .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
+
+            if (investmentWallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.InvestmentWalletNotExist);
+            }
+
+            var currency = new CurrencyInfoDto()
+            {
+                CurrencyId = investmentWallet.CurrencyId,
+                Code = investmentWallet.Currency.Code,
+                Name = investmentWallet.Currency.Name,
+            };
+
+            return currency;
+        }
+
+        public async Task EditAsync(string userId, int investmentWalletId, int currencyId, string name)
+        {
+            var investmentWallet = await this.dbContext.InvestmentWallets
+                .Include(iw => iw.Trades)
+                .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
+
+            if (investmentWallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.InvestmentWalletNotExist);
+            }
+
+            var currency = await this.dbContext.Currencies
+                .FirstOrDefaultAsync(c => c.Id == currencyId);
+
+            if (currency == null)
+            {
+                throw new ArgumentException(GlobalConstants.CurrencyNotExist);
+            }
+
+            if (!await this.IsUserOwnInvestmentWalletAsync(userId, investmentWalletId))
+            {
+                throw new ArgumentException(GlobalConstants.NotPermissionsToEditInvestmentWallet);
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = "Unnamed Wallet";
+            }
+
+            investmentWallet.Name = name;
+            investmentWallet.CurrencyId = currencyId;
+
+            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task RemoveAsync(string userId, int investmentWalletId)
