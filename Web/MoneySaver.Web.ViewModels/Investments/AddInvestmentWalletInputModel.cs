@@ -1,15 +1,15 @@
 ﻿namespace MoneySaver.Web.ViewModels.Investments
 {
-    using MoneySaver.Web.ViewModels.Currencies;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
+    using MoneySaver.Web.ViewModels.Currencies;
 
     public class AddInvestmentWalletInputModel
     {
         public AddInvestmentWalletInputModel()
         {
-
-
+            this.Currencies = new HashSet<CurrencyViewModel>();
         }
 
         public string Name { get; set; }

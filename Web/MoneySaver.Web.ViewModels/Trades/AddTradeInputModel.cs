@@ -11,7 +11,6 @@
         public AddTradeInputModel()
         {
             this.Companies = new HashSet<CompanyViewModel>();
-            this.Currencies = new HashSet<CurrencyViewModel>();
         }
 
         [Range(1, 1000000)]
@@ -29,7 +28,5 @@
         public decimal Amount => this.Price * this.Quantity;
 
         public ICollection<CompanyViewModel> Companies { get; set; }
-
-
     }
 }

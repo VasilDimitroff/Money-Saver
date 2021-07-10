@@ -2,7 +2,7 @@
 
 @model AddInvestmentWalletInputModel
 @{
-    this.ViewData["Title"] = "Add Trade";
+    this.ViewData["Title"] = "Add Investment Wallet";
 }
 
 <div class="col-12 grid-margin stretch-card">
@@ -12,19 +12,26 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
                         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="Trades" asp-action="All">Trades</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><span>Add Trade</span></li>
+                        <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="All">Investment Wallets</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><span>Add New</span></li>
                     </ol>
                 </nav>
             </div>
             <p class="card-title">
-                Add new Trade
+                New Investment Wallet
             </p>
-            <form class="forms-sample" asp-controller="Trades" asp-action="Add" method="post">
+            <form class="forms-sample" asp-controller="Investments" asp-action="AddWallet" method="post">
                 <div class="text-danger" asp-validation-summary="All"></div>
+                <div class="form-group">
+                    <span class="mdi mdi-lead-pencil text-primary"></span>
+                    <label asp-for="@Model.Name"><span class="font-weight-bold">Name</span></label>
+                    <input type="text" class="form-control form-control-lg" asp-for="@Model.Name" placeholder="Name">
+                    <span class="text-danger" asp-validation-for="@Model.Name"></span>
+                </div>
                 <div class="form-group">
                     <span class="mdi mdi-cash text-primary"></span>
                     <label asp-for="@Model.SelectedCurrencyId">Currency</label>
+                    <p><small class="text-muted mt-1">Note! All trades in this investment wallet should be in the chosen currency.</small></p>
                     <select asp-for="@Model.SelectedCurrencyId" class="js-example-basic-single" style="width:100%">
                         <option disabled selected>-- Select the currency of the trade --</option>
                         @foreach (var currency in Model.Currencies)
@@ -34,20 +41,8 @@
                     </select>
                     <span class="text-danger" asp-validation-for="@Model.SelectedCurrencyId"></span>
                 </div>
-                <div class="form-group">
-                    <span class="mdi mdi-currency-usd text-primary"></span>
-                    <label asp-for="@Model.Price"><span class="font-weight-bold">Price per share</span></label>
-                    <input type="number" class="form-control form-control-lg" asp-for="@Model.Price" placeholder="Price per share" value="0">
-                    <span class="text-danger" asp-validation-for="@Model.Price"></span>
-                </div>
-                <div class="form-group">
-                    <span class="mdi mdi-hexagon-multiple text-primary"></span>
-                    <label asp-for="@Model.Quantity"><span class="font-weight-bold">Quantity</span></label>
-                    <input type="text" class="form-control form-control-lg" asp-for="@Model.Quantity" placeholder="Quantity">
-                    <span class="text-danger" asp-validation-for="@Model.Quantity"></span>
-                </div>
                 <button type="submit" class="btn btn-primary btn-sm mr-2 mdi mdi-check text-light">
-                    Add Trade
+                    Add Investment Wallet
                 </button>
             </form>
         </div>

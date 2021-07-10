@@ -19,18 +19,14 @@
     {
         private readonly ICompaniesService companiesService;
         private readonly ITradesService tradesService;
-        private readonly ICurrenciesService currenciesService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public TradesController(
             ICompaniesService companiesService,
             ITradesService tradesService,
-            ICurrenciesService currenciesService,
             UserManager<ApplicationUser> userManager)
         {
             this.companiesService = companiesService;
-            this.tradesService = tradesService;
-            this.currenciesService = currenciesService;
             this.userManager = userManager;
         }
 
@@ -41,20 +37,12 @@
             }
 
             var companies = await this.companiesService.GetAllCompaniesAsync();
-            var currencies = await this.currenciesService.GetAllAsync();
             var model = new AddTradeInputModel
             {
                 Companies = companies.Select(c => new CompanyViewModel
                 {
                     Name = c.Name,
                     Ticker = c.Ticker,
-                })
-                .ToList(),
-                Currencies = currencies.Select(c => new CurrencyViewModel
-                {
-                    Code = c.Code,
-                    CurrencyId = c.CurrencyId,
-                    Name = c.Name,
                 })
                 .ToList(),
             };

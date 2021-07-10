@@ -72,6 +72,7 @@
             services.AddTransient<IToDoListsService, ToDoListsService>();
             services.AddTransient<ICompaniesService, CompaniesService>();
             services.AddTransient<ITradesService, TradesService>();
+            services.AddTransient<IInvestmentsWalletsService, InvestmentsWalletsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

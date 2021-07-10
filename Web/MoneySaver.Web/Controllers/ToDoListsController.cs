@@ -20,7 +20,9 @@
         private readonly IToDoListsService toDoListsService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public ToDoListsController(IToDoListsService toDoListsService, UserManager<ApplicationUser> userManager)
+        public ToDoListsController(
+            IToDoListsService toDoListsService,
+            UserManager<ApplicationUser> userManager)
         {
             this.toDoListsService = toDoListsService;
             this.userManager = userManager;
@@ -211,6 +213,13 @@
                 .OrderBy(li => li.CreatedOn)
                 .ToList();
 
+            switch (getStatus)
+                {
+                    case 1: this.ViewData["Status"] = "All"; break;
+                    case 2: this.ViewData["Status"] = "Active"; break;
+                    case 3: this.ViewData["Status"] = "Completed"; break;
+                }
+
             return this.View(model);
         }
 
@@ -235,7 +244,7 @@
             return this.Content("No");
         }
 
-        public async Task<IActionResult> ChangeListStatus(string id,string divId, string returnUrl, int getStatus = 1)
+        public async Task<IActionResult> ChangeListStatus(string id, string divId, string returnUrl, int getStatus = 1)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 

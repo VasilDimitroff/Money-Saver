@@ -1,19 +1,17 @@
-﻿using System;
+﻿using MoneySaver.Data.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace MoneySaver.Data.Models
 {
-    public class InvestmentWallet
+    public class InvestmentWallet : BaseModel<int>
     {
         public InvestmentWallet()
         {
             this.Trades = new HashSet<Trade>();
         }
-
-        public int Id { get; set; }
-
 
         [Required]
         public string Name { get; set; }

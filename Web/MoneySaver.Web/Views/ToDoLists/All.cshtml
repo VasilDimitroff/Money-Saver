@@ -11,7 +11,6 @@
     {
         getStatus = Model.FirstOrDefault().GetStatus;
     }
-    string status = "Active";
 }
 
 <style>
@@ -69,33 +68,21 @@
         </nav>
     </div>
 </div>
-
-
-@if (getStatus == 1)
-{
-    status = "All";
-}
-
-else if (getStatus == 3)
-{
-    status = "Completed";
-}
-
 <div class="form-inline d-flex justify-content-center h3 pb-2">
-    @status Lists
+    @this.ViewData["Status"] Lists
 </div>
 <div class="col-12 form-inline justify-content-center mb-4">
     <div class="pr-1 pb-1">
         <a asp-controller="ToDoLists" asp-action="Add"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit list"><i class="mdi mdi-plus"></i> Add</span></a>
     </div>
     <div class="pr-1 pb-1">
-        <a asp-controller="ToDoLists" asp-action="All" asp-route-getstatus="1"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit list"><i class="mdi mdi-format-list-bulleted"></i> All Lists</span></a>
+        <a asp-controller="ToDoLists" asp-action="All" asp-route-getstatus="1"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Show all lists"><i class="mdi mdi-format-list-bulleted"></i> All Lists</span></a>
     </div>
     <div class="pr-1 pb-1">
-        <a asp-controller="ToDoLists" asp-action="All" asp-route-getstatus="2"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit list"><i class="mdi mdi-dots-horizontal"></i> Active</span></a>
+        <a asp-controller="ToDoLists" asp-action="All" asp-route-getstatus="2"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Show active lists"><i class="mdi mdi-dots-horizontal"></i> Active</span></a>
     </div>
     <div class="pr-1 pb-1">
-        <a asp-controller="ToDoLists" asp-action="All" asp-route-getstatus="3"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit list"><i class="mdi mdi-checkbox-multiple-marked-outline"></i> Completed</span></a>
+        <a asp-controller="ToDoLists" asp-action="All" asp-route-getstatus="3"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Show completed lists"><i class="mdi mdi-checkbox-multiple-marked-outline"></i> Completed</span></a>
     </div>
 </div>
 
