@@ -30,18 +30,18 @@
             <form class="forms-sample" style="display: inline" asp-controller="Records" asp-action="Edit" method="post">
                 <div class="text-danger" asp-validation-summary="All"></div>
                 <div class="form-group">
+                    <span class="mdi mdi-pencil text-primary"></span>
+                    <label asp-for="Description"><span class="font-weight-bold">Description</span></label>
+                    <input type="text" class="form-control form-control-lg" asp-for="Description" placeholder="Description">
+                    <span class="text-danger" asp-validation-for="Description"></span>
+                </div>
+                <div class="form-group">
                     <span class="mdi mdi-tag text-primary"></span>
                     <label for="Category"><span class="font-weight-bold">Category</span></label>
                     <select asp-for="CategoryId"
                             asp-items="@(new SelectList(Model.Categories,"Id","Name"))" class="js-example-basic-single" style="width:100%">
                     </select>
                     <span class="text-danger" asp-validation-for="CategoryId"></span>
-                </div>
-                <div class="form-group">
-                    <span class="mdi mdi-pencil text-primary"></span>
-                    <label asp-for="Description"><span class="font-weight-bold">Description</span></label>
-                    <input type="text" class="form-control form-control-lg" asp-for="Description" placeholder="Description">
-                    <span class="text-danger" asp-validation-for="Description"></span>
                 </div>
                 <div class="form-group">
                     <span class="mdi mdi-arrow-right-bold text-success"></span><span class="mdi mdi-arrow-left-bold text-danger"></span>

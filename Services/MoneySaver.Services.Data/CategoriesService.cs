@@ -36,6 +36,11 @@
                 throw new ArgumentException(GlobalConstants.WalletNotExist);
             }
 
+            if (string.IsNullOrWhiteSpace(categoryName))
+            {
+                throw new ArgumentException(GlobalConstants.CategoryNameCannotBeEmpty);
+            }
+
             if (await this.IsCategoryExistAsync(walletId, categoryName))
             {
                 throw new ArgumentException(GlobalConstants.ExistingCategory);

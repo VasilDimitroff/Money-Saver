@@ -36,7 +36,7 @@
         [HttpPost]
         public async Task<IActionResult> Add(AddToDoListInputModel input)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
             }
 
@@ -51,6 +51,10 @@
         // In categories and everwhere where use modal for edit/delete - TOO!
         public async Task<IActionResult> Edit(string id)
         {
+            if (!this.ModelState.IsValid)
+            {
+            }
+
             var user = await this.userManager.GetUserAsync(this.User);
 
             var dto = await this.toDoListsService.GetByIdAsync(user.Id, id);
@@ -78,7 +82,7 @@
         [HttpPost]
         public async Task<IActionResult> Edit(ToDoListViewModel list, string returnUrl)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
             }
 
@@ -133,7 +137,7 @@
 
         public async Task<IActionResult> Delete(string id, string returnUrl, int itemsToShow = 5)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
             }
 
@@ -146,6 +150,10 @@
 
         public async Task<IActionResult> DeleteItem(string id, string divId, string returnUrl)
         {
+            if (!this.ModelState.IsValid)
+            {
+            }
+
             var user = await this.userManager.GetUserAsync(this.User);
             var listId = await this.toDoListsService.GetListIdAsync(id);
 
@@ -168,7 +176,7 @@
             // if getStatus == 1 => Return all lists
             // if getStatus == 2 => return Active
             // if getStatus == 3 => return Completed
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
             }
 
@@ -226,6 +234,10 @@
         [HttpPost]
         public async Task<IActionResult> ChangeItemStatus(string id, string divId, string returnUrl)
         {
+            if (!this.ModelState.IsValid)
+            {
+            }
+
             var user = await this.userManager.GetUserAsync(this.User);
 
             await this.toDoListsService.ChangeItemStatusAsync(user.Id, id);
@@ -241,7 +253,7 @@
                 return this.Redirect($"/ToDoLists/Edit/{listId}");
             }
 
-            return this.Content("No");
+            return this.Redirect($"/ToDoLists/All");
         }
 
         public async Task<IActionResult> ChangeListStatus(string id, string divId, string returnUrl, int getStatus = 1)
@@ -259,7 +271,7 @@
                 return this.Redirect($"/ToDoLists/Edit/{id}");
             }
 
-            return this.Content("No");
+            return this.Redirect($"/ToDoLists/All");
         }
     }
 }

@@ -25,6 +25,11 @@
 
         public async Task<string> AddAsync(int categoryId, string description, decimal amount, string type, DateTime? createdOn)
         {
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                description = "N/A";
+            }
+
             Category category = await this.GetCategoryByIdAsync(categoryId);
 
             if (category == null)

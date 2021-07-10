@@ -32,6 +32,8 @@
 
         public const string CategorySuccessfullyUpdated = "The category is successfully updated";
 
+        public const string CategoryNameCannotBeEmpty = "Category Name Cannot Be Empty";
+
         public const string UnexistingCategory = "Category do not exist";
 
         public const string WalletNotExist = "Wallet do not exist";

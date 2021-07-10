@@ -89,7 +89,6 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.BadRequest();
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
@@ -136,7 +135,6 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.BadRequest();
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
