@@ -17,6 +17,8 @@
 
         public Task<IEnumerable<InvestmentWalletDto>> GetAllAsync(string userId);
 
+        public Task<InvestmentWalletTradesDto> GetTradesAsync(string userId, int investmentWalletId);
+
         public Task<string> GetInvestmentWalletNameAsync(int investmentWalletId);
 
         public Task<CurrencyInfoDto> GetInvestmentCurrencyAsync(int investmentWalletId);

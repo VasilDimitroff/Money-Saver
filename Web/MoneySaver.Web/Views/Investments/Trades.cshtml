@@ -1,0 +1,144 @@
+﻿@using MoneySaver.Web.ViewModels.Investments
+@using MoneySaver.Web.ViewModels.Trades.Enums 
+@using System.Globalization
+
+@model InvestmentWalletTradesViewModel
+@{
+    this.ViewData["Title"] = "All Trades " + " - " + "Page " + Model.PageNumber + " - " + Model.Name;
+}
+
+<!-- partial -->
+<div class="card">
+    <div class="card-body">
+        <div class="template-demo mb-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="All">Investment Wallets</a></li>  
+                    @if (Model.PageNumber == 1)
+                    {
+                        <li class="breadcrumb-item active" aria-current="page"><span>@Model.Name</span></li>
+                    }
+
+                    else
+                    {
+                        <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="Trades" asp-route-id="@Model.Id">@Model.Name</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><span>Page @Model.PageNumber</span></li>
+                    }
+                </ol>
+            </nav>
+        </div>
+        <div class="col-12 mb-3">
+            <div class="btn-group mr-3 mr-sm-1 mb-2 mt-2">
+                <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
+            </div>
+            <div class="btn-group mr-2">
+                <a class="btn btn-sm btn-primary" asp-controller="Trades" asp-action="Add"><i class="mdi mdi-plus"></i> Add Trade</a>
+            </div>
+            <div class="btn-group mr-2">
+                <a class="btn btn-sm btn-primary" asp-controller="Investments" asp-action="Edit" asp-route-id="@Model.Id"><i class="mdi mdi-lead-pencil"></i> Edit</a>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="table-responsive">
+                <table id="order-listing" class="table text-center table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Edit/Delete</th>
+                            <!-- <th>Delete</th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var trade in Model.Trades)
+                        {
+
+                            <tr class="card-shadow">
+                                <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create date">@trade.CreatedOn</span></td>
+                                <td style="max-width: 25%;">@trade.Company.Name (@trade.Company.Ticker) </td>
+                                <td>
+                                    @if (trade.Type == TradeType.Buy)
+                                    {
+                                        <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @trade.Type</span>
+                                    }
+
+                                    else if (trade.Type == TradeType.Sell)
+                                    {
+
+                                        <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @trade.Type</span>
+                                    }
+                                </td>
+
+                                <td>
+
+                                    @if (trade.Price < 0)
+                                    {
+                                        <p class="text-danger"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
+                                    }
+
+                                    else if (trade.Price == 0)
+                                    {
+                                        <p class="text-secondary"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
+                                    }
+
+                                    else
+                                    {
+                                        <p class="text-success bold"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
+                                    }
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    @* <vc:edit-record record-id="@trade.Id" wallet-id="@Model.WalletId"></vc:edit-record>
+                                         <vc:delete-record-small-button record-id="@trade.Id"></vc:delete-record-small-button>*@
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+                <br />
+
+                @if (Model.Trades.Count() == 0)
+                {
+                    <br />
+                    <div class="alert alert-warning" role="alert">
+                        <span>No trades found</span>
+                    </div>
+                }
+                <!-- Pagination-->
+                <div style="display: inline;">
+                    <partial name="_PagingPartial" model="@Model" />
+                    <!-- End Pagination-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content-wrapper ends -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // executes when HTML-Document is loaded and DOM is ready
+            console.log("document is ready");
+
+
+            $(".card-shadow").hover(
+                function () {
+                    $(this).addClass('shadow-sm').css('cursor', 'pointer');
+                }, function () {
+                    $(this).removeClass('shadow-sm');
+                }
+            );
+
+            // document ready
+        });
+    </script>
+    <script src="~/vendors/js/vendor.bundle.addons.js"></script>
+    <script src="~/js/select2.js"></script>
+}

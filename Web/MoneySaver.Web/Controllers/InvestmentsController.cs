@@ -158,5 +158,49 @@
 
             return this.View(model);
         }
+
+        public async Task<IActionResult> Trades(int id)
+        {
+            if (this.ModelState.IsValid)
+            {
+            }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+            var result = await this.investmentsWalletsService.GetTradesAsync(user.Id, id);
+
+            var model = new InvestmentWalletTradesViewModel
+            {
+                Id = result.Id,
+                CreatedOn = result.CreatedOn,
+                Name = result.Name,
+                TotalBuyTradesAmount = result.TotalBuyTradesAmount,
+                TotalSellTradesAmount = result.TotalSellTradesAmount,
+                TotalTradesCount = result.TotalTradesCount,
+                Currency = new CurrencyViewModel
+                {
+                    Name = result.Currency.Name,
+                    Code = result.Currency.Code,
+                    CurrencyId = result.Currency.CurrencyId,
+                },
+                Trades = result.Trades.Select(t => new TradeViewModel
+                {
+                    Id = t.Id,
+                    CreatedOn = t.CreatedOn,
+                    Price = t.Price,
+                    Type = Enum.Parse<TradeType>(t.Type.ToString()),
+                    InvestmentWalletId = t.InvestmentWalletId,
+                    StockQuantity = t.StockQuantity,
+                    Company = new CompanyViewModel
+                    {
+                        Name = t.Company.Name,
+                        Ticker = t.Company.Ticker,
+                    },
+                })
+                .OrderBy(t => t.CreatedOn)
+                .ToList(),
+            };
+
+            return this.View(model);
+        }
     }
 }

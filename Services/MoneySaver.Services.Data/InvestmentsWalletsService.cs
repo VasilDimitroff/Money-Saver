@@ -50,6 +50,57 @@
             await this.dbContext.SaveChangesAsync();
         }
 
+        public async Task<InvestmentWalletTradesDto> GetTradesAsync(string userId, int investmentWalletId)
+        {
+            var investmentWallet = await this.dbContext.InvestmentWallets
+                .Include(iw => iw.Trades)
+                .Include(iw => iw.Currency)
+                .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
+
+            if (investmentWallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.InvestmentWalletNotExist);
+            }
+
+            if (!await this.IsUserOwnInvestmentWalletAsync(userId, investmentWalletId))
+            {
+                throw new ArgumentException(GlobalConstants.NotPermissionsToEditInvestmentWallet);
+            }
+
+            var walletTrades = new InvestmentWalletTradesDto
+            {
+                Id = investmentWallet.Id,
+                Name = investmentWallet.Name,
+                CreatedOn = investmentWallet.CreatedOn,
+                TotalBuyTradesAmount = investmentWallet.Trades.Where(t => t.Type == TradeType.Buy).Sum(t => t.Price),
+                TotalSellTradesAmount = investmentWallet.Trades.Where(t => t.Type == TradeType.Sell).Sum(t => t.Price),
+                TotalTradesCount = investmentWallet.Trades.Count(),
+                Currency = new CurrencyInfoDto
+                {
+                    Name = investmentWallet.Currency.Name,
+                    CurrencyId = investmentWallet.CurrencyId,
+                    Code = investmentWallet.Currency.Code,
+                },
+                Trades = investmentWallet.Trades.Select(t => new TradeDto
+                {
+                    Id = t.Id,
+                    CreatedOn = t.CreatedOn,
+                    Price = t.Price,
+                    Type = t.Type,
+                    StockQuantity = t.StockQuantity,
+                    InvestmentWalletId = investmentWallet.Id,
+                    Company = new GetCompanyDto
+                    {
+                        Name = t.Company.Name,
+                        Ticker = t.CompanyTicker,
+                    },
+                })
+                .ToList(),
+            };
+
+            return walletTrades;
+        }
+
         public async Task<string> GetInvestmentWalletNameAsync(int investmentWalletId)
         {
             var investmentWallet = await this.dbContext.InvestmentWallets

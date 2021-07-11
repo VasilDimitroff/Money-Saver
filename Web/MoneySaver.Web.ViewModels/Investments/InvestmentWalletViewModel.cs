@@ -6,9 +6,8 @@
     using MoneySaver.Web.ViewModels.Currencies;
     using MoneySaver.Web.ViewModels.Trades;
 
-    public class InvestmentWalletViewModel
+    public class InvestmentWalletViewModel : PagingViewModel
     {
-
         public int Id { get; set; }
 
         public string Name { get; set; }
