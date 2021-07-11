@@ -30,13 +30,10 @@
         </div>
         <div class="col-12 mb-3">
             <div class="btn-group mr-3 mr-sm-1 mb-2 mt-2">
-                <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
-            </div>
-            <div class="btn-group mr-2">
                 <a class="btn btn-sm btn-primary" asp-controller="Trades" asp-action="Add"><i class="mdi mdi-plus"></i> Add Trade</a>
             </div>
             <div class="btn-group mr-2">
-                <a class="btn btn-sm btn-primary" asp-controller="Investments" asp-action="Edit" asp-route-id="@Model.Id"><i class="mdi mdi-lead-pencil"></i> Edit</a>
+                <a class="btn btn-sm btn-outline-primary" asp-controller="Investments" asp-action="EditWallet" asp-route-id="@Model.Id"><i class="mdi mdi-lead-pencil"></i> Edit</a>
             </div>
         </div>
         <div class="col-12">
