@@ -11,6 +11,7 @@
     using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.ViewModels.Currencies;
+    using MoneySaver.Web.ViewModels.Investments;
     using MoneySaver.Web.ViewModels.Trades;
     using MoneySaver.Web.ViewModels.Trades.Enums;
 
@@ -79,6 +80,52 @@
             }
 
             return this.Redirect("/Investments/All");
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (this.ModelState.IsValid)
+            {
+            }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            var companies = await this.companiesService.GetAllCompaniesAsync();
+            var result = await this.tradesService.GetTradeInfoForEdit(user.Id, id);
+
+            var model = new EditTradeInputModel
+            {
+                Id = result.Id,
+                CreatedOn = result.CreatedOn,
+                Quantity = result.Quantity,
+                Type = Enum.Parse<TradeType>(result.Type.ToString()),
+                Price = result.Price,
+                InvestmentWallet = new InvestmentWalletIdNameAndCurrencyViewModel
+                {
+                    Id = result.InvestmentWallet.Id,
+                    CurrencyCode = result.InvestmentWallet.CurrencyCode,
+                    Name = result.InvestmentWallet.Name,
+                },
+                AllInvestmentWallets = result.AllInvestmentWallets.Select(iw => new InvestmentWalletIdNameAndCurrencyViewModel
+                {
+                    Id = iw.Id,
+                    CurrencyCode = iw.CurrencyCode,
+                    Name = iw.Name,
+                }),
+                SelectedCompany = new CompanyViewModel
+                {
+                    Name = result.SelectedCompany.Name,
+                    Ticker = result.SelectedCompany.Ticker,
+                },
+                Companies = companies.Select(c => new CompanyViewModel
+                {
+                    Name = c.Name,
+                    Ticker = c.Ticker,
+                })
+                .ToList(),
+            };
+
+            return this.View(model);
         }
     }
 }

@@ -4,12 +4,16 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
     using MoneySaver.Common;
     using MoneySaver.Data;
     using MoneySaver.Data.Models;
     using MoneySaver.Data.Models.Enums;
     using MoneySaver.Services.Data.Contracts;
+    using MoneySaver.Services.Data.Models.Companies;
+    using MoneySaver.Services.Data.Models.InvestmentWallets;
+    using MoneySaver.Services.Data.Models.Trades;
 
     public class TradesService : ITradesService
     {
@@ -18,8 +22,7 @@
 
         public TradesService(
             ApplicationDbContext dbContext,
-            ICompaniesService companiesService
-            )
+            ICompaniesService companiesService)
         {
             this.dbContext = dbContext;
             this.companiesService = companiesService;
@@ -126,6 +129,64 @@
             int currentlyHoldingQuantity = totalBuyQuantity - totalSellQuantity;
 
             return currentlyHoldingQuantity;
+        }
+
+        public async Task<EditTradeDto> GetTradeInfoForEdit(string userId, string tradeId)
+        {
+            var trade = await this.dbContext.Trades
+                .Include(t => t.Company)
+                .Include(t => t.InvestmentWallet)
+                .ThenInclude(iw => iw.Currency)
+                .FirstOrDefaultAsync(t => t.Id == tradeId);
+
+            if (trade == null)
+            {
+                throw new ArgumentException(GlobalConstants.TradeNotExist);
+            }
+
+            if (!await this.CanUserEditInvestmentWallet(userId, trade.InvestmentWalletId))
+            {
+                throw new ArgumentException(GlobalConstants.CannotEditInvestmentWallet);
+            }
+
+            var tradeDto = new EditTradeDto
+            {
+                Id = trade.Id,
+                CreatedOn = trade.CreatedOn,
+                InvestmentWallet = new InvestmentWalletIdNameAndCurrencyDto
+                {
+                    Id = trade.InvestmentWalletId,
+                    Name = trade.InvestmentWallet.Name,
+                    CurrencyCode = trade.InvestmentWallet.Currency.Code,
+                },
+                Price = trade.Price,
+                Quantity = trade.StockQuantity,
+                Type = trade.Type,
+                SelectedCompany = new GetCompanyDto
+                {
+                    Name = trade.Company.Name,
+                    Ticker = trade.CompanyTicker,
+                },
+                AllInvestmentWallets = await this.GetInvestmentWalletsAsync(userId),
+            };
+
+            return tradeDto;
+        }
+
+        private async Task<IEnumerable<InvestmentWalletIdNameAndCurrencyDto>> GetInvestmentWalletsAsync(string userId)
+        {
+            var wallets = await this.dbContext.InvestmentWallets
+                .Include(iw => iw.Currency)
+                .Where(iw => iw.ApplicationUserId == userId)
+                .Select(iw => new InvestmentWalletIdNameAndCurrencyDto
+                {
+                    Id = iw.Id,
+                    CurrencyCode = iw.Currency.Code,
+                    Name = iw.Name,
+                })
+                .ToListAsync();
+
+            return wallets;
         }
 
         private async Task<bool> CanUserEditInvestmentWallet(string userId, int investmentWalletId)

@@ -104,7 +104,7 @@
                         <div id="AddItems-@Model.Id">
                             <div class='input-group mb-3'>
                                 <div class='input-group-prepend'>
-                                    <span onclick='AddItem()' class='btn btn-sm btn-primary' style='padding-top: 13px;'><i class='mdi mdi-plus'></i></span>
+                                    <span onclick='AddItem()' class='btn btn-sm btn-primary' style='padding-top: 15px;'><i class='mdi mdi-plus'></i></span>
                                     <label for='ListItems[0]'></label>
                                 </div>
                                 <input type='text' placeholder='Add a new item' name='ListItems[0]' id='ListItems[0]' class='form-control' />
@@ -126,7 +126,7 @@
         function AddItem() {
             $("#AddItems-@Model.Id").
                 append("<div class='input-group mb-3'>" +
-                "<div class='input-group-prepend'>" + "<span onclick='AddItem()' class='btn btn-sm btn-primary' style='padding-top: 13px;'><i class='mdi mdi-plus'></i></span>" +
+                "<div class='input-group-prepend'>" + "<span onclick='AddItem()' class='btn btn-sm btn-primary' style='padding-top: 15px;'><i class='mdi mdi-plus'></i></span>" +
                     "<label for='ListItems" + index + "'" + "" +
                     "</label>" +
                     "</div>" +

@@ -87,7 +87,9 @@
         public const string EmptyInvestmentsWalletName = "Please, enter a valid investment wallet name";
 
         public const string NotPermissionsToEditInvestmentWallet = "You have no permissions to see or edit this investment wallet.";
-        
+
         public const string InvestmentWalletNotExist = "Investment wallet not exist";
+
+        public const string TradeNotExist = "Trade not exist";
     }
 }

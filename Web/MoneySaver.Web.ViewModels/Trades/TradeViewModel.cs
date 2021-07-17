@@ -18,7 +18,7 @@
 
         public TradeType Type { get; set; }
 
-        public decimal TotalAmount => Math.Round(this.Price * this.StockQuantity);
+        public decimal TotalAmount => Math.Round(this.Price * this.StockQuantity, 2);
 
         public int InvestmentWalletId { get; set; }
     }

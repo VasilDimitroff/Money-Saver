@@ -20,6 +20,6 @@
 
         public decimal TotalSellTradesAmount { get; set; }
 
-        public decimal Amount => this.TotalBuyTradesAmount - this.TotalSellTradesAmount;
+        public decimal Amount => this.TotalBuyTradesAmount + this.TotalSellTradesAmount;
     }
 }
