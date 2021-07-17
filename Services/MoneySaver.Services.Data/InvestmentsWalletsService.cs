@@ -50,10 +50,11 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task<InvestmentWalletTradesDto> GetTradesAsync(string userId, int investmentWalletId)
+        public async Task<InvestmentWalletTradesDto> GetTradesAsync(string userId, int investmentWalletId, int page, int itemsPerPage = 12)
         {
-            var investmentWallet = await this.dbContext.InvestmentWallets
+            InvestmentWallet investmentWallet = await this.dbContext.InvestmentWallets
                 .Include(iw => iw.Trades)
+                .ThenInclude(t => t.Company)
                 .Include(iw => iw.Currency)
                 .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
 
@@ -72,8 +73,8 @@
                 Id = investmentWallet.Id,
                 Name = investmentWallet.Name,
                 CreatedOn = investmentWallet.CreatedOn,
-                TotalBuyTradesAmount = investmentWallet.Trades.Where(t => t.Type == TradeType.Buy).Sum(t => t.Price),
-                TotalSellTradesAmount = investmentWallet.Trades.Where(t => t.Type == TradeType.Sell).Sum(t => t.Price),
+                TotalBuyTradesAmount = investmentWallet.Trades.Where(t => t.Type == TradeType.Buy).Sum(t => t.Price * t.StockQuantity),
+                TotalSellTradesAmount = investmentWallet.Trades.Where(t => t.Type == TradeType.Sell).Sum(t => t.Price * t.StockQuantity),
                 TotalTradesCount = investmentWallet.Trades.Count(),
                 Currency = new CurrencyInfoDto
                 {
@@ -81,7 +82,10 @@
                     CurrencyId = investmentWallet.CurrencyId,
                     Code = investmentWallet.Currency.Code,
                 },
-                Trades = investmentWallet.Trades.Select(t => new TradeDto
+                Trades = investmentWallet.Trades
+                .OrderByDescending(x => x.CreatedOn)
+                .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
+                .Select(t => new TradeDto
                 {
                     Id = t.Id,
                     CreatedOn = t.CreatedOn,
@@ -214,14 +218,19 @@
                         Code = iw.Currency.Code,
                         Name = iw.Currency.Name,
                     },
-                    TotalBuyTradesAmount = iw.Trades.Where(t => t.Type == TradeType.Buy).Sum(t => t.Price),
-                    TotalSellTradesAmount = iw.Trades.Where(t => t.Type == TradeType.Sell).Sum(t => t.Price),
+                    TotalBuyTradesAmount = iw.Trades.Where(t => t.Type == TradeType.Buy).Sum(t => t.Price * t.StockQuantity),
+                    TotalSellTradesAmount = iw.Trades.Where(t => t.Type == TradeType.Sell).Sum(t => t.Price * t.StockQuantity),
                     TotalTradesCount = iw.Trades.Count(),
                 })
                 .OrderBy(iw => iw.CreatedOn)
                 .ToListAsync();
 
             return investmentWallets;
+        }
+
+        public int GetTradesCount(int investmentWalletId)
+        {
+            return this.dbContext.Trades.Count(x => x.InvestmentWalletId == investmentWalletId);
         }
 
         private async Task<bool> IsUserOwnInvestmentWalletAsync(string userId, int investmentWalletId)

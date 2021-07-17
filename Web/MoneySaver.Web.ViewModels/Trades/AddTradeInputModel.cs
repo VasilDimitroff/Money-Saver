@@ -19,6 +19,8 @@
         [Required]
         public decimal Price { get; set; }
 
+        public int InvestmentWalletId { get; set; }
+
         [Required]
         [Range(1, 1000000)]
         public TradeType Type { get; set; }

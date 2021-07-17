@@ -6,10 +6,8 @@
     using MoneySaver.Web.ViewModels.Currencies;
     using MoneySaver.Web.ViewModels.Trades;
 
-    public class InvestmentWalletViewModel : PagingViewModel
+    public class InvestmentWalletViewModel : TradesPagingViewModel
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         public CurrencyViewModel Currency { get; set; }
@@ -22,6 +20,6 @@
 
         public decimal TotalSellTradesAmount { get; set; }
 
-        public decimal Amount => this.TotalSellTradesAmount - this.TotalBuyTradesAmount;
+        public decimal Amount => this.TotalBuyTradesAmount - this.TotalSellTradesAmount;
     }
 }

@@ -27,6 +27,14 @@
 
         public async Task CreateBuyTradeAsync(string userId, int investmentWalletId, string companyTicker, int quantity, decimal pricePerShare)
         {
+            var investmentWallet = await this.dbContext.InvestmentWallets
+                .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
+
+            if (investmentWallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.InvestmentWalletNotExist);
+            }
+
             if (!await this.CanUserEditInvestmentWallet(userId, investmentWalletId))
             {
                 throw new ArgumentException(GlobalConstants.CannotEditInvestmentWallet);
@@ -37,7 +45,7 @@
             if (pricePerShare > 0)
             {
                 pricePerShare *= -1;
-            }
+            } 
 
             var userTrade = new Trade()
             {
@@ -57,6 +65,14 @@
 
         public async Task CreateSellTradeAsync(string userId, int investmentWalletId, string companyTicker, int quantity, decimal pricePerShare)
         {
+            var investmentWallet = await this.dbContext.InvestmentWallets
+                .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
+
+            if (investmentWallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.InvestmentWalletNotExist);
+            }
+
             if (!await this.CanUserEditInvestmentWallet(userId, investmentWalletId))
             {
                 throw new ArgumentException(GlobalConstants.CannotEditInvestmentWallet);

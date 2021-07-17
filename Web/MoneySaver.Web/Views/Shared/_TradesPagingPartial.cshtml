@@ -1,0 +1,34 @@
+﻿@model TradesPagingViewModel
+
+<div class="d-flex justify-content-center">
+    <nav>
+        <ul class="pagination rounded-flat pagination-primary">
+            <li class="page-item @if (!Model.HasPreviousPage) { <text>disabled</text> }">
+                <a class="page-link" href="/Investments/Trades?id=@Model.Id&page=@Model.PreviousPageNumber"><i class="mdi mdi-chevron-left"></i></a>
+            </li>
+            @for (int i = Model.PageNumber - 4; i < Model.PageNumber; i++)
+            {
+                if (i > 0)
+                {
+                    <li class="page-item"><a class="page-link" href="/Investments/Trades?id=@Model.Id&page=@i">@i</a></li>
+                }
+            }
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">
+                    @Model.PageNumber
+                    <span class="sr-only">(current)</span>
+                </span>
+            </li>
+            @for (int i = Model.PageNumber + 1; i <= Model.PageNumber + 4; i++)
+            {
+                if (i <= Model.PagesCount)
+                {
+                    <li class="page-item"><a class="page-link" href="/Investments/Trades?id=@Model.Id&page=@i">@i</a></li>
+                }
+            }
+            <li class="page-item @if (!Model.HasNextPage) { <text>disabled</text> }">
+                <a class="page-link" href="/Investments/Trades?id=@Model.Id&page=@Model.NextPageNumber"><i class="mdi mdi-chevron-right"></i></a>
+            </li>
+        </ul>
+    </nav>
+</div>

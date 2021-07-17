@@ -30,7 +30,7 @@
         </div>
         <div class="col-12 mb-3">
             <div class="btn-group mr-3 mr-sm-1 mb-2 mt-2">
-                <a class="btn btn-sm btn-primary" asp-controller="Trades" asp-action="Add"><i class="mdi mdi-plus"></i> Add Trade</a>
+                <a class="btn btn-sm btn-primary" asp-controller="Trades" asp-action="Add" asp-route-investmentwalletid="@Model.Id"><i class="mdi mdi-plus"></i> Add Trade</a>
             </div>
             <div class="btn-group mr-2">
                 <a class="btn btn-sm btn-outline-primary" asp-controller="Investments" asp-action="EditWallet" asp-route-id="@Model.Id"><i class="mdi mdi-lead-pencil"></i> Edit</a>
@@ -44,8 +44,9 @@
                             <th>Date</th>
                             <th>Description</th>
                             <th>Type</th>
-                            <th>Amount</th>
-                            <th>Category</th>
+                            <th>Price Per Share</th>
+                            <th>Quantity</th>
+                            <th>Total Amount</th>
                             <th>Edit/Delete</th>
                             <!-- <th>Delete</th>-->
                         </tr>
@@ -54,47 +55,63 @@
                         @foreach (var trade in Model.Trades)
                         {
 
-                            <tr class="card-shadow">
-                                <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create date">@trade.CreatedOn</span></td>
-                                <td style="max-width: 25%;">@trade.Company.Name (@trade.Company.Ticker) </td>
-                                <td>
-                                    @if (trade.Type == TradeType.Buy)
-                                    {
-                                        <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @trade.Type</span>
-                                    }
+                        <tr class="card-shadow">
+                            <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create date">@trade.CreatedOn</span></td>
+                            <td style="max-width: 25%;">@trade.Company.Name (@trade.Company.Ticker) </td>
+                            <td>
+                                @if (trade.Type == TradeType.Buy)
+                                {
+                                    <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @trade.Type</span>
+                                }
 
-                                    else if (trade.Type == TradeType.Sell)
-                                    {
+                                else if (trade.Type == TradeType.Sell)
+                                {
 
-                                        <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @trade.Type</span>
-                                    }
-                                </td>
+                                    <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @trade.Type</span>
+                                }
+                            </td>
 
-                                <td>
+                            <td>
 
-                                    @if (trade.Price < 0)
-                                    {
-                                        <p class="text-danger"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
-                                    }
+                                @if (trade.Price < 0)
+                                {
+                                    <p class="text-danger"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
+                                }
 
-                                    else if (trade.Price == 0)
-                                    {
-                                        <p class="text-secondary"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
-                                    }
+                                else if (trade.Price == 0)
+                                {
+                                    <p class="text-secondary"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
+                                }
 
-                                    else
-                                    {
-                                        <p class="text-success bold"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
-                                    }
-                                </td>
-                                <td>
+                                else
+                                {
+                                    <p class="text-success bold"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
+                                }
+                            </td>
+                            <td>
+                                @trade.StockQuantity
+                            </td>
+                            <td>
+                                @if (trade.TotalAmount < 0)
+                                {
+                                    <p class="text-danger"><strong>@trade.TotalAmount @Model.Currency.Code</strong></p>
+                                }
 
-                                </td>
-                                <td>
-                                    @* <vc:edit-record record-id="@trade.Id" wallet-id="@Model.WalletId"></vc:edit-record>
-                                         <vc:delete-record-small-button record-id="@trade.Id"></vc:delete-record-small-button>*@
-                                </td>
-                            </tr>
+                                else if (trade.TotalAmount == 0)
+                                {
+                                    <p class="text-secondary"><strong>@trade.TotalAmount @Model.Currency.Code</strong></p>
+                                }
+
+                                else
+                                {
+                                    <p class="text-success bold"><strong>@trade.TotalAmount @Model.Currency.Code</strong></p>
+                                }    
+                            </td>
+                            <td>
+                                @* <vc:edit-record record-id="@trade.Id" wallet-id="@Model.WalletId"></vc:edit-record>
+            <vc:delete-record-small-button record-id="@trade.Id"></vc:delete-record-small-button>*@
+                            </td>
+                        </tr>
 
                         }
                     </tbody>
@@ -110,7 +127,7 @@
                 }
                 <!-- Pagination-->
                 <div style="display: inline;">
-                    <partial name="_PagingPartial" model="@Model" />
+                    <partial name="_TradesPagingPartial" model="@Model" />
                     <!-- End Pagination-->
                 </div>
             </div>

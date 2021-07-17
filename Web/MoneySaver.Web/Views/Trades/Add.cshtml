@@ -21,7 +21,7 @@
             <p class="card-title">
                 Add new Trade
             </p>
-            <form class="forms-sample" asp-controller="Trades" asp-action="Add" method="post">
+            <form class="forms-sample" asp-controller="Trades" asp-action="Add" asp-route-investmentwalletid="@Model.InvestmentWalletId" method="post">
                 <div class="text-danger" asp-validation-summary="All"></div>
                 <div class="form-group">
                     <span class="mdi mdi-copyright text-primary"></span>

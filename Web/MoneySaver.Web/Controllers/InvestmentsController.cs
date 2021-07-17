@@ -18,9 +18,12 @@
     [Authorize]
     public class InvestmentsController : Controller
     {
+        private const int ItemsPerPage = 12;
+
         private readonly ICurrenciesService currenciesService;
         private readonly IInvestmentsWalletsService investmentsWalletsService;
         private readonly UserManager<ApplicationUser> userManager;
+
 
         public InvestmentsController(
             ICurrenciesService currenciesService,
@@ -151,30 +154,30 @@
                     CurrencyId = iw.Currency.CurrencyId,
                 },
                 TotalTradesCount = iw.TotalTradesCount,
-                TotalBuyTradesAmount = iw.TotalBuyTradesAmount,
-                TotalSellTradesAmount = iw.TotalSellTradesAmount,
+                TotalBuyTradesAmount = Math.Round(iw.TotalBuyTradesAmount, 2),
+                TotalSellTradesAmount = Math.Round(iw.TotalSellTradesAmount, 2),
             })
                 .ToList();
 
             return this.View(model);
         }
 
-        public async Task<IActionResult> Trades(int id)
+        public async Task<IActionResult> Trades(int id, int page = 1)
         {
             if (this.ModelState.IsValid)
             {
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
-            var result = await this.investmentsWalletsService.GetTradesAsync(user.Id, id);
+            var result = await this.investmentsWalletsService.GetTradesAsync(user.Id, id, page, ItemsPerPage);
 
             var model = new InvestmentWalletTradesViewModel
             {
                 Id = result.Id,
                 CreatedOn = result.CreatedOn,
                 Name = result.Name,
-                TotalBuyTradesAmount = result.TotalBuyTradesAmount,
-                TotalSellTradesAmount = result.TotalSellTradesAmount,
+                TotalBuyTradesAmount = Math.Round(result.TotalBuyTradesAmount, 2),
+                TotalSellTradesAmount = Math.Round(result.TotalSellTradesAmount, 2),
                 TotalTradesCount = result.TotalTradesCount,
                 Currency = new CurrencyViewModel
                 {
@@ -186,7 +189,7 @@
                 {
                     Id = t.Id,
                     CreatedOn = t.CreatedOn,
-                    Price = t.Price,
+                    Price = Math.Round(t.Price, 2),
                     Type = Enum.Parse<TradeType>(t.Type.ToString()),
                     InvestmentWalletId = t.InvestmentWalletId,
                     StockQuantity = t.StockQuantity,
@@ -199,6 +202,10 @@
                 .OrderBy(t => t.CreatedOn)
                 .ToList(),
             };
+
+            model.ItemsPerPage = ItemsPerPage;
+            model.PageNumber = page;
+            model.RecordsCount = this.investmentsWalletsService.GetTradesCount(id);
 
             return this.View(model);
         }

@@ -28,9 +28,10 @@
         {
             this.companiesService = companiesService;
             this.userManager = userManager;
+            this.tradesService = tradesService;
         }
 
-        public async Task<IActionResult> Add()
+        public async Task<IActionResult> Add(int investmentWalletId)
         {
             if (this.ModelState.IsValid)
             {
@@ -39,6 +40,7 @@
             var companies = await this.companiesService.GetAllCompaniesAsync();
             var model = new AddTradeInputModel
             {
+                InvestmentWalletId = investmentWalletId,
                 Companies = companies.Select(c => new CompanyViewModel
                 {
                     Name = c.Name,
@@ -62,18 +64,21 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
 
-            /*
+            var selectedCompany = await this.companiesService
+                .GetCompanyByTickerAsync(input.SelectedCompany.Ticker);
+
+            input.SelectedCompany.Name = selectedCompany.Name;
+
             if (input.Type == TradeType.Buy)
             {
-                await this.tradesService.CreateBuyTradeAsync(user.Id, input.SelectedCompany.Ticker, input.Quantity, input.Price, input.SelectedCurrencyId);
+                await this.tradesService.CreateBuyTradeAsync(user.Id, input.InvestmentWalletId, input.SelectedCompany.Ticker, input.Quantity, input.Price);
             }
             else
             {
-                await this.tradesService.CreateSellTradeAsync(user.Id, input.SelectedCompany.Ticker, input.Quantity, input.Price, input.SelectedCurrencyId);
+                await this.tradesService.CreateSellTradeAsync(user.Id, input.InvestmentWalletId, input.SelectedCompany.Ticker, input.Quantity, input.Price);
             }
-            */
 
-            return this.Redirect("/Trades/All");
+            return this.Redirect("/Investments/All");
         }
     }
 }

@@ -17,10 +17,12 @@
 
         public Task<IEnumerable<InvestmentWalletDto>> GetAllAsync(string userId);
 
-        public Task<InvestmentWalletTradesDto> GetTradesAsync(string userId, int investmentWalletId);
+        public Task<InvestmentWalletTradesDto> GetTradesAsync(string userId, int investmentWalletId, int page, int itemsPerPage = 12);
 
         public Task<string> GetInvestmentWalletNameAsync(int investmentWalletId);
 
         public Task<CurrencyInfoDto> GetInvestmentCurrencyAsync(int investmentWalletId);
+
+        public int GetTradesCount(int investmentWalletId);
     }
 }
