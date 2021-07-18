@@ -9,80 +9,84 @@
     this.ViewData["Title"] = "Edit Record";
     Model.OldAmount = Model.Amount;
 }
-<div class="col-12 grid-margin stretch-card">
-    <div class="card">
-        <div class="card-body">
-            <div class="template-demo mb-5">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Records" asp-route-id="@Model.WalletId">Records</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><span>Edit</span></li>
-                    </ol>
-                </nav>
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Records" asp-route-id="@Model.WalletId">Records</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Edit</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            Edit record from
+            <a class="badge badge-primary ml-2" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form class="forms-sample" style="display: inline" asp-controller="Records" asp-action="Edit" method="post">
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <span class="mdi mdi-pencil text-primary"></span>
+                <label asp-for="Description"><span class="font-weight-bold">Description</span></label>
+                <input type="text" class="form-control form-control-lg" asp-for="Description" placeholder="Description">
+                <span class="text-danger" asp-validation-for="Description"></span>
             </div>
-            <p class="card-description">
-                Edit record from
-                <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a>
-            </p>
-            <form class="forms-sample" style="display: inline" asp-controller="Records" asp-action="Edit" method="post">
-                <div class="text-danger" asp-validation-summary="All"></div>
-                <div class="form-group">
-                    <span class="mdi mdi-pencil text-primary"></span>
-                    <label asp-for="Description"><span class="font-weight-bold">Description</span></label>
-                    <input type="text" class="form-control form-control-lg" asp-for="Description" placeholder="Description">
-                    <span class="text-danger" asp-validation-for="Description"></span>
-                </div>
-                <div class="form-group">
-                    <span class="mdi mdi-tag text-primary"></span>
-                    <label for="Category"><span class="font-weight-bold">Category</span></label>
-                    <select asp-for="CategoryId"
-                            asp-items="@(new SelectList(Model.Categories,"Id","Name"))" class="js-example-basic-single" style="width:100%">
-                    </select>
-                    <span class="text-danger" asp-validation-for="CategoryId"></span>
-                </div>
-                <div class="form-group">
-                    <span class="mdi mdi-arrow-right-bold text-success"></span><span class="mdi mdi-arrow-left-bold text-danger"></span>
-                    <label asp-for="Type"><span class="font-weight-bold">Type</span></label>
-                    <select class="js-example-basic-single" style="width:100%" asp-for="Type" placeholder="Type">
-                        @foreach (string name in Enum.GetNames(typeof(RecordTypeInputModel)))
+            <div class="form-group">
+                <span class="mdi mdi-tag text-primary"></span>
+                <label for="Category"><span class="font-weight-bold">Category</span></label>
+                <select asp-for="CategoryId"
+                        asp-items="@(new SelectList(Model.Categories,"Id","Name"))" class="js-example-basic-single" style="width:100%">
+                </select>
+                <span class="text-danger" asp-validation-for="CategoryId"></span>
+            </div>
+            <div class="form-group">
+                <span class="mdi mdi-arrow-right-bold text-success"></span><span class="mdi mdi-arrow-left-bold text-danger"></span>
+                <label asp-for="Type"><span class="font-weight-bold">Type</span></label>
+                <select class="js-example-basic-single" style="width:100%" asp-for="Type" placeholder="Type">
+                    @foreach (string name in Enum.GetNames(typeof(RecordTypeInputModel)))
+                    {
+                        if (name == RecordTypeInputModel.Income.ToString())
                         {
-                            if (name == RecordTypeInputModel.Income.ToString())
-                            {
-                                <option selected>@name</option>
-                            }
-                            else
-                            {
-                                <option>@name</option>
-                            }
+                            <option selected>@name</option>
                         }
-                    </select>
-                    <span class="text-danger" asp-validation-for="Type"></span>
-                </div>
-                <div class="form-group">
-                    <span class="mdi mdi-currency-usd text-primary"></span>
-                    <label asp-for="@Model.Amount"><span class="font-weight-bold">Amount</span></label>
-                    <input type="hidden" asp-for="@Model.OldAmount" />
-                    <input type="number" class="form-control form-control-lg" asp-for="@Model.Amount" placeholder="@Model.Amount" value="@Model.Amount">
-                    <span class="text-danger" asp-validation-for="Amount"></span>
-                </div>
-                <div class="form-group">
-                    <span class="mdi mdi-calendar-clock text-primary"></span>
-                    <label asp-for="@Model.CreatedOn"><span class="font-weight-bold">CreatedOn</span></label>
-                    <input type="datetime-local" class="form-control form-control-lg" asp-for="@Model.CreatedOn" placeholder="@Model.CreatedOn">
-                    <span class="text-danger" asp-validation-for="CreatedOn"></span>
-                </div>
-                <input type="hidden" asp-for="@Model.Id" />
-                <span class="text-danger" asp-validation-for="Id"></span>
-                <input type="hidden" asp-for="@Model.WalletId" />
-                <span class="text-danger" asp-validation-for="WalletId"></span>
-                <vc:save-button></vc:save-button>
-            </form>
-            <div class="float-right">
-                <vc:delete-record record-id="@Model.Id"></vc:delete-record>
+                        else
+                        {
+                            <option>@name</option>
+                        }
+                    }
+                </select>
+                <span class="text-danger" asp-validation-for="Type"></span>
             </div>
+            <div class="form-group">
+                <span class="mdi mdi-currency-usd text-primary"></span>
+                <label asp-for="@Model.Amount"><span class="font-weight-bold">Amount</span></label>
+                <input type="hidden" asp-for="@Model.OldAmount" />
+                <input type="number" class="form-control form-control-lg" asp-for="@Model.Amount" placeholder="@Model.Amount" value="@Model.Amount">
+                <span class="text-danger" asp-validation-for="Amount"></span>
+            </div>
+            <div class="form-group">
+                <span class="mdi mdi-calendar-clock text-primary"></span>
+                <label asp-for="@Model.CreatedOn"><span class="font-weight-bold">CreatedOn</span></label>
+                <input type="datetime-local" class="form-control form-control-lg" asp-for="@Model.CreatedOn" placeholder="@Model.CreatedOn">
+                <span class="text-danger" asp-validation-for="CreatedOn"></span>
+            </div>
+            <input type="hidden" asp-for="@Model.Id" />
+            <span class="text-danger" asp-validation-for="Id"></span>
+            <input type="hidden" asp-for="@Model.WalletId" />
+            <span class="text-danger" asp-validation-for="WalletId"></span>
+            <vc:save-button></vc:save-button>
+        </form>
+        <div class="float-right">
+            <vc:delete-record record-id="@Model.Id"></vc:delete-record>
         </div>
     </div>
 </div>

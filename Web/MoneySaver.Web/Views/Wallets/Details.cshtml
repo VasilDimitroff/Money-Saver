@@ -47,7 +47,7 @@
                 <div class="col-lg-3 col-sm-6 col-md-6 grid-margin stretch-card text-center">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Balance : <span class="h4 text-info"><span class="pt-2">@Model.CurrentBalance @Model.Currency</span></span></h4>
+                            <h4 class="card-title">Balance : <span class="h4 text-info"><span style="display:block;" class="h4 mt-2">@Model.CurrentBalance @Model.Currency</span></span></h4>
                             <div class="d-flex justify-content-between">
                                 <p class="text-muted">30 days change:</p>
                                 <p class="text-info">@Model.TotalWalletBalanceLast30Days</p>
@@ -61,7 +61,7 @@
                 <div class="col-lg-3 col-sm-6 col-md-6 grid-margin stretch-card text-center">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Incomes: <span class="h4 text-success"><span class="pt-2">@Model.TotalWalletIncomes @Model.Currency</span></span></h4>
+                            <h4 class="card-title">Incomes: <span class="h4 text-success"><span style="display:block;" class="h4 mt-2">@Model.TotalWalletIncomes @Model.Currency</span></span></h4>
                             <div class="d-flex justify-content-between">
                                 <p class="text-muted">Last 30 days:</p>
                                 <p class="text-success">@Model.TotalWalletIncomesLast30Days</p>
@@ -75,7 +75,7 @@
                 <div class="col-lg-3 col-sm-6 col-md-6 grid-margin stretch-card text-center">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Expenses: <span class="h4 text-danger"><span class="pt-2">@Model.TotalWalletExpenses @Model.Currency</span></span></h4>
+                            <h4 class="card-title">Expenses: <span class="h4 text-danger"><span style="display:block;" class="h4 mt-2">@Model.TotalWalletExpenses @Model.Currency</span></span></h4>
                             <div class="d-flex justify-content-between">
                                 <p class="text-muted">Last 30 days:</p>
                                 <p class="text-danger">@Model.TotalWalletExpensesLast30Days</p>
@@ -89,7 +89,7 @@
                 <div class="col-lg-3 col-sm-6 col-md-6 grid-margin stretch-card text-center">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Total Records: <span class="h4 text-warning"><span class="pt-2">@Model.Records.Count()</span></span></h4>
+                            <h4 class="card-title">Total Records: <span class="h4 text-warning"><span style="display:block;" class="h4 mt-2">@Model.Records.Count()</span></span></h4>
                             <div class="d-flex justify-content-between">
                                 <p class="text-muted">Last 30 days:</p>
                                 <p class="text-muted">@Model.TotalRecordsCountLast30Days</p>
@@ -130,7 +130,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="ml-3">
                                                 <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
-                                                <span class="text-muted text-small">@category.TotalIncomeRecordsLast30Days incomes</span>
+                                                <p class="text-muted text-small">@category.TotalIncomeRecordsLast30Days incomes</p>
                                             </div>
                                         </div>
                                     </td>
@@ -212,7 +212,7 @@
                                         <div class="ml-3">
 
                                             <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
-                                            <span class="text-muted text-small">@category.TotalExpenseRecordsLast30Days expenses</span>
+                                            <p class="text-muted text-small">@category.TotalExpenseRecordsLast30Days expenses</p>
                                         </div>
                                     </div>
                                 </td>
@@ -384,7 +384,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="ml-3">
                                                 <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
-                                                <span class="text-muted text-small">@category.RecordsCount records</span>
+                                                <p class="text-muted text-small">@category.RecordsCount records</p>
                                             </div>
                                         </div>
                                     </td>

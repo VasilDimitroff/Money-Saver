@@ -8,6 +8,48 @@
 }
 
 <!-- partial -->
+
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a></li>
+                @if (Model.PageNumber == 1)
+                {
+                    <li class="breadcrumb-item active" aria-current="page"><span>Records</span></li>
+                }
+
+                else
+                {
+                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Records" asp-route-id="@Model.WalletId">Records</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><span>Page @Model.PageNumber</span></li>
+                }
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            All Records in <a class="badge badge-primary ml-2" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a>
+        </div>
+
+        <br />
+        <div class="d-flex justify-content-center">
+            <div class="pr-1">
+                <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
+            </div>
+            <div class="pr-1">
+                <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>
+            </div>
+            <div class="pr-1">
+                <vc:wallet-statistics id="@Model.WalletId"></vc:wallet-statistics>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="card">
     <div class="card-body">
         @*
@@ -17,29 +59,7 @@
                 - <a class="badge badge-primary" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a>
             </h4>
         *@
-        <div class="template-demo mb-5">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
-                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.Wallet</a></li>
-                    @if (Model.PageNumber == 1)
-                    {
-                        <li class="breadcrumb-item active" aria-current="page"><span>Records</span></li>
-                    }
-
-                    else
-                    {
-                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Records" asp-route-id="@Model.WalletId">Records</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><span>Page @Model.PageNumber</span></li>
-                    }
-                </ol>
-            </nav>
-        </div>
         <div class="col-12 mb-3">
-            <div class="btn-group mr-3 mr-sm-1 mb-2 mt-2">
-                <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
-            </div>
             <div class="btn-group mr-2">
                 <vc:get-records-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" id="@Model.WalletId"></vc:get-records-by-date>
             </div>

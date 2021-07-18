@@ -8,100 +8,64 @@
     string badgeClassName = string.Empty;
 }
 <!-- partial -->
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Categories</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            All Categories in <a class="badge badge-primary ml-2" asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a>
+        </div>
+
+        <br />
+        <div class="d-flex justify-content-center">
+            <div class="pr-1">
+                <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
+            </div>
+            <div class="pr-1">
+                <vc:all-records-by-wallet wallet-id="@Model.WalletId"></vc:all-records-by-wallet>             
+            </div>
+            <div class="pr-1">
+                <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="card">
     <div class="card-body">
-        <div class="template-demo mb-5">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
-                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"><span>Categories</span></li>
-                </ol>
-            </nav>
-            </div>
-            <div class="col-12">
-                <div class="row pb-4">
-                    <div class="pr-1">
-                        <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
-                    </div>
-                    <div class="pr-1">
-                        <vc:add-category wallet-id="@Model.WalletId"></vc:add-category>
-                    </div>
-                    <vc:all-records-by-wallet wallet-id="@Model.WalletId"></vc:all-records-by-wallet>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="table-responsive">
-                    <table id="order-listing" class="table text-center table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Records</th>
-                                <th>Incomes</th>
-                                <th>Expenses</th>
-                                <th>Last Added</th>
-                                <th>Edit/Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var category in Model.Categories)
-                            {
-                                <tr class="card-shadow" onclick="window.location = '/Categories/Details/@category.Id'">
-                                    <td><a href="/Categories/Details/@category.Id" class="badge badge-@category.BadgeColor.ToString().ToLower()">@category.Name</a></td>
-                                    <td>
-                                        <a href="/Categories/Details/@category.Id"><span class="badge badge-warning text-light">@category.TotalRecordsCount</span></a>
-                                    </td>
-
-                                    <td>
-                                        @if (category.TotalIncomesAmount == 0)
-                                        {
-                                            badgeClassName = "secondary";
-                                        }
-
-                                        else
-                                        {
-                                            badgeClassName = "success";
-                                        }
-                                        <span class="text-@badgeClassName">
-                                            <strong>
-                                                @if (category.TotalIncomesAmount > 0)
-                                                {
-                                                    <span>+</span>
-                                                }
-
-                                                @category.TotalIncomesAmount @Model.Currency
-                                            </strong>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        @if (category.TotalExpensesAmount == 0)
-                                        {
-                                            badgeClassName = "secondary";
-                                        }
-
-                                        else
-                                        {
-                                            badgeClassName = "danger";
-                                        }
-                                        <span class="text-@badgeClassName"><strong>@category.TotalExpensesAmount @Model.Currency</strong></span>
-                                    </td>
-                                    <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Last added on">@category.ModifiedOn</span></td>
-
-
-                                    <td>
-                                        <vc:edit-category category-id="@category.Id" wallet-id="@Model.WalletId"></vc:edit-category>
-                                        <vc:delete-category category-id="@category.Id" wallet-id="@Model.WalletId"></vc:delete-category>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td class="font-weight-bolder"><span class="badge badge-outline-dark">Total:</span></td>
-                                <td><a href="/Wallets/Records/@Model.WalletId"><span class="badge badge-outline-warning">@Model.RecordsCount</span></a></td>
+        <div class="col-12">
+            <div class="table-responsive">
+                <table id="order-listing" class="table text-center table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Records</th>
+                            <th>Incomes</th>
+                            <th>Expenses</th>
+                            <th>Last Added</th>
+                            <th>Edit/Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var category in Model.Categories)
+                        {
+                            <tr class="card-shadow" onclick="window.location = '/Categories/Details/@category.Id'">
+                                <td><a href="/Categories/Details/@category.Id" class="badge badge-@category.BadgeColor.ToString().ToLower()">@category.Name</a></td>
                                 <td>
-                                    @if (Model.Incomes == 0)
+                                    <a href="/Categories/Details/@category.Id"><span class="badge badge-warning text-light">@category.TotalRecordsCount</span></a>
+                                </td>
+
+                                <td>
+                                    @if (category.TotalIncomesAmount == 0)
                                     {
                                         badgeClassName = "secondary";
                                     }
@@ -110,15 +74,19 @@
                                     {
                                         badgeClassName = "success";
                                     }
-                                    <span class="text-@badgeClassName font-weight-bolder badge badge-outline-@badgeClassName">
-                                        @if (@Model.Incomes > 0)
-                                        {
-                                            <span>+</span>
-                                        } @Model.Incomes @Model.Currency
+                                    <span class="text-@badgeClassName">
+                                        <strong>
+                                            @if (category.TotalIncomesAmount > 0)
+                                            {
+                                                <span>+</span>
+                                            }
+
+                                            @category.TotalIncomesAmount @Model.Currency
+                                        </strong>
                                     </span>
                                 </td>
                                 <td>
-                                    @if (Model.Outcomes == 0)
+                                    @if (category.TotalExpensesAmount == 0)
                                     {
                                         badgeClassName = "secondary";
                                     }
@@ -127,27 +95,70 @@
                                     {
                                         badgeClassName = "danger";
                                     }
-                                    <span class="text-@badgeClassName font-weight-bolder badge badge-outline-@badgeClassName">@Model.Outcomes @Model.Currency</span>
+                                    <span class="text-@badgeClassName"><strong>@category.TotalExpensesAmount @Model.Currency</strong></span>
                                 </td>
-                                <td></td>
-                                <td></td>
+                                <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Last added on">@category.ModifiedOn</span></td>
+
+
+                                <td>
+                                    <vc:edit-category category-id="@category.Id" wallet-id="@Model.WalletId"></vc:edit-category>
+                                    <vc:delete-category category-id="@category.Id" wallet-id="@Model.WalletId"></vc:delete-category>
+                                </td>
                             </tr>
-                        </tfoot>
-                    </table>
-                    @if (Model.Categories.Count() == 0)
-                    {
-                        <br />
-                        <div class="alert alert-warning" role="alert">
-                            <span>There are no categories in wallet <strong>"@Model.WalletName</strong>".</span>
-                        </div>
-                    }
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="font-weight-bolder"><span class="badge badge-outline-dark">Total:</span></td>
+                            <td><a href="/Wallets/Records/@Model.WalletId"><span class="badge badge-outline-warning">@Model.RecordsCount</span></a></td>
+                            <td>
+                                @if (Model.Incomes == 0)
+                                {
+                                    badgeClassName = "secondary";
+                                }
+
+                                else
+                                {
+                                    badgeClassName = "success";
+                                }
+                                <span class="text-@badgeClassName font-weight-bolder badge badge-outline-@badgeClassName">
+                                    @if (@Model.Incomes > 0)
+                                    {
+                                        <span>+</span>
+                                    } @Model.Incomes @Model.Currency
+                                </span>
+                            </td>
+                            <td>
+                                @if (Model.Outcomes == 0)
+                                {
+                                    badgeClassName = "secondary";
+                                }
+
+                                else
+                                {
+                                    badgeClassName = "danger";
+                                }
+                                <span class="text-@badgeClassName font-weight-bolder badge badge-outline-@badgeClassName">@Model.Outcomes @Model.Currency</span>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                @if (Model.Categories.Count() == 0)
+                {
                     <br />
-                    <!-- Pagination-->
-                    <!-- End Pagination-->
-                </div>
+                    <div class="alert alert-warning" role="alert">
+                        <span>There are no categories in wallet <strong>"@Model.WalletName</strong>".</span>
+                    </div>
+                }
+                <br />
+                <!-- Pagination-->
+                <!-- End Pagination-->
             </div>
         </div>
     </div>
+</div>
 <!-- content-wrapper ends -->
 @section Scripts {
     <script>
