@@ -4,75 +4,77 @@
 @{
     this.ViewData["Title"] = "Edit Investment Wallet";
 }
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="All">Investment Wallets</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Edit @Model.Name</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            Edit <span class="font-weight-bold ml-2">@Model.Name</span>
+        </div>
+    </div>
+</div>
 
-<div class="col-12 grid-margin stretch-card">
-    <div class="card">
-        <div class="card-body">
-            <div class="template-demo mb-4">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="All">Investment Wallets</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><span>Edit @Model.Name</span></li>
-                    </ol>
-                </nav>
+<div class="card">
+    <div class="card-body">
+        <form class="forms-sample" style="display: inline" asp-controller="Investments" asp-action="EditWallet" asp-route-id="@Model.Id" method="post">
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <span class="mdi mdi-lead-pencil text-primary"></span>
+                <label asp-for="@Model.Name"><span class="font-weight-bold">Name</span></label>
+                <input type="text" class="form-control form-control-lg" asp-for="@Model.Name" placeholder="Name">
+                <span class="text-danger" asp-validation-for="@Model.Name"></span>
             </div>
-            <p class="card-title">
-                Edit <span class="font-weight-bold">@Model.Name</span>
-            </p>
-            <form class="forms-sample" style="display: inline" asp-controller="Investments" asp-action="EditWallet" asp-route-id="@Model.Id" method="post">
-                <div class="text-danger" asp-validation-summary="All"></div>
-                <div class="form-group">
-                    <span class="mdi mdi-lead-pencil text-primary"></span>
-                    <label asp-for="@Model.Name"><span class="font-weight-bold">Name</span></label>
-                    <input type="text" class="form-control form-control-lg" asp-for="@Model.Name" placeholder="Name">
-                    <span class="text-danger" asp-validation-for="@Model.Name"></span>
-                </div>
-                <div class="form-group">
-                    <span class="mdi mdi-cash text-primary"></span>
-                    <label asp-for="@Model.SelectedCurrency.CurrencyId">Currency</label>
-                    <p><small class="text-muted mt-1">Note! All trades in this investment wallet should be in the chosen currency.</small></p>
-                    <select asp-for="@Model.SelectedCurrency.CurrencyId" class="js-example-basic-single" style="width:100%">
-                        <option selected value="@Model.SelectedCurrency.CurrencyId">@Model.SelectedCurrency.Name (@Model.SelectedCurrency.Code)</option>
-                        @foreach (var currency in Model.Currencies)
-                        {
-                            <option value="@currency.CurrencyId">@currency.Name (@currency.Code)</option>
-                        }
-                    </select>
-                    <span class="text-danger" asp-validation-for="@Model.SelectedCurrency.CurrencyId"></span>
-                </div>
-                <button type="submit" class="btn btn-primary btn-sm mr-2 mdi mdi-check text-light">
-                    Save
-                </button>
-            </form>
+            <div class="form-group">
+                <span class="mdi mdi-cash text-primary"></span>
+                <label asp-for="@Model.SelectedCurrency.CurrencyId">Currency</label>
+                <p><small class="text-muted mt-1">Note! All trades in this investment wallet should be in the chosen currency.</small></p>
+                <select asp-for="@Model.SelectedCurrency.CurrencyId" class="js-example-basic-single" style="width:100%">
+                    <option selected value="@Model.SelectedCurrency.CurrencyId">@Model.SelectedCurrency.Name (@Model.SelectedCurrency.Code)</option>
+                    @foreach (var currency in Model.Currencies)
+                    {
+                        <option value="@currency.CurrencyId">@currency.Name (@currency.Code)</option>
+                    }
+                </select>
+                <span class="text-danger" asp-validation-for="@Model.SelectedCurrency.CurrencyId"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm mr-2 mdi mdi-check text-light">
+                Save
+            </button>
+        </form>
 
 
-            @*Delete wallet button*@
-            <button type="button" class="btn btn-outline-danger btn-sm mr-2 float-right" data-placement="bottom" title="Delete wallet with categories and records within" data-toggle="modal" data-target="#defaultModal"><span class="mdi mdi-delete-forever" style="font-size: 15px;"></span>Delete</button>
-            <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <form method="post" asp-controller="Investments" asp-action="DeleteWallet" asp-route-id="@Model.Id">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-danger" id="exampleModalLabel">Note! This operation will result in permanently data loss!</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <p>If you confirm deleting investment wallet <span class="font-weight-bold">@Model.Name</span>, you will delete also all trades which are part from it. This operation cannot be undo!</span>
-                                <p class="font-weight-bold">Are you sure you want to delete the investment wallet?</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                <button type="submit" class="btn btn-outline-danger">Yes</button>
-                            </div>
+        @*Delete wallet button*@
+        <button type="button" class="btn btn-outline-danger btn-sm mr-2 float-right" data-placement="bottom" title="Delete wallet with categories and records within" data-toggle="modal" data-target="#defaultModal"><span class="mdi mdi-delete-forever" style="font-size: 15px;"></span>Delete</button>
+        <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <form method="post" asp-controller="Investments" asp-action="DeleteWallet" asp-route-id="@Model.Id">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-danger" id="exampleModalLabel">Note! This operation will result in permanently data loss!</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>If you confirm deleting investment wallet <span class="font-weight-bold">@Model.Name</span>, you will delete also all trades which are part from it. This operation cannot be undo!</span>
+                            <p class="font-weight-bold">Are you sure you want to delete the investment wallet?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-outline-danger">Yes</button>
                         </div>
                     </div>
-                </form>
-            </div>
-
-
+                </div>
+            </form>
         </div>
     </div>
 </div>
