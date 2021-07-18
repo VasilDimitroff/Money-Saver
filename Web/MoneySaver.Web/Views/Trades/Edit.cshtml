@@ -5,70 +5,75 @@
 @{
     this.ViewData["Title"] = "Edit Trade";
 }
-
-<div class="col-12 grid-margin stretch-card">
-    <div class="card">
-        <div class="card-body">
-            <div class="template-demo mb-5">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="Trades" asp-route-id="@Model.InvestmentWallet.Id">Trades</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><span>Edit Trade</span></li>
-                    </ol>
-                </nav>
-            </div>
-            <p class="card-title">
-               Edit Trade
-            </p>
-            <form class="forms-sample" asp-controller="Trades" asp-action="Edit" asp-route-id="@Model.Id" method="post">
-                <div class="text-danger" asp-validation-summary="All"></div>
-                <div class="form-group">
-                    <span class="mdi mdi-copyright text-primary"></span>
-                    <label asp-for="@Model.SelectedCompany.Ticker"><span class="font-weight-bold">Company</span></label>
-                    <select asp-for="@Model.SelectedCompany.Ticker" class="js-example-basic-single" style="width:100%">
-                        <option value="@Model.SelectedCompany.Ticker" selected>@Model.SelectedCompany.Name (Ticker: @Model.SelectedCompany.Ticker)</option>
-                        @foreach (var company in Model.Companies)
-                        {
-                            <option value="@company.Ticker">@company.Name (Ticker: @company.Ticker)</option>
-                        }
-                    </select>
-                    <p class="pt-3 text-muted">Couldn't find the company you've searched? <a asp-controller="Companies" asp-action="Add">Add new company</a></p>
-                </div>
-                <div class="form-group">
-                    <span class="mdi mdi-copyright text-primary"></span>
-                    <label asp-for="@Model.InvestmentWalletId"><span class="font-weight-bold">Investment Wallet</span></label>
-                    <select asp-for="@Model.InvestmentWalletId" class="js-example-basic-single" style="width:100%">
-                        @foreach (var wallet in Model.AllInvestmentWallets)
-                        {
-                            <option value="@wallet.Id">@wallet.Name (Currency: @wallet.CurrencyCode)</option>
-                        }
-                    </select>
-                    <span class="text-danger" asp-validation-for="@Model.InvestmentWalletId"></span>
-                </div>
-                <div class="form-group">
-                    <span class="mdi mdi-currency-usd text-primary"></span>
-                    <label asp-for="@Model.Price"><span class="font-weight-bold">Price per share</span></label>
-                    <input type="number" class="form-control form-control-lg" asp-for="@Model.Price" placeholder="Price per share" value="@Model.Price">
-                    <span class="text-danger" asp-validation-for="@Model.Price"></span>
-                </div>
-                <div class="form-group">
-                    <span class="mdi mdi-hexagon-multiple text-primary"></span>
-                    <label asp-for="@Model.Quantity"><span class="font-weight-bold">Quantity</span></label>
-                    <input type="number" class="form-control form-control-lg" asp-for="@Model.Quantity" placeholder="Quantity">
-                    <span class="text-danger" asp-validation-for="@Model.Quantity"></span>
-                </div>
-                <div class="form-group">
-                    <span class="mdi mdi-calendar-clock text-primary"></span>
-                    <label asp-for="@Model.CreatedOn"><span class="font-weight-bold">Trade Date</span></label>
-                    <input type="datetime-local" class="form-control form-control-lg" asp-for="@Model.CreatedOn" placeholder="@Model.CreatedOn">
-                    <span class="text-danger" asp-validation-for="@Model.CreatedOn"></span>
-                </div>
-                <button type="submit" class="btn btn-primary btn-sm mr-2 mdi mdi-check text-light">
-                    Save
-                </button>
-            </form>
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="Trades" asp-route-id="@Model.InvestmentWallet.Id">Trades</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Edit Trade</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            Edit Trade from @Model.InvestmentWallet.Name
         </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-body">
+        <form class="forms-sample" asp-controller="Trades" asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <span class="mdi mdi-copyright text-primary"></span>
+                <label asp-for="@Model.SelectedCompany.Ticker"><span class="font-weight-bold">Company</span></label>
+                <select asp-for="@Model.SelectedCompany.Ticker" class="js-example-basic-single" style="width:100%">
+                    <option value="@Model.SelectedCompany.Ticker" selected>@Model.SelectedCompany.Name (Ticker: @Model.SelectedCompany.Ticker)</option>
+                    @foreach (var company in Model.Companies)
+                    {
+                        <option value="@company.Ticker">@company.Name (Ticker: @company.Ticker)</option>
+                    }
+                </select>
+                <p class="pt-3 text-muted">Couldn't find the company you've searched? <a asp-controller="Companies" asp-action="Add">Add new company</a></p>
+            </div>
+            <div class="form-group">
+                <span class="mdi mdi-copyright text-primary"></span>
+                <label asp-for="@Model.InvestmentWalletId"><span class="font-weight-bold">Investment Wallet</span></label>
+                <select asp-for="@Model.InvestmentWalletId" class="js-example-basic-single" style="width:100%">
+                    @foreach (var wallet in Model.AllInvestmentWallets)
+                    {
+                        <option value="@wallet.Id">@wallet.Name (Currency: @wallet.CurrencyCode)</option>
+                    }
+                </select>
+                <span class="text-danger" asp-validation-for="@Model.InvestmentWalletId"></span>
+            </div>
+            <div class="form-group">
+                <span class="mdi mdi-currency-usd text-primary"></span>
+                <label asp-for="@Model.Price"><span class="font-weight-bold">Price per share</span></label>
+                <input type="number" class="form-control form-control-lg" asp-for="@Model.Price" placeholder="Price per share" value="@Model.Price">
+                <span class="text-danger" asp-validation-for="@Model.Price"></span>
+            </div>
+            <div class="form-group">
+                <span class="mdi mdi-hexagon-multiple text-primary"></span>
+                <label asp-for="@Model.Quantity"><span class="font-weight-bold">Quantity</span></label>
+                <input type="number" class="form-control form-control-lg" asp-for="@Model.Quantity" placeholder="Quantity">
+                <span class="text-danger" asp-validation-for="@Model.Quantity"></span>
+            </div>
+            <div class="form-group">
+                <span class="mdi mdi-calendar-clock text-primary"></span>
+                <label asp-for="@Model.CreatedOn"><span class="font-weight-bold">Trade Date</span></label>
+                <input type="datetime-local" class="form-control form-control-lg" asp-for="@Model.CreatedOn" placeholder="@Model.CreatedOn">
+                <span class="text-danger" asp-validation-for="@Model.CreatedOn"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm mr-2 mdi mdi-check text-light">
+                Save
+            </button>
+        </form>
     </div>
 </div>
 

@@ -5,22 +5,26 @@
 @{
     this.ViewData["Title"] = "Add Trade";
 }
-
-<div class="col-12 grid-margin stretch-card">
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="Trades" asp-route-id="@Model.InvestmentWalletId">Trades</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Add Trade</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            Add a new Trade
+        </div>
+    </div>
+</div>
     <div class="card">
         <div class="card-body">
-            <div class="template-demo mb-5">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="Trades" asp-action="All">Trades</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><span>Add Trade</span></li>
-                    </ol>
-                </nav>
-            </div>
-            <p class="card-title">
-                Add new Trade
-            </p>
             <form class="forms-sample" asp-controller="Trades" asp-action="Add" asp-route-investmentwalletid="@Model.InvestmentWalletId" method="post">
                 <div class="text-danger" asp-validation-summary="All"></div>
                 <div class="form-group">
@@ -41,7 +45,7 @@
                         <option disabled selected>-- Choose Trade Type --</option>
                         @foreach (string type in Enum.GetNames(typeof(TradeType)))
                         {
-                           <option>@type</option>
+                            <option>@type</option>
                         }
                     </select>
                     <span class="text-danger" asp-validation-for="Type"></span>
@@ -64,7 +68,6 @@
             </form>
         </div>
     </div>
-</div>
 
 @section Scripts {
     <script src="~/vendors/js/vendor.bundle.addons.js"></script>
