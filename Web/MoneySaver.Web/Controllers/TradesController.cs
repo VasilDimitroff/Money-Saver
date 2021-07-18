@@ -34,7 +34,7 @@
 
         public async Task<IActionResult> Add(int investmentWalletId)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
             }
 
@@ -59,7 +59,7 @@
         [HttpPost]
         public async Task<IActionResult> Add(AddTradeInputModel input)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
             }
 
@@ -84,7 +84,7 @@
 
         public async Task<IActionResult> Edit(string id)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
             }
 
@@ -126,6 +126,28 @@
             };
 
             return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditTradeInputModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+            }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            await this.tradesService
+                .Update(
+                user.Id,
+                input.Id,
+                input.SelectedCompany.Ticker,
+                input.InvestmentWalletId,
+                input.Price,
+                input.Quantity,
+                input.CreatedOn);
+
+            return this.Redirect($"/Investments/Trades/{input.InvestmentWalletId}");
         }
     }
 }

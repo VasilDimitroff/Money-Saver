@@ -1,5 +1,6 @@
 ﻿namespace MoneySaver.Services.Data.Contracts
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -14,5 +15,7 @@
         public int GetCompanyStocksHoldingsCount(string companyTicker, int quantity, int investmentWalletId);
 
         public Task<EditTradeDto> GetTradeInfoForEdit(string userId, string tradeId);
+
+        public Task Update(string userId, string tradeId, string companyTicker, int investmentWalletId, decimal price, int quantity, DateTime createdOn);
     }
 }

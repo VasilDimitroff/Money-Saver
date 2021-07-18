@@ -173,6 +173,48 @@
             return tradeDto;
         }
 
+        public async Task Update(string userId, string tradeId, string companyTicker, int investmentWalletId, decimal price, int quantity, DateTime createdOn)
+        {
+            var trade = await this.dbContext.Trades
+               .Include(t => t.Company)
+               .Include(t => t.InvestmentWallet)
+               .ThenInclude(iw => iw.Currency)
+               .FirstOrDefaultAsync(t => t.Id == tradeId);
+
+            if (trade == null)
+            {
+                throw new ArgumentException(GlobalConstants.TradeNotExist);
+            }
+
+            var company = await this.dbContext.Companies.FirstOrDefaultAsync(c => c.Ticker == companyTicker);
+
+            if (company == null)
+            {
+                throw new ArgumentException(GlobalConstants.InvalidCompanyTicker);
+            }
+
+            var investmentWallet = await this.dbContext.InvestmentWallets
+                .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
+
+            if (investmentWallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.InvestmentWalletNotExist);
+            }
+
+            if (!await this.CanUserEditInvestmentWallet(userId, trade.InvestmentWalletId))
+            {
+                throw new ArgumentException(GlobalConstants.CannotEditInvestmentWallet);
+            }
+
+            trade.InvestmentWalletId = investmentWalletId;
+            trade.Price = price;
+            trade.StockQuantity = quantity;
+            trade.CompanyTicker = companyTicker;
+            trade.CreatedOn = createdOn;
+
+            await this.dbContext.SaveChangesAsync();
+        }
+
         private async Task<IEnumerable<InvestmentWalletIdNameAndCurrencyDto>> GetInvestmentWalletsAsync(string userId)
         {
             var wallets = await this.dbContext.InvestmentWallets

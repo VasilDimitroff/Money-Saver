@@ -38,10 +38,16 @@
                 <label asp-for="@Model.SelectedCurrency.CurrencyId">Currency</label>
                 <p><small class="text-muted mt-1">Note! All trades in this investment wallet should be in the chosen currency.</small></p>
                 <select asp-for="@Model.SelectedCurrency.CurrencyId" class="js-example-basic-single" style="width:100%">
-                    <option selected value="@Model.SelectedCurrency.CurrencyId">@Model.SelectedCurrency.Name (@Model.SelectedCurrency.Code)</option>
                     @foreach (var currency in Model.Currencies)
                     {
-                        <option value="@currency.CurrencyId">@currency.Name (@currency.Code)</option>
+                        if (currency.CurrencyId == Model.SelectedCurrency.CurrencyId)
+                        {
+                            <option selected value="@currency.CurrencyId">@currency.Name (@currency.Code)</option>
+                        }
+                        else
+                        {
+                            <option value="@currency.CurrencyId">@currency.Name (@currency.Code)</option>
+                        }
                     }
                 </select>
                 <span class="text-danger" asp-validation-for="@Model.SelectedCurrency.CurrencyId"></span>

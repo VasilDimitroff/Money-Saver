@@ -33,10 +33,16 @@
                 <span class="mdi mdi-copyright text-primary"></span>
                 <label asp-for="@Model.SelectedCompany.Ticker"><span class="font-weight-bold">Company</span></label>
                 <select asp-for="@Model.SelectedCompany.Ticker" class="js-example-basic-single" style="width:100%">
-                    <option value="@Model.SelectedCompany.Ticker" selected>@Model.SelectedCompany.Name (Ticker: @Model.SelectedCompany.Ticker)</option>
                     @foreach (var company in Model.Companies)
                     {
-                        <option value="@company.Ticker">@company.Name (Ticker: @company.Ticker)</option>
+                        if (company.Ticker == Model.SelectedCompany.Ticker)
+                        {
+                            <option selected value="@company.Ticker">@company.Name (Ticker: @company.Ticker)</option>
+                        }
+                        else
+                        {
+                            <option value="@company.Ticker">@company.Name (Ticker: @company.Ticker)</option>
+                        }
                     }
                 </select>
                 <p class="pt-3 text-muted">Couldn't find the company you've searched? <a asp-controller="Companies" asp-action="Add">Add new company</a></p>
