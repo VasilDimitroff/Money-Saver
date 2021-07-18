@@ -6,21 +6,31 @@
 @{
     this.ViewData["Title"] = "Delete Category " + "- " + @Model.OldCategoryName;
 }
-<div class="col-12 grid-margin stretch-card">
+<div class="bg-white">
+    <div class="template-demo mb-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Categories" asp-route-id="@Model.WalletId">Categories</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.OldCategoryId">@Model.OldCategoryName</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Delete</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            Delete category
+            <a class="badge badge-@Model.OldCategoryBadgeColor.ToString().ToLower() ml-2" asp-controller="Categories" asp-action="Details" asp-route-id="@Model.OldCategoryId">@Model.OldCategoryName</a>
+        </div>
+    </div>
+</div>
     <div class="card">
         <div class="card-body">
-            <div class="template-demo mb-5">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Categories" asp-route-id="@Model.WalletId">Categories</a></li>
-                        <li class="breadcrumb-item"><a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.OldCategoryId">@Model.OldCategoryName</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><span>Delete</span></li>
-                    </ol>
-                </nav>
-            </div>
+            
             <div class="card-description">
                 <div class="alert alert-info" role="alert">
                     <span class="mdi mdi-information-outline" style="font-size: 15px;"> </span>
@@ -98,7 +108,6 @@
             </div>
         </div>
     </div>
-</div>
 
 @section Scripts {
     <script src="~/vendors/js/vendor.bundle.addons.js"></script>

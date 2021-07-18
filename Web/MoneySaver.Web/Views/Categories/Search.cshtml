@@ -7,40 +7,50 @@
     this.ViewData["Title"] = "Search results for " + Model.SearchTerm + " - " + Model.Category + " - Page " + Model.PageNumber + " - " + Model.WalletName;
 }
 <!-- partial -->
+<div class="bg-white">
+    <div class="template-demo mb-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.CategoryId">@Model.Category</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page">
+                    <span>
+                        Result for "<span class="text-warning">@Model.SearchTerm</span>"
+                        @if (Model.PageNumber > 1)
+                        {
+                            <text> - Page @Model.PageNumber</text>
+                        }
+                    </span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            @Model.Category - Records - Search Results for "@Model.SearchTerm"
+            <div class="input-group-sm d-flex justify-content-end ml-4">
+                <a asp-controller="Categories" asp-action="Edit" asp-route-id="@Model.CategoryId" asp-route-walletid="@Model.WalletId" class="btn btn-sm btn-outline-primary"><i class="mdi mdi-lead-pencil"></i></a>
+            </div>
+        </div>
+        <br />
+        <div class="d-flex justify-content-center">
+            <div class="pr-1">
+                <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
+                <vc:delete-category category-id="@Model.CategoryId" wallet-id="@Model.WalletId"></vc:delete-category>
+            </div>
+        </div>
+        <br />
+
+    </div>
+</div>
 <div class="card">
     <div class="card-body">
-        <div class="template-demo mb-5">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="All">Wallets</a></li>
-                    <li class="breadcrumb-item"><a asp-controller="Wallets" asp-action="Details" asp-route-id="@Model.WalletId">@Model.WalletName</a></li>
-                    <li class="breadcrumb-item"><a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.CategoryId">@Model.Category</a></li>
-
-                    <li class="breadcrumb-item active" aria-current="page">
-                        <span>
-                            Result for "<span class="text-warning">@Model.SearchTerm</span>"
-                            @if (Model.PageNumber > 1)
-                            {
-                                <text> - Page @Model.PageNumber</text>
-                            }
-                        </span>
-                    </li>
-                </ol>
-            </nav>
-        </div>
         <div class="col-12 mb-3 form-inline">
-            <div class="input-group mr-2 mr-sm-1 mt-2 mb-2">
-                <div class="btn-group mr-2">
-                    <vc:add-record wallet-id="@Model.WalletId"></vc:add-record>
-                </div>
-                <div class="btn-group mr-2">
-                    <vc:edit-category category-id="@Model.CategoryId" wallet-id="@Model.WalletId"></vc:edit-category>
-                </div>
-                <div class="btn-group mr-2">
-                    <vc:delete-category category-id="@Model.CategoryId" wallet-id="@Model.WalletId"></vc:delete-category>
-                </div>
-            </div>
             <div class="btn-group mr-4">
                 <vc:get-records-in-category-by-date start-date="@Model.StartDate" end-date="@Model.EndDate" category-id="@Model.CategoryId"></vc:get-records-in-category-by-date>
             </div>
