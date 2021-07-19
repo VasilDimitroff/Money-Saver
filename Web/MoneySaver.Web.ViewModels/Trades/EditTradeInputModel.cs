@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
+    using System.ComponentModel.DataAnnotations;
     using MoneySaver.Web.ViewModels.Investments;
 
     public class EditTradeInputModel : AddTradeInputModel
@@ -12,6 +12,7 @@
             this.AllInvestmentWallets = new List<InvestmentWalletIdNameAndCurrencyViewModel>();
         }
 
+        [Required]
         public string Id { get; set; }
 
         public InvestmentWalletIdNameAndCurrencyViewModel InvestmentWallet { get; set; }

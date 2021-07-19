@@ -27,7 +27,7 @@
 
 <div class="card">
     <div class="card-body">
-        <form class="forms-sample" asp-controller="Trades" asp-action="Edit" asp-route-id="@Model.Id" method="post">
+        <form class="forms-sample" style="display: inline;" asp-controller="Trades" asp-action="Edit" asp-route-id="@Model.Id" method="post">
             <div class="text-danger" asp-validation-summary="All"></div>
             <div class="form-group">
                 <span class="mdi mdi-copyright text-primary"></span>
@@ -45,6 +45,7 @@
                         }
                     }
                 </select>
+                <span class="text-danger" asp-validation-for="@Model.SelectedCompany.Ticker"></span>
                 <p class="pt-3 text-muted">Couldn't find the company you've searched? <a asp-controller="Companies" asp-action="Add">Add new company</a></p>
             </div>
             <div class="form-group">
@@ -61,9 +62,11 @@
             <div class="form-group">
                 <span class="mdi mdi-currency-usd text-primary"></span>
                 <label asp-for="@Model.Price"><span class="font-weight-bold">Price per share</span></label>
-                <input type="number" class="form-control form-control-lg" asp-for="@Model.Price" placeholder="Price per share" value="@Model.Price">
+                <input type="number" class="form-control form-control-lg" asp-for="@Model.Price" placeholder="Price per share">
                 <span class="text-danger" asp-validation-for="@Model.Price"></span>
             </div>
+                <input type="hidden" asp-for="@Model.Type" value="@Model.Type" />
+                <span class="text-danger" asp-validation-for="@Model.Type"></span>
             <div class="form-group">
                 <span class="mdi mdi-hexagon-multiple text-primary"></span>
                 <label asp-for="@Model.Quantity"><span class="font-weight-bold">Quantity</span></label>
@@ -80,6 +83,30 @@
                 Save
             </button>
         </form>
+
+        @*Delete trade button*@
+        <button type="button" class="btn btn-outline-danger btn-sm mr-2 float-right" data-placement="bottom" title="Delete trade" data-toggle="modal" data-target="#defaultModal"><span class="mdi mdi-delete-forever" style="font-size: 15px;"></span>Delete</button>
+        <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <form method="post" asp-controller="Trades" asp-action="Delete" asp-route-id="@Model.Id">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-danger" id="exampleModalLabel">Note! This operation will result in permanently data loss!</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this trade from <span class="font-weight-bold">@Model.InvestmentWallet.Name (@Model.InvestmentWallet.CurrencyCode)</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-outline-danger">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

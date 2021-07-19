@@ -12,10 +12,14 @@
 
         public Task CreateSellTradeAsync(string userId, int investmentWalletId, string companyTicker, int quantity, decimal pricePerShare);
 
-        public int GetCompanyStocksHoldingsCount(string companyTicker, int quantity, int investmentWalletId);
+        public int GetCompanyStocksHoldingsCount(string companyTicker, int investmentWalletId);
 
         public Task<EditTradeDto> GetTradeInfoForEdit(string userId, string tradeId);
 
-        public Task Update(string userId, string tradeId, string companyTicker, int investmentWalletId, decimal price, int quantity, DateTime createdOn);
+        public Task UpdateAsync(string userId, string tradeId, string companyTicker, int investmentWalletId, decimal price, int quantity, DateTime createdOn);
+
+        public Task RemoveAsync(string userId, string tradeId);
+
+        public Task<int> GetInvestmentWalletIdByTradeIdAsync(string tradeId);
     }
 }

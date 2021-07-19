@@ -13,15 +13,17 @@
             this.Companies = new HashSet<CompanyViewModel>();
         }
 
-        [Range(1, 1000000)]
+        [Range(1, 10000000)]
         public int Quantity { get; set; }
 
         [Required]
         public decimal Price { get; set; }
 
+        [Required]
         public int InvestmentWalletId { get; set; }
 
         [Required]
+        [Range(1, 2, ErrorMessage = "Please choose Trade Type")]
         public TradeType Type { get; set; }
 
         public CompanyViewModel SelectedCompany { get; set; }

@@ -36,6 +36,7 @@
                             <option value="@company.Ticker">@company.Name (Ticker: @company.Ticker)</option>
                         }
                     </select>
+                    <span class="text-danger" asp-validation-for="@Model.SelectedCompany.Ticker"></span>
                     <p class="pt-3 text-muted">Couldn't find the company you've searched? <a asp-controller="Companies" asp-action="Add">Add new company</a></p>
                 </div>
                 <div class="form-group">
@@ -53,7 +54,7 @@
                 <div class="form-group">
                     <span class="mdi mdi-currency-usd text-primary"></span>
                     <label asp-for="@Model.Price"><span class="font-weight-bold">Price per share</span></label>
-                    <input type="number" class="form-control form-control-lg" asp-for="@Model.Price" placeholder="Price per share" value="0">
+                    <input type="number" class="form-control form-control-lg" asp-for="@Model.Price" placeholder="Price per share">
                     <span class="text-danger" asp-validation-for="@Model.Price"></span>
                 </div>
                 <div class="form-group">

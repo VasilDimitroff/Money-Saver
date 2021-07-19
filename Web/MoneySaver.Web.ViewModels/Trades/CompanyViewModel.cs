@@ -4,6 +4,7 @@
 
     public class CompanyViewModel
     {
+        [Required]
         public string Ticker { get; set; }
 
         public string Name { get; set; }
