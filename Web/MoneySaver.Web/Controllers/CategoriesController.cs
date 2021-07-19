@@ -209,8 +209,20 @@
         {
             try
             {
+                var user = await this.userManager.GetUserAsync(this.User);
+
                 if (!this.ModelState.IsValid)
                 {
+                    if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))
+                    {
+                        return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForEditWallet}");
+                    }
+
+                    if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, input.OldCategoryId))
+                    {
+                        return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForViewOrEditCategory}");
+                    }
+
                     var modelInfo = await this.categoriesService.GetCategoryInfoForDeleteAsync(input.OldCategoryId, input.WalletId);
 
                     input.WalletId = modelInfo.WalletId;
@@ -228,8 +240,6 @@
 
                     return this.View(input);
                 }
-
-                var user = await this.userManager.GetUserAsync(this.User);
 
                 if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))
                 {

@@ -16,9 +16,6 @@
         [Required(ErrorMessage = "Category Id is required")]
         public int CategoryId { get; set; }
 
-        [Required(ErrorMessage = "Description cannot be empty")]
-        [MinLength(1)]
-        [MaxLength(250)]
         public string Description { get; set; }
 
         public string WalletName { get; set; }

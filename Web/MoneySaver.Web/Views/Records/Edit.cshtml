@@ -37,7 +37,7 @@
             <div class="form-group">
                 <span class="mdi mdi-pencil text-primary"></span>
                 <label asp-for="Description"><span class="font-weight-bold">Description</span></label>
-                <input type="text" class="form-control form-control-lg" asp-for="Description" placeholder="Description">
+                <input type="text" class="form-control form-control-lg" asp-for="Description" placeholder="Description" value="@Model.Description">
                 <span class="text-danger" asp-validation-for="Description"></span>
             </div>
             <div class="form-group">

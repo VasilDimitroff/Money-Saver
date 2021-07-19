@@ -211,7 +211,7 @@
                 newAmount = -1 * newAmount;
             }
 
-            record.Description = description;
+            record.Description = string.IsNullOrWhiteSpace(description) ? "N/A" : description;
             record.Amount = newAmount;
             record.CreatedOn = createdOn;
             record.ModifiedOn = DateTime.UtcNow;

@@ -172,6 +172,11 @@
 
                 if (!this.ModelState.IsValid)
                 {
+                    if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.Id))
+                    {
+                        return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForEditWallet}");
+                    }
+
                     var walletInfo = await this.walletsService.GetWalletInfoForEditAsync(user.Id, input.Id);
 
                     input.Currencies = walletInfo.Currencies.Select(c => new CurrencyViewModel

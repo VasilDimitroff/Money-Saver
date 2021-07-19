@@ -176,9 +176,6 @@
             // if getStatus == 1 => Return all lists
             // if getStatus == 2 => return Active
             // if getStatus == 3 => return Completed
-            if (!this.ModelState.IsValid)
-            {
-            }
 
             var user = await this.userManager.GetUserAsync(this.User);
 
