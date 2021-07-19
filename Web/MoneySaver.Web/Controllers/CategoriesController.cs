@@ -34,279 +34,369 @@
 
         public async Task<IActionResult> Add(int id)
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+            try
             {
-                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+                var user = await this.userManager.GetUserAsync(this.User);
+
+                if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, id))
+                {
+                    throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+                }
+
+                var model = new AddCategoryInputModel();
+
+                var wallets = await this.categoriesService.GetAllWalletsWithNameAndIdAsync(user.Id);
+
+                model.WalletId = id;
+                model.WalletName = await this.walletsService.GetWalletNameAsync(id);
+                model.Wallets = wallets.Select(w => new AddCategoryWalletsListViewModel
+                {
+                    WalletId = w.WalletId,
+                    WalletName = w.WalletName,
+                })
+                    .ToList();
+
+                return this.View(model);
             }
-
-            var model = new AddCategoryInputModel();
-
-            var wallets = await this.categoriesService.GetAllWalletsWithNameAndIdAsync(user.Id);
-
-            model.WalletId = id;
-            model.WalletName = await this.walletsService.GetWalletNameAsync(id);
-            model.Wallets = wallets.Select(w => new AddCategoryWalletsListViewModel
+            catch (Exception ex)
             {
-                WalletId = w.WalletId,
-                WalletName = w.WalletName,
-            })
-                .ToList();
-
-            return this.View(model);
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(AddCategoryInputModel input)
         {
-            if (!this.ModelState.IsValid)
+            try
             {
+                if (!this.ModelState.IsValid)
+                {
+                    input.WalletName = await this.walletsService.GetWalletNameAsync(input.WalletId);
+                    return this.View(input);
+                }
+
+                var user = await this.userManager.GetUserAsync(this.User);
+
+                if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))
+                {
+                    return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForEditWallet}");
+                }
+
+                await this.categoriesService.AddAsync(input.Name, input.WalletId, input.BadgeColor);
+
+                return this.Redirect($"/Wallets/Categories/{input.WalletId}");
             }
-
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))
+            catch (Exception ex)
             {
-                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+                return this.Redirect($"/Home/Error?message={ex.Message}");
             }
-
-            await this.categoriesService.AddAsync(input.Name, input.WalletId, input.BadgeColor);
-            return this.Redirect($"/Wallets/Categories/{input.WalletId}");
         }
 
         public async Task<IActionResult> Edit(int id, int walletId)
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, id))
+            try
             {
-                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
+                var user = await this.userManager.GetUserAsync(this.User);
+
+                if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, id))
+                {
+                    return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForViewOrEditCategory}");
+                }
+
+                var categoryInfo = await this.categoriesService.GetCategoryInfoForEditAsync(id);
+                var wallets = await this.categoriesService.GetAllWalletsWithNameAndIdAsync(user.Id);
+                var walletName = await this.walletsService.GetWalletNameAsync(walletId);
+
+                var model = new EditCategoryInputModel();
+                model.CategoryId = id;
+                model.CategoryName = categoryInfo.CategoryName;
+                model.BadgeColor = Enum.Parse<BadgeColor>(categoryInfo.BadgeColor);
+                model.WalletId = walletId;
+                model.WalletName = walletName;
+                model.Wallets = wallets.Select(w => new EditCategoryWalletsListViewModel
+                {
+                    WalletId = w.WalletId,
+                    WalletName = w.WalletName,
+                })
+                    .ToList();
+
+                return this.View(model);
             }
-
-            var categoryInfo = await this.categoriesService.GetCategoryInfoForEditAsync(id);
-            var wallets = await this.categoriesService.GetAllWalletsWithNameAndIdAsync(user.Id);
-            var walletName = await this.walletsService.GetWalletNameAsync(walletId);
-
-            var model = new EditCategoryInputModel();
-            model.CategoryId = id;
-            model.CategoryName = categoryInfo.CategoryName;
-            model.BadgeColor = Enum.Parse<BadgeColor>(categoryInfo.BadgeColor);
-            model.WalletId = walletId;
-            model.WalletName = walletName;
-            model.Wallets = wallets.Select(w => new EditCategoryWalletsListViewModel
+            catch (Exception ex)
             {
-                WalletId = w.WalletId,
-                WalletName = w.WalletName,
-            })
-                .ToList();
-
-            return this.View(model);
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditCategoryInputModel input)
         {
-            if (!this.ModelState.IsValid)
+            try
             {
+                if (!this.ModelState.IsValid)
+                {
+                    var categoryInfo = await this.categoriesService.GetCategoryInfoForEditAsync(input.CategoryId);
+                    var walletName = await this.walletsService.GetWalletNameAsync(input.WalletId);
+
+                    input.CategoryName = categoryInfo.CategoryName;
+                    input.BadgeColor = Enum.Parse<BadgeColor>(categoryInfo.BadgeColor);
+                    input.WalletName = walletName;
+
+                    return this.View(input);
+                }
+
+                var user = await this.userManager.GetUserAsync(this.User);
+
+                if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, input.CategoryId))
+                {
+                    return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForViewOrEditCategory}");
+                }
+
+                await this.categoriesService.EditAsync(input.CategoryId, input.CategoryName, input.BadgeColor.ToString());
+
+                return this.Redirect($"/Wallets/Categories/{input.WalletId}");
             }
-
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, input.CategoryId))
+            catch (Exception ex)
             {
-                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
+                return this.Redirect($"/Home/Error?message={ex.Message}");
             }
-
-            await this.categoriesService.EditAsync(input.CategoryId, input.CategoryName, input.BadgeColor.ToString());
-
-            return this.Redirect($"/Wallets/Categories/{input.WalletId}");
         }
 
         public async Task<IActionResult> Delete(int id, int walletId)
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, walletId))
+            try
             {
-                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
-            }
+                var user = await this.userManager.GetUserAsync(this.User);
 
-            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, id))
-            {
-                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
-            }
-
-            var model = new DeleteCategoryInputModel();
-
-            var modelInfo = await this.categoriesService.GetCategoryInfoForDeleteAsync(id, walletId);
-
-            model.WalletId = modelInfo.WalletId;
-            model.WalletName = modelInfo.WalletName;
-            model.OldCategoryId = id;
-            model.OldCategoryName = modelInfo.OldCategoryName;
-            model.OldCategoryBadgeColor = Enum.Parse<BadgeColor>(modelInfo.OldCategoryBadgeColor.ToString());
-            model.Categories = modelInfo.Categories
-                .Select(c => new DeleteCategoryNameAndIdViewModel
+                if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, walletId))
                 {
-                    BadgeColor = Enum.Parse<BadgeColor>(c.BadgeColor.ToString()),
-                    CategoryId = c.CategoryId,
-                    CategoryName = c.CategoryName,
-                })
-                .ToList();
+                    return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForEditWallet}");
+                }
 
-            return this.View(model);
+                if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, id))
+                {
+                    return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForViewOrEditCategory}");
+                }
+
+                var model = new DeleteCategoryInputModel();
+
+                var modelInfo = await this.categoriesService.GetCategoryInfoForDeleteAsync(id, walletId);
+
+                model.WalletId = modelInfo.WalletId;
+                model.WalletName = modelInfo.WalletName;
+                model.OldCategoryId = id;
+                model.OldCategoryName = modelInfo.OldCategoryName;
+                model.OldCategoryBadgeColor = Enum.Parse<BadgeColor>(modelInfo.OldCategoryBadgeColor.ToString());
+                model.Categories = modelInfo.Categories
+                    .Select(c => new DeleteCategoryNameAndIdViewModel
+                    {
+                        BadgeColor = Enum.Parse<BadgeColor>(c.BadgeColor.ToString()),
+                        CategoryId = c.CategoryId,
+                        CategoryName = c.CategoryName,
+                    })
+                    .ToList();
+
+                return this.View(model);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(DeleteCategoryInputModel input)
         {
-            if (!this.ModelState.IsValid)
+            try
             {
+                if (!this.ModelState.IsValid)
+                {
+                    var modelInfo = await this.categoriesService.GetCategoryInfoForDeleteAsync(input.OldCategoryId, input.WalletId);
+
+                    input.WalletId = modelInfo.WalletId;
+                    input.WalletName = modelInfo.WalletName;
+                    input.OldCategoryName = modelInfo.OldCategoryName;
+                    input.OldCategoryBadgeColor = Enum.Parse<BadgeColor>(modelInfo.OldCategoryBadgeColor.ToString());
+                    input.Categories = modelInfo.Categories
+                        .Select(c => new DeleteCategoryNameAndIdViewModel
+                        {
+                            BadgeColor = Enum.Parse<BadgeColor>(c.BadgeColor.ToString()),
+                            CategoryId = c.CategoryId,
+                            CategoryName = c.CategoryName,
+                        })
+                        .ToList();
+
+                    return this.View(input);
+                }
+
+                var user = await this.userManager.GetUserAsync(this.User);
+
+                if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))
+                {
+                    return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForEditWallet}");
+                }
+
+                if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, input.OldCategoryId))
+                {
+                    return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForViewOrEditCategory}");
+                }
+
+                if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, input.NewCategoryId) && input.NewCategoryId != -1)
+                {
+                    return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForViewOrEditCategory}");
+                }
+
+                await this.categoriesService.RemoveAsync(input.OldCategoryId, input.NewCategoryId);
+                return this.Redirect($"/Wallets/Categories/{input.WalletId}");
             }
-
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            if (!await this.walletsService.IsUserOwnWalletAsync(user.Id, input.WalletId))
+            catch (Exception ex)
             {
-                throw new ArgumentException(GlobalConstants.NoPermissionForEditWallet);
+                return this.Redirect($"/Home/Error?message={ex.Message}");
             }
-
-            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, input.OldCategoryId))
-            {
-                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
-            }
-
-            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, input.NewCategoryId) && input.NewCategoryId != -1)
-            {
-                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
-            }
-
-            await this.categoriesService.RemoveAsync(input.OldCategoryId, input.NewCategoryId);
-            return this.Redirect($"/Wallets/Categories/{input.WalletId}");
         }
 
         public async Task<IActionResult> Details(int id, int page = 1)
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, id))
+            try
             {
-                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
-            }
+                var user = await this.userManager.GetUserAsync(this.User);
 
-            var category = await this.categoriesService.GetRecordsByCategoryAsync(id, page, ItemsPerPage);
-            CategoryRecordsViewModel model = new CategoryRecordsViewModel()
-            {
-                Records = category.Records
-                .Select(r => new RecordsByCategoryViewModel
+                if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, id))
                 {
-                    Amount = r.Amount,
-                    CreatedOn = r.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
-                    Description = r.Description,
-                    Id = r.Id,
-                    Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
-                })
-                .ToList(),
-                Category = category.Category,
-                CategoryId = id,
-                Currency = category.Currency,
-                WalletId = category.WalletId,
-                WalletName = category.WalletName,
-                BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString()),
-            };
+                    throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
+                }
 
-            model.ItemsPerPage = ItemsPerPage;
-            model.PageNumber = page;
-            model.RecordsCount = this.categoriesService.GetRecordsCount(id);
+                var category = await this.categoriesService.GetRecordsByCategoryAsync(id, page, ItemsPerPage);
+                CategoryRecordsViewModel model = new CategoryRecordsViewModel()
+                {
+                    Records = category.Records
+                    .Select(r => new RecordsByCategoryViewModel
+                    {
+                        Amount = r.Amount,
+                        CreatedOn = r.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
+                        Description = r.Description,
+                        Id = r.Id,
+                        Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
+                    })
+                    .ToList(),
+                    Category = category.Category,
+                    CategoryId = id,
+                    Currency = category.Currency,
+                    WalletId = category.WalletId,
+                    WalletName = category.WalletName,
+                    BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString()),
+                };
 
-            return this.View(model);
+                model.ItemsPerPage = ItemsPerPage;
+                model.PageNumber = page;
+                model.RecordsCount = this.categoriesService.GetRecordsCount(id);
+
+                return this.View(model);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
         }
 
         public async Task<IActionResult> Search(int categoryId, string searchTerm, int page = 1)
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, categoryId))
+            try
             {
-                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
-            }
+                var user = await this.userManager.GetUserAsync(this.User);
 
-            if (searchTerm == null)
-            {
-                searchTerm = string.Empty;
-            }
-
-            var category = await this.categoriesService.GetRecordsByKeywordAsync(searchTerm, categoryId, page, ItemsPerPage);
-            CategoryRecordsViewModel model = new CategoryRecordsViewModel()
-            {
-                Records = category.Records
-                .Select(r => new RecordsByCategoryViewModel
+                if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, categoryId))
                 {
-                    Amount = r.Amount,
-                    CreatedOn = r.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
-                    Description = r.Description,
-                    Id = r.Id,
-                    Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
-                })
-                .ToList(),
-                Category = category.Category,
-                CategoryId = categoryId,
-                Currency = category.Currency,
-                WalletId = category.WalletId,
-                WalletName = category.WalletName,
-                BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString()),
-                SearchTerm = searchTerm,
-            };
+                    return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForViewOrEditCategory}");
+                }
 
-            model.ItemsPerPage = ItemsPerPage;
-            model.PageNumber = page;
-            model.RecordsCount = this.categoriesService.GetSearchRecordsCount(searchTerm, categoryId);
+                if (searchTerm == null)
+                {
+                    searchTerm = string.Empty;
+                }
 
-            return this.View(model);
+                var category = await this.categoriesService.GetRecordsByKeywordAsync(searchTerm, categoryId, page, ItemsPerPage);
+                CategoryRecordsViewModel model = new CategoryRecordsViewModel()
+                {
+                    Records = category.Records
+                    .Select(r => new RecordsByCategoryViewModel
+                    {
+                        Amount = r.Amount,
+                        CreatedOn = r.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
+                        Description = r.Description,
+                        Id = r.Id,
+                        Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
+                    })
+                    .ToList(),
+                    Category = category.Category,
+                    CategoryId = categoryId,
+                    Currency = category.Currency,
+                    WalletId = category.WalletId,
+                    WalletName = category.WalletName,
+                    BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString()),
+                    SearchTerm = searchTerm,
+                };
+
+                model.ItemsPerPage = ItemsPerPage;
+                model.PageNumber = page;
+                model.RecordsCount = this.categoriesService.GetSearchRecordsCount(searchTerm, categoryId);
+
+                return this.View(model);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
         }
 
         public async Task<IActionResult> DateSorted(DateTime startDate, DateTime endDate, int categoryId, int page = 1)
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, categoryId))
+            try
             {
-                throw new ArgumentException(GlobalConstants.NoPermissionForViewOrEditCategory);
-            }
+                var user = await this.userManager.GetUserAsync(this.User);
 
-            var category = await this.categoriesService.GetRecordsByDateRangeAsync(startDate, endDate, categoryId, page, ItemsPerPage);
-            CategoryRecordsViewModel model = new CategoryRecordsViewModel()
-            {
-                Records = category.Records
-                .Select(r => new RecordsByCategoryViewModel
+                if (!await this.categoriesService.IsUserOwnCategoryAsync(user.Id, categoryId))
                 {
-                    Amount = r.Amount,
-                    CreatedOn = r.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
-                    Description = r.Description,
-                    Id = r.Id,
-                    Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
-                })
-                .ToList(),
-                Category = category.Category,
-                CategoryId = categoryId,
-                Currency = category.Currency,
-                WalletId = category.WalletId,
-                WalletName = category.WalletName,
-                BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString()),
-            };
+                    return this.Redirect($"/Home/Error?message={GlobalConstants.NoPermissionForViewOrEditCategory}");
+                }
 
-            var startDate12AM = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0);
-            var endDate12PM = new DateTime(endDate.Year, endDate.Month, endDate.Day, 23, 59, 59);
+                var category = await this.categoriesService.GetRecordsByDateRangeAsync(startDate, endDate, categoryId, page, ItemsPerPage);
+                CategoryRecordsViewModel model = new CategoryRecordsViewModel()
+                {
+                    Records = category.Records
+                    .Select(r => new RecordsByCategoryViewModel
+                    {
+                        Amount = r.Amount,
+                        CreatedOn = r.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
+                        Description = r.Description,
+                        Id = r.Id,
+                        Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
+                    })
+                    .ToList(),
+                    Category = category.Category,
+                    CategoryId = categoryId,
+                    Currency = category.Currency,
+                    WalletId = category.WalletId,
+                    WalletName = category.WalletName,
+                    BadgeColor = Enum.Parse<BadgeColor>(category.BadgeColor.ToString()),
+                };
 
-            model.StartDate = startDate12AM;
-            model.EndDate = endDate12PM;
+                var startDate12AM = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0);
+                var endDate12PM = new DateTime(endDate.Year, endDate.Month, endDate.Day, 23, 59, 59);
 
-            model.ItemsPerPage = ItemsPerPage;
-            model.PageNumber = page;
-            model.RecordsCount = this.categoriesService.GetDateSortedRecordsCount(startDate, endDate, categoryId);
+                model.StartDate = startDate12AM;
+                model.EndDate = endDate12PM;
 
-            return this.View(model);
+                model.ItemsPerPage = ItemsPerPage;
+                model.PageNumber = page;
+                model.RecordsCount = this.categoriesService.GetDateSortedRecordsCount(startDate, endDate, categoryId);
+
+                return this.View(model);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
         }
     }
 }

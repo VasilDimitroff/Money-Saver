@@ -51,7 +51,7 @@
                         <span class="text-danger" asp-validation-for="WalletId"></span>
                     </div>
                 *@
-                <input type="hidden" asp-for="WalletId">
+                <input type="hidden" asp-for="WalletId" value="@Model.WalletId">
                 <div class="form-group">
                     <span class="mdi mdi-format-color-fill text-primary"></span>
                     <label asp-for="BadgeColor"><span class="font-weight-bold">Badge Color</span></label>
@@ -96,7 +96,7 @@
                                 color = "Gray";
                             }
 
-                            <option class="optText-@name.ToString().ToLower()" value="@name">@color</option>
+                            <option class="optText-@name.ToString().ToLower() font-weight-bold" value="@name">@color</option>
                         }
                     </select>
                     <span class="text-danger" asp-validation-for="BadgeColor"></span>
