@@ -164,10 +164,6 @@
 
         public async Task<IActionResult> Trades(int id, int page = 1)
         {
-            if (this.ModelState.IsValid)
-            {
-            }
-
             var user = await this.userManager.GetUserAsync(this.User);
             var result = await this.investmentsWalletsService.GetTradesAsync(user.Id, id, page, ItemsPerPage);
 

@@ -8,18 +8,16 @@
 
     public class HomeController : BaseController
     {
-        private IRecordsService recordsService;
 
-        public HomeController(IRecordsService recordsService)
+        public HomeController()
         {
-            this.recordsService = recordsService;
         }
 
         public IActionResult Index()
         {
             try
             {
-               // this.recordsService.AddAsync(userId, description, amount, category, type, wallet);
+
             }
             catch (System.Exception ex)
             {

@@ -46,7 +46,7 @@
             <div class="form-group">
                 <span class="mdi mdi-currency-usd text-primary"></span>
                 <label asp-for="Amount"><span class="font-weight-bold">Initial Amount (if you haven't initial amount, type 0)</span></label>
-                <input type="number" class="form-control form-control-lg" asp-for="Amount" placeholder="Enter initial amount of the wallet" value="Enter amount">
+                <input type="number" class="form-control form-control-lg" asp-for="Amount" placeholder="Enter initial amount of the wallet" value="0">
                 <span class="text-danger" asp-validation-for="Amount"></span>
             </div>
             @*<input type="hidden" asp-for="ApplicationUserId" value="@Model.ApplicationUserId">*@
