@@ -150,10 +150,6 @@
 
         public async Task<IActionResult> DeleteItem(string id, string divId, string returnUrl)
         {
-            if (!this.ModelState.IsValid)
-            {
-            }
-
             var user = await this.userManager.GetUserAsync(this.User);
             var listId = await this.toDoListsService.GetListIdAsync(id);
 
@@ -167,8 +163,10 @@
             {
                 return this.Redirect($"/ToDoLists/Edit/{listId}");
             }
-
-            return this.Content("No");
+            else
+            {
+                return this.Redirect($"/Home/Error");
+            }
         }
 
         public async Task<IActionResult> All(int getStatus = 1)
@@ -176,7 +174,6 @@
             // if getStatus == 1 => Return all lists
             // if getStatus == 2 => return Active
             // if getStatus == 3 => return Completed
-
             var user = await this.userManager.GetUserAsync(this.User);
 
             List<ToDoListDto> dtoLists = new List<ToDoListDto>();

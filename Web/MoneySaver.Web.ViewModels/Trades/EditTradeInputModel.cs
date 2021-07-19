@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
     using MoneySaver.Web.ViewModels.Investments;
 
     public class EditTradeInputModel : AddTradeInputModel

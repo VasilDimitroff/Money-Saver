@@ -48,7 +48,7 @@
             if (pricePerShare > 0)
             {
                 pricePerShare *= -1;
-            } 
+            }
 
             var userTrade = new Trade()
             {

@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MoneySaver.Web.ViewModels.Investments
+﻿namespace MoneySaver.Web.ViewModels.Investments
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class InvestmentWalletIdNameAndCurrencyViewModel
     {
         [Required]

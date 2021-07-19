@@ -9,7 +9,6 @@
 
     public class Trade : BaseModel<string>
     {
-
         [Required]
         [ForeignKey(nameof(Company))]
         public string CompanyTicker { get; set; }

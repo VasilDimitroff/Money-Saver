@@ -24,7 +24,6 @@
         private readonly IInvestmentsWalletsService investmentsWalletsService;
         private readonly UserManager<ApplicationUser> userManager;
 
-
         public InvestmentsController(
             ICurrenciesService currenciesService,
             IInvestmentsWalletsService investmentsWalletsService,

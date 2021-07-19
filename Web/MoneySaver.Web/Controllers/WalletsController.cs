@@ -231,7 +231,7 @@
             catch (Exception ex)
             {
                 return this.Redirect($"/Home/Error?message={ex.Message}");
-            } 
+            }
         }
 
         public async Task<IActionResult> Records(int id, int page = 1)

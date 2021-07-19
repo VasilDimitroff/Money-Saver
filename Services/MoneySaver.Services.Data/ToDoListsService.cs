@@ -24,13 +24,12 @@
 
         public async Task<string> AddAsync(string userId, string name, IEnumerable<string> listItems)
         {
-            //bool isNullValues = listItems.Any(x => string.IsNullOrWhiteSpace(x) || x == null);
+            // bool isNullValues = listItems.Any(x => string.IsNullOrWhiteSpace(x) || x == null);
 
-            //if (isNullValues)
-            //{
+            // if (isNullValues)
+            // {
             //    throw new ArgumentException(GlobalConstants.ListContainsEmptyItems);
-            //}
-
+            // }
             bool hasActiveListWithThisName = await this.dbContext.ToDoLists
                 .AnyAsync(l => l.Name.ToLower() == name.ToLower() && l.Status == StatusType.Active);
 
@@ -91,13 +90,12 @@
                 throw new ArgumentException(GlobalConstants.ListNotExist);
             }
 
-            //bool isNullValues = list.ListItems.Any(x => string.IsNullOrWhiteSpace(x.Name) || x == null);
+            // bool isNullValues = list.ListItems.Any(x => string.IsNullOrWhiteSpace(x.Name) || x == null);
 
-            //if (isNullValues)
-            //{
+            // if (isNullValues)
+            // {
             //    throw new ArgumentException(GlobalConstants.ListContainsEmptyItems);
-            //}
-
+            // }
             targetList.Name = list.Name;
             targetList.Status = list.Status;
             var itemsToAdd = list.ListItems.Select(li => new ToDoItem
