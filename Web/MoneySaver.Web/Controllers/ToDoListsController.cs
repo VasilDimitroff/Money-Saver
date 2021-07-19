@@ -44,7 +44,7 @@
 
             await this.toDoListsService.AddAsync(user.Id, input.Name, input.ListItems);
 
-            return this.Redirect("/ToDoLists/All");
+            return this.Redirect("/ToDoLists/AllLists");
         }
 
         // TODO: create view component to exclude script for adding new items => id must be different in every list
@@ -123,9 +123,9 @@
 
             await this.toDoListsService.EditAsync(user.Id, listAsDto);
 
-            if (returnUrl == "/ToDoLists/All")
+            if (returnUrl == "/ToDoLists/AllLists")
             {
-                return this.Redirect($"/ToDoLists/All");
+                return this.Redirect($"/ToDoLists/AllLists");
             }
             else if (returnUrl == $"/ToDoLists/Edit/{list.Id}")
             {
@@ -145,7 +145,7 @@
 
             await this.toDoListsService.RemoveListAsync(user.Id, id);
 
-            return this.Redirect($"/ToDoLists/All");
+            return this.Redirect($"/ToDoLists/AllLists");
         }
 
         public async Task<IActionResult> DeleteItem(string id, string divId, string returnUrl)
@@ -155,9 +155,9 @@
 
             await this.toDoListsService.RemoveListItemAsync(user.Id, id);
 
-            if (returnUrl == "/ToDoLists/All")
+            if (returnUrl == "/ToDoLists/AllLists")
             {
-                return this.Redirect($"/ToDoLists/All#{divId}");
+                return this.Redirect($"/ToDoLists/AllLists#{divId}");
             }
             else if (returnUrl == $"/ToDoLists/Edit/{listId}")
             {
@@ -169,7 +169,7 @@
             }
         }
 
-        public async Task<IActionResult> All(int getStatus = 1)
+        public async Task<IActionResult> AllLists(int getStatus = 1)
         {
             // if getStatus == 1 => Return all lists
             // if getStatus == 2 => return Active
@@ -238,16 +238,16 @@
 
             var listId = await this.toDoListsService.GetListIdAsync(id);
 
-            if (returnUrl == "/ToDoLists/All")
+            if (returnUrl == "/ToDoLists/AllLists")
             {
-                return this.Redirect($"/ToDoLists/All#{divId}");
+                return this.Redirect($"/ToDoLists/AllLists#{divId}");
             }
             else if (returnUrl == $"/ToDoLists/Edit/{listId}")
             {
                 return this.Redirect($"/ToDoLists/Edit/{listId}");
             }
 
-            return this.Redirect($"/ToDoLists/All");
+            return this.Redirect($"/ToDoLists/AllLists");
         }
 
         public async Task<IActionResult> ChangeListStatus(string id, string divId, string returnUrl, int getStatus = 1)
@@ -256,16 +256,16 @@
 
             var result = await this.toDoListsService.ChangeListStatusAsync(user.Id, id);
 
-            if (returnUrl == "/ToDoLists/All")
+            if (returnUrl == "/ToDoLists/AllLists")
             {
-                return this.Redirect($"/ToDoLists/All?getstatus={getStatus}#{divId}");
+                return this.Redirect($"/ToDoLists/AllLists?getstatus={getStatus}#{divId}");
             }
             else if (returnUrl == $"/ToDoLists/Edit/{id}")
             {
                 return this.Redirect($"/ToDoLists/Edit/{id}");
             }
 
-            return this.Redirect($"/ToDoLists/All");
+            return this.Redirect($"/ToDoLists/AllLists");
         }
     }
 }

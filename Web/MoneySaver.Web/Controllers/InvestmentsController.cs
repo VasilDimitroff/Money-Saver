@@ -68,7 +68,7 @@
             await this.investmentsWalletsService
                 .AddAsync(user.Id, input.Name, input.SelectedCurrencyId);
 
-            return this.Redirect("/Investments/All");
+            return this.Redirect("/Investments/AllInvestments");
         }
 
         public async Task<IActionResult> EditWallet(int id)
@@ -113,7 +113,7 @@
 
             await this.investmentsWalletsService.EditAsync(user.Id, input.Id, input.SelectedCurrency.CurrencyId, input.Name);
 
-            return this.Redirect("/Investments/All");
+            return this.Redirect("/Investments/AllInvestments");
         }
 
         [HttpPost]
@@ -127,10 +127,10 @@
 
             await this.investmentsWalletsService.RemoveAsync(user.Id, id);
 
-            return this.Redirect("/Investments/All");
+            return this.Redirect("/Investments/AllInvestments");
         }
 
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> AllInvestments()
         {
             if (this.ModelState.IsValid)
             {

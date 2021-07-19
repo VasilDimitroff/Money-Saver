@@ -40,7 +40,7 @@
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> AllWallets()
         {
             try
             {
@@ -226,7 +226,7 @@
 
                 await this.walletsService.RemoveAsync(id);
 
-                return this.Redirect("/Wallets/All");
+                return this.Redirect("/Wallets/AllWallets");
             }
             catch (Exception ex)
             {

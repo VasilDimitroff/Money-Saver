@@ -31,16 +31,16 @@
                         <tr>
                             <th class="pt-1 pl-2">
                                 <span class="small font-weight-bold">Category</span>
-</th>
+                            </th>
                             <th class="pt-1">
                                 <span class="small font-weight-bold">Incomes Amount</span>
-</th>
+                            </th>
                             <th class="pt-1">
                                 <span class="small font-weight-bold">%</span>
-</th>
+                            </th>
                             <th class="pt-1">
                                 <span class="small font-weight-bold">Wallet</span>
-</th>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,18 +76,18 @@
                                 </td>
                                 <td>
                                     <p class="font-weight-bold text-info small" style="white-space: nowrap;">
-                                      
-                                            @{
-                                                decimal percentOfAllWalletIncomes = 0;
 
-                                                if (Model.TotalAccountIncomesLast30Days != 0)
-                                                {
-                                                    percentOfAllWalletIncomes = Math.Round((category.TotalIncomesLast30days / Model.TotalAccountIncomesLast30Days * 100), 1);
-                                                }
+                                        @{
+                                            decimal percentOfAllWalletIncomes = 0;
+
+                                            if (Model.TotalAccountIncomesLast30Days != 0)
+                                            {
+                                                percentOfAllWalletIncomes = Math.Round((category.TotalIncomesLast30days / Model.TotalAccountIncomesLast30Days * 100), 1);
                                             }
+                                        }
 
-                                            @percentOfAllWalletIncomes %
-                                       
+                                        @percentOfAllWalletIncomes %
+
                                     </p>
                                 </td>
                                 <td>
@@ -163,21 +163,21 @@
                                 </td>
                                 <td>
                                     <p class="font-weight-bold text-info small" style="white-space: nowrap;">
-                                       
-                                            @{
-                                                decimal percentOfAllWalletExpenses = 0;
 
-                                                if (Model.TotalAccountExpensesLast30Days != 0)
-                                                {
-                                                    percentOfAllWalletExpenses =
-                                                        Math.Round(
-                                                            (Math.Abs(category.TotalExpensesLast30Days) / Math.Abs(Model.TotalAccountExpensesLast30Days) * 100)
-                                                            , 1);
-                                                }
+                                        @{
+                                            decimal percentOfAllWalletExpenses = 0;
+
+                                            if (Model.TotalAccountExpensesLast30Days != 0)
+                                            {
+                                                percentOfAllWalletExpenses =
+                                                    Math.Round(
+                                                        (Math.Abs(category.TotalExpensesLast30Days) / Math.Abs(Model.TotalAccountExpensesLast30Days) * 100)
+                                                        , 1);
                                             }
+                                        }
 
-                                            @percentOfAllWalletExpenses %
-                                        
+                                        @percentOfAllWalletExpenses %
+
                                     </p>
                                 </td>
                                 <td>
