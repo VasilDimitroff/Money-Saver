@@ -111,7 +111,7 @@
                         {
 
                             <tr class="card-shadow">
-                                <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create date">@trade.CreatedOn</span></td>
+                                <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create date">@trade.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture)</span></td>
                                 <td style="max-width: 25%;">@trade.Company.Name (@trade.Company.Ticker) </td>
                                 <td>
                                     @if (trade.Type == TradeType.Buy)

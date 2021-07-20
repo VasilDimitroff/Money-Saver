@@ -9,6 +9,8 @@
     using MoneySaver.Data;
     using MoneySaver.Data.Models.Enums;
     using MoneySaver.Services.Data.Contracts;
+    using MoneySaver.Services.Data.Models.Companies;
+    using MoneySaver.Services.Data.Models.Currencies;
     using MoneySaver.Services.Data.Models.Home;
 
     public class HomeService : IHomeService
@@ -29,6 +31,8 @@
                 ActiveToDoLists = await this.GetActiveListsAsync(userId),
                 Wallets = await this.GetWalletsAsync(userId),
                 InvestmentWallets = await this.GetInvestmentWalletsAsync(userId),
+                AccountRecords = await this.GetLastRecordsAsync(userId, 10),
+                AccountTrades = await this.GetLastTradesAsync(userId, 10),
             };
 
             return indexDto;
@@ -142,6 +146,63 @@
                .ToListAsync();
 
             return investmentWallets;
+        }
+
+        private async Task<IEnumerable<IndexRecordDto>> GetLastRecordsAsync(string userId, int count)
+        {
+            var records = await this.dbContext.Records
+                .Where(r => r.Category.Wallet.ApplicationUserId == userId)
+                .OrderByDescending(x => x.CreatedOn)
+                .Take(count)
+                .Select(r => new IndexRecordDto
+                {
+                    Id = r.Id,
+                    Amount = Math.Round(r.Amount, 2),
+                    CategoryName = r.Category.Name,
+                    CategoryId = r.CategoryId,
+                    CreatedOn = r.CreatedOn,
+                    Description = r.Description,
+                    Type = r.Type,
+                    WalletName = r.Category.Wallet.Name,
+                    WalletId = r.Category.WalletId,
+                    CurrencyCode = r.Category.Wallet.Currency.Code,
+                    CategoryBadgeColor = r.Category.BadgeColor,
+                })
+                .ToListAsync();
+
+            return records;
+        }
+
+        private async Task<IEnumerable<IndexTradeDto>> GetLastTradesAsync(string userId, int count)
+        {
+            var trades = await this.dbContext.Trades
+                .Where(t => t.InvestmentWallet.ApplicationUserId == userId)
+                .OrderByDescending(t => t.CreatedOn)
+                .Take(count)
+                 .Select(t => new IndexTradeDto
+                 {
+                     Id = t.Id,
+                     CreatedOn = t.CreatedOn,
+                     Price = t.Price,
+                     Type = t.Type,
+                     StockQuantity = t.StockQuantity,
+                     InvestmentWalletId = t.InvestmentWalletId,
+                     InvestmentWalletName = t.InvestmentWallet.Name,
+                     Company = new GetCompanyDto
+                     {
+                         Name = t.Company.Name,
+                         Ticker = t.CompanyTicker,
+                     },
+                     Currency = new CurrencyInfoDto
+                     {
+                         Code = t.InvestmentWallet.Currency.Code,
+                         CurrencyId = t.InvestmentWallet.CurrencyId,
+                         Name = t.InvestmentWallet.Currency.Name,
+                     },
+                 })
+                .ToListAsync();
+
+            return trades;
         }
     }
 }

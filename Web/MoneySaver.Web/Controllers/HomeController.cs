@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -9,8 +10,11 @@
     using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.ViewModels;
+    using MoneySaver.Web.ViewModels.Currencies;
     using MoneySaver.Web.ViewModels.Home;
     using MoneySaver.Web.ViewModels.Records.Enums;
+    using MoneySaver.Web.ViewModels.Trades;
+    using MoneySaver.Web.ViewModels.Trades.Enums;
 
     public class HomeController : BaseController
     {
@@ -84,6 +88,43 @@
                     Name = iw.Name,
                     TotalBuyTradesAmount = iw.TotalBuyTradesAmount,
                     TotalSellTradesAmount = iw.TotalSellTradesAmount,
+                })
+                .ToList(),
+                AccountRecords = dto.AccountRecords.Select(r => new IndexRecordViewModel
+                {
+                    Id = r.Id,
+                    Amount = r.Amount,
+                    CategoryId = r.CategoryId,
+                    CategoryName = r.CategoryName,
+                    CategoryBadgeColor = Enum.Parse<BadgeColor>(r.CategoryBadgeColor.ToString()),
+                    CreatedOn = r.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture),
+                    CurrencyCode = r.CurrencyCode,
+                    Description = r.Description,
+                    Type = Enum.Parse<RecordTypeInputModel>(r.Type.ToString()),
+                    WalletId = r.WalletId,
+                    WalletName = r.WalletName,
+                })
+                .ToList(),
+                AccountTrades = dto.AccountTrades.Select(t => new IndexTradeViewModel
+                {
+                    Id = t.Id,
+                    CreatedOn = t.CreatedOn,
+                    Price = t.Price,
+                    StockQuantity = t.StockQuantity,
+                    InvestmentWalletId = t.InvestmentWalletId,
+                    InvestmentWalletName = t.InvestmentWalletName,
+                    Type = Enum.Parse<TradeType>(t.Type.ToString()),
+                    Company = new CompanyViewModel
+                    {
+                        Name = t.Company.Name,
+                        Ticker = t.Company.Ticker,
+                    },
+                    Currency = new CurrencyViewModel
+                    {
+                        Name = t.Currency.Name,
+                        CurrencyId = t.Currency.CurrencyId,
+                        Code = t.Currency.Code,
+                    },
                 })
                 .ToList(),
             };

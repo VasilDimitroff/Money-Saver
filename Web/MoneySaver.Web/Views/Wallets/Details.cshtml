@@ -103,7 +103,8 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card float-left">
+<div class="row">
+    <div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title"><span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span></span> Last 30 days incomes</h4>
@@ -129,7 +130,7 @@
                                     <td class="py-1 pl-0">
                                         <div class="d-flex align-items-center">
                                             <div class="ml-3">
-                                                <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
+                                                <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.CategoryId" class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</a>
                                                 <p class="text-muted text-small">@category.TotalIncomeRecordsLast30Days incomes</p>
                                             </div>
                                         </div>
@@ -184,7 +185,7 @@
         </div>
     </div>
 
-    <div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card float-left">
+    <div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title"><span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> </span> Last 30 days expenses</h4>
@@ -211,7 +212,7 @@
                                     <div class="d-flex align-items-center">
                                         <div class="ml-3">
 
-                                            <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
+                                            <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.CategoryId" class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</a>
                                             <p class="text-muted text-small">@category.TotalExpenseRecordsLast30Days expenses</p>
                                         </div>
                                     </div>
@@ -266,6 +267,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
         <div class="card">
@@ -327,7 +329,8 @@
                                         }
                                         <p class="text-@badgeClassName font-weight-bold">@record.Amount @Model.Currency</p>
                                     </td>
-                                    <td><a href="/Categories/Details/@record.CategoryId"><p class="mb-2 badge badge-@record.CategoryBadgeColor.ToString().ToLower()">@record.CategoryName</p></a></td>
+                                    <td>
+                                    <a asp-controller="Categories" asp-action="Details" asp-route-id="@record.CategoryId" class="badge badge-@record.CategoryBadgeColor.ToString().ToLower()">@record.CategoryName</a></td>
                                     <td>
                                         <vc:edit-record record-id="@record.Id" wallet-id="@Model.WalletId"></vc:edit-record>
                                         <vc:delete-record-small-button record-id="@record.Id"></vc:delete-record-small-button>
@@ -383,7 +386,7 @@
                                     <td class="py-1 pl-0">
                                         <div class="d-flex align-items-center">
                                             <div class="ml-3">
-                                                <a href="/Categories/Details/@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
+                                                <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.CategoryId" class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</a>
                                                 <p class="text-muted text-small">@category.RecordsCount records</p>
                                             </div>
                                         </div>

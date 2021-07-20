@@ -1,4 +1,6 @@
 ﻿@using MoneySaver.Web.ViewModels.Home
+@using MoneySaver.Web.ViewModels.Trades.Enums
+@using System.Globalization
 @model IndexViewModel
 @{
     this.ViewData["Title"] = "Home";
@@ -13,188 +15,294 @@
         </div>
     </div>
 </div>
-
-<div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card float-left">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title"><span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span></span> Last 30 days incomes</h4>
-            <div class="table-responsive">
-                <table class="table text-center table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th class="pt-1 pl-2">
-                                <span class="small font-weight-bold">Category</span>
-                            </th>
-                            <th class="pt-1">
-                                <span class="small font-weight-bold">Incomes Amount</span>
-                            </th>
-                            <th class="pt-1">
-                                <span class="small font-weight-bold">%</span>
-                            </th>
-                            <th class="pt-1">
-                                <span class="small font-weight-bold">Wallet</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var category in Model.CategoriesLast30DaysIncomes.Where(c => c.TotalIncomesLast30days != 0).OrderByDescending(c => c.TotalIncomesLast30days))
-                        {
-                            <tr class="card-shadow">
-                                <td class="py-1">
-                                    <div class="d-flex align-items-center">
-                                        <div class="ml-3">
-                                            <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
-                                            <p class="text-muted text-small">@category.TotalIncomeRecordsLast30Days incomes</p>
+<div class="row">
+    <div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Last 10 records</h4>
+                <div class="table-responsive">
+                    <table class="table text-center table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="pt-1">
+                                    Date
+                                </th>
+                                <th class="pt-1">
+                                    Description
+                                </th>
+                                <th class="pt-1">
+                                    Amount
+                                </th>
+                                <th class="pt-1">
+                                    Category
+                                </th>
+                                <th class="pt-1">
+                                    Wallet
+                                </th>
+                                <th class="pt-1">
+                                    Edit/Delete
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var record in Model.AccountRecords)
+                            {
+                                <tr class="card-shadow">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Added on"> @record.CreatedOn</span>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    @if (category.TotalIncomesLast30days < 0)
-                                    {
-                                        badgeClassName = "danger";
-                                    }
-
-                                    else if (category.TotalIncomesLast30days == 0)
-                                    {
-                                        badgeClassName = "secondary";
-                                    }
-
-                                    else
-                                    {
-                                        badgeClassName = "success";
-                                    }
-                                    <p class="text-@badgeClassName font-weight-bold small">
-                                        @category.TotalIncomesLast30days  @category.CurrencyCode
-                                    </p>
-                                </td>
-                                <td>
-                                    <p class="font-weight-bold text-info small" style="white-space: nowrap;">
-
-                                        @{
-                                            decimal percentOfAllWalletIncomes = 0;
-
-                                            if (Model.TotalAccountIncomesLast30Days != 0)
-                                            {
-                                                percentOfAllWalletIncomes = Math.Round((category.TotalIncomesLast30days / Model.TotalAccountIncomesLast30Days * 100), 1);
-                                            }
+                                    </td>
+                                    <td>
+                                        @if (record.Description.Length > 25)
+                                        {
+                                            string descriptionExcerpt = record.Description.Substring(0, 25) + "...";
+                                            record.Description = descriptionExcerpt;
                                         }
 
-                                        @percentOfAllWalletIncomes %
+                                        @record.Description
+                                    </td>
+                                    <td>
+                                        @if (record.Amount < 0)
+                                        {
+                                            badgeClassName = "danger";
+                                        }
 
-                                    </p>
-                                </td>
-                                <td>
-                                    <a asp-controller="Wallets" asp-action="Details" asp-route-id="@category.WalletId" class="badge badge-primary text-light">@category.WalletName</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-                @if (Model.CategoriesLast30DaysIncomes.Count() < 1)
-                {<br />
+                                        else if (record.Amount == 0)
+                                        {
+                                            badgeClassName = "secondary";
+                                        }
+
+                                        else
+                                        {
+                                            badgeClassName = "success";
+                                        }
+                                        <p class="text-@badgeClassName font-weight-bold">@record.Amount @record.CurrencyCode</p>
+                                    </td>
+                                    <td><a asp-controller="Categories" asp-action="Details" asp-route-id="@record.CategoryId" class="badge badge-@record.CategoryBadgeColor.ToString().ToLower()">@record.CategoryName</a></td>
+                                    <td>
+
+                                        <a asp-controller="Wallets" asp-action="Details" asp-route-id="@record.WalletId" class="badge badge-primary"> @record.WalletName</a>
+
+                                    </td>
+                                    <td>
+                                        <vc:edit-record record-id="@record.Id" wallet-id="@record.WalletId"></vc:edit-record>
+                                        <vc:delete-record-small-button record-id="@record.Id"></vc:delete-record-small-button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <br />
                     <div class="btn-group form-inline">
-                        <div class="input-group-sm mr-sm-1 mb-0">
-                            BUTTON HERE
-                        </div>
+                            <div class="input-group-sm mr-sm-1 mb-0 small">
+                                <a class="btn btn-sm btn-primary" asp-controller="Wallets" asp-action="AllWallets" type="button"><i class="mdi mdi-wallet"></i> Go to Wallets</a>
+                            </div>
                     </div>
-                }
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card float-left">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title"><span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> </span> Last 30 days expenses</h4>
-            <div class="table-responsive">
-                <table class="table text-center table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th class="pt-1">
-                                <span class="small font-weight-bold">Category</span>
-                            </th>
-                            <th class="pt-1">
-                                <span class="small font-weight-bold">Expenses Amount</span>
-                            </th>
-                            <th class="pt-1">
-                                <span class="small font-weight-bold"> %</span>
-                            </th>
-                            <th class="pt-1">
-                                <span class="small font-weight-bold"> Wallet</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var category in Model.CategoriesLast30DaysExpenses.Where(c => c.TotalExpensesLast30Days != 0).OrderBy(c => c.TotalExpensesLast30Days))
-                        {
-                            <tr class="card-shadow">
-                                <td class="py-1 pl-0">
-                                    <div class="d-flex align-items-center">
-                                        <div class="ml-3">
-                                            <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.CategoryId"><p class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</p></a>
-                                            <p class="text-muted text-small">@category.TotalExpenseRecordsLast30Days expenses</p>
+<div class="row">
+    <div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title"><span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span></span> Last 30 days incomes</h4>
+                <div class="table-responsive">
+                    <table class="table text-center table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="pt-1 pl-2">
+                                    <span class="small font-weight-bold">Category</span>
+                                </th>
+                                <th class="pt-1">
+                                    <span class="small font-weight-bold">Incomes Amount</span>
+                                </th>
+                                <th class="pt-1">
+                                    <span class="small font-weight-bold">%</span>
+                                </th>
+                                <th class="pt-1">
+                                    <span class="small font-weight-bold">Wallet</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var category in Model.CategoriesLast30DaysIncomes.Where(c => c.TotalIncomesLast30days != 0).OrderByDescending(c => c.TotalIncomesLast30days))
+                            {
+                                <tr class="card-shadow">
+                                    <td class="py-1">
+                                        <div class="d-flex align-items-center">
+                                            <div class="ml-3">
+                                                <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.CategoryId" class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</a>
+                                                <p class="text-muted text-small">@category.TotalIncomeRecordsLast30Days incomes</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    @if (category.TotalExpensesLast30Days < 0)
-                                    {
-                                        badgeClassName = "danger";
-                                    }
-
-                                    else if (category.TotalExpensesLast30Days == 0)
-                                    {
-                                        badgeClassName = "secondary";
-                                    }
-
-                                    else
-                                    {
-                                        badgeClassName = "success";
-                                    }
-                                    <p class="text-@badgeClassName font-weight-bold  small">@category.TotalExpensesLast30Days @category.CurrencyCode</p>
-                                </td>
-                                <td>
-                                    <p class="font-weight-bold text-info small" style="white-space: nowrap;">
-
-                                        @{
-                                            decimal percentOfAllWalletExpenses = 0;
-
-                                            if (Model.TotalAccountExpensesLast30Days != 0)
-                                            {
-                                                percentOfAllWalletExpenses =
-                                                    Math.Round(
-                                                        (Math.Abs(category.TotalExpensesLast30Days) / Math.Abs(Model.TotalAccountExpensesLast30Days) * 100)
-                                                        , 1);
-                                            }
+                                    </td>
+                                    <td>
+                                        @if (category.TotalIncomesLast30days < 0)
+                                        {
+                                            badgeClassName = "danger";
                                         }
 
-                                        @percentOfAllWalletExpenses %
+                                        else if (category.TotalIncomesLast30days == 0)
+                                        {
+                                            badgeClassName = "secondary";
+                                        }
 
-                                    </p>
-                                </td>
-                                <td>
+                                        else
+                                        {
+                                            badgeClassName = "success";
+                                        }
+                                        <p class="text-@badgeClassName font-weight-bold small">
+                                            @category.TotalIncomesLast30days  @category.CurrencyCode
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p class="font-weight-bold text-info small" style="white-space: nowrap;">
 
-                                    <a asp-controller="Wallets" asp-action="Details" asp-route-id="@category.WalletId" class="badge badge-primary text-light">@category.WalletName</a>
+                                            @{
+                                                decimal percentOfAllWalletIncomes = 0;
 
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                                                if (Model.TotalAccountIncomesLast30Days != 0)
+                                                {
+                                                    percentOfAllWalletIncomes = Math.Round((category.TotalIncomesLast30days / Model.TotalAccountIncomesLast30Days * 100), 1);
+                                                }
+                                            }
 
-                @if (Model.CategoriesLast30DaysExpenses.Count() < 1)
-                {<br />
-                    <div class="btn-group form-inline">
-                        <div class="input-group-sm mr-sm-1 mb-0">
-                            BUTTON HERE
+                                            @percentOfAllWalletIncomes %
+
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Wallets" asp-action="Details" asp-route-id="@category.WalletId" class="badge badge-primary text-light">@category.WalletName</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @if (Model.CategoriesLast30DaysIncomes.Count() < 1)
+                    {<br />
+                        <div class="btn-group form-inline">
+                            <div class="input-group-sm mr-sm-1 mb-0">
+                                BUTTON HERE
+                            </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
         </div>
     </div>
+
+
+
+
+
+    <div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title"><span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> </span> Last 30 days expenses</h4>
+                <div class="table-responsive">
+                    <table class="table text-center table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="pt-1">
+                                    <span class="small font-weight-bold">Category</span>
+                                </th>
+                                <th class="pt-1">
+                                    <span class="small font-weight-bold">Expenses Amount</span>
+                                </th>
+                                <th class="pt-1">
+                                    <span class="small font-weight-bold"> %</span>
+                                </th>
+                                <th class="pt-1">
+                                    <span class="small font-weight-bold"> Wallet</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var category in Model.CategoriesLast30DaysExpenses.Where(c => c.TotalExpensesLast30Days != 0).OrderBy(c => c.TotalExpensesLast30Days))
+                            {
+                                <tr class="card-shadow">
+                                    <td class="py-1 pl-0">
+                                        <div class="d-flex align-items-center">
+                                            <div class="ml-3">
+                                                <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.CategoryId" class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</a>
+                                                <p class="text-muted text-small">@category.TotalExpenseRecordsLast30Days expenses</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (category.TotalExpensesLast30Days < 0)
+                                        {
+                                            badgeClassName = "danger";
+                                        }
+
+                                        else if (category.TotalExpensesLast30Days == 0)
+                                        {
+                                            badgeClassName = "secondary";
+                                        }
+
+                                        else
+                                        {
+                                            badgeClassName = "success";
+                                        }
+                                        <p class="text-@badgeClassName font-weight-bold  small">@category.TotalExpensesLast30Days @category.CurrencyCode</p>
+                                    </td>
+                                    <td>
+                                        <p class="font-weight-bold text-info small" style="white-space: nowrap;">
+
+                                            @{
+                                                decimal percentOfAllWalletExpenses = 0;
+
+                                                if (Model.TotalAccountExpensesLast30Days != 0)
+                                                {
+                                                    percentOfAllWalletExpenses =
+                                                        Math.Round(
+                                                            (Math.Abs(category.TotalExpensesLast30Days) / Math.Abs(Model.TotalAccountExpensesLast30Days) * 100)
+                                                            , 1);
+                                                }
+                                            }
+
+                                            @percentOfAllWalletExpenses %
+
+                                        </p>
+                                    </td>
+                                    <td>
+
+                                        <a asp-controller="Wallets" asp-action="Details" asp-route-id="@category.WalletId" class="badge badge-primary text-light">@category.WalletName</a>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    @if (Model.CategoriesLast30DaysExpenses.Count() < 1)
+                    {<br />
+                        <div class="btn-group form-inline">
+                            <div class="input-group-sm mr-sm-1 mb-0">
+                                BUTTON HERE
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
+
+
+
+
+
+
+
+
+
+
 <div class="row">
     <div class="col-lg-4 grid-margin stretch-card" id="active-lists">
         <div class="card">
@@ -234,7 +342,7 @@
                 <h4 class="card-title">Wallets</h4>
                 <div class="list-wrapper">
                     <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-                        @foreach (var wallet in Model.Wallets.Take(4))
+                        @foreach (var wallet in Model.Wallets.Take(3))
                         {
                             string colorAmount = "danger";
                             <li>
@@ -312,11 +420,137 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Last 10 trades</h4>
+                <div class="table-responsive">
+                    <table id="order-listing" class="table text-center table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Trade Date</th>
+                                <th>Company</th>
+                                <th>Type</th>
+                                <th>Price Per Share</th>
+                                <th>Quantity</th>
+                                <th>Total Amount</th>
+                                <th>Edit/Delete</th>
+                                <!-- <th>Delete</th>-->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var trade in Model.AccountTrades)
+                            {
 
+                                <tr class="card-shadow">
+                                    <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create date">@trade.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture)</span></td>
+                                    <td style="max-width: 25%;">@trade.Company.Name (@trade.Company.Ticker) </td>
+                                    <td>
+                                        @if (trade.Type == TradeType.Buy)
+                                        {
+                                            <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @trade.Type</span>
+                                        }
 
+                                        else if (trade.Type == TradeType.Sell)
+                                        {
 
+                                            <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @trade.Type</span>
+                                        }
+                                    </td>
 
+                                    <td>
 
+                                        @if (trade.Price < 0)
+                                        {
+                                            <p class="text-danger"><strong>@trade.Price.ToString("f2") @trade.Currency.Code</strong></p>
+                                        }
+
+                                        else if (trade.Price == 0)
+                                        {
+                                            <p class="text-secondary"><strong>@trade.Price.ToString("f2") @trade.Currency.Code</strong></p>
+                                        }
+
+                                        else
+                                        {
+                                            <p class="text-success bold"><strong>+@trade.Price.ToString("f2") @trade.Currency.Code</strong></p>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (trade.Type == TradeType.Buy)
+                                        {
+                                            <span class="text-success font-weight-bold">+@trade.StockQuantity shares</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger font-weight-bold">-@trade.StockQuantity shares</span>
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @if (trade.TotalAmount < 0)
+                                        {
+                                            <p class="text-danger"><strong>@trade.TotalAmount @trade.Currency.Code</strong></p>
+                                        }
+
+                                        else if (trade.TotalAmount == 0)
+                                        {
+                                            <p class="text-secondary"><strong>@trade.TotalAmount @trade.Currency.Code</strong></p>
+                                        }
+
+                                        else
+                                        {
+                                            <p class="text-success bold"><strong>+@trade.TotalAmount @trade.Currency.Code</strong></p>
+                                        }
+                                    </td>
+                                    <td class="m-0 pl-2 pr-0">
+                                        <a asp-controller="Trades" asp-action="Edit" asp-route-id="@trade.Id"><span class="btn btn-outline-info btn-sm float-left" data-toggle="tooltip" data-placement="bottom" title="Edit trade"><i class="mdi mdi-pencil"></i></span></a>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete trade" data-toggle="modal" data-target="#defaultModal-@trade.Id"><i class="mdi mdi-delete"></i></button>
+                                        <div class="modal fade" id="defaultModal-@trade.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-@trade.Id" aria-hidden="true">
+                                            <form method="post" asp-controller="Trades" asp-action="Delete" asp-route-id="@trade.Id">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title text-danger" id="exampleModalLabel-@trade.Id">Note! You're preparing to delete a trade</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Are you sure you want to delete this trade from <span class="font-weight-bold">@trade.InvestmentWalletName (@trade.Currency.Code)</span>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                            <button type="submit" class="btn btn-outline-danger">Yes</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                    @if (Model.AccountTrades.Count() == 0)
+                    {
+                        <br />
+                        <div class="alert alert-warning" role="alert">
+                            <span>No trades found</span>
+                        </div>
+                    }
+                    <br />
+                    <div class="btn-group form-inline">
+                        <div class="input-group-sm mr-sm-1 mb-0 small">
+                            <a class="btn btn-sm btn-primary" asp-controller="Investments" asp-action="AllInvestments" type="button"><i class="mdi mdi-chart-areaspline"></i> Go to Investment Wallets</a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-6 col-lg-3 grid-margin stretch-card">
             <div class="card bg-gradient-primary text-white text-center card-shadow-primary">
@@ -351,193 +585,6 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-4 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body pb-0">
-                    <h4 class="card-title">Daily Sales</h4>
-                    <div class="d-flex justify-content-between justify-content-lg-start flex-wrap">
-                        <div class="mr-5 mb-2">
-                            <h3>
-                                56789
-                            </h3>
-                            <h6 class="font-weight-normal mb-0">
-                                Online sales
-                            </h6>
-                        </div>
-                        <div class="mb-2">
-                            <h3>
-                                12345
-                            </h3>
-                            <h6 class="font-weight-normal mb-0">
-                                Sales in store
-                            </h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body d-flex align-items-end p-0">
-                    <div class="mt-auto w-100">
-                        <div id="sales-legend" class="chartjs-legend mt-2 mb-4"></div>
-                        <canvas id="chart-sales"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <h6 class="card-title">Activity</h6>
-                    </div>
-                    <div class="list d-flex align-items-center border-bottom pb-3">
-                        <img class="img-sm rounded-circle" src="https://via.placeholder.com/43x43" alt="">
-                        <div class="wrapper w-100 ml-3">
-                            <p><b>Dobrick </b>published an article</p>
-                            <small class="text-muted">2 hours ago</small>
-                        </div>
-                    </div>
-                    <div class="list d-flex align-items-center border-bottom py-3">
-                        <img class="img-sm rounded-circle" src="https://via.placeholder.com/43x43" alt="">
-                        <div class="wrapper w-100 ml-3">
-                            <p><b>Stella </b>created an event</p>
-                            <small class="text-muted">3 hours ago</small>
-                        </div>
-                    </div>
-                    <div class="list d-flex align-items-center border-bottom py-3">
-                        <img class="img-sm rounded-circle" src="https://via.placeholder.com/43x43" alt="">
-                        <div class="wrapper w-100 ml-3">
-                            <p><b>Peter </b>submitted the reports</p>
-                            <small class="text-muted">1 hours ago</small>
-                        </div>
-                    </div>
-                    <div class="list d-flex align-items-center border-bottom py-3">
-                        <img class="img-sm rounded-circle" src="https://via.placeholder.com/43x43" alt="">
-                        <div class="wrapper w-100 ml-3">
-                            <p><b>Nateila </b>updated the docs</p>
-                            <small class="text-muted">1 hours ago</small>
-                        </div>
-                    </div>
-                    <div class="list d-flex align-items-center pt-3">
-                        <img class="img-sm rounded-circle" src="https://via.placeholder.com/43x43" alt="">
-                        <div class="wrapper w-100 ml-3">
-                            <p><b>Tom </b>uploaded the demo</p>
-                            <small class="text-muted">3 hours ago</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Traffic</h4>
-                    <div class="w-50 mx-auto">
-                        <canvas id="traffic-chart" width="100" height="100"></canvas>
-                    </div>
-                    <div class="text-center mt-5">
-                        <h4 class="mb-2">
-                            Traffic for the day
-                        </h4>
-                        <p class="card-description mb-5">Traffic through the sources google and facebook for the day</p>
-                    </div>
-                    <div id="traffic-chart-legend" class="chartjs-legend traffic-chart-legend"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row grid-margin">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Last Records</h4>
-                    <div class="d-flex table-responsive">
-
-                        <vc:add-record wallet-id="3"></vc:add-record>
-                        <!--<div class="btn-group mr-2">
-                            <button class="btn btn-sm btn-primary" onclick="location.href='/Records/Add?walletId=3'" type="button"><i class="mdi mdi-plus-circle-outline"></i> Add</button>
-                        </div> -->
-
-                        <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-light"><i class="mdi mdi-alert-circle-outline"></i></button>
-                            <button type="button" class="btn btn-light"><i class="mdi mdi-delete-empty"></i></button>
-                        </div>
-                        <div class="btn-group mr-2">
-                            <button type="button" class="btn btn-light"><i class="mdi mdi-printer"></i></button>
-                        </div>
-                        <div class="btn-group ml-auto mr-2 border-0 d-none d-md-block">
-                            <input type="text" class="form-control" placeholder="Search Here">
-                        </div>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-light"><i class="mdi mdi-cloud"></i></button>
-                            <button type="button" class="btn btn-light"><i class="mdi mdi-dots-vertical"></i></button>
-                        </div>
-                    </div>
-                    <div class="table-responsive mt-2">
-                        <table class="table mt-3 border-top">
-                            <thead>
-                                <tr>
-                                    <th>Invoice</th>
-                                    <th>Customer</th>
-                                    <th>Ship</th>
-                                    <th>Best Price</th>
-                                    <th>Purchsed Price</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>50014</td>
-                                    <td>David Grey</td>
-                                    <td>Italy</td>
-                                    <td>$6300</td>
-                                    <td>$2100</td>
-                                    <td><div class="badge badge-success badge-fw">Progress</div></td>
-                                </tr>
-                                <tr>
-                                    <td>50015</td>
-                                    <td>Stella Johnson</td>
-                                    <td>Brazil</td>
-                                    <td>$4500</td>
-                                    <td>$4300</td>
-                                    <td><div class="badge badge-warning badge-fw">Open</div></td>
-                                </tr>
-                                <tr>
-                                    <td>50016</td>
-                                    <td>Marina Michel</td>
-                                    <td>Japan</td>
-                                    <td>$4300</td>
-                                    <td>$6440</td>
-                                    <td><div class="badge badge-danger badge-fw">On hold</div></td>
-                                </tr>
-                                <tr>
-                                    <td>50017</td>
-                                    <td>John Doe</td>
-                                    <td>India</td>
-                                    <td>$6400</td>
-                                    <td>$2200</td>
-                                    <td><div class="badge badge-success badge-fw">Progress</div></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between flex-column flex-sm-row mt-4">
-                        <p class="mb-3 mb-sm-0">Showing 1 to 20 of 20 entries</p>
-                        <nav>
-                            <ul class="pagination pagination-primary mb-0">
-                                <li class="page-item"><a class="page-link"><i class="mdi mdi-chevron-left"></i></a></li>
-                                <li class="page-item active"><a class="page-link">1</a></li>
-                                <li class="page-item"><a class="page-link">2</a></li>
-                                <li class="page-item"><a class="page-link">3</a></li>
-                                <li class="page-item"><a class="page-link">4</a></li>
-                                <li class="page-item"><a class="page-link"><i class="mdi mdi-chevron-right"></i></a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     @section Scripts {
 
     }

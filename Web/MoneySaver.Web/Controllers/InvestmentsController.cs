@@ -194,7 +194,7 @@
                         Ticker = t.Company.Ticker,
                     },
                 })
-                .OrderBy(t => t.CreatedOn)
+                .OrderByDescending(t => t.CreatedOn)
                 .ToList(),
             };
 

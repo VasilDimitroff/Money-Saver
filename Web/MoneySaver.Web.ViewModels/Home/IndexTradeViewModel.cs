@@ -1,10 +1,12 @@
-﻿namespace MoneySaver.Web.ViewModels.Trades
+﻿namespace MoneySaver.Web.ViewModels.Home
 {
     using System;
+
     using MoneySaver.Web.ViewModels.Currencies;
+    using MoneySaver.Web.ViewModels.Trades;
     using MoneySaver.Web.ViewModels.Trades.Enums;
 
-    public class TradeViewModel
+    public class IndexTradeViewModel
     {
         public string Id { get; set; }
 
@@ -23,5 +25,7 @@
         public decimal TotalAmount => Math.Round(this.Price * this.StockQuantity, 2);
 
         public int InvestmentWalletId { get; set; }
+
+        public string InvestmentWalletName { get; set; }
     }
 }
