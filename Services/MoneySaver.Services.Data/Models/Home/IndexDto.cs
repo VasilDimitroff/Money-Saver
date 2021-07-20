@@ -11,6 +11,7 @@
             this.CategoriesLast30DaysIncomes = new HashSet<AccountCategoryIncomesLast30DaysDto>();
             this.ActiveToDoLists = new HashSet<IndexListDto>();
             this.Wallets = new HashSet<IndexWalletDto>();
+            this.InvestmentWallets = new HashSet<IndexInvestmentWalletDto>();
         }
 
         public IEnumerable<AccountCategoryIncomesLast30DaysDto> CategoriesLast30DaysIncomes { get; set; }
@@ -20,5 +21,7 @@
         public IEnumerable<IndexListDto> ActiveToDoLists { get; set; }
 
         public IEnumerable<IndexWalletDto> Wallets { get; set; }
+
+        public IEnumerable<IndexInvestmentWalletDto> InvestmentWallets { get; set; }
     }
 }

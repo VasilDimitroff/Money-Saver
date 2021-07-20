@@ -202,7 +202,7 @@
                 <h4 class="card-title">Active Todo Lists</h4>
                 <div class="list-wrapper">
                     <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-                        @foreach (var list in Model.ActiveToDoLists.Take(4))
+                        @foreach (var list in Model.ActiveToDoLists.Take(5))
                         {
                             <li>
                                 <span class="form-check">
@@ -228,7 +228,7 @@
 
 
 
-    <div class="col-lg-4 grid-margin stretch-card" id="active-lists">
+    <div class="col-lg-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Wallets</h4>
@@ -271,13 +271,13 @@
 
 
 
-    <div class="col-lg-4 grid-margin stretch-card" id="active-lists">
+    <div class="col-lg-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Investment Wallets</h4>
                 <div class="list-wrapper">
                     <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-                        @foreach (var wallet in Model.Wallets.Take(4))
+                        @foreach (var wallet in Model.InvestmentWallets.Take(3))
                         {
                             string colorAmount = "danger";
                             <li>
@@ -295,8 +295,8 @@
                                 </span>
 
                                 <div class="col d-flex justify-content-end">
-                                    <a asp-controller="Wallets" asp-action="Details" asp-route-id="@wallet.Id" class="mdi mdi-directions btn btn-sm btn-outline-primary pr-4 pl-2 pb-1 pt-1 mb-1 mr-1" style="width: 20px; height: 30px; margin-top: 3px;"></a>
-                                    <a asp-controller="Wallets" asp-action="Edit" asp-route-id="@wallet.Id"><span class="mdi mdi-pencil btn btn-sm btn-outline-info pr-4 pl-2 pb-1 pt-1 mb-1" style="width: 20px; height: 30px; margin-top: 3px;" data-toggle="tooltip" data-placement="bottom" title="Edit wallet"></span></a>
+                                    <a asp-controller="Investments" asp-action="Trades" asp-route-id="@wallet.Id" class="mdi mdi-directions btn btn-sm btn-outline-primary pr-4 pl-2 pb-1 pt-1 mb-1 mr-1" style="width: 20px; height: 30px; margin-top: 3px;"></a>
+                                    <a asp-controller="Investments" asp-action="Edit" asp-route-id="@wallet.Id"><span class="mdi mdi-pencil btn btn-sm btn-outline-info pr-4 pl-2 pb-1 pt-1 mb-1" style="width: 20px; height: 30px; margin-top: 3px;" data-toggle="tooltip" data-placement="bottom" title="Edit wallet"></span></a>
                                 </div>
 
                             </li>
@@ -308,89 +308,6 @@
                         <a asp-controller="Investments" asp-action="AllInvestments"><span data-toggle="tooltip" data-placement="bottom" title="All lists"><i class="mdi mdi-format-list-checks"></i> All Investments</span></a>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="col-lg-4 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Recommended</h4>
-                <div class="d-flex align-items-center pb-3 border-bottom">
-                    <img class="img-sm rounded-circle" src="../../../../images/faces/face5.jpg" alt="profile">
-                    <div class="ml-3">
-                        <h6 class="mb-1">Stella Davidson</h6>
-                        <small class="text-muted mb-0"><i class="mdi mdi-map-marker mr-1"></i>New York City, USA</small>
-                    </div>
-                    <i class="mdi mdi-check-circle-outline font-weight-bold ml-auto px-1 py-1 text-info mdi-24px"></i>
-                </div>
-                <div class="d-flex align-items-center py-3 border-bottom">
-                    <img class="img-sm rounded-circle" src="../../../../images/faces/face6.jpg" alt="profile">
-                    <div class="ml-3">
-                        <h6 class="mb-1">Daniel Russel</h6>
-                        <small class="text-muted mb-0"><i class="mdi mdi-map-marker mr-1"></i>Florida, USA</small>
-                    </div>
-                    <i class="mdi mdi-plus-circle-outline font-weight-bold ml-auto px-1 py-1 text-success mdi-24px"></i>
-                </div>
-                <div class="d-flex align-items-center py-3 border-bottom">
-                    <img class="img-sm rounded-circle" src="../../../../images/faces/face7.jpg" alt="profile">
-                    <div class="ml-3">
-                        <h6 class="mb-1">Bruno King</h6>
-                        <small class="text-muted mb-0"><i class="mdi mdi-map-marker mr-1"></i>Arkansas, USA</small>
-                    </div>
-                    <i class="mdi mdi-check-circle-outline font-weight-bold ml-auto px-1 py-1 text-info mdi-24px"></i>
-                </div>
-                <div class="d-flex align-items-center py-3 border-bottom">
-                    <img class="img-sm rounded-circle" src="../../../../images/faces/face8.jpg" alt="profile">
-                    <div class="ml-3">
-                        <h6 class="mb-1">David Moore</h6>
-                        <small class="text-muted mb-0"><i class="mdi mdi-map-marker mr-1"></i>Arizon, USA</small>
-                    </div>
-                    <i class="mdi mdi-plus-circle-outline font-weight-bold ml-auto px-1 py-1 text-success mdi-24px"></i>
-                </div>
-                <div class="d-flex align-items-center pt-3 mb-4">
-                    <img class="img-sm rounded-circle" src="../../../../images/faces/face9.jpg" alt="profile">
-                    <div class="ml-3">
-                        <h6 class="mb-1">Rafell John</h6>
-                        <small class="text-muted mb-0"><i class="mdi mdi-map-marker mr-1"></i>Alaska, USA</small>
-                    </div>
-                    <i class="mdi mdi-plus-circle-outline font-weight-bold ml-auto px-1 py-1 text-success mdi-24px"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Updates</h4>
-                <ul class="bullet-line-list">
-                    <li>
-                        <h6>User confirmation</h6>
-                        <p class="mb-0">Lorem Ipsum is simply dummy text of the printing </p>
-                        <p class="text-muted">
-                            <i class="mdi mdi-clock-outline"></i>
-                            7 months ago.
-                        </p>
-                    </li>
-                    <li>
-                        <h6>Continuous evaluation</h6>
-                        <p class="mb-0">Lorem Ipsum is simply dummy text of the printing </p>
-                        <p class="text-muted">
-                            <i class="mdi mdi-clock-outline"></i>
-                            7 months ago.
-                        </p>
-                    </li>
-                    <li>
-                        <h6>Promotion</h6>
-                        <p class="mb-0">Lorem Ipsum is simply dummy text of the printing </p>
-                        <p class="text-muted">
-                            <i class="mdi mdi-clock-outline"></i>
-                            7 months ago.
-                        </p>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>

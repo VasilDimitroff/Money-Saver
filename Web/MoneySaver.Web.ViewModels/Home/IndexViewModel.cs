@@ -12,6 +12,7 @@
             this.CategoriesLast30DaysExpenses = new HashSet<AccountCategoryExpensesLast30DaysViewModel>();
             this.ActiveToDoLists = new HashSet<IndexListViewModel>();
             this.Wallets = new HashSet<IndexWalletViewModel>();
+            this.InvestmentWallets = new HashSet<IndexInvestmentWalletViewModel>();
         }
 
        // public decimal TotalAccountExpenses => this.CategoriesLast30DaysExpenses.Sum(c => c.TotalExpenses);
@@ -27,5 +28,7 @@
         public ICollection<IndexListViewModel> ActiveToDoLists { get; set; }
 
         public ICollection<IndexWalletViewModel> Wallets { get; set; }
+
+        public IEnumerable<IndexInvestmentWalletViewModel> InvestmentWallets { get; set; }
     }
 }

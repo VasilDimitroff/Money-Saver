@@ -77,6 +77,15 @@
                     Amount = w.Amount,
                 })
                 .ToList(),
+                InvestmentWallets = dto.InvestmentWallets.Select(iw => new IndexInvestmentWalletViewModel
+                {
+                    Id = iw.Id,
+                    CurrencyCode = iw.CurrencyCode,
+                    Name = iw.Name,
+                    TotalBuyTradesAmount = iw.TotalBuyTradesAmount,
+                    TotalSellTradesAmount = iw.TotalSellTradesAmount,
+                })
+                .ToList(),
             };
 
             return this.View(model);

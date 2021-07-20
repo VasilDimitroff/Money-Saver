@@ -28,6 +28,7 @@
                 CategoriesLast30DaysIncomes = await this.GetLast30DaysIncomesByCategoryAsync(userId),
                 ActiveToDoLists = await this.GetActiveListsAsync(userId),
                 Wallets = await this.GetWalletsAsync(userId),
+                InvestmentWallets = await this.GetInvestmentWalletsAsync(userId),
             };
 
             return indexDto;
@@ -114,7 +115,6 @@
         {
             var wallets = await this.dbContext.Wallets
                 .Where(w => w.ApplicationUserId == userId)
-                //.Include(w => w.Currency)
                 .Select(w => new IndexWalletDto
                 {
                     Id = w.Id,
@@ -125,6 +125,23 @@
                 .ToListAsync();
 
             return wallets;
+        }
+
+        private async Task<IEnumerable<IndexInvestmentWalletDto>> GetInvestmentWalletsAsync(string userId)
+        {
+            var investmentWallets = await this.dbContext.InvestmentWallets
+               .Where(iw => iw.ApplicationUserId == userId)
+               .Select(iw => new IndexInvestmentWalletDto
+               {
+                   Id = iw.Id,
+                   Name = iw.Name,
+                   CurrencyCode = iw.Currency.Code,
+                   TotalBuyTradesAmount = iw.Trades.Where(t => t.Type == TradeType.Buy).Sum(t => t.Price * t.StockQuantity),
+                   TotalSellTradesAmount = iw.Trades.Where(t => t.Type == TradeType.Sell).Sum(t => t.Price * t.StockQuantity),
+               })
+               .ToListAsync();
+
+            return investmentWallets;
         }
     }
 }
