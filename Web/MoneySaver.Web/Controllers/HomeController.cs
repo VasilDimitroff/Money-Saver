@@ -69,6 +69,14 @@
                     Name = l.Name,
                 })
                 .ToList(),
+                Wallets = dto.Wallets.Select(w => new IndexWalletViewModel
+                {
+                    Id = w.Id,
+                    Name = w.Name,
+                    CurrencyCode = w.CurrencyCode,
+                    Amount = w.Amount,
+                })
+                .ToList(),
             };
 
             return this.View(model);

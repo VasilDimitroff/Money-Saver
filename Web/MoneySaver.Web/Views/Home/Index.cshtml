@@ -5,15 +5,7 @@
     string badgeClassName = "success";
     this.ViewData["ReturnUrl"] = "/";
 }
-<div class="bg-white">
-    <div class="template-demo mb-4">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                <li class="breadcrumb-item active" aria-current="page"><span>Home</span></li>
-            </ol>
-        </nav>
-    </div>
-</div>
+
 <div class="row mb-4">
     <div class="col-12">
         <div class="form-inline d-flex justify-content-center h3">
@@ -204,10 +196,10 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-4 grid-margin stretch-card" id="active-lists">
+    <div class="col-lg-4 grid-margin stretch-card" id="active-lists">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Active Todo Lists</h4>        
+                <h4 class="card-title">Active Todo Lists</h4>
                 <div class="list-wrapper">
                     <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
                         @foreach (var list in Model.ActiveToDoLists.Take(4))
@@ -225,15 +217,104 @@
                             </li>
                         }
                     </ul>
-                    <div class="row mt-3">
-                        <a asp-controller="ToDoLists" asp-action="Add"><span class="mr-2 btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Add list"><i class="mdi mdi-plus"></i> Add</span></a>
-                        <a asp-controller="ToDoLists" asp-action="AllLists"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="All lists"><i class="mdi mdi-format-list-checks"></i> All</span></a>
+                    <div class="row mt-3 small">
+                        <a asp-controller="ToDoLists" asp-action="Add"><span class="mr-4" data-toggle="tooltip" data-placement="bottom" title="Add list"><i class="mdi mdi-plus"></i> Add</span></a>
+                        <a asp-controller="ToDoLists" asp-action="AllLists"><span data-toggle="tooltip" data-placement="bottom" title="All lists"><i class="mdi mdi-format-list-checks"></i> All Lists</span></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4 grid-margin stretch-card">
+
+
+
+    <div class="col-lg-4 grid-margin stretch-card" id="active-lists">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Wallets</h4>
+                <div class="list-wrapper">
+                    <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
+                        @foreach (var wallet in Model.Wallets.Take(4))
+                        {
+                            string colorAmount = "danger";
+                            <li>
+                                @if (wallet.Amount > 0)
+                                {
+                                    colorAmount = "success";
+                                }
+                                else if (wallet.Amount == 0)
+                                {
+                                    colorAmount = "muted";
+                                }
+                                <span class="form-check">
+                                    @wallet.Name
+                                    <p class="small text-muted">Balance: <span class="text-@colorAmount small">@wallet.Amount @wallet.CurrencyCode</span></p>
+                                </span>
+
+                                <div class="col d-flex justify-content-end">
+                                    <a asp-controller="Wallets" asp-action="Details" asp-route-id="@wallet.Id" class="mdi mdi-directions btn btn-sm btn-outline-primary pr-4 pl-2 pb-1 pt-1 mb-1 mr-1" style="width: 20px; height: 30px; margin-top: 3px;"></a>
+                                    <a asp-controller="Wallets" asp-action="Edit" asp-route-id="@wallet.Id"><span class="mdi mdi-pencil btn btn-sm btn-outline-info pr-4 pl-2 pb-1 pt-1 mb-1" style="width: 20px; height: 30px; margin-top: 3px;" data-toggle="tooltip" data-placement="bottom" title="Edit wallet"></span></a>
+                                </div>
+
+                            </li>
+                        }
+                    </ul>
+
+                    <div class="row mt-3 small">
+                        <a asp-controller="Wallets" asp-action="Add"><span class="mr-4" data-toggle="tooltip" data-placement="bottom" title="Add list"><i class="mdi mdi-plus"></i> Add</span></a>
+                        <a asp-controller="Wallets" asp-action="AllWallets"><span data-toggle="tooltip" data-placement="bottom" title="All lists"><i class="mdi mdi-format-list-checks"></i> All Wallets</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-lg-4 grid-margin stretch-card" id="active-lists">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Investment Wallets</h4>
+                <div class="list-wrapper">
+                    <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
+                        @foreach (var wallet in Model.Wallets.Take(4))
+                        {
+                            string colorAmount = "danger";
+                            <li>
+                                @if (wallet.Amount > 0)
+                                {
+                                    colorAmount = "success";
+                                }
+                                else if (wallet.Amount == 0)
+                                {
+                                    colorAmount = "muted";
+                                }
+                                <span class="form-check">
+                                    @wallet.Name
+                                    <p class="small text-muted">Balance: <span class="text-@colorAmount small">@wallet.Amount @wallet.CurrencyCode</span></p>
+                                </span>
+
+                                <div class="col d-flex justify-content-end">
+                                    <a asp-controller="Wallets" asp-action="Details" asp-route-id="@wallet.Id" class="mdi mdi-directions btn btn-sm btn-outline-primary pr-4 pl-2 pb-1 pt-1 mb-1 mr-1" style="width: 20px; height: 30px; margin-top: 3px;"></a>
+                                    <a asp-controller="Wallets" asp-action="Edit" asp-route-id="@wallet.Id"><span class="mdi mdi-pencil btn btn-sm btn-outline-info pr-4 pl-2 pb-1 pt-1 mb-1" style="width: 20px; height: 30px; margin-top: 3px;" data-toggle="tooltip" data-placement="bottom" title="Edit wallet"></span></a>
+                                </div>
+
+                            </li>
+                        }
+                    </ul>
+
+                    <div class="row mt-3 small">
+                        <a asp-controller="Investments" asp-action="AddWallet"><span class="mr-4" data-toggle="tooltip" data-placement="bottom" title="Add list"><i class="mdi mdi-plus"></i> Add</span></a>
+                        <a asp-controller="Investments" asp-action="AllInvestments"><span data-toggle="tooltip" data-placement="bottom" title="All lists"><i class="mdi mdi-format-list-checks"></i> All Investments</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-lg-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Recommended</h4>

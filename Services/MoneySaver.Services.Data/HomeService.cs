@@ -27,6 +27,7 @@
                 CategoriesLast30DaysExpenses = await this.GetLast30DaysExpensesByCategoryAsync(userId),
                 CategoriesLast30DaysIncomes = await this.GetLast30DaysIncomesByCategoryAsync(userId),
                 ActiveToDoLists = await this.GetActiveListsAsync(userId),
+                Wallets = await this.GetWalletsAsync(userId),
             };
 
             return indexDto;
@@ -107,6 +108,23 @@
                 .ToListAsync();
 
             return lists;
+        }
+
+        private async Task<IEnumerable<IndexWalletDto>> GetWalletsAsync(string userId)
+        {
+            var wallets = await this.dbContext.Wallets
+                .Where(w => w.ApplicationUserId == userId)
+                //.Include(w => w.Currency)
+                .Select(w => new IndexWalletDto
+                {
+                    Id = w.Id,
+                    Name = w.Name,
+                    CurrencyCode = w.Currency.Code,
+                    Amount = w.MoneyAmount,
+                })
+                .ToListAsync();
+
+            return wallets;
         }
     }
 }
