@@ -26,6 +26,7 @@
             {
                 CategoriesLast30DaysExpenses = await this.GetLast30DaysExpensesByCategoryAsync(userId),
                 CategoriesLast30DaysIncomes = await this.GetLast30DaysIncomesByCategoryAsync(userId),
+                ActiveToDoLists = await this.GetActiveListsAsync(userId),
             };
 
             return indexDto;
@@ -89,6 +90,23 @@
                 .ToListAsync();
 
             return categories;
+        }
+
+        private async Task<IEnumerable<IndexListDto>> GetActiveListsAsync(string userId)
+        {
+            var lists = await this.dbContext.ToDoLists
+                .Include(l => l.ListItems)
+                .Where(l => l.ApplicationUserId == userId && l.Status == StatusType.Active)
+                .OrderBy(l => l.ListItems.OrderBy(li => li.ModifiedOn).FirstOrDefault().ModifiedOn)
+                .ThenBy(l => l.ModifiedOn)
+                .Select(l => new IndexListDto
+                {
+                    Id = l.Id,
+                    Name = l.Name,
+                })
+                .ToListAsync();
+
+            return lists;
         }
     }
 }

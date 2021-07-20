@@ -264,6 +264,10 @@
             {
                 return this.Redirect($"/ToDoLists/Edit/{id}");
             }
+            else if (returnUrl == "/")
+            {
+                return this.Redirect("/#active-lists");
+            }
 
             return this.Redirect($"/ToDoLists/AllLists");
         }

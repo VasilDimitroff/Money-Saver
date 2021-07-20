@@ -8,14 +8,14 @@
 
 </style>
 <form method="get" asp-controller="Wallets" asp-action="DateSorted" class="form-inline">
-    <div class="input-group-sm mr-sm-1 mb-4">
+    <div class="input-group-sm mr-sm-1 mb-4"  style="display:inline; white-space: nowrap;">
         <label asp-for="StartDate" class="date-label">Start Date</label>
-        <input type="date" style="display:inline;" class="form-control input-sm " asp-for="StartDate" placeholder="Search Here" value="@Model.DefaultStartDate">
+        <input type="date" class="form-control input-sm" asp-for="StartDate" placeholder="Search Here" value="@Model.DefaultStartDate">
         <span class="d-block text-danger" asp-validation-for="StartDate"></span>
     </div>
-    <div class="input-group-sm mr-sm-1 mb-4">
+    <div class="input-group-sm mr-sm-1 mb-4"  style="display:inline; white-space: nowrap;">
         <label asp-for="EndDate" class="date-label">End Date</label>
-        <input type="date" style="display:inline;" class="form-control input-sm" asp-for="EndDate" placeholder="Search Here" value="@Model.DefaultEndDate">
+        <input type="date" class="form-control input-sm" asp-for="EndDate" placeholder="Search Here" value="@Model.DefaultEndDate">
         <span class="d-block text-danger" asp-validation-for="EndDate"></span>
     </div>
     <input type="hidden" class="form-control input-sm" asp-for="Id">

@@ -300,6 +300,8 @@
                 listItem.Status = StatusType.Active;
             }
 
+            listItem.ModifiedOn = DateTime.UtcNow;
+
             // this.dbContext.Update(listItem);
             await this.dbContext.SaveChangesAsync();
         }

@@ -73,10 +73,10 @@
 </div>
 <div class="col-12 form-inline justify-content-center mb-4">
     <div class="pr-1 pb-1">
-        <a asp-controller="ToDoLists" asp-action="Add"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit list"><i class="mdi mdi-plus"></i> Add</span></a>
+        <a asp-controller="ToDoLists" asp-action="Add"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Add list"><i class="mdi mdi-plus"></i> Add</span></a>
     </div>
     <div class="pr-1 pb-1">
-        <a asp-controller="ToDoLists" asp-action="AllLists" asp-route-getstatus="1"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Show all lists"><i class="mdi mdi-format-list-bulleted"></i> All Lists</span></a>
+        <a asp-controller="ToDoLists" asp-action="AllLists" asp-route-getstatus="1"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Show all lists"><i class="mdi mdi-format-list-checks"></i> All Lists</span></a>
     </div>
     <div class="pr-1 pb-1">
         <a asp-controller="ToDoLists" asp-action="AllLists" asp-route-getstatus="2"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Show active lists"><i class="mdi mdi-dots-horizontal"></i> Active</span></a>
@@ -139,17 +139,17 @@
                             <br />
                             @if (list.Status == StatusType.Active)
                             {
-                                <a asp-controller="ToDoLists" asp-route-getstatus="3" asp-action="ChangeListStatus" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-route-divid="@list.DivId" asp-route-id="@list.Id"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Complete list"><i class="mdi mdi-checkbox-multiple-marked-outline"></i>Mark as Completed</span></a>
+                                <a asp-controller="ToDoLists" asp-route-getstatus="3" asp-action="ChangeListStatus" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-route-divid="@list.DivId" asp-route-id="@list.Id"><span class="btn btn-sm btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Complete list"><i class="mdi mdi-checkbox-multiple-marked-outline"></i>Mark as Completed</span></a>
                             }
 
                             else
                             {
-                                <a asp-controller="ToDoLists" asp-route-getstatus="2" asp-action="ChangeListStatus" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-route-divid="@list.DivId" asp-route-id="@list.Id"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Complete list"><i class="mdi mdi-checkbox-multiple-marked-outline"></i>Mark as Active</span></a>
+                                <a asp-controller="ToDoLists" asp-route-getstatus="2" asp-action="ChangeListStatus" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-route-divid="@list.DivId" asp-route-id="@list.Id"><span class="btn btn-sm btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Complete list"><i class="mdi mdi-checkbox-multiple-marked-outline"></i>Mark as Active</span></a>
                             }
 
-                            <a asp-controller="ToDoLists" asp-action="Edit" asp-route-id="@list.Id"><span class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Edit list"><i class="mdi mdi-pencil"></i>Edit</span></a>
+                            <a asp-controller="ToDoLists" asp-action="Edit" asp-route-id="@list.Id"><span class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="bottom" title="Edit list"><i class="mdi mdi-pencil"></i>Edit</span></a>
                             <div class="float-right">
-                                <button type="button" class="btn btn-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete list" data-toggle="modal" data-target="#defaultModal-small-@list.Id"><i class="mdi mdi-delete btn-icon-prepend"></i>Delete</button>
+                                <button type="button" class="btn btn-outline-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete list" data-toggle="modal" data-target="#defaultModal-small-@list.Id"><i class="mdi mdi-delete btn-icon-prepend"></i>Delete</button>
                                 <div class="modal fade" id="defaultModal-small-@list.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-small-@list.Id" aria-hidden="true">
                                     <form method="get" asp-controller="ToDoLists" asp-action="Delete" asp-route-id="@list.Id">
                                         <div class="modal-dialog" role="document">

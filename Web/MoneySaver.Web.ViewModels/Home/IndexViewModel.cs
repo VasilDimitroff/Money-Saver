@@ -10,6 +10,7 @@
         {
             this.CategoriesLast30DaysIncomes = new HashSet<AccountCategoryIncomesLast30DaysViewModel>();
             this.CategoriesLast30DaysExpenses = new HashSet<AccountCategoryExpensesLast30DaysViewModel>();
+            this.ActiveToDoLists = new HashSet<IndexListViewModel>();
         }
 
        // public decimal TotalAccountExpenses => this.CategoriesLast30DaysExpenses.Sum(c => c.TotalExpenses);
@@ -21,5 +22,7 @@
         public ICollection<AccountCategoryIncomesLast30DaysViewModel> CategoriesLast30DaysIncomes { get; set; }
 
         public ICollection<AccountCategoryExpensesLast30DaysViewModel> CategoriesLast30DaysExpenses { get; set; }
+
+        public ICollection<IndexListViewModel> ActiveToDoLists { get; set; }
     }
 }

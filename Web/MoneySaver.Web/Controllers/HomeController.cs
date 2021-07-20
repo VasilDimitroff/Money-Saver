@@ -23,8 +23,17 @@
 
         public async Task<IActionResult> Index()
         {
-            ClaimsPrincipal currentUser = this.User;
-            var userId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = string.Empty;
+            try
+            {
+                ClaimsPrincipal currentUser = this.User;
+                var userIdentifier = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                userId = userIdentifier;
+            }
+            catch (Exception)
+            {
+                return this.RedirectToAction(nameof(this.Error), new { Message = "You must to log in first!" });
+            }
 
             var dto = await this.homeService.GetIndexInfoAsync(userId);
 
@@ -52,6 +61,12 @@
                     CurrencyCode = ci.CurrencyCode,
                     TotalIncomeRecordsLast30Days = ci.TotalIncomeRecordsLast30Days,
                     TotalIncomesLast30days = ci.TotalIncomesLast30Days,
+                })
+                .ToList(),
+                ActiveToDoLists = dto.ActiveToDoLists.Select(l => new IndexListViewModel
+                {
+                    Id = l.Id,
+                    Name = l.Name,
                 })
                 .ToList(),
             };
