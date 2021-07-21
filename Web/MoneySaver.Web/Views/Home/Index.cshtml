@@ -94,10 +94,18 @@
                         </tbody>
                     </table>
                     <br />
-                    <div class="btn-group form-inline">
-                            <div class="input-group-sm mr-sm-1 mb-0 small">
-                                <a class="btn btn-sm btn-primary" asp-controller="Wallets" asp-action="AllWallets" type="button"><i class="mdi mdi-wallet"></i> Go to Wallets</a>
+                    @if (Model.AccountRecords.Count() < 1)
+                    {
+                        <div class="input-group-sm mr-sm-1 mb-0">
+                            <div class="alert alert-warning" role="alert">
+                                <span>No records yet</span>
                             </div>
+                        </div>
+                    }
+                    <div class="btn-group form-inline">
+                        <div class="input-group-sm mr-sm-1 mb-0 small">
+                            <a class="btn btn-sm btn-primary" asp-controller="Wallets" asp-action="AllWallets" type="button"><i class="mdi mdi-wallet"></i> Go to Wallets</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -182,22 +190,19 @@
                         </tbody>
                     </table>
                     @if (Model.CategoriesLast30DaysIncomes.Count() < 1)
-                    {<br />
-                        <div class="btn-group form-inline">
+                    {
+                        <br />
                             <div class="input-group-sm mr-sm-1 mb-0">
-                                BUTTON HERE
+                                <br />
+                                <div class="alert alert-warning" role="alert">
+                                    <span>No data yet</span>
+                                </div>
                             </div>
-                        </div>
                     }
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
-
     <div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
@@ -271,18 +276,17 @@
                                     <td>
 
                                         <a asp-controller="Wallets" asp-action="Details" asp-route-id="@category.WalletId" class="badge badge-primary text-light">@category.WalletName</a>
-
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-
                     @if (Model.CategoriesLast30DaysExpenses.Count() < 1)
                     {<br />
-                        <div class="btn-group form-inline">
-                            <div class="input-group-sm mr-sm-1 mb-0">
-                                BUTTON HERE
+                        <div class="input-group-sm mr-sm-1 mb-0">
+                            <br />
+                            <div class="alert alert-warning" role="alert">
+                                <span>No data yet</span>
                             </div>
                         </div>
                     }
@@ -290,25 +294,21 @@
             </div>
         </div>
     </div>
-
-
 </div>
-
-
-
-
-
-
-
-
-
-
 <div class="row">
     <div class="col-lg-4 grid-margin stretch-card" id="active-lists">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Active Todo Lists</h4>
                 <div class="list-wrapper">
+                    @if (Model.ActiveToDoLists.Count() < 1)
+                    {
+                        <div class="input-group-sm mr-sm-1 mb-0">
+                            <div class="alert alert-warning" role="alert">
+                                <span>No To Do lists yet</span>
+                            </div>
+                        </div>
+                    }
                     <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
                         @foreach (var list in Model.ActiveToDoLists.Take(5))
                         {
@@ -329,18 +329,23 @@
                         <a asp-controller="ToDoLists" asp-action="Add"><span class="mr-4" data-toggle="tooltip" data-placement="bottom" title="Add list"><i class="mdi mdi-plus"></i> Add</span></a>
                         <a asp-controller="ToDoLists" asp-action="AllLists"><span data-toggle="tooltip" data-placement="bottom" title="All lists"><i class="mdi mdi-format-list-checks"></i> All Lists</span></a>
                     </div>
-                </div>
+                </div>   
             </div>
         </div>
     </div>
-
-
-
     <div class="col-lg-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Wallets</h4>
                 <div class="list-wrapper">
+                    @if (Model.Wallets.Count() < 1)
+                    {
+                        <div class="input-group-sm mr-sm-1 mb-0">
+                            <div class="alert alert-warning" role="alert">
+                                <span>No wallets yet</span>
+                            </div>
+                        </div>
+                    }
                     <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
                         @foreach (var wallet in Model.Wallets.Take(3))
                         {
@@ -384,6 +389,14 @@
             <div class="card-body">
                 <h4 class="card-title">Investment Wallets</h4>
                 <div class="list-wrapper">
+                    @if (Model.InvestmentWallets.Count() < 1)
+                    {
+                        <div class="input-group-sm mr-sm-1 mb-0">
+                            <div class="alert alert-warning" role="alert">
+                                <span>No investment wallets yet</span>
+                            </div>
+                        </div>
+                    }
                     <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
                         @foreach (var wallet in Model.InvestmentWallets.Take(3))
                         {
@@ -537,10 +550,9 @@
                     {
                         <br />
                         <div class="alert alert-warning" role="alert">
-                            <span>No trades found</span>
+                            <span>No trades yet</span>
                         </div>
                     }
-                    <br />
                     <div class="btn-group form-inline">
                         <div class="input-group-sm mr-sm-1 mb-0 small">
                             <a class="btn btn-sm btn-primary" asp-controller="Investments" asp-action="AllInvestments" type="button"><i class="mdi mdi-chart-areaspline"></i> Go to Investment Wallets</a>

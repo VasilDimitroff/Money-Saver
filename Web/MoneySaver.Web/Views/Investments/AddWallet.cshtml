@@ -37,7 +37,7 @@
                     <label asp-for="@Model.SelectedCurrencyId">Currency</label>
                     <p><small class="text-muted mt-1">Note! All trades in this investment wallet should be in the chosen currency.</small></p>
                     <select asp-for="@Model.SelectedCurrencyId" class="js-example-basic-single" style="width:100%">
-                        <option disabled selected>-- Select the currency of the trade --</option>
+                        <option disabled selected>-- Select the currency of the investment wallet --</option>
                         @foreach (var currency in Model.Currencies)
                         {
                             <option value="@currency.CurrencyId">@currency.Name (@currency.Code)</option>

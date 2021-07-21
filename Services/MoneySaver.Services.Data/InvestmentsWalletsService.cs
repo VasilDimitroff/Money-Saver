@@ -208,6 +208,7 @@
         public async Task<IEnumerable<InvestmentWalletDto>> GetAllAsync(string userId)
         {
             var investmentWallets = await this.dbContext.InvestmentWallets
+                .Where(iw => iw.ApplicationUserId == userId)
                 .Select(iw => new InvestmentWalletDto
                 {
                     Id = iw.Id,

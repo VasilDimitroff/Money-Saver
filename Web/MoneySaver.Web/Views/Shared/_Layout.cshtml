@@ -35,103 +35,107 @@
     <div class="container-scroller">
         <!-- partial:partials/_horizontal-navbar.html -->
         <div class="horizontal-menu">
-            <nav class="navbar top-navbar col-lg-12 col-12 p-0">
-                <div class="nav-top flex-grow-1">
-                    <div class="container d-flex flex-row h-100 align-items-left">
-                        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                            <a class="navbar-brand brand-logo" asp-area="" asp-controller="Home" asp-action="Index"><img class="big-logo" src="~/images/logo-big_money_saver_horizontal.png" alt="Money Saver Logo" /></a>
-                            <a class="navbar-brand brand-logo-mini" asp-area="" asp-controller="Home" asp-action="Index"><img class="small-logo" src="~/images/logo-mini-money-saver.png" alt="Money Saver Logo" /></a>
-                        </div>
-                        
+        <nav class="navbar top-navbar col-lg-12 col-12 p-0">
+            <div class="nav-top flex-grow-1">
+                <div class="container d-flex flex-row h-100 align-items-center">
+                    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+                        <a class="navbar-brand brand-logo" asp-area="" asp-controller="Home" asp-action="Index"><img class="big-logo" src="~/images/logo-big_money_saver_horizontal.png" alt="Money Saver Logo" /></a>
+                        <a class="navbar-brand brand-logo-mini" asp-area="" asp-controller="Home" asp-action="Index"><img class="small-logo" src="~/images/logo-mini-money-saver.png" alt="Money Saver Logo" /></a>
+                    </div>
+                    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end flex-grow-1">
                         @if (this.SignInManager.IsSignedIn(this.User))
                         {
-                            <a class="nav-link text-primary mt-2" style="font-size: 15px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@this.User.Identity.Name</a>
+                            <a class="nav-link text-primary" style="font-size: 15px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@this.User.Identity.Name</a>
 
                             if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                             {
                                 <a class="nav-link text-primary" style="font-size: 15px;" asp-area="Administration" asp-controller="Dashboard" asp-action="Index" title="Admin">Admin</a>
                             }
                         }
+                        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="horizontal-menu-toggle">
+                            <span class="mdi mdi-menu"></span>
+                        </button>
                     </div>
                 </div>
-            </nav>
-            <nav class="bottom-navbar">
-                <div class="container">
-                    <ul class="nav page-navigation">
+            </div>
+        </nav>
+        <nav class="bottom-navbar">
+            <div class="container">
+                <ul class="nav page-navigation">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <i class="mdi mdi-home-outline menu-icon"></i>
+                            <span class="menu-title">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Wallets" asp-action="AllWallets">
+                            <i class="mdi mdi-wallet menu-icon"></i>
+                            <span class="menu-title">Wallets</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="ToDoLists" asp-action="AllLists">
+                            <i class="mdi mdi-format-list-checks menu-icon"></i>
+                            <span class="menu-title">ToDo Lists</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-area="" asp-controller="Investments" asp-action="AllInvestments" class="nav-link">
+                            <i class="mdi mdi-chart-areaspline menu-icon"></i>
+                            <span class="menu-title">Investments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="pages/documentation/documentation.html" class="nav-link">
+                            <i class="mdi mdi-information-outline menu-icon"></i>
+                            <span class="menu-title">About</span>
+                        </a>
+                    </li>
+                    @if (this.SignInManager.IsSignedIn(this.User))
+                    {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="mdi mdi-home-outline menu-icon"></i>
-                                <span class="menu-title">Home</span>
+                            <a href="#" class="nav-link">
+                                <i class="mdi mdi-image-filter menu-icon"></i>
+                                <span class="menu-title">Account</span>
+                                <i class="menu-arrow"></i>
+                            </a>
+
+                            <div class="submenu">
+                                <ul class="submenu-item">
+
+
+                                    <li><a class="nav-link" href="/Identity/Account/Manage/"><i class="mdi mdi-pencil"></i> Edit</a></li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">
+                                            <i class="mdi mdi-logout menu-icon"></i> Logout
+                                        </a>
+
+
+                                </ul>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a href="/Identity/Account/Login" class="nav-link">
+                                <i class="mdi mdi-login menu-icon"></i>
+                                <span class="menu-title">Login</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Wallets" asp-action="AllWallets">
-                                <i class="mdi mdi-wallet menu-icon"></i>
-                                <span class="menu-title">Wallets</span>
+                            <a href="/Identity/Account/Register" class="nav-link">
+                                <i class="mdi mdi-account-plus menu-icon"></i>
+                                <span class="menu-title">Register</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="ToDoLists" asp-action="AllLists">
-                                <i class="mdi mdi-format-list-checks menu-icon"></i>
-                                <span class="menu-title">ToDo Lists</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Investments" asp-action="AllInvestments" class="nav-link">
-                                <i class="mdi mdi-chart-areaspline menu-icon"></i>
-                                <span class="menu-title">Investments</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="pages/documentation/documentation.html" class="nav-link">
-                                <i class="mdi mdi-information-outline menu-icon"></i>
-                                <span class="menu-title">About</span>
-                            </a>
-                        </li>
-                        @if (this.SignInManager.IsSignedIn(this.User))
-                        {
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="mdi mdi-image-filter menu-icon"></i>
-                                    <span class="menu-title">Account</span>
-                                    <i class="menu-arrow"></i>
-                                </a>
+                    }
 
-                                <div class="submenu">
-                                    <ul class="submenu-item">
-
-
-                                        <li><a class="nav-link" href="/Identity/Account/Manage/"><i class="mdi mdi-pencil"></i> Edit</a></li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">
-                                                <i class="mdi mdi-logout menu-icon"></i> Logout
-                                            </a>
-
-
-                                    </ul>
-                                </div>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a href="/Identity/Account/Login" class="nav-link">
-                                    <i class="mdi mdi-login menu-icon"></i>
-                                    <span class="menu-title">Login</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/Identity/Account/Register" class="nav-link">
-                                    <i class="mdi mdi-account-plus menu-icon"></i>
-                                    <span class="menu-title">Register</span>
-                                </a>
-                            </li>
-                        }
-
-                    </ul>
-                </div>
-            </nav>
-        </div>
+                </ul>
+            </div>
+        </nav>
+    </div>
 
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
@@ -155,6 +159,7 @@
             <!-- page-body-wrapper ends -->
         </div>
     </div>
+
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="~/vendors/js/vendor.bundle.base.js"></script>
