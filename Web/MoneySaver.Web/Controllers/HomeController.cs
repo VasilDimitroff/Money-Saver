@@ -7,7 +7,9 @@
     using System.Security.Claims;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.ViewModels;
     using MoneySaver.Web.ViewModels.Currencies;
@@ -19,27 +21,24 @@
     public class HomeController : BaseController
     {
         private readonly IHomeService homeService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public HomeController(IHomeService homeService)
+        public HomeController(IHomeService homeService, UserManager<ApplicationUser> userManager)
         {
             this.homeService = homeService;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var userId = string.Empty;
-            try
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (user == null)
             {
-                ClaimsPrincipal currentUser = this.User;
-                var userIdentifier = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
-                userId = userIdentifier;
-            }
-            catch (Exception)
-            {
-                return this.RedirectToAction(nameof(this.Error), new { Message = "You must to log in first!" });
+                return this.Redirect("Identity/Account/Login");
             }
 
-            var dto = await this.homeService.GetIndexInfoAsync(userId);
+            var dto = await this.homeService.GetIndexInfoAsync(user.Id);
 
             var model = new IndexViewModel()
             {

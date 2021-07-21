@@ -63,10 +63,19 @@ namespace MoneySaver.Web.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
+            var user = await this._userManager.GetUserAsync(this.User);
+
+            if (user != null)
+            {
+                return this.Redirect("/");
+            }
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            return null;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

@@ -5,13 +5,15 @@
 }
 
 <header>
-    <h1>@ViewData["Title"]</h1>
+    <h1>You are preparing to logout</h1>
     @{
         if (User.Identity.IsAuthenticated)
         {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
+            <br/>
+            <form class="form-inline mr-2" style="display: inline;" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" style="display: inline;" class="nav-link btn btn-outline-danger btn-sm"><i class="mdi mdi-logout menu-icon"></i> Click here to Logout</button>
             </form>
+            <a class="btn btn-primary btn-sm" href="javascript:history.back()" style="text-decoration: none;"><i class="mdi mdi-undo btn-icon-prepend"></i> Back</a>
         }
         else
         {
