@@ -57,6 +57,12 @@ namespace MoneySaver.Web.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            var user = await this._userManager.GetUserAsync(this.User);
+
+            if (user != null)
+            {
+            }
+
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);

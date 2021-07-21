@@ -1,4 +1,8 @@
 ﻿@using MoneySaver.Common
+@using Microsoft.AspNetCore.Identity
+@using MoneySaver.Data.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +22,6 @@
     <style>
         .big-logo {
             width: 20% !important;
-            
             height: 20% !important;
         }
 
@@ -26,18 +29,18 @@
             width: 90% !important;
             height: 90% !important;
         }
-     </style>
+    </style>
 </head>
 <body>
-    <div class="container-scroller"> 
+    <div class="container-scroller">
         <!-- partial:partials/_horizontal-navbar.html -->
         <div class="horizontal-menu">
             <nav class="navbar top-navbar col-lg-12 col-12 p-0">
                 <div class="nav-top flex-grow-1">
                     <div class="container d-flex flex-row h-100 align-items-center">
                         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                            <a class="navbar-brand brand-logo" asp-controller="Home" asp-action="Index"><img class="big-logo" src="~/images/logo-big_money_saver_horizontal.png" alt="Money Saver Logo" /></a>
-                            <a class="navbar-brand brand-logo-mini" asp-controller="Home" asp-action="Index"><img class="small-logo" src="~/images/logo-mini-money-saver.png" alt="Money Saver Logo" /></a>
+                            <a class="navbar-brand brand-logo" asp-area="" asp-controller="Home" asp-action="Index"><img class="big-logo" src="~/images/logo-big_money_saver_horizontal.png" alt="Money Saver Logo" /></a>
+                            <a class="navbar-brand brand-logo-mini" asp-area="" asp-controller="Home" asp-action="Index"><img class="small-logo" src="~/images/logo-mini-money-saver.png" alt="Money Saver Logo" /></a>
                         </div>
                         <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end flex-grow-1">
                             <ul class="navbar-nav navbar-nav-right">
@@ -189,25 +192,25 @@
                 <div class="container">
                     <ul class="nav page-navigation">
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
                                 <i class="mdi mdi-home-outline menu-icon"></i>
                                 <span class="menu-title">Home</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Wallets" asp-action="AllWallets">
+                            <a class="nav-link" asp-area="" asp-controller="Wallets" asp-action="AllWallets">
                                 <i class="mdi mdi-wallet menu-icon"></i>
                                 <span class="menu-title">Wallets</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="ToDoLists" asp-action="AllLists">
+                            <a class="nav-link" asp-area="" asp-controller="ToDoLists" asp-action="AllLists">
                                 <i class="mdi mdi-format-list-checks menu-icon"></i>
                                 <span class="menu-title">ToDo Lists</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Investments" asp-action="AllInvestments" class="nav-link">
+                            <a asp-area="" asp-controller="Investments" asp-action="AllInvestments" class="nav-link">
                                 <i class="mdi mdi-chart-areaspline menu-icon"></i>
                                 <span class="menu-title">Investments</span>
                             </a>
@@ -218,12 +221,25 @@
                                 <span class="menu-title">About</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="/Identity/Account/Logout" class="nav-link">
-                                <i class="mdi mdi-logout menu-icon"></i>
-                                <span class="menu-title">Logout</span>
-                            </a>
-                        </li>
+                        @if (this.SignInManager.IsSignedIn(this.User))
+                        {
+                            <li class="nav-item">
+                                <a href="/Identity/Account/Logout" class="nav-link">
+                                    <i class="mdi mdi-logout menu-icon"></i>
+                                    <span class="menu-title">Logout</span>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a href="/Identity/Account/Login" class="nav-link">
+                                    <i class="mdi mdi-login menu-icon"></i>
+                                    <span class="menu-title">Login</span>
+                                </a>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </nav>
