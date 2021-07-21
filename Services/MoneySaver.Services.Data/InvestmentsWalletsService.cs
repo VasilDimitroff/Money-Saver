@@ -51,7 +51,7 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task<InvestmentWalletTradesDto> GetTradesAsync(string userId, int investmentWalletId, int page, int itemsPerPage = 12)
+        public async Task<InvestmentWalletTradesDto> GetTradesAsync(string userId, int investmentWalletId, int page, int itemsPerPage = 5)
         {
             InvestmentWallet investmentWallet = await this.dbContext.InvestmentWallets
                 .Include(iw => iw.Trades)
@@ -232,6 +232,62 @@
         public int GetTradesCount(int investmentWalletId)
         {
             return this.dbContext.Trades.Count(x => x.InvestmentWalletId == investmentWalletId);
+        }
+
+        public async Task<IEnumerable<CompanyHoldingsDto>> GetHoldingsAsync(string userId, int investmentWalletId)
+        {
+            var investmentWallet = await this.dbContext.InvestmentWallets
+                .Include(iw => iw.Trades)
+                .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
+
+            if (investmentWallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.InvestmentWalletNotExist);
+            }
+
+            if (!await this.IsUserOwnInvestmentWalletAsync(userId, investmentWalletId))
+            {
+                throw new ArgumentException(GlobalConstants.NotPermissionsToEditInvestmentWallet);
+            }
+
+            var tradedCompanies = await this.dbContext.Companies
+                .Where(c => c.Trades.Any(t => t.InvestmentWalletId == investmentWalletId))
+                //.Where(c => c.Trades.Any(t => t.InvestmentWallet.ApplicationUserId == userId))
+                .Include(c => c.Trades)
+                .ThenInclude(t => t.InvestmentWallet)
+                .ToListAsync();
+
+            var companiesDto = new List<CompanyHoldingsDto>();
+
+            foreach (var company in tradedCompanies)
+            {
+                int totalSellCompanyQuantity = company.Trades
+                    .Where(t => t.InvestmentWalletId == investmentWalletId && t.Type == TradeType.Sell).Sum(t => t.StockQuantity);
+
+                int totalBuyCompanyQuantity = company.Trades
+                   .Where(t => t.InvestmentWalletId == investmentWalletId && t.Type == TradeType.Buy).Sum(t => t.StockQuantity);
+
+                int currentlyCompanyHoldings = totalBuyCompanyQuantity - totalSellCompanyQuantity;
+
+                int buyTradeCompanyCount = company.Trades.Where(t => t.InvestmentWalletId == investmentWalletId && t.Type == TradeType.Buy).Count();
+                int sellTradeCompanyCount = company.Trades.Where(t => t.InvestmentWalletId == investmentWalletId && t.Type == TradeType.Sell).Count();
+
+                if (currentlyCompanyHoldings > 0)
+                {
+                    var companyHoldingDto = new CompanyHoldingsDto
+                    {
+                        Name = company.Name,
+                        Ticker = company.Ticker,
+                        StocksHoldings = currentlyCompanyHoldings,
+                        BuyTrades = buyTradeCompanyCount,
+                        SellTrades = sellTradeCompanyCount,
+                    };
+
+                    companiesDto.Add(companyHoldingDto);
+                }
+            }
+
+            return companiesDto;
         }
 
         private async Task<bool> IsUserOwnInvestmentWalletAsync(string userId, int investmentWalletId)

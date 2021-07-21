@@ -24,5 +24,7 @@
         public Task<CurrencyInfoDto> GetInvestmentCurrencyAsync(int investmentWalletId);
 
         public int GetTradesCount(int investmentWalletId);
+
+        public Task<IEnumerable<CompanyHoldingsDto>> GetHoldingsAsync(string userId, int investmentWalletId);
     }
 }

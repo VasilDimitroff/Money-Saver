@@ -10,7 +10,8 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
                 <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="Trades" asp-route-id="@Model.InvestmentWallet.Id">Trades</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="AllInvestments">Investment Wallets</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="Trades" asp-route-id="@Model.InvestmentWallet.Id">@Model.InvestmentWallet.Name</a></li>
                 <li class="breadcrumb-item active" aria-current="page"><span>Edit Trade</span></li>
             </ol>
         </nav>

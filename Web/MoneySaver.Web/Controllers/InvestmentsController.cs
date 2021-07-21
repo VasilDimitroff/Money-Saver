@@ -18,7 +18,7 @@
     [Authorize]
     public class InvestmentsController : Controller
     {
-        private const int ItemsPerPage = 12;
+        private const int ItemsPerPage = 5;
 
         private readonly ICurrenciesService currenciesService;
         private readonly IInvestmentsWalletsService investmentsWalletsService;
@@ -165,6 +165,8 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
             var result = await this.investmentsWalletsService.GetTradesAsync(user.Id, id, page, ItemsPerPage);
+            var holdingCompanies = await this.investmentsWalletsService.GetHoldingsAsync(user.Id, id);
+
 
             var model = new InvestmentWalletTradesViewModel
             {
@@ -180,6 +182,15 @@
                     Code = result.Currency.Code,
                     CurrencyId = result.Currency.CurrencyId,
                 },
+                HoldingCompanies = holdingCompanies.Select(c => new CompanyHoldingsViewModel
+                {
+                    Name = c.Name,
+                    StocksHoldings = c.StocksHoldings,
+                    Ticker = c.Ticker,
+                    SellTrades = c.SellTrades,
+                    BuyTrades = c.BuyTrades,
+                })
+                .ToList(),
                 Trades = result.Trades.Select(t => new TradeViewModel
                 {
                     Id = t.Id,

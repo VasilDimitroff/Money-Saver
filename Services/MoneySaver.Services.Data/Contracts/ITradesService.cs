@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using MoneySaver.Services.Data.Models.InvestmentWallets;
     using MoneySaver.Services.Data.Models.Trades;
 
     public interface ITradesService
@@ -21,5 +22,7 @@
         public Task RemoveAsync(string userId, string tradeId);
 
         public Task<int> GetInvestmentWalletIdByTradeIdAsync(string tradeId);
+
+        public Task<string> GetInvestmentWalletNameAsync(int investmentWalletId);
     }
 }

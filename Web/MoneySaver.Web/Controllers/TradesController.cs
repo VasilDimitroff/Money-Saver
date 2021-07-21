@@ -38,9 +38,11 @@
             try
             {
                 var companies = await this.companiesService.GetAllCompaniesAsync();
+                string investmentWalletName = await this.tradesService.GetInvestmentWalletNameAsync(investmentWalletId);
                 var model = new AddTradeInputModel
                 {
                     InvestmentWalletId = investmentWalletId,
+                    InvestmentWalletName = investmentWalletName,
                     Companies = companies.Select(c => new CompanyViewModel
                     {
                         Name = c.Name,

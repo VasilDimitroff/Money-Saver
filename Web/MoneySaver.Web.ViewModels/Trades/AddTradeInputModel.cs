@@ -22,6 +22,8 @@
         [Required]
         public int InvestmentWalletId { get; set; }
 
+        public string InvestmentWalletName { get; set; }
+
         [Required]
         [Range(1, 2, ErrorMessage = "Please choose Trade Type")]
         public TradeType Type { get; set; }

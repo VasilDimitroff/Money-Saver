@@ -11,7 +11,7 @@
             <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
                 <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
                 <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="AllInvestments" asp-route-id="@Model.InvestmentWalletId">Investment Wallets</a></li>
-                <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="Trades" asp-route-id="@Model.InvestmentWalletId">Trades</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Investments" asp-action="Trades" asp-route-id="@Model.InvestmentWalletId">@Model.InvestmentWalletName</a></li>
                 <li class="breadcrumb-item active" aria-current="page"><span>Add Trade</span></li>
             </ol>
         </nav>

@@ -246,6 +246,19 @@
             return trade.InvestmentWalletId;
         }
 
+        public async Task<string> GetInvestmentWalletNameAsync(int investmentWalletId)
+        {
+            var investmentWallet = await this.dbContext.InvestmentWallets
+               .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
+
+            if (investmentWallet == null)
+            {
+                throw new ArgumentException(GlobalConstants.InvestmentWalletNotExist);
+            }
+
+            return investmentWallet.Name;
+        }
+
         private async Task<IEnumerable<InvestmentWalletIdNameAndCurrencyDto>> GetInvestmentWalletsAsync(string userId)
         {
             var wallets = await this.dbContext.InvestmentWallets

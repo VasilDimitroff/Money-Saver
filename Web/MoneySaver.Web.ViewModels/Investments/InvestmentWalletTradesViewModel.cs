@@ -9,8 +9,11 @@
         public InvestmentWalletTradesViewModel()
         {
             this.Trades = new HashSet<TradeViewModel>();
+            this.HoldingCompanies = new HashSet<CompanyHoldingsViewModel>();
         }
 
         public IEnumerable<TradeViewModel> Trades { get; set; }
+
+        public IEnumerable<CompanyHoldingsViewModel> HoldingCompanies { get; set; }
     }
 }

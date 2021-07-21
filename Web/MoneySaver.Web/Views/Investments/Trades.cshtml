@@ -88,141 +88,181 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">All Trades</h4>
+                <div class="table-responsive">
+                    <table id="order-listing" class="table text-center table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Trade Date</th>
+                                <th>Company</th>
+                                <th>Type</th>
+                                <th>Price Per Share</th>
+                                <th>Quantity</th>
+                                <th>Total Amount</th>
+                                <th>Edit/Delete</th>
+                                <!-- <th>Delete</th>-->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var trade in Model.Trades)
+                            {
 
-<div class="card">
-    <div class="card-body">
-        <div class="col-12">
-            <div class="table-responsive">
-                <table id="order-listing" class="table text-center table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Trade Date</th>
-                            <th>Company</th>
-                            <th>Type</th>
-                            <th>Price Per Share</th>
-                            <th>Quantity</th>
-                            <th>Total Amount</th>
-                            <th>Edit/Delete</th>
-                            <!-- <th>Delete</th>-->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var trade in Model.Trades)
-                        {
+                                <tr class="card-shadow">
+                                    <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create date">@trade.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture)</span></td>
+                                    <td style="max-width: 25%;">@trade.Company.Name (@trade.Company.Ticker) </td>
+                                    <td>
+                                        @if (trade.Type == TradeType.Buy)
+                                        {
+                                            <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @trade.Type</span>
+                                        }
 
-                            <tr class="card-shadow">
-                                <td><span class="badge badge-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Create date">@trade.CreatedOn.ToString("dddd, dd MMMM yyyy", CultureInfo.InvariantCulture)</span></td>
-                                <td style="max-width: 25%;">@trade.Company.Name (@trade.Company.Ticker) </td>
-                                <td>
-                                    @if (trade.Type == TradeType.Buy)
-                                    {
-                                        <span class="badge bg-inverse-danger"><span class="mdi mdi-arrow-left-bold text-danger"></span> @trade.Type</span>
-                                    }
+                                        else if (trade.Type == TradeType.Sell)
+                                        {
 
-                                    else if (trade.Type == TradeType.Sell)
-                                    {
+                                            <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @trade.Type</span>
+                                        }
+                                    </td>
 
-                                        <span class="badge bg-inverse-success"><span class="mdi mdi-arrow-right-bold text-success"></span> @trade.Type</span>
-                                    }
-                                </td>
+                                    <td>
 
-                                <td>
+                                        @if (trade.Price < 0)
+                                        {
+                                            <p class="text-danger"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
+                                        }
 
-                                    @if (trade.Price < 0)
-                                    {
-                                        <p class="text-danger"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
-                                    }
+                                        else if (trade.Price == 0)
+                                        {
+                                            <p class="text-secondary"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
+                                        }
 
-                                    else if (trade.Price == 0)
-                                    {
-                                        <p class="text-secondary"><strong>@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
-                                    }
+                                        else
+                                        {
+                                            <p class="text-success bold"><strong>+@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (trade.Type == TradeType.Buy)
+                                        {
+                                            <span class="text-success font-weight-bold">+@trade.StockQuantity shares</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger font-weight-bold">-@trade.StockQuantity shares</span>
+                                        }
 
-                                    else
-                                    {
-                                        <p class="text-success bold"><strong>+@trade.Price.ToString("f2") @Model.Currency.Code</strong></p>
-                                    }
-                                </td>
-                                <td>
-                                    @if (trade.Type == TradeType.Buy)
-                                    {
-                                        <span class="text-success font-weight-bold">+@trade.StockQuantity shares</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-danger font-weight-bold">-@trade.StockQuantity shares</span>
-                                    }
+                                    </td>
+                                    <td>
+                                        @if (trade.TotalAmount < 0)
+                                        {
+                                            <p class="text-danger"><strong>@trade.TotalAmount @Model.Currency.Code</strong></p>
+                                        }
 
-                                </td>
-                                <td>
-                                    @if (trade.TotalAmount < 0)
-                                    {
-                                        <p class="text-danger"><strong>@trade.TotalAmount @Model.Currency.Code</strong></p>
-                                    }
+                                        else if (trade.TotalAmount == 0)
+                                        {
+                                            <p class="text-secondary"><strong>@trade.TotalAmount @Model.Currency.Code</strong></p>
+                                        }
 
-                                    else if (trade.TotalAmount == 0)
-                                    {
-                                        <p class="text-secondary"><strong>@trade.TotalAmount @Model.Currency.Code</strong></p>
-                                    }
-
-                                    else
-                                    {
-                                        <p class="text-success bold"><strong>+@trade.TotalAmount @Model.Currency.Code</strong></p>
-                                    }
-                                </td>
-                                <td class="m-0 pl-2 pr-0">
-                                    <a asp-controller="Trades" asp-action="Edit" asp-route-id="@trade.Id"><span class="btn btn-outline-info btn-sm float-left" data-toggle="tooltip" data-placement="bottom" title="Edit trade"><i class="mdi mdi-pencil"></i></span></a>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete trade" data-toggle="modal" data-target="#defaultModal-@trade.Id"><i class="mdi mdi-delete"></i></button>
-                                    <div class="modal fade" id="defaultModal-@trade.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-@trade.Id" aria-hidden="true">
-                                        <form method="post" asp-controller="Trades" asp-action="Delete" asp-route-id="@trade.Id">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title text-danger" id="exampleModalLabel-@trade.Id">Note! You're preparing to delete a trade</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>Are you sure you want to delete this trade from <span class="font-weight-bold">@Model.Name (@Model.Currency.Code)</span>
-</div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                                        <button type="submit" class="btn btn-outline-danger">Yes</button>
+                                        else
+                                        {
+                                            <p class="text-success bold"><strong>+@trade.TotalAmount @Model.Currency.Code</strong></p>
+                                        }
+                                    </td>
+                                    <td class="m-0 pl-2 pr-0">
+                                        <a asp-controller="Trades" asp-action="Edit" asp-route-id="@trade.Id"><span class="btn btn-outline-info btn-sm float-left" data-toggle="tooltip" data-placement="bottom" title="Edit trade"><i class="mdi mdi-pencil"></i></span></a>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete trade" data-toggle="modal" data-target="#defaultModal-@trade.Id"><i class="mdi mdi-delete"></i></button>
+                                        <div class="modal fade" id="defaultModal-@trade.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-@trade.Id" aria-hidden="true">
+                                            <form method="post" asp-controller="Trades" asp-action="Delete" asp-route-id="@trade.Id">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title text-danger" id="exampleModalLabel-@trade.Id">Note! You're preparing to delete a trade</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Are you sure you want to delete this trade from <span class="font-weight-bold">@Model.Name (@Model.Currency.Code)</span>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                            <button type="submit" class="btn btn-outline-danger">Yes</button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </form>
-                                    </div>
-
-
-
-
-
-                                </td>
-                            </tr>
-
-                        }
-                    </tbody>
-                </table>
-                <br />
-
-                @if (Model.Trades.Count() == 0)
-                {
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                     <br />
-                    <div class="alert alert-warning" role="alert">
-                        <span>No trades found</span>
+
+                    @if (Model.Trades.Count() == 0)
+                    {
+                        <br />
+                        <div class="alert alert-warning" role="alert">
+                            <span>No trades found</span>
+                        </div>
+                    }
+                    <!-- Pagination-->
+                    <div style="display: inline;">
+                        <partial name="_TradesPagingPartial" model="@Model" />
+                        <!-- End Pagination-->
                     </div>
-                }
-                <!-- Pagination-->
-                <div style="display: inline;">
-                    <partial name="_TradesPagingPartial" model="@Model" />
-                    <!-- End Pagination-->
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">All Holdings</h4>
+                <div class="table-responsive">
+                    @if (Model.HoldingCompanies.Count() == 0)
+                    {
+                        <br />
+                        <div class="alert alert-warning" role="alert">
+                            <span>You have no holdings in this wallet!</span>
+                        </div>
+
+                    }
+                    else
+                    {
+                        <table id="order-listing" class="table text-center table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Holdings</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var company in Model.HoldingCompanies)
+                                {
+
+                                    <tr class="card-shadow">
+
+                                        <td>@company.Name (@company.Ticker) <span class="text-small text-muted"> (@company.BuyTrades buy trades, @company.SellTrades sell trades)</span></td>
+                                        <td><span class="badge badge-outline-warning">@company.StocksHoldings shares</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- content-wrapper ends -->
 @section Scripts {
     <script>
