@@ -1,6 +1,7 @@
 ﻿namespace MoneySaver.Data.Seeding
 {
     using System;
+    using System.Data;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -41,7 +42,12 @@
                 {
                     Name = "Netflix",
                     Ticker = "NFLX",
-                });
+                },
+                new Company
+                 {
+                     Name = "Moderna",
+                     Ticker = "MRNA",
+                 });
         }
     }
 }

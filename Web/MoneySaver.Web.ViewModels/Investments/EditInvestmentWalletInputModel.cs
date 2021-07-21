@@ -17,7 +17,6 @@
         public string Name { get; set; }
 
         [Required]
-        [Range(1, 1000000)]
         public CurrencyViewModel SelectedCurrency { get; set; }
 
         public IEnumerable<CurrencyViewModel> Currencies { get; set; }

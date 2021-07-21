@@ -14,7 +14,7 @@
 
         public string Name { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Please select a currency first")]
         [Range(1, 1000000)]
         public int SelectedCurrencyId { get; set; }
 
