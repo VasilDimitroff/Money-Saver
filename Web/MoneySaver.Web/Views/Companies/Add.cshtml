@@ -1,0 +1,54 @@
+﻿@using MoneySaver.Web.ViewModels.Companies
+
+@model AddCompanyInputModel
+@{
+    this.ViewData["Title"] = "Add Company";
+}
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Add Company</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            Add a new company
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        @if (this.TempData.ContainsKey("CompanyExist"))
+        {
+        <div class="alert alert-danger">@this.TempData["CompanyExist"]</div>
+        }
+        <form class="forms-sample" asp-controller="Companies" asp-action="Add" asp-route-investmentwalletid="@this.ViewBag.InvestmentWalletId" method="post">
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <span class="mdi mdi-copyright text-primary"></span>
+                <label asp-for="@Model.CompanyName"><span class="font-weight-bold">Name</span></label>
+                <input type="text" class="form-control form-control-lg" asp-for="@Model.CompanyName" placeholder="Company Name">
+                <span class="text-danger" asp-validation-for="@Model.CompanyName"></span>
+            </div>
+            <div class="form-group">
+                <span class="mdi mdi-chart-line-variant text-primary"></span>
+                <label asp-for="@Model.Ticker"><span class="font-weight-bold">Company Ticker</span><span class="small text-muted"> (See more about tickers <a href="https://www.investopedia.com/terms/s/stocksymbol.asp" target="_blank">here</a>)</span></label>
+                <input type="text" class="form-control form-control-lg" asp-for="@Model.Ticker" placeholder="Ticker">
+                <span class="text-danger" asp-validation-for="@Model.Ticker"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm mr-2 mdi mdi-check text-light">
+                Add Company
+            </button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/vendors/js/vendor.bundle.addons.js"></script>
+    <script src="~/js/select2.js"></script>
+}

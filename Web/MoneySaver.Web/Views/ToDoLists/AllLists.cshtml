@@ -147,7 +147,7 @@
                                 <a asp-controller="ToDoLists" asp-route-getstatus="2" asp-action="ChangeListStatus" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-route-divid="@list.DivId" asp-route-id="@list.Id"><span class="btn btn-sm btn-outline-primary" data-toggle="tooltip" data-placement="bottom" title="Complete list"><i class="mdi mdi-checkbox-multiple-marked-outline"></i>Mark as Active</span></a>
                             }
 
-                            <a asp-controller="ToDoLists" asp-action="Edit" asp-route-id="@list.Id"><span class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="bottom" title="Edit list"><i class="mdi mdi-pencil"></i>Edit</span></a>
+                            <a asp-controller="ToDoLists" asp-action="Edit" asp-route-id="@list.Id"><span class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-placement="bottom" title="Edit list"><i class="mdi mdi-pencil"></i> Edit</span></a>
                             <div class="float-right">
                                 <button type="button" class="btn btn-outline-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete list" data-toggle="modal" data-target="#defaultModal-small-@list.Id"><i class="mdi mdi-delete btn-icon-prepend"></i>Delete</button>
                                 <div class="modal fade" id="defaultModal-small-@list.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-small-@list.Id" aria-hidden="true">

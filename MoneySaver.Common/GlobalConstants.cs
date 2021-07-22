@@ -91,5 +91,7 @@
         public const string InvestmentWalletNotExist = "Investment wallet not exist";
 
         public const string TradeNotExist = "Trade not exist";
+
+        public const string CompanyWithThisTickerAlreadyExists = "Company with this ticker already exist";
     }
 }

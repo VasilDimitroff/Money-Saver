@@ -12,5 +12,9 @@
         public Task<IEnumerable<GetCompanyDto>> GetAllCompaniesAsync();
 
         public Task<Company> GetCompanyByTickerAsync(string ticker);
+
+        public Task AddAsync(string ticker, string companyName);
+
+        public Task<bool> IsCompanyAlreadyExistAsync(string ticker);
     }
 }

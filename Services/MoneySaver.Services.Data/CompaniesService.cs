@@ -45,5 +45,34 @@
 
             return company;
         }
+
+        public async Task AddAsync(string ticker, string companyName)
+        {
+            ticker = ticker.ToUpper();
+
+            var company = new Company
+            {
+                Ticker = ticker,
+                Name = companyName,
+                CreatedOn = DateTime.UtcNow,
+            };
+
+            await this.dbContext.Companies.AddAsync(company);
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsCompanyAlreadyExistAsync(string ticker)
+        {
+            ticker = ticker.ToUpper();
+
+            var company = await this.dbContext.Companies.FirstOrDefaultAsync(c => c.Ticker.ToUpper() == ticker);
+
+            if (company != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

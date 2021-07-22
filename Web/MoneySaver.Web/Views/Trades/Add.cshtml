@@ -38,7 +38,7 @@
                         }
                     </select>
                     <span class="text-danger" asp-validation-for="@Model.SelectedCompany.Ticker"></span>
-                    <p class="pt-3 text-muted">Couldn't find the company you've searched? <a asp-controller="Companies" asp-action="Add">Add new company</a></p>
+                    <p class="pt-3 text-muted">Couldn't find the company you've searched? <a asp-controller="Companies" asp-action="Add" asp-route-investmentwalletid="@Model.InvestmentWalletId">Add new company</a></p>
                 </div>
                 <div class="form-group">
                     <span class="mdi mdi-arrow-right-bold text-success"></span><span class="mdi mdi-arrow-left-bold text-danger"></span>
