@@ -23,6 +23,10 @@
 </div>
 <div class="card">
     <div class="card-body">
+        @if (this.TempData.ContainsKey("CurrencyExist"))
+        {
+            <div class="alert alert-danger">@this.TempData["CurrencyExist"]</div>
+        }
         <form class="forms-sample" asp-controller="Wallets" asp-action="Add" method="post">
             <div class="text-danger" asp-validation-summary="All"></div>
             <div class="form-group">

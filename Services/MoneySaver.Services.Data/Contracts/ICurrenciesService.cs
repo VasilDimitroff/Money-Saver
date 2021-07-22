@@ -8,5 +8,7 @@
     public interface ICurrenciesService
     {
         public Task<IEnumerable<CurrencyInfoDto>> GetAllAsync();
+
+        public Task<bool> IsCurrencyExistAsync(int currencyId);
     }
 }

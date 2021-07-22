@@ -71,24 +71,31 @@
 
         public async Task<IActionResult> Add()
         {
-            AddWalletInputModel model = new AddWalletInputModel()
+            try
             {
-                Amount = 0,
-                Name = string.Empty,
-            };
-
-            var currencies = await this.currenciesService.GetAllAsync();
-
-            model.Currencies = currencies
-                .Select(c => new CurrencyViewModel
+                AddWalletInputModel model = new AddWalletInputModel()
                 {
-                    Code = c.Code,
-                    CurrencyId = c.CurrencyId,
-                    Name = c.Name,
-                })
-                .ToList();
+                    Amount = 0,
+                    Name = string.Empty,
+                };
 
-            return this.View(model);
+                var currencies = await this.currenciesService.GetAllAsync();
+
+                model.Currencies = currencies
+                    .Select(c => new CurrencyViewModel
+                    {
+                        Code = c.Code,
+                        CurrencyId = c.CurrencyId,
+                        Name = c.Name,
+                    })
+                    .ToList();
+
+                return this.View(model);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
         }
 
         [HttpPost]
@@ -113,6 +120,14 @@
                 }
 
                 var user = await this.userManager.GetUserAsync(this.User);
+
+                if (!await this.currenciesService.IsCurrencyExistAsync(input.CurrencyId))
+                {
+                    this.TempData["CurrencyExist"] = "Please select a valid currency!";
+                    this.ViewBag.CurrencyExist = this.TempData["CurrencyExist"];
+                    return this.View(input);
+                }
+
 
                 int walletId = await this.walletsService
                     .AddAsync(user.Id, input.Name, input.Amount, input.CurrencyId);

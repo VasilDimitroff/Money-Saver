@@ -31,5 +31,17 @@
 
             return currencies;
         }
+
+        public async Task<bool> IsCurrencyExistAsync(int currencyId)
+        {
+            var currency = await this.db.Currencies.FirstOrDefaultAsync(c => c.Id == currencyId);
+
+            if (currency == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
