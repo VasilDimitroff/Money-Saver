@@ -1,6 +1,7 @@
 ﻿@using MoneySaver.Common
 @using Microsoft.AspNetCore.Identity
 @using MoneySaver.Data.Models
+@using System
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 <!DOCTYPE html>
@@ -11,10 +12,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
     <!-- plugins:css -->
-    <link rel="stylesheet" href="~/vendors/iconfonts/mdi/font/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
-    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.addons.css">
-    <link rel="stylesheet" href="~/css/horizontal-layout/style.css">
+    <link rel="stylesheet" href="~/vendors/iconfonts/mdi/font/css/materialdesignicons.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.addons.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/horizontal-layout/style.css" asp-append-version="true">
+    <!-- Font CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet" asp-append-version="true">
+    <!-- Load Tempalte CSS -->
+    <link rel="stylesheet" href="~/css/horizontal-layout/templatemo.css" asp-append-version="true">
     <!-- endinject -->
     <!--<link rel="stylesheet" href="~/vendors/iconfonts/font-awesome/css/font-awesome.min.css" />-->
     <link rel="shortcut icon" href="~/favicon.ico" />
@@ -146,12 +151,15 @@
                 <div>
                     <!-- content-wrapper ends -->
                     <!-- partial:../../partials/_footer.html -->
-                    <footer class="footer">
-                        <div class="w-100 clearfix">
-                            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2018 <a href="http://www.bootstrapdash.com/" target="_blank">Bootstrapdash</a>. All rights reserved.</span>
-                            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart-outline text-danger"></i></span>
-                        </div>
-                    </footer>
+
+                   
+        <footer class="footer">
+            <div class="w-100 clearfix">
+                <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © @DateTime.Now.Year <a href="https://www.linkedin.com/in/vasil-dimitrov-426abb146/" target="_blank" class="text-primary">Vasil Dimitrov</a>.</span>
+                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"><a class="text-primary" href="https://github.com/VasilDimitroff/SoftUni-CSharp-Web-ASP.NET" target="_blank">GitHub Repository of Money Saver</a></span>
+            </div>
+        </footer>
+                    
                     <!-- partial -->
                 </div>
                 <!-- main-panel ends -->
@@ -162,9 +170,9 @@
 
     <!-- container-scroller -->
     <!-- plugins:js -->
-    <script src="~/vendors/js/vendor.bundle.base.js"></script>
-    <script src="~/js/template.js"></script>
-    <script src="~/js/settings.js"></script>
+    <script src="~/vendors/js/vendor.bundle.base.js" asp-append-version="true"></script>
+    <script src="~/js/template.js" asp-append-version="true"></script>
+    <script src="~/js/settings.js" asp-append-version="true"></script>
 
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>

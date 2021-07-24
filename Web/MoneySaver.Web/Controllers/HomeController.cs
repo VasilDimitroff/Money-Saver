@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Data.Models;
@@ -29,13 +29,14 @@
             this.userManager = userManager;
         }
 
+
         public async Task<IActionResult> Index()
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
             if (user == null)
             {
-                return this.Redirect("Identity/Account/Login");
+                return this.View("Guest");
             }
 
             var dto = await this.homeService.GetIndexInfoAsync(user.Id);

@@ -143,7 +143,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="ml-3">
                                                 <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.CategoryId" class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</a>
-                                                <p class="text-muted text-small">@category.TotalIncomeRecordsLast30Days incomes</p>
+                                                <p class="text-muted">@category.TotalIncomeRecordsLast30Days incomes</p>
                                             </div>
                                         </div>
                                     </td>
@@ -162,12 +162,12 @@
                                         {
                                             badgeClassName = "success";
                                         }
-                                        <p class="text-@badgeClassName font-weight-bold small">
+                                        <p class="text-@badgeClassName font-weight-bold">
                                             @category.TotalIncomesLast30days  @category.CurrencyCode
                                         </p>
                                     </td>
                                     <td>
-                                        <p class="font-weight-bold text-info small" style="white-space: nowrap;">
+                                        <p class="font-weight-bold text-info" style="white-space: nowrap;">
 
                                             @{
                                                 decimal percentOfAllWalletIncomes = 0;
@@ -233,7 +233,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="ml-3">
                                                 <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.CategoryId" class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</a>
-                                                <p class="text-muted text-small">@category.TotalExpenseRecordsLast30Days expenses</p>
+                                                <p class="text-muted">@category.TotalExpenseRecordsLast30Days expenses</p>
                                             </div>
                                         </div>
                                     </td>
@@ -252,10 +252,10 @@
                                         {
                                             badgeClassName = "success";
                                         }
-                                        <p class="text-@badgeClassName font-weight-bold  small">@category.TotalExpensesLast30Days @category.CurrencyCode</p>
+                                        <p class="text-@badgeClassName font-weight-bold">@category.TotalExpensesLast30Days @category.CurrencyCode</p>
                                     </td>
                                     <td>
-                                        <p class="font-weight-bold text-info small" style="white-space: nowrap;">
+                                        <p class="font-weight-bold text-info" style="white-space: nowrap;">
 
                                             @{
                                                 decimal percentOfAllWalletExpenses = 0;
@@ -320,7 +320,7 @@
                                     </form>
                                 </span>
                                 <div class="col d-flex justify-content-end">
-                                    <a asp-controller="ToDoLists" asp-action="Edit" asp-route-id="@list.Id"><span class="mdi mdi-pencil btn btn-sm btn-outline-info pr-4 pl-2 pb-1 pt-1 mb-1" style="width: 20px; height: 30px; margin-top: 3px;" data-toggle="tooltip" data-placement="bottom" title="Edit list"></span></a>
+                                    <a asp-controller="ToDoLists" asp-action="Edit" asp-route-id="@list.Id"><span class="mdi mdi-pencil btn btn-sm btn-outline-info pr-4 pl-2 mb-1" style="width: 20px; height: 30px; margin-top: 3px;" data-toggle="tooltip" data-placement="bottom" title="Edit list"></span></a>
                                 </div>
                             </li>
                         }
@@ -365,8 +365,8 @@
                                 </span>
 
                                 <div class="col d-flex justify-content-end">
-                                    <a asp-controller="Wallets" asp-action="Details" asp-route-id="@wallet.Id" class="mdi mdi-directions btn btn-sm btn-outline-primary pr-4 pl-2 pb-1 pt-1 mb-1 mr-1" style="width: 20px; height: 30px; margin-top: 3px;"></a>
-                                    <a asp-controller="Wallets" asp-action="Edit" asp-route-id="@wallet.Id"><span class="mdi mdi-pencil btn btn-sm btn-outline-info pr-4 pl-2 pb-1 pt-1 mb-1" style="width: 20px; height: 30px; margin-top: 3px;" data-toggle="tooltip" data-placement="bottom" title="Edit wallet"></span></a>
+                                    <a asp-controller="Wallets" asp-action="Details" asp-route-id="@wallet.Id" class="mdi mdi-directions btn btn-sm btn-outline-primary pr-4 pl-2 mb-1 mr-1" style="width: 20px; height: 30px; margin-top: 3px;"></a>
+                                    <a asp-controller="Wallets" asp-action="Edit" asp-route-id="@wallet.Id"><span class="mdi mdi-pencil btn btn-sm btn-outline-info pr-4 pl-2 mb-1" style="width: 20px; height: 30px; margin-top: 3px;" data-toggle="tooltip" data-placement="bottom" title="Edit wallet"></span></a>
                                 </div>
 
                             </li>
@@ -416,8 +416,8 @@
                                 </span>
 
                                 <div class="col d-flex justify-content-end">
-                                    <a asp-controller="Investments" asp-action="Trades" asp-route-id="@wallet.Id" class="mdi mdi-directions btn btn-sm btn-outline-primary pr-4 pl-2 pb-1 pt-1 mb-1 mr-1" style="width: 20px; height: 30px; margin-top: 3px;"></a>
-                                    <a asp-controller="Investments" asp-action="Edit" asp-route-id="@wallet.Id"><span class="mdi mdi-pencil btn btn-sm btn-outline-info pr-4 pl-2 pb-1 pt-1 mb-1" style="width: 20px; height: 30px; margin-top: 3px;" data-toggle="tooltip" data-placement="bottom" title="Edit wallet"></span></a>
+                                    <a asp-controller="Investments" asp-action="Trades" asp-route-id="@wallet.Id" class="mdi mdi-directions btn btn-sm btn-outline-primary pr-4 pl-2 mb-1 mr-1" style="width: 20px; height: 30px; margin-top: 3px;"></a>
+                                    <a asp-controller="Investments" asp-action="Edit" asp-route-id="@wallet.Id"><span class="mdi mdi-pencil btn btn-sm btn-outline-info pr-4 pl-2 mb-1" style="width: 20px; height: 30px; margin-top: 3px;" data-toggle="tooltip" data-placement="bottom" title="Edit wallet"></span></a>
                                 </div>
 
                             </li>
