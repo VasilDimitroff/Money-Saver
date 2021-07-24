@@ -1,0 +1,58 @@
+﻿@model MoneySaver.Data.Models.Company
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Companies" asp-action="Index">Administration</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Edit Company</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            Add a new company
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        @if (this.TempData.ContainsKey("CompanyExist"))
+        {
+            <div class="alert alert-danger">@this.TempData["CompanyExist"]</div>
+        }
+
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Ticker" />
+            <div class="form-group">
+                <span class="mdi mdi-copyright text-primary"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control form-control-lg" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedOn" class="control-label"></label>
+                <input asp-for="CreatedOn" class="form-control form-control-lg" />
+                <span asp-validation-for="CreatedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+        <div>
+            <a class="btn btn-light btn-sm" asp-action="Index">Back to List</a>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,58 @@
+﻿@model MoneySaver.Data.Models.Company
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Companies" asp-action="Index">Administration</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Add Company</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            Add a new company
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        @if (this.TempData.ContainsKey("CompanyExist"))
+        {
+            <div class="alert alert-danger">@this.TempData["CompanyExist"]</div>
+        }
+
+    <form asp-action="Create">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <span class="mdi mdi-copyright text-primary"></span>
+            <label asp-for="Ticker" class="control-label"></label>
+            <input asp-for="Ticker" class="form-control form-control-lg" />
+            <span asp-validation-for="Ticker" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <span class="mdi mdi-chart-line-variant text-primary"></span>
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control form-control-lg" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+        <div>
+            <a class="btn btn-light btn-sm" asp-action="Index">Back to List</a>
+        </div>
+    </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
