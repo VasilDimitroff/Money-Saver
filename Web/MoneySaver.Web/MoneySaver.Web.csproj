@@ -47,6 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Administration\Views\Users\" />
     <Folder Include="Models\" />
   </ItemGroup>
 </Project>

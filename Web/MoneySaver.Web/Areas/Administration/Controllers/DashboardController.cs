@@ -4,7 +4,7 @@
     using MoneySaver.Services.Data;
     using MoneySaver.Web.ViewModels.Administration.Dashboard;
 
-    public class DashboardController : AdministrationController
+    public class DashboardController : Controller
     {
         private readonly ISettingsService settingsService;
 
