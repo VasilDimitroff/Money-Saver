@@ -66,13 +66,24 @@ p, a {font-weight: 400;}
 .inner-text-container {
 	background-color: rgba(120, 114, 253, 0.3);
 	border-radius: 2px;
-	margin-bottom: 25px;
+	margin-bottom: 15px;
 	width: 75%;
+}
+
+
+.social-icon {
+	margin-top: -20px;
+	margin-bottom: 0px;
 }
 
 @media (max-width: 991px) {
 
 	.inner-text-container {
 		width: 100%;
+		margin-top: 0px;
+	}
+
+	.social-icon {
+		margin-top: 0px;
 	}
 }

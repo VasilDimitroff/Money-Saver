@@ -10,6 +10,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Money Saver - your web friend on the way of the financial freedom!" />
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="~/vendors/iconfonts/mdi/font/css/materialdesignicons.min.css" asp-append-version="true">
@@ -92,7 +93,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/documentation/documentation.html" class="nav-link">
+                        <a asp-area="" asp-controller="Home" asp-action="About" class="nav-link">
                             <i class="mdi mdi-information-outline menu-icon"></i>
                             <span class="menu-title">About</span>
                         </a>
@@ -150,15 +151,36 @@
                 </div>
                 <div>
                     <!-- content-wrapper ends -->
-                    <!-- partial:../../partials/_footer.html -->
-
-                   
-        <footer class="footer">
-            <div class="w-100 clearfix">
-                <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © @DateTime.Now.Year <a href="https://www.linkedin.com/in/vasil-dimitrov-426abb146/" target="_blank" class="text-primary">Vasil Dimitrov</a>.</span>
-                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"><a class="text-primary" href="https://github.com/VasilDimitroff/SoftUni-CSharp-Web-ASP.NET" target="_blank">GitHub Repository of Money Saver</a></span>
-            </div>
-        </footer>
+                    <footer class="footer">              
+                        <div class="w-100 clearfix">
+                            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © @DateTime.Now.Year <a href="/" class="text-primary">Money Saver</a>.</span>
+                            <div class="d-block text-center text-sm-left d-sm-inline-block">
+                                <ul class="social-icon">
+                                    <li class="list-inline-item m-0">
+                                        <a class="text-primary" target="_blank" href="https://www.linkedin.com/in/vasil-dimitrov-426abb146/">
+                                            <i class='mdi mdi-linkedin-box mdi-24px'></i>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item m-0">
+                                        <a class="text-primary" target="_blank" href="https://www.facebook.com/vbdimitrov/">
+                                            <i class='mdi mdi-facebook-box mdi-24px'></i>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item m-0">
+                                        <a class="text-primary" target="_blank" href="https://github.com/VasilDimitroff">
+                                            <i class='mdi mdi-github-box mdi-24px'></i>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item m-0">
+                                        <a class="text-primary" target="_blank" href="mailto:v.b.dimitrow@gmail.com">
+                                            <i class='mdi mdi-email mdi-24px'></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"><a class="text-primary" href="https://github.com/VasilDimitroff/SoftUni-CSharp-Web-ASP.NET" target="_blank">GitHub Repository of Money Saver</a></span>
+                        </div>     
+                    </footer>
                     
                     <!-- partial -->
                 </div>
@@ -173,11 +195,9 @@
     <script src="~/vendors/js/vendor.bundle.base.js" asp-append-version="true"></script>
     <script src="~/js/template.js" asp-append-version="true"></script>
     <script src="~/js/settings.js" asp-append-version="true"></script>
-
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     @await this.RenderSectionAsync("Scripts", required: false)

@@ -1,0 +1,65 @@
+﻿@*
+*@
+@{
+    this.ViewData["Title"] = "About";
+}
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>About</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            About Money Saver
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <img src="/images/vasil_dimitrov_junior_developer.jpg" class="img-fluid img-thumbnail w-50 float-left mr-4" alt="...">
+                <p class="mr-2 pr-2">
+                    <strong>Money Saver</strong> is a financial planning app developed by <strong>Vasil Dimitrov - Junior C# Web Developer</strong>.
+                </p>
+                <p class="mr-2 pr-2">
+                    The app
+                    helps you to track where goes your money - you can enter the incomes and the expenses which you make.
+                    Every record has a type - Income or Expense. Records are organized in categories, and categories - in wallets.
+                </p>
+                <p class="mr-2 pr-2">
+                    Every wallet has currency and all records inside have the same currency. You can create many wallets.
+                </p>
+                <p class="mr-2 pr-2">
+                    Other awesome functionality are ToDoLists. There you can easily add your wishlists, shoplists etc.
+                    When you mark a ToDoList as completed, all items inside are marked as completed too - automatically!
+                </p>
+                <p class="mr-2 pr-2">
+                    More good news - in <strong>Money Saver</strong> you can track your stock trades! Trades are organized in investment wallets.
+                    Every investment wallet has a currency and all trades have the same currency. Of example you can have an investment
+                    wallet in US dollar (USD). When you enter trade of Apple stocks from New York Stocks Exchange, the trade
+                    automatically becomes in USD.
+                    But you can buy Apple Stocks from some European Stocks Exchange. Then you can create another investment
+                    wallet - in Euro (EUR). Again, you can add trade of this stock and it will be created in EUR currency
+                    automatically.
+                </p>
+                <p class="mr-2 pr-2">
+                    Now, the developer of <strong>Money Saver - Vasil Dimitrov</strong> is looking for his new job in the IT sector.
+                    If your company are looking for junior developer, maybe Vasil is the right person. Contact him via contacts below!
+                </p>
+                <br />
+                <div class="d-flex justify-content-center">
+                    <a class="btn btn-primary rounded" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@this.Url.Action("Index", "Home", new { area = string.Empty })">Try Money Saver now!</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="_DeveloperContactsPartial" />
