@@ -7,6 +7,15 @@
     string badgeClassName = "success";
     this.ViewData["ReturnUrl"] = "/";
 }
+<style>
+    .stats-link:link {
+        text-decoration: none;
+    }
+
+    .stats-link:hover {
+        opacity: 0.8;
+    }
+    </style>
 
 <div class="row mb-4">
     <div class="col-12">
@@ -16,10 +25,44 @@
     </div>
 </div>
 <div class="row">
+        <a asp-controller="Wallets" asp-action="AllWallets" class="col-md-6 col-lg-3 grid-margin stretch-card stats-link">
+            <div class="card bg-gradient-primary text-white text-center card-shadow-primary">
+                <div class="card-body">
+                    <h6 class="font-weight-normal">Total Incomes</h6>
+                    <h2 class="mb-0">@Model.TotalAccountIncomes records</h2>
+                </div>
+            </div>
+        </a>
+    <a asp-controller="Wallets" asp-action="AllWallets" class="col-md-6 col-lg-3 grid-margin stretch-card stats-link">
+        <div class="card bg-gradient-danger text-white text-center card-shadow-danger">
+            <div class="card-body">
+                <h6 class="font-weight-normal">Total Expenses</h6>
+                <h2 class="mb-0">@Model.TotalAccountExpenses records</h2>
+            </div>
+        </div>
+    </a>
+    <a asp-controller="Investments" asp-action="AllInvestments" class="col-md-6 col-lg-3 grid-margin stretch-card stats-link">
+        <div class="card bg-gradient-warning text-white text-center card-shadow-warning">
+            <div class="card-body">
+                <h6 class="font-weight-normal">Total Holdings</h6>
+                <h2 class="mb-0">@Model.TotalStockHoldings shares</h2>
+            </div>
+        </div>
+    </a>
+    <a asp-controller="Investments" asp-action="AllInvestments" class="col-md-6 col-lg-3 grid-margin stretch-card stats-link">
+        <div class="card bg-gradient-info text-white text-center card-shadow-info">
+            <div class="card-body">
+                <h6 class="font-weight-normal">Total Trades</h6>
+                <h2 class="mb-0">@Model.TotalAccountTrades trades</h2>
+            </div>
+        </div>
+    </a>
+</div>
+<div class="row">
     <div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Last 10 records</h4>
+                <h4 class="card-title"><span class="badge bg-inverse-primary"><span class="mdi mdi-view-list text-primary"></span></span> Last 10 records</h4>
                 <div class="table-responsive">
                     <table class="table text-center table-bordered table-hover">
                         <thead>
@@ -299,7 +342,7 @@
     <div class="col-lg-4 grid-margin stretch-card" id="active-lists">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Active Todo Lists</h4>
+                <h4 class="card-title"><span class="badge bg-inverse-primary"><span class="mdi mdi-format-list-checks text-primary"></span></span> Active Todo Lists</h4>
                 <div class="list-wrapper">
                     @if (Model.ActiveToDoLists.Count() < 1)
                     {
@@ -315,7 +358,7 @@
                             <li>
                                 <span class="form-check">
                                     <form class="form-inline" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-controller="ToDoLists" asp-action="ChangeListStatus" asp-route-id="@list.Id" data-toggle="tooltip" data-placement="bottom" title="Mark all list as completed">
-                                        <button type="submit" style="width: 15px; height: 30px;" class="mdi mdi-check btn btn-outline-primary btn-sm mr-3 pr-3 pl-1 pb-1 pt-1"></button>
+                                        <button type="submit" style="width: 30px; height: 30px;" class="mdi mdi-check btn btn-outline-primary btn-sm mr-3 pr-3 pl-2 pb-1 pt-1"></button>
                                         @list.Name
                                     </form>
                                 </span>
@@ -336,7 +379,7 @@
     <div class="col-lg-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Wallets</h4>
+                <h4 class="card-title"><span class="badge bg-inverse-primary"><span class="mdi mdi-wallet text-primary"></span></span> Wallets</h4>
                 <div class="list-wrapper">
                     @if (Model.Wallets.Count() < 1)
                     {
@@ -387,7 +430,7 @@
     <div class="col-lg-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Investment Wallets</h4>
+                <h4 class="card-title"><span class="badge bg-inverse-primary"><span class="mdi mdi-chart-areaspline text-primary"></span></span> Investment Wallets</h4>
                 <div class="list-wrapper">
                     @if (Model.InvestmentWallets.Count() < 1)
                     {
@@ -412,7 +455,7 @@
                                 }
                                 <span class="form-check">
                                     @wallet.Name
-                                    <p class="small text-muted">Balance: <span class="text-@colorAmount small">@wallet.Amount @wallet.CurrencyCode</span></p>
+                                    <p class="small text-muted">Profit: <span class="text-@colorAmount small">@wallet.Amount @wallet.CurrencyCode</span></p>
                                 </span>
 
                                 <div class="col d-flex justify-content-end">
@@ -437,7 +480,7 @@
     <div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Last 10 trades</h4>
+                <h4 class="card-title"><span class="badge bg-inverse-primary"><span class="mdi mdi-repeat text-primary"></span></span> Last 10 trades</h4>
                 <div class="table-responsive">
                     <table id="order-listing" class="table text-center table-bordered table-hover">
                         <thead>
@@ -448,6 +491,7 @@
                                 <th>Price Per Share</th>
                                 <th>Quantity</th>
                                 <th>Total Amount</th>
+                                <th>Investment Wallet</th>
                                 <th>Edit/Delete</th>
                                 <!-- <th>Delete</th>-->
                             </tr>
@@ -516,6 +560,7 @@
                                             <p class="text-success bold"><strong>+@trade.TotalAmount @trade.Currency.Code</strong></p>
                                         }
                                     </td>
+                                    <td><a asp-controller="Investments" asp-action="Trades" asp-route-id="@trade.InvestmentWalletId" class="badge badge-primary">@trade.InvestmentWalletName</a></td>
                                     <td class="m-0 pl-2 pr-0">
                                         <a asp-controller="Trades" asp-action="Edit" asp-route-id="@trade.Id"><span class="btn btn-outline-info btn-sm float-left" data-toggle="tooltip" data-placement="bottom" title="Edit trade"><i class="mdi mdi-pencil"></i></span></a>
                                         <button type="button" class="btn btn-outline-danger btn-sm" style="display: inline" data-placement="bottom" title="Delete trade" data-toggle="modal" data-target="#defaultModal-@trade.Id"><i class="mdi mdi-delete"></i></button>
@@ -564,41 +609,140 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6 col-lg-3 grid-margin stretch-card">
-            <div class="card bg-gradient-primary text-white text-center card-shadow-primary">
-                <div class="card-body">
-                    <h6 class="font-weight-normal">Total invoices</h6>
-                    <h2 class="mb-0">28893</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3 grid-margin stretch-card">
-            <div class="card bg-gradient-danger text-white text-center card-shadow-danger">
-                <div class="card-body">
-                    <h6 class="font-weight-normal">Total invoices</h6>
-                    <h2 class="mb-0">28893</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3 grid-margin stretch-card">
-            <div class="card bg-gradient-warning text-white text-center card-shadow-warning">
-                <div class="card-body">
-                    <h6 class="font-weight-normal">Total invoices</h6>
-                    <h2 class="mb-0">28893</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3 grid-margin stretch-card">
-            <div class="card bg-gradient-info text-white text-center card-shadow-info">
-                <div class="card-body">
-                    <h6 class="font-weight-normal">Total invoices</h6>
-                    <h2 class="mb-0">28893</h2>
+
+<div class="row">
+    <div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title"><span class="badge bg-inverse-primary"><span class="mdi mdi-chart-arc text-primary"></span></span> All Holdings</h4>
+                <div class="table-responsive">
+                    @if (Model.AccountHoldings.Count() == 0)
+                    {
+                        <br />
+                        <div class="alert alert-warning" role="alert">
+                            <span>You have no holdings!</span>
+                        </div>
+
+                    }
+                    else
+                    {
+                        <table id="order-listing" class="table text-center table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Holdings</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var company in Model.AccountHoldings)
+                                {
+
+                                    <tr class="card-shadow">
+
+                                        <td>@company.Name (@company.Ticker) <span class="text-small text-muted"> (@company.BuyTrades buy trades, @company.SellTrades sell trades)</span></td>
+                                        <td><span class="badge badge-outline-warning">@company.StocksHoldings shares</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+
                 </div>
             </div>
         </div>
     </div>
-    @section Scripts {
 
-    }
+    <div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title"><span class="badge bg-inverse-primary"><span class="mdi mdi-format-list-bulleted text-primary"></span></span> Categories summary</h4>
+                <div class="table-responsive">
+                    <table class="table text-center table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="pt-1 pl-0">
+                                    Category
+                                </th>
+                                <th class="pt-1">
+                                    Incomes
+                                </th>
+                                <th class="pt-1">
+                                    Expenses
+                                </th>
+                                <th class="pt-1">
+                                    Wallet
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var category in Model.AccountCategories.OrderByDescending(x => x.RecordsCount).ThenBy(x => x.TotalExpenses))
+                            {
+                                <tr class="card-shadow" onclick="window.location='/Categories/Details/@category.CategoryId'">
+                                    <td class="py-1 pl-0">
+                                        <div class="d-flex align-items-center">
+                                            <div class="ml-3">
+                                                <a asp-controller="Categories" asp-action="Details" asp-route-id="@category.CategoryId" class="mb-2 badge badge-@category.BadgeColor.ToString().ToLower()">@category.CategoryName</a>
+                                                <p class="text-muted text-small">@category.RecordsCount records</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (category.TotalIncomes < 0)
+                                        {
+                                            badgeClassName = "danger";
+                                        }
+
+                                        else if (category.TotalIncomes == 0)
+                                        {
+                                            badgeClassName = "secondary";
+                                        }
+
+                                        else
+                                        {
+                                            badgeClassName = "success";
+                                        }
+                                        <p class="text-@badgeClassName font-weight-bold">@category.TotalIncomes @category.CurrencyCode</p>
+                                    </td>
+                                    <td>
+                                        @if (category.TotalExpenses < 0)
+                                        {
+                                            badgeClassName = "danger";
+                                        }
+
+                                        else if (category.TotalExpenses == 0)
+                                        {
+                                            badgeClassName = "secondary";
+                                        }
+
+                                        else
+                                        {
+                                            badgeClassName = "success";
+                                        }
+                                        <p class="text-@badgeClassName font-weight-bold">@category.TotalExpenses @category.CurrencyCode</p>
+                                    </td>
+                                    <td><a asp-controller="Wallets" asp-action="Details" asp-route-id="@category.WalletId" class="badge badge-primary">@category.WalletName</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <br />
+                    <div class="btn-group form-inline">
+                        @if (Model.AccountCategories.Count() == 0)
+                        {
+                            <br />
+                            <div class="alert alert-warning" role="alert">
+                                <span>No categories in the account!</span>
+                            </div>
+
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                @section Scripts {
+
+                }
 

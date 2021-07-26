@@ -127,6 +127,28 @@
                     },
                 })
                 .ToList(),
+                AccountHoldings = dto.AccountHoldings.Select(h => new IndexCompanyHoldingsViewModel
+                {
+                    BuyTrades = h.BuyTrades,
+                    SellTrades = h.SellTrades,
+                    StocksHoldings = h.StocksHoldings,
+                    Name = h.Name,
+                    Ticker = h.Ticker,
+                })
+                .ToList(),
+                AccountCategories = dto.AccountCategories.Select(c => new IndexCategoriesSummaryViewModel
+                {
+                    BadgeColor = Enum.Parse<BadgeColor>(c.BadgeColor.ToString()),
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.CategoryName,
+                    CurrencyCode = c.CurrencyCode,
+                    RecordsCount = c.RecordsCount,
+                    TotalExpenses = c.TotalExpenses,
+                    TotalIncomes = c.TotalIncomes,
+                    WalletId = c.WalletId,
+                    WalletName = c.WalletName,
+                })
+                .ToList(),
             };
 
             return this.View(model);
@@ -142,6 +164,11 @@
         {
             return this.View(
                 new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier, Message = message });
+        }
+
+        public IActionResult About()
+        {
+            return this.View();
         }
     }
 }

@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using MoneySaver.Common;
     using MoneySaver.Data;
     using MoneySaver.Data.Models.Enums;
     using MoneySaver.Services.Data.Contracts;
@@ -33,6 +34,8 @@
                 InvestmentWallets = await this.GetInvestmentWalletsAsync(userId),
                 AccountRecords = await this.GetLastRecordsAsync(userId, 10),
                 AccountTrades = await this.GetLastTradesAsync(userId, 10),
+                AccountHoldings = await this.GetHoldingsAsync(userId),
+                AccountCategories = await this.GetCategoriesSummaryAsync(userId),
             };
 
             return indexDto;
@@ -203,6 +206,68 @@
                 .ToListAsync();
 
             return trades;
+        }
+
+        private async Task<IEnumerable<IndexCompanyHoldingsDto>> GetHoldingsAsync(string userId)
+        {
+            var tradedCompanies = await this.dbContext.Companies
+                .Where(c => c.Trades.Any(t => t.InvestmentWallet.ApplicationUserId == userId))
+                .Include(c => c.Trades)
+                .ThenInclude(t => t.InvestmentWallet)
+                .ToListAsync();
+
+            var companiesDto = new List<IndexCompanyHoldingsDto>();
+
+            foreach (var company in tradedCompanies)
+            {
+                int totalSellCompanyQuantity = company.Trades
+                    .Where(t => t.InvestmentWallet.ApplicationUserId == userId && t.Type == TradeType.Sell).Sum(t => t.StockQuantity);
+
+                int totalBuyCompanyQuantity = company.Trades
+                   .Where(t => t.InvestmentWallet.ApplicationUserId == userId && t.Type == TradeType.Buy).Sum(t => t.StockQuantity);
+
+                int currentlyCompanyHoldings = totalBuyCompanyQuantity - totalSellCompanyQuantity;
+
+                int buyTradeCompanyCount = company.Trades.Where(t => t.InvestmentWallet.ApplicationUserId == userId && t.Type == TradeType.Buy).Count();
+                int sellTradeCompanyCount = company.Trades.Where(t => t.InvestmentWallet.ApplicationUserId == userId && t.Type == TradeType.Sell).Count();
+
+                if (currentlyCompanyHoldings > 0)
+                {
+                    var companyHoldingDto = new IndexCompanyHoldingsDto
+                    {
+                        Name = company.Name,
+                        Ticker = company.Ticker,
+                        StocksHoldings = currentlyCompanyHoldings,
+                        BuyTrades = buyTradeCompanyCount,
+                        SellTrades = sellTradeCompanyCount,
+                    };
+
+                    companiesDto.Add(companyHoldingDto);
+                }
+            }
+
+            return companiesDto;
+        }
+
+        private async Task<IEnumerable<IndexCategoriesSummaryDto>> GetCategoriesSummaryAsync(string userId)
+        {
+            var categories = await this.dbContext.Categories
+                .Where(c => c.Wallet.ApplicationUserId == userId)
+                .Select(c => new IndexCategoriesSummaryDto
+                {
+                    CategoryId = c.Id,
+                    CategoryName = c.Name,
+                    BadgeColor = c.BadgeColor,
+                    WalletId = c.WalletId,
+                    WalletName = c.Wallet.Name,
+                    RecordsCount = c.Records.Count(),
+                    TotalExpenses = c.Records.Where(r => r.Type == RecordType.Expense).Sum(r => r.Amount),
+                    TotalIncomes = c.Records.Where(r => r.Type == RecordType.Income).Sum(r => r.Amount),
+                    CurrencyCode = c.Wallet.Currency.Code,
+                })
+                .ToListAsync();
+
+            return categories;
         }
     }
 }

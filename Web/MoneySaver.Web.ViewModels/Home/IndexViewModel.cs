@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using MoneySaver.Web.ViewModels.Records.Enums;
+
     public class IndexViewModel
     {
         public IndexViewModel()
@@ -15,7 +17,21 @@
             this.InvestmentWallets = new HashSet<IndexInvestmentWalletViewModel>();
             this.AccountRecords = new HashSet<IndexRecordViewModel>();
             this.AccountTrades = new HashSet<IndexTradeViewModel>();
+            this.AccountHoldings = new HashSet<IndexCompanyHoldingsViewModel>();
+            this.AccountCategories = new HashSet<IndexCategoriesSummaryViewModel>();
         }
+
+        public decimal TotalAccountExpenses => this.AccountRecords
+            .Where(r => r.Type == RecordTypeInputModel.Expense)
+            .Count();
+
+        public decimal TotalAccountIncomes => this.AccountRecords
+           .Where(r => r.Type == RecordTypeInputModel.Income)
+           .Count();
+
+        public int TotalAccountTrades => this.AccountTrades.Count();
+
+        public int TotalStockHoldings => this.AccountHoldings.Sum(h => h.StocksHoldings);
 
         public decimal TotalAccountIncomesLast30Days => this.CategoriesLast30DaysIncomes.Sum(c => c.TotalIncomesLast30days);
 
@@ -35,5 +51,8 @@
 
         public IEnumerable<IndexTradeViewModel> AccountTrades { get; set; }
 
+        public IEnumerable<IndexCompanyHoldingsViewModel> AccountHoldings { get; set; }
+
+        public IEnumerable<IndexCategoriesSummaryViewModel> AccountCategories { get; set; }
     }
 }

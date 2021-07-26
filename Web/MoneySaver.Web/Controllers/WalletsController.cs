@@ -123,6 +123,17 @@
 
                 if (!await this.currenciesService.IsCurrencyExistAsync(input.CurrencyId))
                 {
+                    var currencies = await this.currenciesService.GetAllAsync();
+
+                    input.Currencies = currencies
+                    .Select(c => new CurrencyViewModel
+                    {
+                        Code = c.Code,
+                        CurrencyId = c.CurrencyId,
+                        Name = c.Name,
+                    })
+                    .ToList();
+
                     this.TempData["CurrencyExist"] = "Please select a valid currency!";
                     this.ViewBag.CurrencyExist = this.TempData["CurrencyExist"];
                     return this.View(input);
