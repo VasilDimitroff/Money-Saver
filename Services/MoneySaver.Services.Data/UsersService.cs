@@ -4,8 +4,10 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using MoneySaver.Common;
     using MoneySaver.Data;
     using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Contracts;
@@ -15,23 +17,67 @@
     public class UsersService : IUsersService
     {
         private readonly ApplicationDbContext dbContext;
+        
+
 
         public UsersService(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        public async Task ChangeUserRole(string newRoleId)
+        public async Task ChangeUserRole(string userId, string newRoleId)
         {
-            throw new NotImplementedException();
+            var user = await this.dbContext.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.Id == userId);
+            var role = await this.dbContext.Roles.FirstOrDefaultAsync(ur => ur.Id == newRoleId);
+
+            if (user == null)
+            {
+                throw new ArgumentException(GlobalConstants.UserWithThisIdNotExist);
+            }
+
+            // role is null when newRoleId is null; When newRoleId is null, then should make user with regular access
+            if (newRoleId == "Regular_User")
+            {
+                foreach (var currentRole in user.Roles)
+                {
+                    user.Roles.Remove(currentRole);
+                }
+
+                await this.dbContext.SaveChangesAsync();
+                return;
+            }
+
+            if (role == null)
+            {
+                throw new ArgumentException(GlobalConstants.RoleWithThisIdNotExist);
+            }
+
+            IdentityUserRole<string> userRole = new IdentityUserRole<string>
+            {
+                RoleId = role.Id,
+                UserId = user.Id,
+            };
+
+            user.Roles.Add(userRole);
+            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task<string> GetAdminRoleId()
         {
-            throw new NotImplementedException();
+            string adminRoleName = GlobalConstants.AdministratorRoleName;
+
+            var adminRole = await this.dbContext.Roles
+                .FirstOrDefaultAsync(ur => ur.Name.ToLower() == adminRoleName.ToLower());
+
+            if (adminRole == null)
+            {
+                throw new ArgumentException(GlobalConstants.RoleWithThisNameNotExist);
+            }
+
+            return adminRole.Id;
         }
 
-        public async Task<IEnumerable<UserDto>> GetAllUsers()
+        public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
             var users = await this.dbContext.Users.Include(u => u.Roles).ToListAsync();
 
@@ -58,6 +104,8 @@
 
                     userDto.Roles.Add(roleDto);
                 }
+
+                usersDto.Add(userDto);
             }
 
             return usersDto;

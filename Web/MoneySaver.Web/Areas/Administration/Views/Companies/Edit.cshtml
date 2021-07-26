@@ -7,8 +7,10 @@
     <div class="template-demo mb-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                <li class="breadcrumb-item"><a asp-controller="Companies" asp-action="Index">Administration</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><span>Edit Company</span></li>
+                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-area="Administration" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a></li>
+                <li class="breadcrumb-item"><a asp-area="Administration" asp-controller="Companies" asp-action="Index">Companies</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Edit @Model.Name</span></li>
             </ol>
         </nav>
     </div>
@@ -16,7 +18,7 @@
 <div class="row mb-4">
     <div class="col-12">
         <div class="form-inline d-flex justify-content-center h3">
-            Add a new company
+            Edit company @Model.Name
         </div>
     </div>
 </div>
@@ -27,27 +29,29 @@
             <div class="alert alert-danger">@this.TempData["CompanyExist"]</div>
         }
 
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Ticker" />
-            <div class="form-group">
-                <span class="mdi mdi-copyright text-primary"></span>
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control form-control-lg" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedOn" class="control-label"></label>
-                <input asp-for="CreatedOn" class="form-control form-control-lg" />
-                <span asp-validation-for="CreatedOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-        <div>
-            <a class="btn btn-light btn-sm" asp-action="Index">Back to List</a>
+    <form asp-action="Edit" style="display: inline;">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Ticker" />
+        <div class="form-group" style="display: inline;">
+            <span class="mdi mdi-copyright text-primary"></span>
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control form-control-lg" />
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
+        <br />
+        <div class="form-group" style="display: inline;">
+            <label asp-for="CreatedOn" class="control-label"></label>
+            <input asp-for="CreatedOn" class="form-control form-control-lg" />
+            <span asp-validation-for="CreatedOn" class="text-danger"></span>
+        </div>
+        <br />
+        <div class="form-group" style="display: inline;">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+       
+            <a class="btn btn-outline-info"  asp-action="Index">Back to List</a>
+        
 
     </div>
 </div>

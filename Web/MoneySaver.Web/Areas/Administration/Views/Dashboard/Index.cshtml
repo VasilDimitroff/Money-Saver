@@ -1,7 +1,61 @@
-﻿@model MoneySaver.Web.ViewModels.Administration.Dashboard.IndexViewModel
-@{
+﻿@{
     this.ViewData["Title"] = "Admin dashboard";
 }
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Admin Dashboard</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            <span class="mdi mdi-view-dashboard mdi-48px text-primary mr-2"></span>  Admin Dashboard
+        </div>
+    </div>
+</div>
+<div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table text-center table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="pt-1">
+                                <span class="small font-weight-bold">Functionality</span>
+                            </th>
+                            <th class="pt-1">
+                                <span class="small font-weight-bold">Actions</span>
+                            </th>
+                         
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="card-shadow">
+                            <td>
+                                <a asp-area="Administration" asp-controller="Users" asp-action="Index">Users</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-info" asp-area="Administration" asp-controller="Users" asp-action="Index">Go</a>
+                            </td>
+                        </tr>
+                        <tr class="card-shadow">
+                            <td>
+                                <a asp-area="Administration" asp-controller="Companies" asp-action="Index">Companies</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-info" asp-area="Administration" asp-controller="Companies" asp-action="Index">Go</a>
+                            </td>
+                        </tr>
 
-<h1>@this.ViewData["Title"]</h1>
-Settings: @this.Model.SettingsCount
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -24,8 +24,6 @@
         </div>
     </div>
 </div>
-
-
 <div class="card">
     <div class="card-body">
         <form class="forms-sample" style="display: inline;" asp-controller="Trades" asp-action="Edit" asp-route-id="@Model.Id" method="post">
@@ -55,7 +53,14 @@
                 <select asp-for="@Model.InvestmentWalletId" class="js-example-basic-single" style="width:100%">
                     @foreach (var wallet in Model.AllInvestmentWallets)
                     {
-                        <option value="@wallet.Id">@wallet.Name (Currency: @wallet.CurrencyCode)</option>
+                        if (wallet.Id == Model.InvestmentWallet.Id)
+                        {
+                            <option value="@wallet.Id" selected>@wallet.Name (Currency: @wallet.CurrencyCode)</option>
+                        }
+                        else
+                        {
+                            <option value="@wallet.Id">@wallet.Name (Currency: @wallet.CurrencyCode)</option>
+                        }
                     }
                 </select>
                 <span class="text-danger" asp-validation-for="@Model.InvestmentWalletId"></span>

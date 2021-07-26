@@ -6,6 +6,12 @@
 
         public const string AdministratorRoleName = "Administrator";
 
+        public const string RoleWithThisNameNotExist = "User role with this name doesn't exist!";
+
+        public const string RoleWithThisIdNotExist = "User role with this Id doesn't exist!";
+
+        public const string UserWithThisIdNotExist = "User with this Id doesn't exist!";
+
         public const string NullValueOfCategory = "Category Cannot Be Null";
 
         public const string BadgeColorNotValid = "Entered Badge Color not valid";

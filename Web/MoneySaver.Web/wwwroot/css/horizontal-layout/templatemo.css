@@ -71,19 +71,10 @@ p, a {font-weight: 400;}
 }
 
 
-.social-icon {
-	margin-top: -20px;
-	margin-bottom: 0px;
-}
-
 @media (max-width: 991px) {
 
 	.inner-text-container {
 		width: 100%;
-		margin-top: 0px;
-	}
-
-	.social-icon {
 		margin-top: 0px;
 	}
 }

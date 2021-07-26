@@ -1,10 +1,12 @@
 ﻿namespace MoneySaver.Web
 {
+    using System;
     using System.Reflection;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -54,6 +56,9 @@
                     }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.Configure<SecurityStampValidatorOptions>(o =>
+             o.ValidationInterval = TimeSpan.FromSeconds(1));
 
             services.AddSingleton(this.configuration);
 

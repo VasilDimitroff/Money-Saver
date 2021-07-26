@@ -1,0 +1,116 @@
+﻿@using MoneySaver.Services.Data.Models.Users
+@using MoneySaver.Common
+@model IEnumerable<UserDto>
+@{
+    this.ViewData["Title"] = "Add Company";
+}
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-area="Administration" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Users</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            <span class="mdi mdi-account-multiple mdi-48px text-primary mr-2"></span>  All Users
+        </div>
+    </div>
+</div>
+<div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table text-center table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="pt-1">
+                                <span class="small font-weight-bold">No</span>
+                            </th>
+                            <th class="pt-1">
+                                <span class="small font-weight-bold">Username (e-mail)</span>
+                            </th>
+                            <th class="pt-1">
+                                <span class="small font-weight-bold"> Created On</span>
+                            </th>
+                            <th class="pt-1">
+                                <span class="small font-weight-bold"> Roles</span>
+                            </th>
+                            <th class="pt-1">
+                                <span class="small font-weight-bold"> Actions</span>
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{int counter = Model.Count(); } 
+                        @foreach (var user in Model.OrderByDescending(u => u.CreatedOn))
+                        {
+                        <tr class="card-shadow">
+                            <td>
+                                <span class="badge badge-outline-primary">
+                                    @counter
+                                </span>
+                                @{ counter--; }
+
+                            </td>
+                            <td style="">
+                                <span class="badge badge-outline-dark">
+                                    @user.Username
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge badge-outline-info">
+                                    @user.CreatedOn.ToShortDateString()
+                                </span>
+                            </td> 
+                            <td>
+                                @if (user.Roles.Count() == 0)
+                                {
+                                    <p class="badge badge-outline-warning">Regular user</p>
+                                }
+                                @foreach (var role in user.Roles)
+                                {
+
+                                    <p class="badge badge-danger">@role.Name</p>
+                                }
+                            </td>
+                            <td class="">
+                                @if (user.IsAdmin)
+                                {
+                                    <form style="display: inline;" asp-area="Administration" asp-controller="Users" asp-action="MakeUser" asp-route-id="@user.Id" method="post">
+                                        <button type="submit" class="btn btn-sm btn-danger">Make User</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form style="display: inline;" asp-area="Administration" asp-controller="Users" asp-action="MakeAdmin" asp-route-id="@user.Id" method="post">
+                                        <button type="submit" class="btn btn-sm btn-info">Make Admin</button>
+                                    </form>
+                                }
+
+                                <a class="btn btn-sm btn-danger" asp-area="Administration" asp-controller="Users" asp-action="Delete">Delete</a>
+                                <a class="btn btn-sm btn-warning" asp-area="Administration" asp-controller="Users" asp-action="Reset">Reset</a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                @if (Model.Count() < 1)
+                {<br />
+                <div class="input-group-sm mr-sm-1 mb-0">
+                    <br />
+                    <div class="alert alert-warning" role="alert">
+                        <span>No users yet</span>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

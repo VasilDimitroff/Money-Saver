@@ -3,14 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using MoneySaver.Common;
     using MoneySaver.Services.Data.Models.Users;
 
     public interface IUsersService
     {
-        public Task<IEnumerable<UserDto>> GetAllUsers();
+        public Task<IEnumerable<UserDto>> GetAllUsersAsync();
 
-        public Task ChangeUserRole(string newRoleId);
+        public Task ChangeUserRole(string userId, string newRoleId);
 
         public Task<string> GetAdminRoleId();
     }

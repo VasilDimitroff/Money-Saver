@@ -12,7 +12,7 @@ using MoneySaver.Data.Models;
 namespace MoneySaver.Web.Areas.Administration.Controllers
 {
     [Area("Administration")]
-    public class CompaniesController : Controller
+    public class CompaniesController : AdministrationController
     {
         private readonly ApplicationDbContext dbContext;
 
@@ -25,25 +25,7 @@ namespace MoneySaver.Web.Areas.Administration.Controllers
         public async Task<IActionResult> Index()
         {
             return this.View(await this.dbContext.Companies.ToListAsync());
-        }
-
-        // GET: Administration/Companies/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return this.NotFound();
-            }
-
-            var company = await this.dbContext.Companies
-                .FirstOrDefaultAsync(m => m.Ticker == id);
-            if (company == null)
-            {
-                return this.NotFound();
-            }
-
-            return this.View(company);
-        }
+        } 
 
         // GET: Administration/Companies/Create
         public IActionResult Create()

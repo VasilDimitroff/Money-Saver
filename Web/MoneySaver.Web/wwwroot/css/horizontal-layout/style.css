@@ -27747,4 +27747,21 @@ div.tagsinput span.tag a {
   }
 }
 
+
 /*# sourceMappingURL=../maps/horizontal-layout/style.css.map */
+.big-logo {
+    width: 20% !important;
+    height: 20% !important;
+}
+
+.small-logo {
+    width: 90% !important;
+    height: 90% !important;
+}
+
+@media (max-width: 991px) {
+
+    .social-icon {
+        margin-top: 12px;
+    }
+}

@@ -1,51 +1,71 @@
 ﻿@model IEnumerable<MoneySaver.Data.Models.Company>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Companies";
 }
-<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-<h1>All Companies</h1>
-<br />
-<p>
-    <a class="btn btn-primary" asp-action="Create">Create New</a>
-</p>
-<br />
-<table class="table table-bordered table-hover table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedOn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedOn)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedOn)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ModifiedOn)
-                </td>
-                <td>
-                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Ticker">Edit</a> |
-                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Ticker">Details</a> |
-                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Ticker">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-area="Administration" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Companies</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            <span class="mdi mdi-copyright mdi-48px text-primary mr-2"></span>  All Companies
+        </div>
+    </div>
+</div>
+<div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table text-center table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Ticker)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CreatedOn)
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderByDescending(c => c.CreatedOn))
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Ticker)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreatedOn)
+                            </td>
+
+                            <td>
+                                <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Ticker">Edit</a> |
+                                <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Ticker">Details</a> |
+                                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Ticker">Delete</a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
