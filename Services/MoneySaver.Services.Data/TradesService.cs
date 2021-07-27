@@ -184,7 +184,7 @@
                 throw new ArgumentException(GlobalConstants.TradeNotExist);
             }
 
-            var company = await this.dbContext.Companies.FirstOrDefaultAsync(c => c.Ticker == companyId);
+            var company = await this.dbContext.Companies.FirstOrDefaultAsync(c => c.Id == companyId);
 
             if (company == null)
             {

@@ -726,17 +726,15 @@
                         </tbody>
                     </table>
                     <br />
-                    <div class="btn-group form-inline">
-                        @if (Model.AccountCategories.Count() == 0)
-                        {
-                            <br />
+                    @if (Model.AccountCategories.Count() == 0)
+                    {
+                        <br />
+                        <div class="input-group-sm mr-sm-1 mb-0">
                             <div class="alert alert-warning" role="alert">
                                 <span>No categories in the account!</span>
                             </div>
-
-                        }
-
-                    </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

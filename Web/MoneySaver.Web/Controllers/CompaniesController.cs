@@ -31,6 +31,7 @@
         {
             if (!this.ModelState.IsValid)
             {
+                this.ViewBag.InvestmentWalletId = input.InvestmentWalletId;
                 return this.View(input);
             }
 

@@ -138,13 +138,13 @@
                     {
                         Name = result.SelectedCompany.Name,
                         Ticker = result.SelectedCompany.Ticker,
-                        Id = result.Id,
+                        Id = result.SelectedCompany.Id,
                     },
                     Companies = companies.Select(c => new CompanyViewModel
                     {
                         Name = c.Name,
                         Ticker = c.Ticker,
-                        Id = result.Id,
+                        Id = c.Id,
                     })
                     .ToList(),
                 };
