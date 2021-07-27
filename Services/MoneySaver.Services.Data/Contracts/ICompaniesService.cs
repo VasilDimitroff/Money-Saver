@@ -11,7 +11,7 @@
     {
         public Task<IEnumerable<GetCompanyDto>> GetAllCompaniesAsync();
 
-        public Task<Company> GetCompanyByTickerAsync(string ticker);
+        public Task<GetCompanyDto> GetCompanyByIdAsync(string id);
 
         public Task AddAsync(string ticker, string companyName);
 

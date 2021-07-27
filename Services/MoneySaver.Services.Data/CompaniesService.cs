@@ -28,22 +28,30 @@
                 {
                     Name = c.Name,
                     Ticker = c.Ticker,
+                    Id = c.Id,
                 })
                 .ToListAsync();
 
             return companies;
         }
 
-        public async Task<Company> GetCompanyByTickerAsync(string ticker)
+        public async Task<GetCompanyDto> GetCompanyByIdAsync(string companyId)
         {
-            var company = await this.dbContext.Companies.FindAsync(ticker);
+            var company = await this.dbContext.Companies.FindAsync(companyId);
 
-            if (string.IsNullOrWhiteSpace(ticker) || company == null)
+            if (string.IsNullOrWhiteSpace(companyId) || company == null)
             {
-                throw new ArgumentException(GlobalConstants.InvalidCompanyTicker);
+                throw new ArgumentException(GlobalConstants.InvalidCompanyId);
             }
 
-            return company;
+            var companyDto = new GetCompanyDto
+            {
+                Id = company.Id,
+                Name = company.Name,
+                Ticker = company.Ticker,
+            };
+
+            return companyDto;
         }
 
         public async Task AddAsync(string ticker, string companyName)
@@ -52,6 +60,7 @@
 
             var company = new Company
             {
+                Id = Guid.NewGuid().ToString(),
                 Ticker = ticker,
                 Name = companyName,
                 CreatedOn = DateTime.UtcNow,
@@ -63,9 +72,7 @@
 
         public async Task<bool> IsCompanyAlreadyExistAsync(string ticker)
         {
-            ticker = ticker.ToUpper();
-
-            var company = await this.dbContext.Companies.FirstOrDefaultAsync(c => c.Ticker.ToUpper() == ticker);
+            var company = await this.dbContext.Companies.FirstOrDefaultAsync(c => c.Ticker.ToUpper() == ticker.ToUpper());
 
             if (company != null)
             {

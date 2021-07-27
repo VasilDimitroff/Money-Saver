@@ -20,33 +20,39 @@
                 .AddRangeAsync(
                 new Company
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Name = "Facebook",
                     Ticker = "FB",
                 },
                 new Company
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Name = "Amazon",
                     Ticker = "AMZN",
                 },
                 new Company
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Name = "Apple",
                     Ticker = "AAPL",
                 },
                 new Company
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Name = "Tesla",
                     Ticker = "TSLA",
                 },
                 new Company
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Name = "Netflix",
                     Ticker = "NFLX",
                 },
                 new Company
                  {
-                     Name = "Moderna",
-                     Ticker = "MRNA",
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "Moderna",
+                    Ticker = "MRNA",
                  });
         }
     }

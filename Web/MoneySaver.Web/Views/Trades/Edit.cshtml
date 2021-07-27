@@ -30,21 +30,21 @@
             <div class="text-danger" asp-validation-summary="All"></div>
             <div class="form-group">
                 <span class="mdi mdi-copyright text-primary"></span>
-                <label asp-for="@Model.SelectedCompany.Ticker"><span class="font-weight-bold">Company</span></label>
-                <select asp-for="@Model.SelectedCompany.Ticker" class="js-example-basic-single" style="width:100%">
+                <label asp-for="@Model.SelectedCompany.Id"><span class="font-weight-bold">Company</span></label>
+                <select asp-for="@Model.SelectedCompany.Id" class="js-example-basic-single" style="width:100%">
                     @foreach (var company in Model.Companies)
                     {
-                        if (company.Ticker == Model.SelectedCompany.Ticker)
+                        if (company.Id == Model.SelectedCompany.Id)
                         {
-                            <option selected value="@company.Ticker">@company.Name (Ticker: @company.Ticker)</option>
+                            <option selected value="@company.Id">@company.Name (Ticker: @company.Ticker)</option>
                         }
                         else
                         {
-                            <option value="@company.Ticker">@company.Name (Ticker: @company.Ticker)</option>
+                            <option value="@company.Id">@company.Name (Ticker: @company.Ticker)</option>
                         }
                     }
                 </select>
-                <span class="text-danger" asp-validation-for="@Model.SelectedCompany.Ticker"></span>
+                <span class="text-danger" asp-validation-for="@Model.SelectedCompany.Id"></span>
                 <p class="pt-3 text-muted">Couldn't find the company you've searched? <a asp-controller="Companies" asp-action="Add">Add new company</a></p>
             </div>
             <div class="form-group">

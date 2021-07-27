@@ -47,6 +47,7 @@
                     {
                         Name = c.Name,
                         Ticker = c.Ticker,
+                        Id = c.Id,
                     })
                     .ToList(),
                 };
@@ -74,6 +75,7 @@
                     {
                         Name = c.Name,
                         Ticker = c.Ticker,
+                        Id = c.Id,
                     })
                     .ToList();
 
@@ -83,17 +85,17 @@
                 var user = await this.userManager.GetUserAsync(this.User);
 
                 var selectedCompany = await this.companiesService
-                    .GetCompanyByTickerAsync(input.SelectedCompany.Ticker);
+                    .GetCompanyByIdAsync(input.SelectedCompany.Id);
 
                 input.SelectedCompany.Name = selectedCompany.Name;
 
                 if (input.Type == TradeType.Buy)
                 {
-                    await this.tradesService.CreateBuyTradeAsync(user.Id, input.InvestmentWalletId, input.SelectedCompany.Ticker, input.Quantity, input.Price);
+                    await this.tradesService.CreateBuyTradeAsync(user.Id, input.InvestmentWalletId, input.SelectedCompany.Id, input.Quantity, input.Price);
                 }
                 else
                 {
-                    await this.tradesService.CreateSellTradeAsync(user.Id, input.InvestmentWalletId, input.SelectedCompany.Ticker, input.Quantity, input.Price);
+                    await this.tradesService.CreateSellTradeAsync(user.Id, input.InvestmentWalletId, input.SelectedCompany.Id, input.Quantity, input.Price);
                 }
 
                 return this.Redirect($"/Investments/Trades/{input.InvestmentWalletId}");
@@ -136,11 +138,13 @@
                     {
                         Name = result.SelectedCompany.Name,
                         Ticker = result.SelectedCompany.Ticker,
+                        Id = result.Id,
                     },
                     Companies = companies.Select(c => new CompanyViewModel
                     {
                         Name = c.Name,
                         Ticker = c.Ticker,
+                        Id = result.Id,
                     })
                     .ToList(),
                 };
@@ -176,12 +180,14 @@
                     {
                         Name = result.SelectedCompany.Name,
                         Ticker = result.SelectedCompany.Ticker,
+                        Id = result.SelectedCompany.Id,
                     };
 
                     input.Companies = companies.Select(c => new CompanyViewModel
                     {
                         Name = c.Name,
                         Ticker = c.Ticker,
+                        Id = c.Id,
                     })
                     .ToList();
 
@@ -201,7 +207,7 @@
                                 .UpdateAsync(
                                 user.Id,
                                 input.Id,
-                                input.SelectedCompany.Ticker,
+                                input.SelectedCompany.Id,
                                 input.InvestmentWalletId,
                                 input.Price,
                                 input.Quantity,

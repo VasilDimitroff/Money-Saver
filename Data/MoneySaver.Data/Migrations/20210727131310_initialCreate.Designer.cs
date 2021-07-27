@@ -10,7 +10,7 @@ using MoneySaver.Data;
 namespace MoneySaver.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210709094410_initialCreate")]
+    [Migration("20210727131310_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -263,8 +263,8 @@ namespace MoneySaver.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<int>("WalletId")
                         .HasColumnType("int");
@@ -278,20 +278,37 @@ namespace MoneySaver.Data.Migrations
 
             modelBuilder.Entity("MoneySaver.Data.Models.Company", b =>
                 {
-                    b.Property<string>("Ticker")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Ticker");
+                    b.Property<string>("Ticker")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("Ticker")
+                        .IsUnique();
 
                     b.ToTable("Companies");
                 });
@@ -304,10 +321,14 @@ namespace MoneySaver.Data.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -325,8 +346,18 @@ namespace MoneySaver.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("CurrencyId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -353,8 +384,8 @@ namespace MoneySaver.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -414,7 +445,8 @@ namespace MoneySaver.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -446,7 +478,8 @@ namespace MoneySaver.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -463,7 +496,7 @@ namespace MoneySaver.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CompanyTicker")
+                    b.Property<string>("CompanyId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -487,7 +520,7 @@ namespace MoneySaver.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyTicker");
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("InvestmentWalletId");
 
@@ -646,8 +679,8 @@ namespace MoneySaver.Data.Migrations
             modelBuilder.Entity("MoneySaver.Data.Models.Trade", b =>
                 {
                     b.HasOne("MoneySaver.Data.Models.Company", "Company")
-                        .WithMany("Traders")
-                        .HasForeignKey("CompanyTicker")
+                        .WithMany("Trades")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -703,7 +736,7 @@ namespace MoneySaver.Data.Migrations
 
             modelBuilder.Entity("MoneySaver.Data.Models.Company", b =>
                 {
-                    b.Navigation("Traders");
+                    b.Navigation("Trades");
                 });
 
             modelBuilder.Entity("MoneySaver.Data.Models.Currency", b =>

@@ -15,7 +15,7 @@
             trade
                 .HasOne(tr => tr.Company)
                .WithMany(company => company.Trades)
-               .HasForeignKey(tr => tr.CompanyTicker)
+               .HasForeignKey(tr => tr.CompanyId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 

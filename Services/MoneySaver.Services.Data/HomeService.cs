@@ -194,7 +194,8 @@
                      Company = new GetCompanyDto
                      {
                          Name = t.Company.Name,
-                         Ticker = t.CompanyTicker,
+                         Id = t.CompanyId,
+                         Ticker = t.Company.Ticker,
                      },
                      Currency = new CurrencyInfoDto
                      {

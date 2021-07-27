@@ -9,7 +9,7 @@
     {
         [Required(ErrorMessage = "Description cannot be empty")]
         [MinLength(1)]
-        [MaxLength(250)]
+        [MaxLength(200)]
         public string Description { get; set; }
 
         public decimal Amount { get; set; }

@@ -83,7 +83,7 @@ namespace MoneySaver.Web.Areas.Administration.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!this.CompanyExists(company.Ticker))
+                    if (!this.CompanyExists(company.Id))
                     {
                         return this.NotFound();
                     }
@@ -131,7 +131,7 @@ namespace MoneySaver.Web.Areas.Administration.Controllers
 
         private bool CompanyExists(string id)
         {
-            return this.dbContext.Companies.Any(e => e.Ticker == id);
+            return this.dbContext.Companies.Any(e => e.Id == id);
         }
     }
 }

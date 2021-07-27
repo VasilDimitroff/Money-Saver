@@ -29,6 +29,7 @@
                               new SettingsSeeder(),
                               new CurrencySeeder(),
                               new CompaniesSeeder(),
+                              new UserInRolesSeeder(),
                           };
 
             foreach (var seeder in seeders)

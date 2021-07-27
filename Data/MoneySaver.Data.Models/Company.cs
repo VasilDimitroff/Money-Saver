@@ -6,23 +6,20 @@
 
     using MoneySaver.Data.Common.Models;
 
-    public class Company
+    public class Company : BaseDeletableModel<string>
     {
         public Company()
         {
             this.Trades = new HashSet<Trade>();
         }
 
-        [Key]
         [Required]
+        [MaxLength(10)]
         public string Ticker { get; set; }
 
         [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
-
-        public DateTime CreatedOn { get; set; }
-
-        public DateTime? ModifiedOn { get; set; }
 
         public virtual ICollection<Trade> Trades { get; set; }
     }

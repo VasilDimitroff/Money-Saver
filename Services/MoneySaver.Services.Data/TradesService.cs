@@ -28,7 +28,7 @@
             this.companiesService = companiesService;
         }
 
-        public async Task CreateBuyTradeAsync(string userId, int investmentWalletId, string companyTicker, int quantity, decimal pricePerShare)
+        public async Task CreateBuyTradeAsync(string userId, int investmentWalletId, string companyId, int quantity, decimal pricePerShare)
         {
             var investmentWallet = await this.dbContext.InvestmentWallets
                 .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
@@ -43,7 +43,7 @@
                 throw new ArgumentException(GlobalConstants.CannotEditInvestmentWallet);
             }
 
-            var company = await this.companiesService.GetCompanyByTickerAsync(companyTicker);
+            var companyDto = await this.companiesService.GetCompanyByIdAsync(companyId);
 
             if (pricePerShare > 0)
             {
@@ -55,8 +55,7 @@
                 Id = Guid.NewGuid().ToString(),
                 InvestmentWalletId = investmentWalletId,
                 CreatedOn = DateTime.UtcNow,
-                Company = company,
-                CompanyTicker = company.Ticker,
+                CompanyId = companyDto.Id,
                 Price = pricePerShare,
                 StockQuantity = quantity,
                 Type = TradeType.Buy,
@@ -66,7 +65,7 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task CreateSellTradeAsync(string userId, int investmentWalletId, string companyTicker, int quantity, decimal pricePerShare)
+        public async Task CreateSellTradeAsync(string userId, int investmentWalletId, string companyId, int quantity, decimal pricePerShare)
         {
             var investmentWallet = await this.dbContext.InvestmentWallets
                 .FirstOrDefaultAsync(iw => iw.Id == investmentWalletId);
@@ -81,14 +80,14 @@
                 throw new ArgumentException(GlobalConstants.CannotEditInvestmentWallet);
             }
 
-            var company = await this.companiesService.GetCompanyByTickerAsync(companyTicker);
+            var companyDto = await this.companiesService.GetCompanyByIdAsync(companyId);
 
             if (pricePerShare < 0)
             {
                 pricePerShare *= -1;
             }
 
-            int currentlyHoldings = this.GetCompanyStocksHoldingsCount(companyTicker, investmentWalletId);
+            int currentlyHoldings = this.GetCompanyStocksHoldingsCount(companyId, investmentWalletId);
 
             if (currentlyHoldings < quantity)
             {
@@ -100,8 +99,7 @@
                 Id = Guid.NewGuid().ToString(),
 
                 CreatedOn = DateTime.UtcNow,
-                Company = company,
-                CompanyTicker = company.Ticker.ToUpper(),
+                CompanyId = companyDto.Id,
                 Price = pricePerShare,
                 StockQuantity = quantity,
                 Type = TradeType.Sell,
@@ -112,17 +110,17 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-        public int GetCompanyStocksHoldingsCount(string companyTicker, int investmentWalletId)
+        public int GetCompanyStocksHoldingsCount(string companyId, int investmentWalletId)
         {
             int totalBuyQuantity = this.dbContext.Trades
                 .Where(ut => ut.InvestmentWalletId == investmentWalletId
-                    && ut.CompanyTicker == companyTicker
+                    && ut.CompanyId == companyId
                     && ut.Type == TradeType.Buy)
                 .Sum(ut => ut.StockQuantity);
 
             int totalSellQuantity = this.dbContext.Trades
                 .Where(ut => ut.InvestmentWalletId == investmentWalletId
-                    && ut.CompanyTicker == companyTicker
+                    && ut.CompanyId == companyId
                     && ut.Type == TradeType.Sell)
                 .Sum(ut => ut.StockQuantity);
 
@@ -165,7 +163,8 @@
                 SelectedCompany = new GetCompanyDto
                 {
                     Name = trade.Company.Name,
-                    Ticker = trade.CompanyTicker,
+                    Id = trade.CompanyId,
+                    Ticker = trade.Company.Ticker,
                 },
                 AllInvestmentWallets = await this.GetInvestmentWalletsAsync(userId),
             };
@@ -173,7 +172,7 @@
             return tradeDto;
         }
 
-        public async Task UpdateAsync(string userId, string tradeId, string companyTicker, int investmentWalletId, decimal price, int quantity, DateTime createdOn)
+        public async Task UpdateAsync(string userId, string tradeId, string companyId, int investmentWalletId, decimal price, int quantity, DateTime createdOn)
         {
             var trade = await this.dbContext.Trades
                .Include(t => t.Company)
@@ -185,11 +184,11 @@
                 throw new ArgumentException(GlobalConstants.TradeNotExist);
             }
 
-            var company = await this.dbContext.Companies.FirstOrDefaultAsync(c => c.Ticker == companyTicker);
+            var company = await this.dbContext.Companies.FirstOrDefaultAsync(c => c.Ticker == companyId);
 
             if (company == null)
             {
-                throw new ArgumentException(GlobalConstants.InvalidCompanyTicker);
+                throw new ArgumentException(GlobalConstants.InvalidCompanyId);
             }
 
             var investmentWallet = await this.dbContext.InvestmentWallets
@@ -208,7 +207,7 @@
             trade.InvestmentWalletId = investmentWalletId;
             trade.Price = price;
             trade.StockQuantity = quantity;
-            trade.CompanyTicker = companyTicker;
+            trade.CompanyId = companyId;
             trade.CreatedOn = createdOn;
 
             await this.dbContext.SaveChangesAsync();

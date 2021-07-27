@@ -8,6 +8,7 @@
     public class ToDoItem : BaseModel<string>
     {
         [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
 
         public string ToDoListId { get; set; }

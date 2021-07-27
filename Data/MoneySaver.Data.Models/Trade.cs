@@ -11,7 +11,7 @@
     {
         [Required]
         [ForeignKey(nameof(Company))]
-        public string CompanyTicker { get; set; }
+        public string CompanyId { get; set; }
 
         public virtual Company Company { get; set; }
 
