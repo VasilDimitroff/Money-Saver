@@ -4,101 +4,166 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Authentication.Cookies;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
+
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Server.HttpSys;
     using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Contracts;
+    using MoneySaver.Web.ViewModels.Roles;
+    using MoneySaver.Web.ViewModels.Users;
 
     [Area("Administration")]
     public class UsersController : AdministrationController
     {
         private const string IdentifierToMakeUserWithRegularRole = "Regular_User";
         private readonly IUsersService usersService;
-        private readonly SignInManager<ApplicationUser> signInManager;
 
-        public UsersController(IUsersService usersService, SignInManager<ApplicationUser> signInManager)
+        public UsersController(IUsersService usersService)
         {
             this.usersService = usersService;
-            this.signInManager = signInManager;
         }
 
         // GET: UsersController
         public async Task<IActionResult> Index()
         {
-            var model = await this.usersService.GetAllUsersAsync();
-            return this.View(model);
+            try
+            {
+                List<UserViewModel> model = await this.GetUsersAsync();
+
+                return this.View(model);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
         }
 
         // POST: UsersController/MakeAdmin/5
         [HttpPost]
         public async Task<IActionResult> MakeAdmin(string id)
         {
-            var adminRoleId = await this.usersService.GetAdminRoleId();
-            await this.usersService.ChangeUserRole(id, adminRoleId);
+            try
+            {
+                var adminRoleId = await this.usersService.GetAdminRoleIdAsync();
+                var username = await this.usersService.ChangeUserRoleAsync(id, adminRoleId);
+                this.TempData["UserAdmin"] = $"User {username} is now admin!";
 
-            return this.RedirectToAction(nameof(this.Index));
+                List<UserViewModel> model = await this.GetUsersAsync();
+
+                return this.View("Index", model);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> MakeUser(string id)
         {
-            await this.usersService.ChangeUserRole(id, IdentifierToMakeUserWithRegularRole);
+            try
+            {
+                var username = await this.usersService.ChangeUserRoleAsync(id, IdentifierToMakeUserWithRegularRole);
+                this.TempData["UserRegular"] = $"User {username} is now regular user!";
 
-            return this.RedirectToAction(nameof(this.Index));
+                List<UserViewModel> model = await this.GetUsersAsync();
+
+                return this.View("Index", model);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
         }
 
-        // GET: UsersController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: UsersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Restore(string id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                string username = await this.usersService.UndeleteAsync(id);
+
+                this.TempData["RestoredProfile"] = $"User profile {username} is successfully restored!";
+
+                List<UserViewModel> model = await this.GetUsersAsync();
+
+                return this.View("Index", model);
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return this.Redirect($"/Home/Error?message={ex.Message}");
             }
         }
 
         // GET: UsersController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: UsersController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Delete(string id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var userDto = await this.usersService.GetUserByIdAsync(id);
+
+                var model = new UserViewModel
+                {
+                    Id = userDto.Id,
+                    CreatedOn = userDto.CreatedOn,
+                    Username = userDto.Username,
+                    Roles = userDto.Roles.Select(ur => new RoleViewModel
+                    {
+                        Id = ur.Id,
+                        Name = ur.Name,
+                    })
+                    .ToList(),
+                };
+
+                return this.View(model);
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return this.Redirect($"/Home/Error?message={ex.Message}");
             }
         }
 
-        private void DeleteCookies()
+        // POST: UsersController/DeleteConfirm/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirm(string id)
         {
-            foreach (var cookie in this.HttpContext.Request.Cookies)
+            try
             {
-                this.Response.Cookies.Delete(cookie.Key);
+                string username = await this.usersService.MarkAsDeletedAsync(id);
+                this.TempData["DeletedProfile"] = $"User profile {username} is marked as deleted!";
+
+                List<UserViewModel> model = await this.GetUsersAsync();
+
+                return this.View("Index", model);
             }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
+        }
+
+        private async Task<List<UserViewModel>> GetUsersAsync()
+        {
+            var dtoInfo = await this.usersService.GetAllUsersAsync();
+            var model = new List<UserViewModel>();
+
+            model = dtoInfo.Select(u => new UserViewModel
+            {
+                Id = u.Id,
+                Username = u.Username,
+                CreatedOn = u.CreatedOn,
+                IsDeleted = u.IsDeleted,
+                Roles = u.Roles.Select(r => new RoleViewModel
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                })
+                .ToList(),
+            })
+                .OrderByDescending(u => u.CreatedOn)
+                .ToList();
+            return model;
         }
     }
 }

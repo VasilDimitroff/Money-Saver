@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\MoneySaver.Data.Models\MoneySaver.Data.Models.csproj" />
+    <ProjectReference Include="..\..\MoneySaver.Common\MoneySaver.Common.csproj" />
     <ProjectReference Include="..\..\Services\MoneySaver.Services.Mapping\MoneySaver.Services.Mapping.csproj" />
   </ItemGroup>
 

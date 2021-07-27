@@ -18,10 +18,10 @@
 
         public string Username { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public ICollection<RoleDto> Roles { get; set; }
-
-        public bool IsAdmin => this.Roles.Any(r => r.Name.ToLower() == GlobalConstants.AdministratorRoleName.ToLower());
     }
 }
