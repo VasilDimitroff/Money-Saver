@@ -20,7 +20,7 @@
 
         public string WalletName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter amount")]
         public decimal Amount { get; set; }
 
         public DateTime? CreatedOn { get; set; }

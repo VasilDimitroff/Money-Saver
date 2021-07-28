@@ -4,13 +4,14 @@
 
     public class AddCompanyInputModel
     {
-        [Required]
+        [Required(ErrorMessage = "Please enter a company ticker")]
+        [MaxLength(10)]
         public string Ticker { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter a company name")]
+        [MaxLength(50)]
         public string CompanyName { get; set; }
 
-        [Range(1, int.MaxValue)]
         public int InvestmentWalletId { get; set; }
     }
 }

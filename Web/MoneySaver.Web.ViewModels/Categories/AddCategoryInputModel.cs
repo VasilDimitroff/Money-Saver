@@ -12,12 +12,12 @@
 
         [Required(ErrorMessage = "Category Name is required")]
         [MinLength(1)]
-        [MaxLength(50)]
+        [MaxLength(25)]
         public string Name { get; set; }
 
         public string WalletName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Wallet Id is required")]
         public int WalletId { get; set; }
 
         [Required(ErrorMessage = "Badge Color is required")]

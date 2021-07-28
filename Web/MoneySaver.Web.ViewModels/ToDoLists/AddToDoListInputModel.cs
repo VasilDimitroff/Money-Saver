@@ -10,7 +10,7 @@
             this.ListItems = new HashSet<string>();
         }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter a list name")]
         public string Name { get; set; }
 
         // When adding new list or when fill list

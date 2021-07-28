@@ -14,7 +14,7 @@
 
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Wallet name is required")]
         public string Name { get; set; }
 
         [Required]
@@ -24,7 +24,7 @@
 
         public string CurrentCurrencyName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Amount is required")]
         public decimal Amount { get; set; }
 
         public IEnumerable<CurrencyViewModel> Currencies { get; set; }
