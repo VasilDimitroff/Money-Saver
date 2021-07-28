@@ -254,7 +254,6 @@
 
             var tradedCompanies = await this.dbContext.Companies
                 .Where(c => c.Trades.Any(t => t.InvestmentWalletId == investmentWalletId))
-                //.Where(c => c.Trades.Any(t => t.InvestmentWallet.ApplicationUserId == userId))
                 .Include(c => c.Trades)
                 .ThenInclude(t => t.InvestmentWallet)
                 .ToListAsync();

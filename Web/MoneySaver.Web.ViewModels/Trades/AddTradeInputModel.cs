@@ -13,10 +13,10 @@
             this.Companies = new HashSet<CompanyViewModel>();
         }
 
-        [Range(1, 10000000)]
+        [Range(1, 10000000, ErrorMessage = "Quantity should be between 1 and 10 000 000")]
         public int Quantity { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Price per share is required")]
         public decimal Price { get; set; }
 
         [Required]

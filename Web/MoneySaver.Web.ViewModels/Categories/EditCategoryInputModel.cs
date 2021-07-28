@@ -16,6 +16,8 @@
         public int CategoryId { get; set; }
 
         [Required(ErrorMessage = "Category Name is required")]
+        [MinLength(1)]
+        [MaxLength(25)]
         public string CategoryName { get; set; }
 
         [Required]

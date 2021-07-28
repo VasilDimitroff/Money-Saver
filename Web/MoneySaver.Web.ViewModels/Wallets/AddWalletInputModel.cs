@@ -12,7 +12,7 @@
             this.Currencies = new HashSet<CurrencyViewModel>();
         }
 
-        [Required(ErrorMessage = "Wallet Name is required")]
+        [Required(ErrorMessage = "Wallet Name field is required")]
         [MinLength(1)]
         [MaxLength(50)]
         public string Name { get; set; }
@@ -20,7 +20,7 @@
         [Required]
         public int CurrencyId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Amount field is required")]
         public decimal Amount { get; set; }
 
         public IEnumerable<CurrencyViewModel> Currencies { get; set; }

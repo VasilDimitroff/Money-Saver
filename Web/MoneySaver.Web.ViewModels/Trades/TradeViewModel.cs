@@ -1,6 +1,7 @@
 ﻿namespace MoneySaver.Web.ViewModels.Trades
 {
     using System;
+
     using MoneySaver.Web.ViewModels.Currencies;
     using MoneySaver.Web.ViewModels.Trades.Enums;
 

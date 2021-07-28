@@ -7,6 +7,7 @@
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using MoneySaver.Common;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.ViewModels.Companies;
 
@@ -46,10 +47,81 @@
 
             if (input.InvestmentWalletId == 0)
             {
+                if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                {
+                    return this.Redirect($"/Companies/Index");
+                }
+
                 return this.Redirect($"/Investments/AllInvestments");
             }
 
             return this.Redirect($"/Trades/Add?investmentWalletId={input.InvestmentWalletId}");
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Index()
+        {
+            var companiesDto = await this.companiesService.GetAllWithDeletedAsync();
+            var companies = new List<CompanyViewModel>();
+
+            companies = companiesDto.Select(c => new CompanyViewModel
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Ticker = c.Ticker,
+                CreatedOn = c.CreatedOn,
+                TradesCount = c.TradesCount,
+            })
+                .ToList();
+
+            return this.View(companies);
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Edit(string id)
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Edit(string id, [Bind("Ticker,Name,CreatedOn,ModifiedOn")] CompanyViewModel company)
+        {
+            if (id != company.Ticker)
+            {
+                return this.NotFound();
+            }
+
+            if (this.ModelState.IsValid)
+            {
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            return this.View(company);
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View();
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+           // var company = await this.dbContext.Companies.FindAsync(id);
+           // this.dbContext.Companies.Remove(company);
+           // await this.dbContext.SaveChangesAsync();
+            return this.RedirectToAction(nameof(this.Index));
         }
     }
 }

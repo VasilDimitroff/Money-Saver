@@ -1,0 +1,95 @@
+﻿@using MoneySaver.Web.ViewModels.Companies
+@model IEnumerable<CompanyViewModel>
+
+@{
+    ViewData["Title"] = "All Companies";
+}
+
+<div class="bg-white">
+    <div class="template-demo mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
+                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-area="Administration" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><span>Companies</span></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="form-inline d-flex justify-content-center h3">
+            <span class="mdi mdi-copyright mdi-48px text-primary mr-2"></span>  All Companies
+        </div>
+        <br />
+        <div class="d-flex justify-content-center">
+            <div class="pr-1">
+                <a class="btn btn-sm btn-primary" asp-area="" asp-controller="Companies" asp-action="Add" asp-route-investmentwalletid="0"><i class="mdi mdi-plus"></i> Add Company</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table text-center table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <span class="small font-weight-bold">
+                                    Ticker
+                                </span>
+                            </th>
+                            <th>
+                                <span class="small font-weight-bold">
+                                    Name
+                                </span>
+                            </th>
+                            <th>
+                                <span class="small font-weight-bold">
+                                    Created On
+                                </span>
+                            </th>
+                            <th>
+                                <span class="small font-weight-bold">
+                                    Actions
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var company in Model.OrderByDescending(c => c.CreatedOn))
+                        {
+                            <tr>
+                                <td>
+                                    <span class="badge badge-outline-primary">
+                                    @company.Ticker
+                                        </span>
+                                    <p class="text-muted text-small mt-2 mb-0">(Trades count: @company.TradesCount)</p>
+                                </td>
+                                <td>
+                                    <span class="badge badge-outline-info">
+                                        @company.Name
+                                    </span>
+                                        <p class="text-muted text-small mt-2 mb-0">(Company Id: @company.Id)</p>
+                                </td>
+                                <td>
+                                    <span class="badge badge-outline-warning">
+                                        @company.CreatedOn.ToShortDateString()
+                                    </span>
+                                </td>
+                                <td>
+                                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@company.Id">Edit</a>
+                                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@company.Id">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
