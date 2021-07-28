@@ -31,13 +31,13 @@
         }
         <form style="display: inline;" class="forms-sample" asp-controller="Companies" asp-action="Edit" asp-route-id="@Model.Id" method="post">
             <div class="text-danger" asp-validation-summary="All"></div>
-            <div class="form-group" style="display: inline;">
+            <div class="form-group">
                 <span class="mdi mdi-copyright text-primary"></span>
                 <label asp-for="Name" class="control-label">Name</label>
                 <input asp-for="Name" class="form-control form-control-lg" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group" style="display: inline;">
+            <div class="form-group">
                 <span class="mdi mdi-copyright text-primary"></span>
                 <label asp-for="Ticker" class="control-label">Ticker</label>
                 <input asp-for="Ticker" class="form-control form-control-lg" />
