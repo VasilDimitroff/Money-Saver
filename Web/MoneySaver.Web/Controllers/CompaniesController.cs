@@ -170,6 +170,27 @@
             }    
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Restore(string id)
+        {
+            try
+            {
+                var companyName = await this.companiesService.UndeleteAsync(id);
+
+                this.TempData["SuccessfullRestoredCompany"] = $"Successfully restored company {companyName}!";
+
+                List<CompanyViewModel> companies = await this.GetAllCompaniesWithDeletedAsync();
+
+                return this.View("Index", companies);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
+        }
+
         private async Task<List<CompanyViewModel>> GetAllCompaniesWithDeletedAsync()
         {
             var companiesDto = await this.companiesService.GetAllWithDeletedAsync();

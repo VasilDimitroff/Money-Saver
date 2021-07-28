@@ -45,7 +45,12 @@
             }
             @if (this.TempData.ContainsKey("SuccessfullDeletedCompany"))
             {
-                <div class="alert alert-success font-weight-bold">@this.TempData["SuccessfullDeletedCompany"]</div>
+                <div class="alert alert-warning font-weight-bold">@this.TempData["SuccessfullDeletedCompany"]</div>
+                <br />
+            }
+            @if (this.TempData.ContainsKey("SuccessfullRestoredCompany"))
+            {
+                <div class="alert alert-success font-weight-bold">@this.TempData["SuccessfullRestoredCompany"]</div>
                 <br />
             }
             <div class="table-responsive">
@@ -82,43 +87,53 @@
                     <tbody>
                         @foreach (var company in Model.OrderByDescending(c => c.CreatedOn))
                         {
-                        <tr>
-                            <td>
-                                <span class="badge badge-outline-primary">
-                                    @company.Ticker
-                                </span>
-                                <p class="text-muted text-small mt-2 mb-0">(Trades count: @company.TradesCount)</p>
-                            </td>
-                            <td>
-                                <span class="badge badge-outline-info">
-                                    @company.Name
-                                </span>
-                                <p class="text-muted text-small mt-2 mb-0">(Company Id: @company.Id)</p>
-                            </td>
-                            <td>
-                                <span class="badge badge-outline-warning">
-                                    @company.CreatedOn.ToShortDateString()
-                                </span>
-                            </td>
-                            <td>
-                                @if (company.IsDeleted)
-                                {
-                                    <span class="badge badge-danger">
-                                        Yes
+                            <tr>
+                                <td>
+                                    <span class="badge badge-outline-primary">
+                                        @company.Ticker
                                     </span>
-                                }
-                                else
-                                {
-                                    <span class="badge badge-success text-light">
-                                        No
+                                    <p class="text-muted text-small mt-2 mb-0">(Trades count: @company.TradesCount)</p>
+                                </td>
+                                <td>
+                                    <span class="badge badge-outline-info">
+                                        @company.Name
                                     </span>
-                                }
-                            </td>
-                            <td>
-                                <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@company.Id">Edit</a>
-                                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@company.Id">Delete</a>
-                            </td>
-                        </tr>
+                                    <p class="text-muted text-small mt-2 mb-0">(Company Id: @company.Id)</p>
+                                </td>
+                                <td>
+                                    <span class="badge badge-outline-warning">
+                                        @company.CreatedOn.ToShortDateString()
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (company.IsDeleted)
+                                    {
+                                        <span class="badge badge-danger">
+                                            Yes
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-success text-light">
+                                            No
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (company.IsDeleted)
+                                    {
+                                        <form style="display: inline;" asp-controller="Companies" asp-action="Restore" asp-route-id="@company.Id" method="post">
+                                            <button type="submit" class="btn btn-sm btn-info">Restore Company</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@company.Id">Edit</a>
+                                        <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@company.Id">Delete</a>
+                                    }
+
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>

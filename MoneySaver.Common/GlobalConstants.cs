@@ -99,5 +99,7 @@
         public const string TradeNotExist = "Trade not exist";
 
         public const string CompanyWithThisTickerAlreadyExists = "Company with this ticker already exist";
+
+        public const string CompanyNotMarkedAsDeleted = "Cannot restore company because it is not market as deleted";
     }
 }

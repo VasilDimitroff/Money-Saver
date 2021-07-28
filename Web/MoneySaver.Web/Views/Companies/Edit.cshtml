@@ -27,29 +27,28 @@
     <div class="card-body">
         @if (this.TempData.ContainsKey("InvalidEditModel"))
         {
-             <div class="alert alert-danger font-weight-bold">@this.TempData["InvalidEditModel"]</div>
+            <div class="alert alert-danger font-weight-bold">@this.TempData["InvalidEditModel"]</div>
         }
-        <form class="forms-sample" asp-controller="Companies" asp-action="Edit" asp-route-id="@Model.Id" method="post">
+        <form style="display: inline;" class="forms-sample" asp-controller="Companies" asp-action="Edit" asp-route-id="@Model.Id" method="post">
             <div class="text-danger" asp-validation-summary="All"></div>
-            <div class="form-group">
+            <div class="form-group" style="display: inline;">
                 <span class="mdi mdi-copyright text-primary"></span>
                 <label asp-for="Name" class="control-label">Name</label>
                 <input asp-for="Name" class="form-control form-control-lg" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display: inline;">
                 <span class="mdi mdi-copyright text-primary"></span>
                 <label asp-for="Ticker" class="control-label">Ticker</label>
                 <input asp-for="Ticker" class="form-control form-control-lg" />
                 <span asp-validation-for="Ticker" class="text-danger"></span>
             </div>
+            <br />
             <button type="submit" class="btn btn-primary btn-sm mr-2 mdi mdi-check text-light">
                 Save
             </button>
         </form>
-        <br/>
-        <a class="btn btn-outline-info btn-sm" asp-action="Index">Back to List</a>
-
+        <a class="btn btn-outline-info btn-sm float-right" asp-action="Index">Back to All</a>
     </div>
 </div>
 

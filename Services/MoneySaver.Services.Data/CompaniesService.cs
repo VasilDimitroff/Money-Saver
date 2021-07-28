@@ -136,14 +136,19 @@
 
         public async Task<string> UndeleteAsync(string id)
         {
-            if (!await this.IsCompanyExistAsync(id))
+            var company = await this.companyRepository
+               .AllWithDeleted()
+               .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (company == null)
             {
                 throw new ArgumentException(GlobalConstants.InvalidCompanyId);
             }
 
-            var company = await this.companyRepository
-                .AllWithDeleted()
-                .FirstOrDefaultAsync(c => c.Id == id);
+            if (!company.IsDeleted)
+            {
+                throw new ArgumentException(GlobalConstants.CompanyNotMarkedAsDeleted);
+            }
 
             this.companyRepository.Undelete(company);
             await this.companyRepository.SaveChangesAsync();
