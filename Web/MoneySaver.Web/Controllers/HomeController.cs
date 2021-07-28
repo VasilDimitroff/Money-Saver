@@ -11,6 +11,7 @@
     using Microsoft.AspNetCore.Mvc;
     using MoneySaver.Data.Models;
     using MoneySaver.Services.Data.Contracts;
+    using MoneySaver.Services.Data.Models.Home;
     using MoneySaver.Web.ViewModels;
     using MoneySaver.Web.ViewModels.Currencies;
     using MoneySaver.Web.ViewModels.Home;
@@ -31,16 +32,46 @@
 
         public async Task<IActionResult> Index()
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            if (user == null)
+            try
             {
-                return this.View("Guest");
+                var user = await this.userManager.GetUserAsync(this.User);
+
+                if (user == null)
+                {
+                    return this.View("Guest");
+                }
+
+                var dto = await this.homeService.GetIndexInfoAsync(user.Id);
+                IndexViewModel model = this.MapInfoToModel(dto);
+
+                return this.View(model);
             }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
+        }
 
-            var dto = await this.homeService.GetIndexInfoAsync(user.Id);
+        public IActionResult Privacy()
+        {
+            return this.View();
+        }
 
-            var model = new IndexViewModel()
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error(string message = "Error happened!")
+        {
+            return this.View(
+                new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier, Message = message });
+        }
+
+        public IActionResult About()
+        {
+            return this.View();
+        }
+
+        private IndexViewModel MapInfoToModel(IndexDto dto)
+        {
+            return new IndexViewModel()
             {
                 CategoriesLast30DaysExpenses = dto.CategoriesLast30DaysExpenses.Select(ce => new AccountCategoryExpensesLast30DaysViewModel
                 {
@@ -53,7 +84,7 @@
                     TotalExpenseRecordsLast30Days = ce.TotalExpenseRecordsLast30Days,
                     TotalExpensesLast30Days = ce.TotalExpensesLast30Days,
                 })
-                .ToList(),
+                            .ToList(),
                 CategoriesLast30DaysIncomes = dto.CategoriesLast30DaysIncomes.Select(ci => new AccountCategoryIncomesLast30DaysViewModel
                 {
                     BadgeColor = Enum.Parse<BadgeColor>(ci.BadgeColor.ToString()),
@@ -65,13 +96,13 @@
                     TotalIncomeRecordsLast30Days = ci.TotalIncomeRecordsLast30Days,
                     TotalIncomesLast30days = ci.TotalIncomesLast30Days,
                 })
-                .ToList(),
+                            .ToList(),
                 ActiveToDoLists = dto.ActiveToDoLists.Select(l => new IndexListViewModel
                 {
                     Id = l.Id,
                     Name = l.Name,
                 })
-                .ToList(),
+                            .ToList(),
                 Wallets = dto.Wallets.Select(w => new IndexWalletViewModel
                 {
                     Id = w.Id,
@@ -79,7 +110,7 @@
                     CurrencyCode = w.CurrencyCode,
                     Amount = w.Amount,
                 })
-                .ToList(),
+                            .ToList(),
                 InvestmentWallets = dto.InvestmentWallets.Select(iw => new IndexInvestmentWalletViewModel
                 {
                     Id = iw.Id,
@@ -88,7 +119,7 @@
                     TotalBuyTradesAmount = iw.TotalBuyTradesAmount,
                     TotalSellTradesAmount = iw.TotalSellTradesAmount,
                 })
-                .ToList(),
+                            .ToList(),
                 AccountRecords = dto.AccountRecords.Select(r => new IndexRecordViewModel
                 {
                     Id = r.Id,
@@ -103,7 +134,7 @@
                     WalletId = r.WalletId,
                     WalletName = r.WalletName,
                 })
-                .ToList(),
+                            .ToList(),
                 AccountTrades = dto.AccountTrades.Select(t => new IndexTradeViewModel
                 {
                     Id = t.Id,
@@ -125,7 +156,7 @@
                         Code = t.Currency.Code,
                     },
                 })
-                .ToList(),
+                            .ToList(),
                 AccountHoldings = dto.AccountHoldings.Select(h => new IndexCompanyHoldingsViewModel
                 {
                     BuyTrades = h.BuyTrades,
@@ -134,7 +165,7 @@
                     Name = h.Name,
                     Ticker = h.Ticker,
                 })
-                .ToList(),
+                            .ToList(),
                 AccountCategories = dto.AccountCategories.Select(c => new IndexCategoriesSummaryViewModel
                 {
                     BadgeColor = Enum.Parse<BadgeColor>(c.BadgeColor.ToString()),
@@ -147,27 +178,8 @@
                     WalletId = c.WalletId,
                     WalletName = c.WalletName,
                 })
-                .ToList(),
+                            .ToList(),
             };
-
-            return this.View(model);
-        }
-
-        public IActionResult Privacy()
-        {
-            return this.View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(string message = "Error happened!")
-        {
-            return this.View(
-                new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier, Message = message });
-        }
-
-        public IActionResult About()
-        {
-            return this.View();
         }
     }
 }

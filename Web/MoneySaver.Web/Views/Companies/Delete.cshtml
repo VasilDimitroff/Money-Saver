@@ -1,4 +1,4 @@
-﻿@model MoneySaver.Data.Models.Company
+﻿@model MoneySaver.Web.ViewModels.Companies.CompanyViewModel
 
 @{
     ViewData["Title"] = "Delete Company";
@@ -8,9 +8,9 @@
     <div class="template-demo mb-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
                 <li class="breadcrumb-item"><a asp-area="Administration" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a></li>
-                <li class="breadcrumb-item"><a asp-area="Administration" asp-controller="Companies" asp-action="Index">Companies</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Companies" asp-action="Index">Companies</a></li>
                 <li class="breadcrumb-item active" aria-current="page"><span>Delete @Model.Name</span></li>
             </ol>
         </nav>
@@ -24,35 +24,56 @@
     </div>
 </div>
 
-<h3>Are you sure you want to delete this company?</h3>
-<br/>
-<h4 class="text-danger font-weight-bold">This action will delete all trades which are related to @Model.Name (@Model.Ticker).</h4>
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Ticker)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Ticker)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedOn)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreatedOn)
-        </dd>
-    </dl>
-
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Ticker" />
-        <input type="submit" value="Delete" class="btn btn-danger" />
-        <a class="btn btn-outline-info" asp-action="Index">Back to List</a>
-    </form>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Are you sure you want to delete company @Model.Name (@Model.Ticker)?</h4>
+        <div class="table-responsive">
+            <table class="table text-center table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <span class="small font-weight-bold">
+                                Ticker
+                            </span>
+                        </th>
+                        <th>
+                            <span class="small font-weight-bold">
+                                Name
+                            </span>
+                        </th>
+                        <th>
+                            <span class="small font-weight-bold">
+                                Actions
+                            </span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="badge badge-outline-primary">
+                                @Model.Ticker
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge badge-outline-info">
+                                @Model.Name
+                            </span>
+                            <p class="text-muted text-small mt-2 mb-0">(Company Id: @Model.Id)</p>
+                        </td>
+                        <td>
+                            <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post" style="display: inline;">
+                                <input type="submit" value="Delete" class="btn btn-sm btn-danger" />
+                            </form>
+                            <a class="btn btn-outline-info btn-sm" asp-action="Index">Back to All</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>   
+    </div>
 </div>
+
+
+
+

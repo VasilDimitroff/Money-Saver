@@ -9,7 +9,7 @@
     <div class="template-demo mb-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
                 <li class="breadcrumb-item"><a asp-area="Administration" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page"><span>Companies</span></li>
             </ol>
@@ -33,6 +33,21 @@
 <div class="col-12 col-sm-12 grid-margin grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
+            @if (this.TempData.ContainsKey("SuccessfullUpdatedCompany"))
+            {
+                <div class="alert alert-success font-weight-bold">@this.TempData["SuccessfullUpdatedCompany"]</div>
+                <br />
+            }
+            @if (this.TempData.ContainsKey("SuccessfullAddedCompany"))
+            {
+                <div class="alert alert-success font-weight-bold">@this.TempData["SuccessfullAddedCompany"]</div>
+                <br />
+            }
+            @if (this.TempData.ContainsKey("SuccessfullDeletedCompany"))
+            {
+                <div class="alert alert-success font-weight-bold">@this.TempData["SuccessfullDeletedCompany"]</div>
+                <br />
+            }
             <div class="table-responsive">
                 <table class="table text-center table-bordered table-hover">
                     <thead>
@@ -54,6 +69,11 @@
                             </th>
                             <th>
                                 <span class="small font-weight-bold">
+                                    Is Deleted
+                                </span>
+                            </th>
+                            <th>
+                                <span class="small font-weight-bold">
                                     Actions
                                 </span>
                             </th>
@@ -62,29 +82,43 @@
                     <tbody>
                         @foreach (var company in Model.OrderByDescending(c => c.CreatedOn))
                         {
-                            <tr>
-                                <td>
-                                    <span class="badge badge-outline-primary">
+                        <tr>
+                            <td>
+                                <span class="badge badge-outline-primary">
                                     @company.Ticker
-                                        </span>
-                                    <p class="text-muted text-small mt-2 mb-0">(Trades count: @company.TradesCount)</p>
-                                </td>
-                                <td>
-                                    <span class="badge badge-outline-info">
-                                        @company.Name
+                                </span>
+                                <p class="text-muted text-small mt-2 mb-0">(Trades count: @company.TradesCount)</p>
+                            </td>
+                            <td>
+                                <span class="badge badge-outline-info">
+                                    @company.Name
+                                </span>
+                                <p class="text-muted text-small mt-2 mb-0">(Company Id: @company.Id)</p>
+                            </td>
+                            <td>
+                                <span class="badge badge-outline-warning">
+                                    @company.CreatedOn.ToShortDateString()
+                                </span>
+                            </td>
+                            <td>
+                                @if (company.IsDeleted)
+                                {
+                                    <span class="badge badge-danger">
+                                        Yes
                                     </span>
-                                        <p class="text-muted text-small mt-2 mb-0">(Company Id: @company.Id)</p>
-                                </td>
-                                <td>
-                                    <span class="badge badge-outline-warning">
-                                        @company.CreatedOn.ToShortDateString()
+                                }
+                                else
+                                {
+                                    <span class="badge badge-success text-light">
+                                        No
                                     </span>
-                                </td>
-                                <td>
-                                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@company.Id">Edit</a>
-                                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@company.Id">Delete</a>
-                                </td>
-                            </tr>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@company.Id">Edit</a>
+                                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@company.Id">Delete</a>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

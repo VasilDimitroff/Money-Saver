@@ -95,22 +95,26 @@
                 throw new ArgumentException(GlobalConstants.InvalidCompanyId);
             }
 
-            if (await this.IsCompanyAlreadyExistAsync(ticker))
+            var companyWithId = await this.companyRepository
+                .AllWithDeleted()
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            var companyWithTicker = await this.companyRepository
+               .AllWithDeleted()
+               .FirstOrDefaultAsync(c => c.Ticker == ticker);
+
+            if (companyWithId.Id != companyWithTicker.Id)
             {
                 throw new ArgumentException(GlobalConstants.CompanyWithThisTickerAlreadyExists);
             }
 
-            var company = await this.companyRepository
-                .AllWithDeleted()
-                .FirstOrDefaultAsync(c => c.Id == id);
+            companyWithId.Ticker = ticker.ToUpper();
+            companyWithId.Name = companyName;
 
-            company.Ticker = ticker.ToUpper();
-            company.Name = companyName;
-
-            this.companyRepository.Update(company);
+            this.companyRepository.Update(companyWithId);
             await this.companyRepository.SaveChangesAsync();
 
-            return company.Name;
+            return companyWithId.Name;
         }
 
         public async Task<string> DeleteAsync(string id)

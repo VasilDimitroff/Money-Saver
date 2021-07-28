@@ -33,12 +33,13 @@
             if (!this.ModelState.IsValid)
             {
                 this.ViewBag.InvestmentWalletId = input.InvestmentWalletId;
+                this.TempData["InvalidAddModel"] = "Some of fields you entered are invalid!";
                 return this.View(input);
             }
 
             if (await this.companiesService.IsCompanyAlreadyExistAsync(input.Ticker))
             {
-                this.TempData["CompanyExist"] = "Company with this ticker already exists!";
+                this.TempData["CompanyExist"] = $"Company with ticker {input.Ticker} already exists!";
                 this.ViewBag.InvestmentWalletId = input.InvestmentWalletId;
                 return this.View(input);
             }
@@ -49,7 +50,12 @@
             {
                 if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                 {
-                    return this.Redirect($"/Companies/Index");
+                    this.TempData["SuccessfullAddedCompany"] =
+                        $"Successfilly added company with name {input.CompanyName} and ticker {input.Ticker}!";
+
+                    List<CompanyViewModel> companies = await this.GetAllCompaniesWithDeletedAsync();
+
+                    return this.View("Index", companies);
                 }
 
                 return this.Redirect($"/Investments/AllInvestments");
@@ -61,6 +67,111 @@
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Index()
         {
+            try
+            {
+                List<CompanyViewModel> companies = await this.GetAllCompaniesWithDeletedAsync();
+
+                return this.View(companies);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Edit(string id)
+        {
+            try
+            {
+                var companyDto = await this.companiesService.GetCompanyByIdAsync(id);
+                var company = new EditCompanyInputModel
+                {
+                    Id = companyDto.Id,
+                    Name = companyDto.Name,
+                    Ticker = companyDto.Ticker,
+                };
+
+                return this.View(company);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            } 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Edit(EditCompanyInputModel company)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    this.TempData["InvalidEditModel"] = $"Some of fields you entered are invalid!";
+                    return this.View(company);
+                }
+
+                string editedCompanyName = await this.companiesService.EditAsync(company.Id, company.Ticker, company.Name);
+                
+                this.TempData["SuccessfullUpdatedCompany"] = $"Successfully updated company {editedCompanyName}!";
+
+                List<CompanyViewModel> companies = await this.GetAllCompaniesWithDeletedAsync();
+
+                return this.View("Index", companies);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                var companyDto = await this.companiesService.GetCompanyByIdAsync(id);
+                var companyModel = new CompanyViewModel()
+                {
+                    Id = companyDto.Id,
+                    Name = companyDto.Name,
+                    Ticker = companyDto.Ticker,
+                };
+
+                return this.View(companyModel);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }
+           
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            try
+            {
+                var companyName = await this.companiesService.DeleteAsync(id);
+
+                this.TempData["SuccessfullDeletedCompany"] = $"Successfully deleted company {companyName}!";
+
+                List<CompanyViewModel> companies = await this.GetAllCompaniesWithDeletedAsync();
+
+                return this.View("Index", companies);
+            }
+            catch (Exception ex)
+            {
+                return this.Redirect($"/Home/Error?message={ex.Message}");
+            }    
+        }
+
+        private async Task<List<CompanyViewModel>> GetAllCompaniesWithDeletedAsync()
+        {
             var companiesDto = await this.companiesService.GetAllWithDeletedAsync();
             var companies = new List<CompanyViewModel>();
 
@@ -71,57 +182,10 @@
                 Ticker = c.Ticker,
                 CreatedOn = c.CreatedOn,
                 TradesCount = c.TradesCount,
+                IsDeleted = c.IsDeleted,
             })
                 .ToList();
-
-            return this.View(companies);
-        }
-
-        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-        public async Task<IActionResult> Edit(string id)
-        {
-            return this.View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-        public async Task<IActionResult> Edit(string id, [Bind("Ticker,Name,CreatedOn,ModifiedOn")] CompanyViewModel company)
-        {
-            if (id != company.Ticker)
-            {
-                return this.NotFound();
-            }
-
-            if (this.ModelState.IsValid)
-            {
-                return this.RedirectToAction(nameof(this.Index));
-            }
-
-            return this.View(company);
-        }
-
-        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return this.NotFound();
-            }
-
-            return this.View();
-        }
-
-        [HttpPost]
-        [ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-           // var company = await this.dbContext.Companies.FindAsync(id);
-           // this.dbContext.Companies.Remove(company);
-           // await this.dbContext.SaveChangesAsync();
-            return this.RedirectToAction(nameof(this.Index));
+            return companies;
         }
     }
 }
