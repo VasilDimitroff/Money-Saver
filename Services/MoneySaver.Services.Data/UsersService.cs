@@ -36,7 +36,6 @@
                 throw new ArgumentException(GlobalConstants.UserWithThisIdNotExist);
             }
 
-            // role is null when newRoleId is null; When newRoleId is null, then should make user with regular access
             if (newRoleId == "Regular_User")
             {
                 foreach (var currentRole in user.Roles)
