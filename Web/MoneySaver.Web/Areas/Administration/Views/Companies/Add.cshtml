@@ -11,7 +11,7 @@
             @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a></li>
                     <li class="breadcrumb-item"><a asp-controller="Companies" asp-action="Index">Companies</a></li>
                     <li class="breadcrumb-item active" aria-current="page"><span>Add Company</span></li>

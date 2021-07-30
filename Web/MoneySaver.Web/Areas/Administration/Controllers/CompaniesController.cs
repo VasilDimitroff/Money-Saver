@@ -1,4 +1,4 @@
-﻿namespace MoneySaver.Web.Controllers
+﻿namespace MoneySaver.Web.Areas.Administration.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -12,6 +12,7 @@
     using MoneySaver.Web.ViewModels.Companies;
 
     [Authorize]
+    [Area("Administration")]
     public class CompaniesController : Controller
     {
         private readonly ICompaniesService companiesService;

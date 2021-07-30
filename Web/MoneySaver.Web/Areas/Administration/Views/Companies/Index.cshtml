@@ -9,8 +9,8 @@
     <div class="template-demo mb-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-custom bg-inverse-primary">
-                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                <li class="breadcrumb-item"><a asp-area="Administration" asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a></li>
+                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Admin Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page"><span>Companies</span></li>
             </ol>
         </nav>
@@ -24,7 +24,7 @@
         <br />
         <div class="d-flex justify-content-center">
             <div class="pr-1">
-                <a class="btn btn-sm btn-primary" asp-area="" asp-controller="Companies" asp-action="Add" asp-route-investmentwalletid="0"><i class="mdi mdi-plus"></i> Add Company</a>
+                <a class="btn btn-sm btn-primary" asp-controller="Companies" asp-action="Add" asp-route-investmentwalletid="0"><i class="mdi mdi-plus"></i> Add Company</a>
             </div>
         </div>
     </div>
