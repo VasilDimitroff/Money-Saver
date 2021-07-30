@@ -74,8 +74,8 @@
                 Id = investmentWallet.Id,
                 Name = investmentWallet.Name,
                 CreatedOn = investmentWallet.CreatedOn,
-                TotalBuyTradesAmount = investmentWallet.Trades.Where(t => t.Type == TradeType.Buy).Sum(t => t.Price * t.StockQuantity),
-                TotalSellTradesAmount = investmentWallet.Trades.Where(t => t.Type == TradeType.Sell).Sum(t => t.Price * t.StockQuantity),
+                TotalBuyTradesAmount = investmentWallet.Trades.Where(t => t.Type == TradeType.Buy && t.Company.IsDeleted == false).Sum(t => t.Price * t.StockQuantity),
+                TotalSellTradesAmount = investmentWallet.Trades.Where(t => t.Type == TradeType.Sell && t.Company.IsDeleted == false).Sum(t => t.Price * t.StockQuantity),
                 TotalTradesCount = investmentWallet.Trades.Count(),
                 Currency = new CurrencyInfoDto
                 {
@@ -221,8 +221,8 @@
                         Code = iw.Currency.Code,
                         Name = iw.Currency.Name,
                     },
-                    TotalBuyTradesAmount = iw.Trades.Where(t => t.Type == TradeType.Buy).Sum(t => t.Price * t.StockQuantity),
-                    TotalSellTradesAmount = iw.Trades.Where(t => t.Type == TradeType.Sell).Sum(t => t.Price * t.StockQuantity),
+                    TotalBuyTradesAmount = iw.Trades.Where(t => t.Type == TradeType.Buy && t.Company.IsDeleted == false).Sum(t => t.Price * t.StockQuantity),
+                    TotalSellTradesAmount = iw.Trades.Where(t => t.Type == TradeType.Sell && t.Company.IsDeleted == false).Sum(t => t.Price * t.StockQuantity),
                     TotalTradesCount = iw.Trades.Count(),
                 })
                 .OrderBy(iw => iw.CreatedOn)
