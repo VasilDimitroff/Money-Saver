@@ -80,21 +80,9 @@
 
         public async Task<WalletCategoriesDto> GetWalletWithCategoriesAsync(int walletId)
         {
-            // EF Core can't translate the query for total amount, total expenses and total incomes
-            // decimal total = 0;
             var targetWallet = await this.dbContext.Wallets.Include(x => x.Categories).ThenInclude(x => x.Records)
                 .FirstOrDefaultAsync(x => x.Id == walletId);
 
-            // foreach (var item in wallets)
-            // {
-            //    foreach (var cat in item.Categories)
-            //    {
-            //        foreach (var rec in cat.Records)
-            //        {
-            //           total += rec.Amount;
-            //        }
-            //    }
-            // }
             Record lastRecord = await this.dbContext.Records
                 .OrderByDescending(r => r.CreatedOn)
                 .FirstOrDefaultAsync();
@@ -128,28 +116,6 @@
             return wallet;
         }
 
-        public async Task<IEnumerable<WalletCategoriesDto>> GetWalletsAsync(string userId)
-        {
-            var wallets = await this.dbContext.Wallets
-                .Where(w => w.ApplicationUserId == userId)
-                .Select(w => new WalletCategoriesDto
-                {
-                    TotalAmount = decimal.Parse(w.Categories.Sum(x => x.Records.Sum(y => y.Amount)).ToString("f2")),
-                    WalletName = w.Name,
-                    WalletId = w.Id,
-                    Categories = w.Categories.Select(c => new CategoryWalletInfoDto
-                    {
-                        Id = c.Id,
-                        Name = c.Name,
-                        RecordsCount = c.Records.Count(),
-                    }),
-                })
-                .ToListAsync();
-
-            return wallets;
-        }
-
-        // TODO: ID WE HAVE BUDGETS, MUST DELETE THEM IN THIS METHOD!
         public async Task<string> RemoveAsync(int walletId)
         {
             var wallet = await this.dbContext
@@ -170,9 +136,11 @@
                 this.dbContext.Records.RemoveRange(records);
 
                 this.dbContext.Categories.Remove(category);
+
+                await this.dbContext.SaveChangesAsync();
             }
 
-            this.dbContext.Remove(wallet);
+            this.dbContext.Wallets.Remove(wallet);
 
             await this.dbContext.SaveChangesAsync();
 

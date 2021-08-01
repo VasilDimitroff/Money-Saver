@@ -7,6 +7,7 @@
     using MoneySaver.Data;
     using MoneySaver.Data.Common.Repositories;
     using MoneySaver.Data.Models;
+
     using MoneySaver.Data.Repositories;
 
     using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@
 
     public class SettingsServiceTests
     {
+        /*
         [Fact]
         public void GetCountShouldReturnCorrectNumber()
         {
@@ -31,7 +33,7 @@
             Assert.Equal(3, service.GetCount());
             repository.Verify(x => x.All(), Times.Once);
         }
-
+        */
         [Fact]
         public async Task GetCountShouldReturnCorrectNumberUsingDbContext()
         {

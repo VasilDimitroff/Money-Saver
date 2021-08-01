@@ -15,7 +15,7 @@
     .stats-link:hover {
         opacity: 0.8;
     }
-    </style>
+</style>
 
 <div class="row mb-4">
     <div class="col-12">
@@ -25,14 +25,14 @@
     </div>
 </div>
 <div class="row">
-        <a asp-controller="Wallets" asp-action="AllWallets" class="col-md-6 col-lg-3 grid-margin stretch-card stats-link">
-            <div class="card bg-gradient-primary text-white text-center card-shadow-primary">
-                <div class="card-body">
-                    <h6 class="font-weight-normal">Total Incomes</h6>
-                    <h2 class="mb-0">@Model.TotalAccountIncomes records</h2>
-                </div>
+    <a asp-controller="Wallets" asp-action="AllWallets" class="col-md-6 col-lg-3 grid-margin stretch-card stats-link">
+        <div class="card bg-gradient-primary text-white text-center card-shadow-primary">
+            <div class="card-body">
+                <h6 class="font-weight-normal">Total Incomes</h6>
+                <h2 class="mb-0">@Model.TotalAccountIncomes records</h2>
             </div>
-        </a>
+        </div>
+    </a>
     <a asp-controller="Wallets" asp-action="AllWallets" class="col-md-6 col-lg-3 grid-margin stretch-card stats-link">
         <div class="card bg-gradient-danger text-white text-center card-shadow-danger">
             <div class="card-body">
@@ -235,12 +235,12 @@
                     @if (Model.CategoriesLast30DaysIncomes.Count() < 1)
                     {
                         <br />
-                            <div class="input-group-sm mr-sm-1 mb-0">
-                                <br />
-                                <div class="alert alert-warning" role="alert">
-                                    <span>No data yet</span>
-                                </div>
+                        <div class="input-group-sm mr-sm-1 mb-0">
+                            <br />
+                            <div class="alert alert-warning" role="alert">
+                                <span>No data yet</span>
                             </div>
+                        </div>
                     }
                 </div>
             </div>
@@ -372,7 +372,7 @@
                         <a asp-controller="ToDoLists" asp-action="Add"><span class="mr-4" data-toggle="tooltip" data-placement="bottom" title="Add list"><i class="mdi mdi-plus"></i> Add</span></a>
                         <a asp-controller="ToDoLists" asp-action="AllLists"><span data-toggle="tooltip" data-placement="bottom" title="All lists"><i class="mdi mdi-format-list-checks"></i> All Lists</span></a>
                     </div>
-                </div>   
+                </div>
             </div>
         </div>
     </div>
@@ -605,10 +605,10 @@
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
         </div>
     </div>
+</div>
 
 <div class="row">
     <div class="col-lg-6 col-12 col-sm-12 grid-margin grid-margin stretch-card">
@@ -740,7 +740,6 @@
         </div>
     </div>
 </div>
-                @section Scripts {
-
-                }
+@section Scripts {
+}
 

@@ -1,20 +1,38 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using MoneySaver.Common;
-using System;
-using System.Collections.Generic;
-
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MoneySaver.Data.Seeding
+﻿namespace MoneySaver.Data.Seeding
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using MoneySaver.Common;
+    using MoneySaver.Data.Models;
+
     public class UserInRolesSeeder : ISeeder
     {
+        public UserInRolesSeeder()
+        {
+        }
+
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
             var user = await dbContext.Users
                 .FirstOrDefaultAsync(u => u.UserName == "v.b.dimitrow@gmail.com");
+
+            //var user1 = new ApplicationUser()
+            //{
+            //};
+
+            //user.Roles.Add(new IdentityUserRole<string>()
+            //{
+            //    RoleId = dbContext.Roles.FirstOrDefault(r => r.Name == "a").Id,
+            //    UserId = user.Id,
+            //});
+
+            //dbContext.Add(user);
+            //dbContext.SaveChanges();
 
             if (user == null)
             {
