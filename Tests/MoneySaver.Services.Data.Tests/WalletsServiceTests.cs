@@ -433,6 +433,20 @@
             Assert.Equal("Bonus recieved", record.Description);
         }
 
+        [Fact]
+        public async Task GetDateSortedShouldReturn3Records()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var records = await this.wallService
+                .GetRecordsByDateRangeAsync(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow, 5, 1, 12);
+
+            // Assert
+            Assert.Equal(3, records.Count());
+        }
+
         private void FillDatabase()
         {
             this.CleanDatabase();
