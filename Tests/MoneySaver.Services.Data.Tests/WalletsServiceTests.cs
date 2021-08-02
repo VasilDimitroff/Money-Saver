@@ -7,7 +7,6 @@
 
     using Microsoft.EntityFrameworkCore;
     using MoneySaver.Data;
-    using MoneySaver.Data.Common.Repositories;
     using MoneySaver.Data.Models;
     using MoneySaver.Data.Models.Enums;
     using MoneySaver.Services.Data.Contracts;
@@ -30,7 +29,7 @@
             this.catService = new Mock<ICategoriesService>();
             this.currService = new Mock<ICurrenciesService>();
             this.optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase("database");
+                .UseInMemoryDatabase("walletsDatabase");
             this.db = new ApplicationDbContext(this.optionsBuilder.Options);
             this.wallService = new WalletsService(this.db, this.recService.Object, this.currService.Object, this.catService.Object);
         }
@@ -447,6 +446,76 @@
             Assert.Equal(3, records.Count());
         }
 
+        [Fact]
+        public async Task GetDateSortedShouldReturn0Records()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var records = await this.wallService
+                .GetRecordsByDateRangeAsync(DateTime.UtcNow.AddDays(-2), DateTime.UtcNow.AddDays(-1), 5, 1, 12);
+
+            // Assert
+            Assert.Equal(0, records.Count());
+        }
+
+        [Fact]
+        public async Task IsUserOwnWalletShoudReturnTrue()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            bool isUserOwnWallet = await this.wallService
+                .IsUserOwnWalletAsync("userId", 5);
+
+            // Assert
+            Assert.True(isUserOwnWallet);
+        }
+
+        [Fact]
+        public async Task IsUserOwnWalletShoudReturnFalse()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            bool isUserOwnWallet = await this.wallService
+                .IsUserOwnWalletAsync("userId", 15);
+
+            // Assert
+            Assert.False(isUserOwnWallet);
+        }
+
+        [Fact]
+        public async Task GetWalletCategoriesExpensesLast30DaysShouldReturn1Category()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var expensesCategories = await this.wallService
+                .GetWalletCategoriesExpensesLast30DaysAsync(5);
+
+            // Assert
+            Assert.Equal(1, expensesCategories.Count());
+        }
+
+        [Fact]
+        public async Task GetWalletCategoriesIncomesLast30DaysShouldReturn1Category()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var incomesCategories = await this.wallService
+                .GetWalletCategoriesIncomesLast30DaysAsync(5);
+
+            // Assert
+            Assert.Equal(1, incomesCategories.Count());
+        }
+
         private void FillDatabase()
         {
             this.CleanDatabase();
@@ -673,7 +742,7 @@
                 new MoneySaver.Data.Models.Record()
                 {
                     Id = "record1",
-                    Amount = 5,
+                    Amount = -5,
                     Category = category,
                     Type = RecordType.Expense,
                     Description = "Party in the club",
@@ -684,7 +753,7 @@
                 new MoneySaver.Data.Models.Record()
                 {
                     Id = "record2",
-                    Amount = 10,
+                    Amount = -10,
                     Category = category,
                     Type = RecordType.Expense,
                     Description = "Party in the hotel",
