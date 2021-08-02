@@ -379,6 +379,11 @@
 
         public int GetSearchRecordsCount(string searchTerm, int walletId)
         {
+            if (searchTerm == null)
+            {
+                searchTerm = string.Empty;
+            }
+
             int count = this.dbContext.Records
                 .Where(r => r.Description.ToLower().Contains(searchTerm.ToLower()) && r.Category.WalletId == walletId)
                 .Count();

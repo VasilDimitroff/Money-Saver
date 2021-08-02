@@ -333,6 +333,106 @@
                 .GetAllRecordsAsync(1, 50, 12));
         }
 
+        [Fact]
+        public void GetSearchRecordsCountShouldReturn2()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            int records = this.wallService
+                .GetSearchRecordsCount("party", 5);
+
+            // Assert
+            Assert.Equal(2, records);
+        }
+
+        [Fact]
+        public void GetSearchRecordsCountShouldReturn3WhenSearchTermIsEmptyString()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            int records = this.wallService
+                .GetSearchRecordsCount(string.Empty, 5);
+
+            // Assert
+            Assert.Equal(3, records);
+        }
+
+        [Fact]
+        public void GetSearchRecordsCountShouldReturn3WhenSearchTermIsNull()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            int records = this.wallService
+                .GetSearchRecordsCount(null, 5);
+
+            // Assert
+            Assert.Equal(3, records);
+        }
+
+        [Fact]
+        public async Task GetRecordsByKeyWordShouldReturn3RecordsWhenTermIsEmpty()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var records = await this.wallService
+                .GetRecordsByKeywordAsync(string.Empty, 5, 1, 12);
+
+            // Assert
+            Assert.Equal(3, records.Count());
+        }
+
+        [Fact]
+        public async Task GetRecordsByKeyWordShouldReturn2RecordsWhenTermIsParty()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var records = await this.wallService
+                .GetRecordsByKeywordAsync("party", 5, 1, 12);
+
+            // Assert
+            Assert.Equal(2, records.Count());
+        }
+
+        [Fact]
+        public async Task GetRecordsByKeyWordShouldReturn1RecordsWhenTermIsBonus()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var records = await this.wallService
+                .GetRecordsByKeywordAsync("bonus", 5, 1, 12);
+
+            // Assert
+            Assert.Equal(1, records.Count());
+        }
+
+        [Fact]
+        public async Task RecordDescriptionShouldBeBonusRecievedWhenSearchTermIsBonus()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var records = await this.wallService
+                .GetRecordsByKeywordAsync("bonus", 5, 1, 12);
+
+            var record = records.FirstOrDefault();
+
+            // Assert
+            Assert.Equal("Bonus recieved", record.Description);
+        }
+
         private void FillDatabase()
         {
             this.CleanDatabase();
