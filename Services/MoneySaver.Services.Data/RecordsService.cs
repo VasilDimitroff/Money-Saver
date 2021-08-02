@@ -224,6 +224,7 @@
             return GlobalConstants.RecordSuccessfullyUpdated;
         }
 
+        /*
         public async Task<string> UpdateRecordWORKFINE(string recordId, int categoryId, int walletId, string description, decimal oldAmount, decimal newAmount, string type, DateTime modifiedOn)
         {
             newAmount = Math.Abs(newAmount);
@@ -295,6 +296,8 @@
 
             return GlobalConstants.RecordSuccessfullyUpdated;
         }
+
+        */
 
         public async Task EditWalletAmountAsync(int walletId, decimal amount)
         {

@@ -245,6 +245,261 @@
             Assert.Equal(RecordType.Expense, recordType);
         }
 
+        [Fact]
+        public async Task GetRecordWithAllCategoriesShouldThrowsExceptionWhenRecordIsInvalid()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => this.recService.GetRecordWithAllCategories("invalidRecordId", 5));
+        }
+
+        [Fact]
+        public async Task NewRecordShouldBeSuccessfullyUpdatedWhenRecordUpdateMethodIsExecuted()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            string result = await this.recService.UpdateRecord("record1", 4, 5, "updated description", -5, 20, "Expense", DateTime.UtcNow);
+
+            var record = this.db.Records.FirstOrDefault(r => r.Id == "record1");
+            var recordDescription = record.Description;
+            var recordAmount = record.Amount;
+            var recordType = record.Type;
+            var recordCategoryId = record.CategoryId;
+
+            var wallet = this.db.Wallets.FirstOrDefault(w => w.Id == 5);
+
+            // Assert
+            Assert.Equal("updated description", recordDescription);
+            Assert.Equal(-20, recordAmount);
+            Assert.Equal(RecordType.Expense, recordType);
+            Assert.Equal(4, recordCategoryId);
+            Assert.Equal(485, wallet.MoneyAmount);
+        }
+
+        [Fact]
+        public async Task WalletAmountShouldIncreaseWith4WhenRecordUpdateMethodIsExecuted()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            string result = await this.recService.UpdateRecord("record1", 4, 5, "updated description", -5, 1, "Expense", DateTime.UtcNow);
+
+            var record = this.db.Records.FirstOrDefault(r => r.Id == "record1");
+            var recordDescription = record.Description;
+            var recordAmount = record.Amount;
+            var recordType = record.Type;
+            var recordCategoryId = record.CategoryId;
+
+            var wallet = this.db.Wallets.FirstOrDefault(w => w.Id == 5);
+
+            // Assert
+            Assert.Equal("updated description", recordDescription);
+            Assert.Equal(-1, recordAmount);
+            Assert.Equal(RecordType.Expense, recordType);
+            Assert.Equal(4, recordCategoryId);
+            Assert.Equal(504, wallet.MoneyAmount);
+        }
+
+        [Fact]
+        public async Task WalletAmountShouldIncreaseWith10WhenChangeRecordType()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            string result = await this.recService.UpdateRecord("record1", 4, 5, "updated description", -5, 5, "Income", DateTime.UtcNow);
+
+            var record = this.db.Records.FirstOrDefault(r => r.Id == "record1");
+            var recordDescription = record.Description;
+            var recordAmount = record.Amount;
+            var recordType = record.Type;
+            var recordCategoryId = record.CategoryId;
+
+            var wallet = this.db.Wallets.FirstOrDefault(w => w.Id == 5);
+
+            // Assert
+            Assert.Equal("updated description", recordDescription);
+            Assert.Equal(5, recordAmount);
+            Assert.Equal(RecordType.Income, recordType);
+            Assert.Equal(4, recordCategoryId);
+            Assert.Equal(510, wallet.MoneyAmount);
+        }
+
+        [Fact]
+        public async Task WalletAmountShouldIncreaseWith10WhenChangeRecordTypeAndTypeMinus5AsNewAmount()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            string result = await this.recService.UpdateRecord("record1", 4, 5, "updated description", -5, -5, "Income", DateTime.UtcNow);
+
+            var record = this.db.Records.FirstOrDefault(r => r.Id == "record1");
+            var recordDescription = record.Description;
+            var recordAmount = record.Amount;
+            var recordType = record.Type;
+            var recordCategoryId = record.CategoryId;
+
+            var wallet = this.db.Wallets.FirstOrDefault(w => w.Id == 5);
+
+            // Assert
+            Assert.Equal("updated description", recordDescription);
+            Assert.Equal(5, recordAmount);
+            Assert.Equal(RecordType.Income, recordType);
+            Assert.Equal(4, recordCategoryId);
+            Assert.Equal(510, wallet.MoneyAmount);
+        }
+
+        [Fact]
+        public async Task WalletAmountShouldDecreaseWith30WhenChangeRecordType()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            string result = await this.recService.UpdateRecord("record3", 4, 5, "updated description", 15, 15, "Expense", DateTime.UtcNow);
+
+            var record = this.db.Records.FirstOrDefault(r => r.Id == "record3");
+            var recordDescription = record.Description;
+            var recordAmount = record.Amount;
+            var recordType = record.Type;
+            var recordCategoryId = record.CategoryId;
+
+            var wallet = this.db.Wallets.FirstOrDefault(w => w.Id == 5);
+
+            // Assert
+            Assert.Equal("updated description", recordDescription);
+            Assert.Equal(-15, recordAmount);
+            Assert.Equal(RecordType.Expense, recordType);
+            Assert.Equal(4, recordCategoryId);
+            Assert.Equal(470, wallet.MoneyAmount);
+        }
+
+        [Fact]
+        public async Task WalletAmountShouldDecreaseWith10WhenChangeRecordAmount()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            string result = await this.recService.UpdateRecord("record3", 4, 5, "updated description", 15, 5, "Income", DateTime.UtcNow);
+
+            var record = this.db.Records.FirstOrDefault(r => r.Id == "record3");
+            var recordDescription = record.Description;
+            var recordAmount = record.Amount;
+            var recordType = record.Type;
+            var recordCategoryId = record.CategoryId;
+
+            var wallet = this.db.Wallets.FirstOrDefault(w => w.Id == 5);
+
+            // Assert
+            Assert.Equal("updated description", recordDescription);
+            Assert.Equal(5, recordAmount);
+            Assert.Equal(RecordType.Income, recordType);
+            Assert.Equal(4, recordCategoryId);
+            Assert.Equal(490, wallet.MoneyAmount);
+        }
+
+        [Fact]
+        public async Task UpdateRecordShouldThrowsExceptionWhenRecordIsInvalid()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Assert
+            await Assert.ThrowsAsync<ArgumentException>(()
+                => this.recService.UpdateRecord("invalidRecordId", 4, 5, "updated description", 15, 5, "Income", DateTime.UtcNow));
+        }
+
+        [Fact]
+        public async Task UpdateRecordShouldThrowsExceptionWhenWalletIsInvalid()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Assert
+            await Assert.ThrowsAsync<ArgumentException>(()
+                => this.recService.UpdateRecord("invalidRecordId", 4, 50, "updated description", 15, 5, "Income", DateTime.UtcNow));
+        }
+
+        [Fact]
+        public async Task UpdateRecordShouldThrowsExceptionWhenCategoryIsInvalid()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Assert
+            await Assert.ThrowsAsync<ArgumentException>(()
+                => this.recService.UpdateRecord("record1", 40, 5, "updated description", 15, 5, "Income", DateTime.UtcNow));
+        }
+
+        [Fact]
+        public async Task UpdateRecordShouldSetCreatedOnToTodayWhenInputDateIsDefault()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            string result = await this.recService.UpdateRecord("record3", 4, 5, "updated description", 15, 5, "Income", default);
+
+            var record = this.db.Records.FirstOrDefault(r => r.Id == "record3");
+            var recordDate = record.CreatedOn;
+
+            // Assert
+            Assert.Equal(DateTime.UtcNow.Day, recordDate.Day);
+
+        }
+
+        [Fact]
+        public async Task UpdateRecordShouldThrowsExceptionWhenRecordTypeIsInvalid()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Assert
+            await Assert.ThrowsAsync<ArgumentException>(()
+                => this.recService.UpdateRecord("record1", 4, 5, "updated description", 15, 5, "invalidRecordType", DateTime.UtcNow));
+        }
+
+        [Fact]
+        public async Task IsUserOwnRecordShouldReturnTrue()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            bool isUserOwnRecord = await this.recService.IsUserOwnRecordAsync("userId", "record1");
+
+            Assert.True(isUserOwnRecord);
+        }
+
+        [Fact]
+        public async Task IsUserOwnRecordShouldReturnFalse()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            bool isUserOwnRecord = await this.recService.IsUserOwnRecordAsync("userId", "invalidrecordId");
+
+            Assert.False(isUserOwnRecord);
+        }
+
+        [Fact]
+        public async Task EditWalletShouldThrowExceptionWhenWalletIdIsInvalid()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            await Assert.ThrowsAsync<ArgumentException>(() => this.recService.EditWalletAmountAsync(50, 200));
+        }
+
         private void FillDatabase()
         {
             this.CleanDatabase();
