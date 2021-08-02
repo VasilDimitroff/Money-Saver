@@ -148,14 +148,14 @@
 
         public async Task<AllRecordsInCategoryDto> GetRecordsByKeywordAsync(string keyword, int categoryId, int page, int itemsPerPage = 12)
         {
-            keyword = keyword.ToLower().Trim();
-
             if (string.IsNullOrWhiteSpace(keyword))
             {
                 var allRecords = await this.GetRecordsByCategoryAsync(categoryId, page, itemsPerPage);
 
                 return allRecords;
             }
+
+            keyword = keyword.ToLower().Trim();
 
             var category = await this.dbContext.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
 

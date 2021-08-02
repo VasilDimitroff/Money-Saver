@@ -12,7 +12,6 @@
     using MoneySaver.Data.Models.Enums;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Services.Data.Models.Records;
-    using Moq;
     using Xunit;
 
     public class RecordsServiceTests
