@@ -226,6 +226,32 @@
             Assert.Equal("Party in the club", firstRecord.Description);
         }
 
+        [Fact]
+        public async Task GetRecordsByDateRangeShouldReturn3Records()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.catService.GetRecordsByDateRangeAsync(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow, 4, 1, 12);
+
+            var firstRecord = result.Records.FirstOrDefault(x => x.Id == "record1");
+
+            Assert.Equal(3, result.Records.Count());
+            Assert.Equal("Party in the club", firstRecord.Description);
+        }
+
+        [Fact]
+        public async Task GetRecordsByDateRangeShouldThrowExceptionWhenCategoryIsInvalid()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Assert
+            await Assert.ThrowsAsync<ArgumentException>(()
+                => this.catService.GetRecordsByDateRangeAsync(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow, 40, 1, 12));
+        }
+
         private void FillDatabase()
         {
             this.CleanDatabase();
