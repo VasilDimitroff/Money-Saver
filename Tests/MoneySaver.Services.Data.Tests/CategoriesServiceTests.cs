@@ -252,6 +252,199 @@
                 => this.catService.GetRecordsByDateRangeAsync(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow, 40, 1, 12));
         }
 
+        [Fact]
+        public void GetRecordsCountShouldReturn3()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = this.catService.GetRecordsCount(4);
+
+            Assert.Equal(3, result);
+        }
+
+        [Fact]
+        public void GetSearchRecordsCountShouldReturn3()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = this.catService.GetSearchRecordsCount("", 4);
+
+            Assert.Equal(3, result);
+        }
+
+        [Fact]
+        public void GetSearchRecordsCountShouldReturn3WhenSearchTermIsNull()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = this.catService.GetSearchRecordsCount(null, 4);
+
+            Assert.Equal(3, result);
+        }
+
+        [Fact]
+        public void GetSearchRecordsCountShouldReturn1()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = this.catService.GetSearchRecordsCount("club", 4);
+
+            Assert.Equal(1, result);
+        }
+
+        [Fact]
+        public void GetSearchRecordsCountShouldReturn2()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = this.catService.GetSearchRecordsCount("party", 4);
+
+            Assert.Equal(2, result);
+        }
+
+        [Fact]
+        public void GetDateSortedRecordsCountShouldReturn3()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = this.catService.GetDateSortedRecordsCount(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow, 4);
+
+            Assert.Equal(3, result);
+        }
+
+        [Fact]
+        public void GetDateSortedRecordsCountShouldReturn0()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = this.catService.GetDateSortedRecordsCount(DateTime.UtcNow.AddDays(-2), DateTime.UtcNow.AddDays(-1), 4);
+
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public async Task GetCategoryInfoForEditAsyncShouldReturnPartiesCategory()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.catService.GetCategoryInfoForEditAsync(4);
+
+            Assert.Equal("Parties", result.CategoryName);
+        }
+
+        [Fact]
+        public async Task GetCategoryInfoForEditAsyncShouldThrowExceptionWhenCategoryIdIsInvalid()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => this.catService.GetCategoryInfoForEditAsync(40));
+        }
+
+        [Fact]
+        public async Task GetCategoryInfoForDeleteAsyncShouldReturnPartiesCategoryWithWalletCategoriesCount()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.catService.GetCategoryInfoForDeleteAsync(4, 5);
+
+            Assert.Equal("Parties", result.OldCategoryName);
+            Assert.Equal(4, result.OldCategoryId);
+            Assert.Equal("Holiday Wallet", result.WalletName);
+            Assert.Equal(2, result.Categories.Count());
+        }
+
+        [Fact]
+        public async Task GetCategoryInfoForDeleteAsyncShouldThrowExceptionWhenCategoryIdIsInvalid()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => this.catService.GetCategoryInfoForDeleteAsync(40, 5));
+        }
+
+        [Fact]
+        public async Task GetAllWalletsWithNameAndIdAsyncShouldThrowExceptionWhenUserIdIsInvalid()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => this.catService.GetAllWalletsWithNameAndIdAsync("invalidUserId"));
+        }
+
+        [Fact]
+        public async Task GetAllWalletsWithNameAndIdAsyncShouldReturn5Wallets()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.catService.GetAllWalletsWithNameAndIdAsync("userId");
+
+            // Assert
+            Assert.Equal(5, result.Count());
+        }
+
+        [Fact]
+        public async Task GetAllWalletsWithNameAndIdAsyncShouldReturnValidObjects()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.catService.GetAllWalletsWithNameAndIdAsync("userId");
+
+            // Assert
+            Assert.True(result.Any(w => w.WalletName == "Holiday Wallet" && w.WalletId == 5));
+        }
+
+        [Fact]
+        public async Task IsUserOwnCategoryAsyncShouldReturnTrue()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            bool result = await this.catService.IsUserOwnCategoryAsync("userId", 4);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task IsUserOwnCategoryAsyncShouldReturnFalse()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            bool result = await this.catService.IsUserOwnCategoryAsync("userId", 40);
+
+            // Assert
+            Assert.False(result);
+        }
+
         private void FillDatabase()
         {
             this.CleanDatabase();

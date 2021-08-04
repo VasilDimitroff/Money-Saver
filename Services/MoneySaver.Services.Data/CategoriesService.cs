@@ -286,6 +286,11 @@
 
         public int GetSearchRecordsCount(string searchTerm, int id)
         {
+            if (searchTerm == null)
+            {
+                searchTerm = string.Empty;
+            }
+
             string keyword = searchTerm.ToLower().Trim();
 
             return this.dbContext.Records
