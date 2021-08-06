@@ -29,6 +29,7 @@
         private ApplicationDbContext db;
         private ToDoListsController controller;
         private AddToDoListInputModel inputModel;
+        private ToDoListViewModel viewModel;
 
         public ToDoListsControllerTests()
         {
@@ -59,6 +60,175 @@
             Assert.Equal(4, this.db.ToDoLists.Count());
         }
 
+        [Fact]
+        public void GetAddShouldReturnView()
+        {
+            this.FillDatabase();
+
+            var result = this.controller.Add();
+            Assert.IsType<ViewResult>(result);
+        }
+
+        [Fact]
+        public async Task EditGetShouldReturnViewWithModel()
+        {
+            this.FillDatabase();
+
+            var result = await this.controller.Edit("list1");
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<ToDoListViewModel>(viewResult.ViewData.Model);
+            Assert.Equal("Shoplist", model.Name);
+            Assert.Equal(3, model.Items.Count());
+        }
+
+        [Fact]
+        public async Task EditPostShouldEditListCorrectly()
+        {
+            this.FillDatabase();
+
+            this.viewModel = new ToDoListViewModel
+            {
+                Id = "list1",
+                Name = "Shoplist Edited",
+                Status = ViewModels.ToDoLists.Enums.StatusType.Completed,
+                ListItems = new List<string>(),
+            };
+
+            this.viewModel.ListItems.Add("test item");
+
+            var result = await this.controller.Edit(this.viewModel, "/ToDoLists/AllLists");
+
+            var viewResult = Assert.IsType<RedirectResult>(result);
+
+            var list = this.db.ToDoLists.FirstOrDefault(x => x.Id == "list1");
+
+            Assert.Equal("Shoplist Edited", list.Name);
+            Assert.Equal(4, list.ListItems.Count());
+            Assert.True(list.ListItems.Any(li => li.Name == "test item"));
+            Assert.True(list.Status == StatusType.Completed);
+        }
+
+        [Fact]
+        public async Task DeleteShouldDeleteListCorrectly()
+        {
+            this.FillDatabase();
+
+            var result = await this.controller.Delete("list1", "/ToDoLists/AllLists", 5);
+
+            var list = this.db.ToDoLists.FirstOrDefault(x => x.Id == "list1");
+
+            Assert.Null(list);
+            var viewResult = Assert.IsType<RedirectResult>(result);
+            Assert.Equal(2, this.db.ToDoLists.Count());
+        }
+
+        [Fact]
+        public async Task DeleteItemShouldDeleteListItemCorrectlyAndReturnRedirect()
+        {
+            this.FillDatabase();
+
+            var listItemBeforeDelete = this.db.ToDoItems.FirstOrDefault(x => x.Id == "list1Item1");
+
+            Assert.Equal("Tomatoes", listItemBeforeDelete.Name);
+
+            var list = this.db.ToDoLists.FirstOrDefault(x => x.ListItems.Any(li => li.Id == "list1Item1"));
+
+            var result = await this.controller.DeleteItem("list1Item1", "Shoplist", "/ToDoLists/AllLists");
+
+            var listItemAfterDelete = this.db.ToDoItems.FirstOrDefault(x => x.Id == "list1Item1");
+
+            Assert.Null(listItemAfterDelete);
+            var viewResult = Assert.IsType<RedirectResult>(result);
+
+            Assert.Equal(2, list.ListItems.Count());
+        }
+
+        [Fact]
+        public async Task AllListsShouldReturnViewWithValidModel()
+        {
+            this.FillDatabase();
+
+            var result = await this.controller.AllLists(1);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<IEnumerable<ToDoListViewModel>>(viewResult.ViewData.Model);
+
+            Assert.Equal(3, model.Count());
+        }
+
+        [Fact]
+        public async Task ChangeItemStatusShouldWorkCorrectlyWhenIsSettedToCompleted()
+        {
+            this.FillDatabase();
+
+            var itemBeforeChangeStatus = this.db.ToDoItems.FirstOrDefault(li => li.Id == "list1Item1");
+
+            Assert.True(itemBeforeChangeStatus.Status == StatusType.Active);
+
+            var result = await this.controller.ChangeItemStatus("list1Item1", "Shoplist", "/ToDoLists/AllLists");
+
+            var itemAfterChangeStatus = this.db.ToDoItems.FirstOrDefault(li => li.Id == "list1Item1");
+
+            var viewResult = Assert.IsType<RedirectResult>(result);
+
+            Assert.True(itemAfterChangeStatus.Status == StatusType.Completed);
+        }
+
+        [Fact]
+        public async Task ChangeItemStatusShouldWorkCorrectlyWhenIsSettedToActive()
+        {
+            this.FillDatabase();
+
+            var itemBeforeChangeStatus = this.db.ToDoItems.FirstOrDefault(li => li.Id == "list1Item3");
+
+            Assert.True(itemBeforeChangeStatus.Status == StatusType.Completed);
+
+            var result = await this.controller.ChangeItemStatus("list1Item3", "Shoplist", "/ToDoLists/AllLists");
+
+            var itemAfterChangeStatus = this.db.ToDoItems.FirstOrDefault(li => li.Id == "list1Item3");
+
+            var viewResult = Assert.IsType<RedirectResult>(result);
+
+            Assert.True(itemAfterChangeStatus.Status == StatusType.Active);
+        }
+
+        [Fact]
+        public async Task ChangeListStatusShouldWorkCorrectlyWhenIsSettedToActive()
+        {
+            this.FillDatabase();
+
+            var listBeforeChangeStatus = this.db.ToDoLists.FirstOrDefault(li => li.Id == "list3");
+
+            Assert.True(listBeforeChangeStatus.Status == StatusType.Completed);
+
+            var result = await this.controller.ChangeListStatus("list3", "Todo List", "/ToDoLists/AllLists");
+
+            var listAfterChangeStatus = this.db.ToDoLists.FirstOrDefault(li => li.Id == "list3");
+
+            var viewResult = Assert.IsType<RedirectResult>(result);
+
+            Assert.True(listAfterChangeStatus.Status == StatusType.Active);
+        }
+
+        [Fact]
+        public async Task ChangeListStatusShouldWorkCorrectlyWhenIsSettedToCompleted()
+        {
+            this.FillDatabase();
+
+            var listBeforeChangeStatus = this.db.ToDoLists.FirstOrDefault(li => li.Id == "list1");
+
+            Assert.True(listBeforeChangeStatus.Status == StatusType.Active);
+
+            var result = await this.controller.ChangeListStatus("list1", "Todo List", "/ToDoLists/AllLists");
+
+            var listAfterChangeStatus = this.db.ToDoLists.FirstOrDefault(li => li.Id == "list1");
+
+            var viewResult = Assert.IsType<RedirectResult>(result);
+
+            Assert.True(listAfterChangeStatus.Status == StatusType.Completed);
+        }
+
         private void FillDatabase()
         {
             this.CleanDatabase();
@@ -69,20 +239,22 @@
 
         private void CleanDatabase()
         {
+            foreach (var item in this.db.ToDoItems)
+            {
+                this.db.ToDoItems.Remove(item);
+                this.db.SaveChanges();
+            }
+
             foreach (var list in this.db.ToDoLists)
             {
-                foreach (var item in list.ListItems)
-                {
-                    this.db.ToDoItems.Remove(item);
-                }
-
-                this.db.SaveChanges();
                 this.db.ToDoLists.Remove(list);
+                this.db.SaveChanges();
             }
 
             foreach (var user in this.db.Users)
             {
                 this.db.Users.Remove(user);
+                this.db.SaveChanges();
             }
 
             this.db.SaveChanges();
