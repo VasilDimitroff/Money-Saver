@@ -17,8 +17,7 @@
     using MoneySaver.Services.Data;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.Controllers;
-    using MoneySaver.Web.ViewModels.Currencies;
-    using MoneySaver.Web.ViewModels.Wallets;
+    using MoneySaver.Web.ViewModels.Records;
     using Moq;
     using Xunit;
 
@@ -32,6 +31,7 @@
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
         private ApplicationDbContext db;
         private RecordsController controller;
+        private AddRecordViewModel inputModel;
 
         public RecordsControllerTests()
         {
@@ -44,6 +44,49 @@
             this.walletsService = new WalletsService(this.db, this.recordsService, this.currenciesService, this.categoriesService);
             this.userManager = new FakeUserManager();
             this.controller = new RecordsController(this.recordsService, this.walletsService, this.userManager);
+        }
+
+        [Fact]
+        public async Task AddGetShoudReturnViewWithValidModel()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Add(3);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<AddRecordViewModel>(viewResult.ViewData.Model);
+            Assert.Equal("Job Wallet", model.WalletName);
+        }
+
+        public async Task AddPostShoudCreateRecordSuccessfully()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            this.inputModel = new AddRecordViewModel
+            {
+                Amount = 20,
+                WalletId = 5,
+                CategoryId = 4,
+                Type = ViewModels.Records.Enums.RecordTypeInputModel.Expense,
+                Description = "Test Record",
+                CreatedOn = DateTime.UtcNow,
+            };
+
+            // Act
+            var result = await this.controller.Add(this.inputModel);
+
+            // Assert
+            var viewResult = Assert.IsType<RedirectResult>(result);
+            var record = this.db.Records.FirstOrDefault(x => x.Description == "Test Record");
+
+            Assert.Equal("Test Record", record.Description);
+            Assert.Equal(4, record.CategoryId);
+            Assert.True(record.Type == RecordType.Expense);
+            Assert.Equal(-20, record.Amount);
         }
 
         private void FillDatabase()
