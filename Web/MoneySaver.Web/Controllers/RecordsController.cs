@@ -146,6 +146,7 @@
                     })
                     .ToList(),
                 };
+
                 return this.View(model);
             }
             catch (Exception ex)

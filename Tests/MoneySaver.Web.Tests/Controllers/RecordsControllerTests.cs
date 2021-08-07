@@ -32,6 +32,7 @@
         private ApplicationDbContext db;
         private RecordsController controller;
         private AddRecordViewModel inputModel;
+        private EditRecordInputModel editModel;
 
         public RecordsControllerTests()
         {
@@ -61,6 +62,7 @@
             Assert.Equal("Job Wallet", model.WalletName);
         }
 
+        [Fact]
         public async Task AddPostShoudCreateRecordSuccessfully()
         {
             // Arrange
@@ -87,6 +89,120 @@
             Assert.Equal(4, record.CategoryId);
             Assert.True(record.Type == RecordType.Expense);
             Assert.Equal(-20, record.Amount);
+        }
+
+        [Fact]
+        public async Task EditGetShoudReturnViewWithValidModel()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Edit("record1", 5);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<EditRecordViewModel>(viewResult.ViewData.Model);
+            Assert.Equal("Holiday Wallet", model.WalletName);
+            Assert.Equal("Party in the club", model.Description);
+            Assert.Equal(ViewModels.Records.Enums.RecordTypeInputModel.Expense, model.Type);
+            Assert.Equal(4, model.CategoryId);
+            Assert.Equal(-5, model.Amount);
+        }
+
+        [Fact]
+        public async Task EditPostShoudEditRecordSuccessfully()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            this.editModel = new EditRecordInputModel
+            {
+                Id = "record1",
+                OldAmount = -5,
+                Amount = -6.50m,
+                WalletId = 5,
+                CategoryId = 5,
+                Type = ViewModels.Records.Enums.RecordTypeInputModel.Income,
+                Description = "edited record description",
+                CreatedOn = DateTime.UtcNow,
+                WalletName = "Holiday Wallet",
+            };
+
+            // Act
+            var result = await this.controller.Edit(this.editModel);
+
+            // Assert
+            var editedRecord = this.db.Records.FirstOrDefault(r => r.Id == "record1");
+
+            var viewResult = Assert.IsType<RedirectResult>(result);
+
+            Assert.Equal("edited record description", editedRecord.Description);
+            Assert.Equal(RecordType.Income, editedRecord.Type);
+            Assert.Equal(5, editedRecord.CategoryId);
+            Assert.Equal(6.50m, editedRecord.Amount);
+        }
+
+        [Fact]
+        public async Task EditGetShoudReturnsRedirectWhenRecordIdIsInvalid()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            this.editModel = new EditRecordInputModel
+            {
+                Id = null,
+                OldAmount = -5,
+                Amount = -6.50m,
+                WalletId = 5,
+                CategoryId = 5,
+                Type = ViewModels.Records.Enums.RecordTypeInputModel.Income,
+                Description = "edited record description",
+                CreatedOn = DateTime.UtcNow,
+                WalletName = "Holiday Wallet",
+            };
+
+            // Act
+            var result = await this.controller.Edit(this.editModel);
+
+            // Assert
+            var editedRecord = this.db.Records.FirstOrDefault(r => r.Id == "record1");
+
+            var redirectResult = Assert.IsType<RedirectResult>(result);
+            Assert.Equal("H", redirectResult.Url[1].ToString());
+        }
+
+        [Fact]
+        public async Task DeleteShouldDeleteRecordAndReturnsRedirect()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Delete("record1");
+
+            // Assert
+            var viewResult = Assert.IsType<RedirectResult>(result);
+            var record = this.db.Records.FirstOrDefault(x => x.Id == "record1");
+            Assert.Null(record);
+            Assert.Equal(2, this.db.Records.Where(r => r.CategoryId == 4).Count());
+        }
+
+        [Fact]
+        public async Task DeleteShouldReturnsRedirectWhenIdIsInvalid()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Delete(null);
+
+            // Assert
+            var typeResult = Assert.IsType<RedirectResult>(result);
+
+            Assert.Equal(3, this.db.Records.Where(r => r.CategoryId == 4).Count());
+            var redirectResult = Assert.IsType<RedirectResult>(result);
+            Assert.Equal("H", redirectResult.Url[1].ToString());
         }
 
         private void FillDatabase()
