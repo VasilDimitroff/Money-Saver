@@ -9,173 +9,197 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using MoneySaver.Data;
+    using MoneySaver.Data.Common.Repositories;
     using MoneySaver.Data.Models;
     using MoneySaver.Data.Models.Enums;
+    using MoneySaver.Data.Repositories;
     using MoneySaver.Services.Data;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.Controllers;
     using MoneySaver.Web.ViewModels.Currencies;
-    using MoneySaver.Web.ViewModels.Investments;
+    using MoneySaver.Web.ViewModels.Trades;
+    using MoneySaver.Web.ViewModels.Wallets;
     using Moq;
     using Xunit;
 
-    public class InvestmentsControllerTests
+    public class TradesControllerTests
     {
-        private readonly ICurrenciesService currenciesService;
-        private readonly IInvestmentsWalletsService investmentsWalletsService;
+        private readonly ITradesService tradesService;
+        private readonly ICompaniesService companiesService;
         private readonly FakeUserManager userManager;
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
         private ApplicationDbContext db;
-        private InvestmentsController controller;
-        private AddInvestmentWalletInputModel inputModel;
-        private EditInvestmentWalletInputModel editModel;
+        private IDeletableEntityRepository<Company> repo;
+        private TradesController controller;
+        private AddTradeInputModel inputModel;
+        private EditTradeInputModel editModel;
 
-        public InvestmentsControllerTests()
+        public TradesControllerTests()
         {
             this.optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
-               .UseInMemoryDatabase("investmentWalletsDatabase");
+               .UseInMemoryDatabase("tradesDatabase");
             this.db = new ApplicationDbContext(this.optionsBuilder.Options);
-            this.currenciesService = new CurrenciesService(this.db);
-            this.investmentsWalletsService = new InvestmentsWalletsService(this.db);
+            this.repo = new EfDeletableEntityRepository<Company>(this.db);
+            this.companiesService = new CompaniesService(this.repo);
+            this.tradesService = new TradesService(this.db, this.companiesService);
             this.userManager = new FakeUserManager();
-            this.controller = new InvestmentsController(this.currenciesService, this.investmentsWalletsService, this.userManager);
+            this.controller = new TradesController(this.companiesService, this.tradesService, this.userManager);
         }
 
         [Fact]
-        public async Task AddWalletGetShouldReturnViewWithValidModel()
+        public async Task AddTradeShouldReturnViewWithValidModel()
         {
             // Arrange
             this.FillDatabase();
 
             // Act
-            var result = await this.controller.AddWallet();
+            var result = await this.controller.Add(2);
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<AddInvestmentWalletInputModel>(viewResult.ViewData.Model);
-            Assert.Equal(3, model.Currencies.Count());
+            var model = Assert.IsAssignableFrom<AddTradeInputModel>(viewResult.ViewData.Model);
+            Assert.Equal(2, model.InvestmentWalletId);
+            Assert.Equal(3, model.Companies.Count());
         }
 
         [Fact]
-        public async Task AddWalletPostShouldCreateWalletSuccessfully()
+        public async Task AddTradeShouldCreateNewBuyTrade()
         {
             // Arrange
             this.FillDatabase();
-            this.inputModel = new AddInvestmentWalletInputModel
+            this.inputModel = new AddTradeInputModel
             {
-                Name = "Test Investment Wallet",
-                SelectedCurrencyId = 2,
-            };
-
-            // Act
-            var result = await this.controller.AddWallet(this.inputModel);
-
-            // Assert
-            var viewResult = Assert.IsType<RedirectResult>(result);
-
-            var createdWallet = this.db.InvestmentWallets.FirstOrDefault(x => x.Name == "Test Investment Wallet");
-
-            Assert.Equal("Test Investment Wallet", createdWallet.Name);
-            Assert.Equal(2, createdWallet.CurrencyId);
-            Assert.Equal(4, this.db.InvestmentWallets.Count());
-        }
-
-        [Fact]
-        public async Task EditWalletGetShouldReturnViewWithValidModel()
-        {
-            // Arrange
-            this.FillDatabase();
-
-            // Act
-            var result = await this.controller.EditWallet(2);
-
-            // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<EditInvestmentWalletInputModel>(viewResult.ViewData.Model);
-            Assert.Equal(3, model.Currencies.Count());
-            Assert.Equal(2, model.SelectedCurrency.CurrencyId);
-            Assert.Equal("USD Account", model.Name);
-        }
-
-        [Fact]
-        public async Task EditWalletGetShouldEditWalletSucessfully()
-        {
-            // Arrange
-            this.FillDatabase();
-            this.editModel = new EditInvestmentWalletInputModel
-            {
-                Id = 2,
-                Name = "Edited Wallet Name",
-                SelectedCurrency = new CurrencyViewModel
+                Price = 20,
+                InvestmentWalletId = 2,
+                Quantity = 5,
+                Type = ViewModels.Trades.Enums.TradeType.Buy,
+                SelectedCompany = new CompanyViewModel
                 {
-                    CurrencyId = 3,
-                    Name = "Euro",
-                    Code = "EUR",
+                    Id = "company3",
+                    Name = "Amazon",
+                    Ticker = "amzn",
                 },
             };
 
             // Act
-            var result = await this.controller.EditWallet(this.editModel);
+            var result = await this.controller.Add(this.inputModel);
 
             // Assert
             var redirectResult = Assert.IsType<RedirectResult>(result);
-            var editedWallet = this.db.InvestmentWallets.FirstOrDefault(x => x.Id == 2);
-            Assert.Equal("Edited Wallet Name", editedWallet.Name);
-            Assert.Equal(3, editedWallet.CurrencyId);
+            var newTrade = this.db.Trades.FirstOrDefault(x => !x.Id.StartsWith("trade"));
+            Assert.Equal(2, newTrade.InvestmentWalletId);
+            Assert.Equal(-20, newTrade.Price);
+            Assert.Equal(5, newTrade.StockQuantity);
+            Assert.Equal("company3", newTrade.CompanyId);
+            Assert.Equal(4, this.db.Trades.Count());
+            Assert.Equal(TradeType.Buy, newTrade.Type);
         }
 
         [Fact]
-        public async Task DeleteWalletGetShouldDeleteWalletSucessfully()
+        public async Task AddTradeShouldCreateNewSellTrade()
         {
             // Arrange
             this.FillDatabase();
+            this.inputModel = new AddTradeInputModel
+            {
+                Price = -50,
+                InvestmentWalletId = 2,
+                Quantity = 3,
+                Type = ViewModels.Trades.Enums.TradeType.Sell,
+                SelectedCompany = new CompanyViewModel
+                {
+                    Id = "company2",
+                    Name = "Facebook",
+                    Ticker = "FB",
+                },
+            };
 
             // Act
-            var result = await this.controller.DeleteWallet(2);
+            var result = await this.controller.Add(this.inputModel);
 
             // Assert
             var redirectResult = Assert.IsType<RedirectResult>(result);
-            var deletedWallet = this.db.InvestmentWallets.FirstOrDefault(x => x.Id == 2);
-            Assert.Null(deletedWallet);
-            Assert.Equal(2, this.db.InvestmentWallets.Count());
+            var newTrade = this.db.Trades.FirstOrDefault(x => !x.Id.StartsWith("trade"));
+            Assert.Equal(2, newTrade.InvestmentWalletId);
+            Assert.Equal(50, newTrade.Price);
+            Assert.Equal(3, newTrade.StockQuantity);
+            Assert.Equal("company2", newTrade.CompanyId);
+            Assert.Equal(4, this.db.Trades.Count());
+            Assert.Equal(TradeType.Sell, newTrade.Type);
         }
 
         [Fact]
-        public async Task AllInvestmentsShouldReturn3InvesmentWalletsInView()
+        public async Task EditShouldReturnViewWithValidModel()
         {
             // Arrange
             this.FillDatabase();
 
             // Act
-            var result = await this.controller.AllInvestments();
+            var result = await this.controller.Edit("trade1");
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<IEnumerable<InvestmentWalletViewModel>>(viewResult.ViewData.Model);
-            Assert.Equal(3, model.Count());
+            var model = Assert.IsAssignableFrom<EditTradeInputModel>(viewResult.ViewData.Model);
+            Assert.Equal(ViewModels.Trades.Enums.TradeType.Buy, model.Type);
+            Assert.Equal("company1", model.SelectedCompany.Id);
+            Assert.Equal(5, model.Quantity);
+            Assert.Equal(-100, model.Price);
+            Assert.Equal(-500, model.Amount);
         }
 
         [Fact]
-        public async Task TradesShouldReturn2TradesInView()
+        public async Task EditShouldEditTrade()
+        {
+            // Arrange
+            this.FillDatabase();
+            this.editModel = new EditTradeInputModel
+            {
+                Id = "trade1",
+                InvestmentWalletId = 1,
+                Quantity = 11,
+                Price = 120,
+                Type = ViewModels.Trades.Enums.TradeType.Buy,
+                SelectedCompany = new CompanyViewModel
+                {
+                    Id = "company3",
+                    Name = "Amazon",
+                    Ticker = "amzn",
+                },
+            };
+
+            // Act
+            var result = await this.controller.Edit(this.editModel);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectResult>(result);
+            var editedTrade = this.db.Trades.FirstOrDefault(x => x.Id == "trade1");
+            Assert.Equal(TradeType.Buy, editedTrade.Type);
+            Assert.Equal("company3", editedTrade.CompanyId);
+            Assert.Equal("AMZN", editedTrade.Company.Ticker);
+            Assert.Equal("Amazon", editedTrade.Company.Name);
+            Assert.Equal(11, editedTrade.StockQuantity);
+            Assert.Equal(-120, editedTrade.Price);
+            Assert.Equal(1, editedTrade.InvestmentWalletId);
+            Assert.Equal(3, this.db.Trades.Count());
+        }
+
+        [Fact]
+        public async Task DeleteShouldDeleteTrade()
         {
             // Arrange
             this.FillDatabase();
 
             // Act
-            var result = await this.controller.Trades(2);
+            var result = await this.controller.Delete("trade1");
 
             // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<InvestmentWalletTradesViewModel>(viewResult.ViewData.Model);
-            Assert.Equal(2, model.Trades.Count());
-            Assert.True(model.Trades.Any(t => t.Type == ViewModels.Trades.Enums.TradeType.Buy));
-            Assert.True(model.Trades.Any(t => t.Type == ViewModels.Trades.Enums.TradeType.Sell));
-            Assert.True(model.Trades.Any(t => t.Price == 50));
-            Assert.True(model.Trades.Any(t => t.StockQuantity == 2));
+            var redirectResult = Assert.IsType<RedirectResult>(result);
+            var deletedTrade = this.db.Trades.FirstOrDefault(x => x.Id == "trade1");
+            Assert.Null(deletedTrade);
+            Assert.Equal(2, this.db.Trades.Count());
         }
 
         private void FillDatabase()

@@ -204,6 +204,16 @@
                 throw new ArgumentException(GlobalConstants.CannotEditInvestmentWallet);
             }
 
+            if (price < 0 && trade.Type == TradeType.Sell)
+            {
+                price = Math.Abs(price);
+            }
+
+            if (price > 0 && trade.Type == TradeType.Buy)
+            {
+                price = price * -1;
+            }
+
             trade.InvestmentWalletId = investmentWalletId;
             trade.Price = price;
             trade.StockQuantity = quantity;
