@@ -17,91 +17,272 @@
     using MoneySaver.Services.Data;
     using MoneySaver.Services.Data.Contracts;
     using MoneySaver.Web.Controllers;
-    using MoneySaver.Web.ViewModels.Currencies;
-    using MoneySaver.Web.ViewModels.Wallets;
+    using MoneySaver.Web.ViewModels.Categories;
     using Moq;
     using Xunit;
 
-    public class WalletsControllerTests
+    public class CategoriesControllerTests
     {
         private readonly IWalletsService walletsService;
         private readonly IRecordsService recordsService;
-        private readonly ICurrenciesService currenciesService;
         private readonly ICategoriesService categoriesService;
+        private readonly ICurrenciesService currenciesService;
         private readonly FakeUserManager userManager;
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
         private ApplicationDbContext db;
-        private WalletsController controller;
-        private AddWalletInputModel inputModel;
+        private CategoriesController controller;
+        private AddCategoryInputModel inputModel;
+        private EditCategoryInputModel editModel;
+        private DeleteCategoryInputModel deleteModel;
 
-        public WalletsControllerTests()
+        public CategoriesControllerTests()
         {
             this.optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase("walletsDatabase");
+                .UseInMemoryDatabase("categoriesDatabase");
             this.db = new ApplicationDbContext(this.optionsBuilder.Options);
             this.recordsService = new RecordsService(this.db);
             this.currenciesService = new CurrenciesService(this.db);
             this.categoriesService = new CategoriesService(this.db, this.recordsService);
             this.walletsService = new WalletsService(this.db, this.recordsService, this.currenciesService, this.categoriesService);
             this.userManager = new FakeUserManager();
-            this.controller = new WalletsController(this.walletsService, this.recordsService, this.currenciesService, this.userManager);
+            this.controller = new CategoriesController(this.categoriesService, this.walletsService, this.userManager);
         }
 
         [Fact]
-        public async Task ControllerShouldCreateNewWallet()
+        public async Task AddGetShoudReturnViewWithValidModel()
         {
+            // Arrange
             this.FillDatabase();
 
-            this.inputModel = new AddWalletInputModel
-            {
-                Amount = 250,
-                CurrencyId = 1,
-                Name = "Test Wallet",
-            };
+            // Act
+            var result = await this.controller.Add(5);
 
-            await this.controller.Add(this.inputModel);
-
-            var createdWallet = this.db.Wallets.FirstOrDefault(w => w.Name == "Test Wallet");
-
-            Assert.Equal("Test Wallet", createdWallet.Name);
-            Assert.Equal(1, createdWallet.CurrencyId);
-            Assert.Equal(250, createdWallet.MoneyAmount);
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<AddCategoryInputModel>(viewResult.ViewData.Model);
+            Assert.Equal("Holiday Wallet", model.WalletName);
         }
 
         [Fact]
-        public async Task ControllerShouldReturnRedirectWhenWalletIsAdded()
+        public async Task AddPostShoudCreateCategoryAndReturnRedirect()
         {
+            // Arrange
             this.FillDatabase();
 
-            this.inputModel = new AddWalletInputModel
+            this.inputModel = new AddCategoryInputModel
             {
-                Amount = 250,
-                CurrencyId = 1,
-                Name = "Test Wallet",
+                WalletId = 5,
+                Name = "Test Category",
+                BadgeColor = "Danger",
             };
 
+            // Act
             var result = await this.controller.Add(this.inputModel);
 
-            var redirectToActionResult = Assert.IsType<RedirectResult>(result);
-            Assert.Equal("W", redirectToActionResult.Url[1].ToString());
-        }
-
-        [Fact]
-        public async Task ControllerShouldReturnRedirectToErrorWhenCurrencyIdIsInvalid()
-        {
-            this.FillDatabase();
-
-            this.inputModel = new AddWalletInputModel
-            {
-                Amount = 250,
-                CurrencyId = 100,
-                Name = "Test Wallet",
-            };
-
-            var result = await this.controller.Add(this.inputModel);
-
+            // Assert
             var redirectResult = Assert.IsType<RedirectResult>(result);
-            Assert.Equal("H", redirectResult.Url[1].ToString());
+
+            var category = this.db.Categories.FirstOrDefault(c => c.Name.Contains("Test Category"));
+            Assert.NotNull(category);
+            Assert.Equal("Test Category", category.Name);
+            Assert.Equal(5, category.WalletId);
+            Assert.Equal(3, this.db.Wallets.FirstOrDefault(w => w.Id == 5).Categories.Count());
+        }
+
+        [Fact]
+        public async Task EditGetShoudReturnViewWithValidModel()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Edit(4, 5);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<EditCategoryInputModel>(viewResult.ViewData.Model);
+
+            Assert.Equal("Holiday Wallet", model.WalletName);
+            Assert.Equal("Parties", model.CategoryName);
+            Assert.Equal(ViewModels.Records.Enums.BadgeColor.Warning, model.BadgeColor);
+        }
+
+        [Fact]
+        public async Task EditPostShoudEditCategorySuccessfully()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            this.editModel = new EditCategoryInputModel
+            {
+                CategoryId = 4,
+                CategoryName = "Edited Category Name",
+                BadgeColor = ViewModels.Records.Enums.BadgeColor.Danger,
+            };
+
+            // Act
+            var result = await this.controller.Edit(this.editModel);
+
+            // Assert
+            var editedCategory = this.db.Categories.FirstOrDefault(r => r.Id == 4);
+
+            var viewResult = Assert.IsType<RedirectResult>(result);
+
+            Assert.Equal("Edited Category Name", editedCategory.Name);
+            Assert.Equal(4, editedCategory.Id);
+            Assert.Equal(5, editedCategory.WalletId);
+            Assert.Equal(BadgeColor.Danger, editedCategory.BadgeColor);
+        }
+
+        [Fact]
+        public async Task DeleteGetShoudReturnView()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Delete(4, 5);
+
+            // Assert
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<DeleteCategoryInputModel>(viewResult.ViewData.Model);
+            Assert.Equal("Parties", model.OldCategoryName);
+            Assert.Equal(4, model.OldCategoryId);
+            Assert.Equal(5, model.WalletId);
+            Assert.Equal(ViewModels.Records.Enums.BadgeColor.Warning, model.OldCategoryBadgeColor);
+        }
+
+        [Fact]
+        public async Task DeleteShouldDeleteCategoryAndReturnRedirect()
+        {
+            // Arrange
+            this.FillDatabase();
+            this.deleteModel = new DeleteCategoryInputModel
+            {
+                OldCategoryId = 4,
+                OldCategoryName = "Parties",
+                WalletId = 5,
+                WalletName = "Holiday Wallet",
+                NewCategoryId = -1,
+                OldCategoryBadgeColor = ViewModels.Records.Enums.BadgeColor.Warning,
+            };
+
+            // Act
+            var result = await this.controller.Delete(this.deleteModel);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectResult>(result);
+            Assert.Equal("W", redirectResult.Url[1].ToString());
+
+            var category = this.db.Categories.FirstOrDefault(c => c.Id == 4);
+            Assert.Null(category);
+            Assert.Equal(1, this.db.Wallets.FirstOrDefault(w => w.Id == 5).Categories.Count());
+        }
+
+        [Fact]
+        public async Task DetailsShoudReturnView()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Details(4, 1);
+
+            // Assert
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<CategoryRecordsViewModel>(viewResult.ViewData.Model);
+            Assert.Equal(3, model.Records.Count());
+            Assert.Equal(3, model.RecordsCount);
+            Assert.Equal(5, model.WalletId);
+            Assert.Equal("Parties", model.Category);
+            Assert.Equal(ViewModels.Records.Enums.BadgeColor.Warning, model.BadgeColor);
+            Assert.Equal("BRR", model.Currency);
+        }
+
+        [Fact]
+        public async Task SearchShouldReturn2Results()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Search(4, "party", 1);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<CategoryRecordsViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(2, model.Records.Count());
+            Assert.Equal(2, model.RecordsCount);
+            Assert.Equal(5, model.WalletId);
+            Assert.Equal("Parties", model.Category);
+            Assert.Equal(ViewModels.Records.Enums.BadgeColor.Warning, model.BadgeColor);
+            Assert.Equal("BRR", model.Currency);
+        }
+
+        [Fact]
+        public async Task SearchShouldReturn3ResultsWhenSearchTermIsNull()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Search(4, null, 1);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<CategoryRecordsViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(3, model.Records.Count());
+            Assert.Equal(3, model.RecordsCount);
+            Assert.Equal(5, model.WalletId);
+            Assert.Equal("Parties", model.Category);
+            Assert.Equal(ViewModels.Records.Enums.BadgeColor.Warning, model.BadgeColor);
+            Assert.Equal("BRR", model.Currency);
+        }
+
+        [Fact]
+        public async Task SearchShouldReturn3ResultsWhenDateRangeIsBetweenTodayAndYesterday()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.DateSorted(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow, 4, 1);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<CategoryRecordsViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(3, model.Records.Count());
+            Assert.Equal(3, model.RecordsCount);
+            Assert.Equal(5, model.WalletId);
+            Assert.Equal("Parties", model.Category);
+            Assert.Equal(ViewModels.Records.Enums.BadgeColor.Warning, model.BadgeColor);
+            Assert.Equal("BRR", model.Currency);
+        }
+
+        [Fact]
+        public async Task SearchShouldReturn3ResultsWhenDateRangeIsAfter2And3Days()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.DateSorted(DateTime.UtcNow.AddDays(1), DateTime.UtcNow.AddDays(2), 4, 1);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<CategoryRecordsViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(0, model.Records.Count());
+            Assert.Equal(0, model.RecordsCount);
+            Assert.Equal(5, model.WalletId);
+            Assert.Equal("Parties", model.Category);
+            Assert.Equal(ViewModels.Records.Enums.BadgeColor.Warning, model.BadgeColor);
+            Assert.Equal("BRR", model.Currency);
         }
 
         private void FillDatabase()

@@ -115,7 +115,7 @@
                 }
 
                 string editedCompanyName = await this.companiesService.EditAsync(company.Id, company.Ticker, company.Name);
-                
+
                 this.TempData["SuccessfullUpdatedCompany"] = $"Successfully updated company {editedCompanyName}!";
 
                 List<CompanyViewModel> companies = await this.GetAllCompaniesWithDeletedAsync();
@@ -147,7 +147,6 @@
             {
                 return this.Redirect($"/Home/Error?message={ex.Message}");
             }
-           
         }
 
         [HttpPost]
@@ -168,7 +167,7 @@
             catch (Exception ex)
             {
                 return this.Redirect($"/Home/Error?message={ex.Message}");
-            }    
+            }
         }
 
         [HttpPost]

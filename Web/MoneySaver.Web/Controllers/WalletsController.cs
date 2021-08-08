@@ -134,8 +134,8 @@
                     })
                     .ToList();
 
-                    //this.TempData["CurrencyExist"] = "Please select a valid currency!";
-                    //this.ViewBag.CurrencyExist = this.TempData["CurrencyExist"];
+                    this.TempData["CurrencyExist"] = "Please select a valid currency!";
+                    this.ViewBag.CurrencyExist = this.TempData["CurrencyExist"];
                     return this.View(input);
                 }
 
