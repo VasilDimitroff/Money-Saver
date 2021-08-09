@@ -87,6 +87,23 @@
         }
 
         [Fact]
+        public async Task ControllerShouldReturnViewWithAllWallets()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.AllWallets();
+
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<IEnumerable<AllWalletsViewModel>>(viewResult.ViewData.Model);
+
+            Assert.Equal(5, model.Count());
+        }
+
+        [Fact]
         public async Task ControllerShouldReturnRedirectToErrorWhenCurrencyIdIsInvalid()
         {
             this.FillDatabase();
@@ -102,6 +119,27 @@
 
             var redirectResult = Assert.IsType<RedirectResult>(result);
             Assert.Equal("H", redirectResult.Url[1].ToString());
+        }
+
+        [Fact]
+        public async Task EditWalletShouldReturnViewWithValidModel()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Edit(5);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<EditWalletViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(5, model.Id);
+            Assert.Equal("Holiday Wallet", model.Name);
+            Assert.Equal(8, model.CurrencyId);
+            Assert.Equal("BRR", model.CurrentCurrencyCode);
+            Assert.Equal("Brazil Real", model.CurrentCurrencyName);
+            Assert.Equal(500, model.Amount);
         }
 
         private void FillDatabase()
