@@ -99,13 +99,14 @@
                 .AllWithDeleted()
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            var companyWithTicker = await this.companyRepository
-               .AllWithDeleted()
-               .FirstOrDefaultAsync(c => c.Ticker == ticker);
+            var companyWithThisTicker = await this.companyRepository.AllWithDeleted().FirstOrDefaultAsync(c => c.Ticker == ticker);
 
-            if (companyWithId.Id != companyWithTicker.Id)
+            if (companyWithThisTicker != null)
             {
-                throw new ArgumentException(GlobalConstants.CompanyWithThisTickerAlreadyExists);
+                if (companyWithId.Id != companyWithThisTicker.Id)
+                {
+                    throw new ArgumentException(GlobalConstants.CompanyWithThisTickerAlreadyExists);
+                }
             }
 
             companyWithId.Ticker = ticker.ToUpper();
