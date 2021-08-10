@@ -265,7 +265,7 @@
         }
 
         [Fact]
-        public async Task SearchShouldReturn3ResultsWhenDateRangeIsAfter2And3Days()
+        public async Task SearchShouldReturn0ResultsWhenDateRangeIsAfter2And3Days()
         {
             // Arrange
             this.FillDatabase();

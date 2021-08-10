@@ -33,6 +33,7 @@
         private ApplicationDbContext db;
         private WalletsController controller;
         private AddWalletInputModel inputModel;
+        private EditWalletViewModel editModel;
 
         public WalletsControllerTests()
         {
@@ -140,6 +141,218 @@
             Assert.Equal("BRR", model.CurrentCurrencyCode);
             Assert.Equal("Brazil Real", model.CurrentCurrencyName);
             Assert.Equal(500, model.Amount);
+        }
+
+        [Fact]
+        public async Task EditShouldEditWalletSuccessfully()
+        {
+            // Arrange
+            this.FillDatabase();
+            this.editModel = new EditWalletViewModel
+            {
+                Id = 1,
+                Amount = 560,
+                Name = "Test Edit Wallet",
+                CurrencyId = 5,
+            };
+
+            // Act
+            var result = await this.controller.Edit(this.editModel);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectResult>(result);
+            var editedWallet = this.db.Wallets.Find(1);
+
+            Assert.Equal(1, editedWallet.Id);
+            Assert.Equal("Test Edit Wallet", editedWallet.Name);
+            Assert.Equal(5, editedWallet.CurrencyId);
+            Assert.Equal(560, editedWallet.MoneyAmount);
+        }
+
+        [Fact]
+        public async Task DeleteShouldEditWalletSuccessfully()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Delete(1);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectResult>(result);
+            var deletedWallet = this.db.Wallets.Find(1);
+
+            Assert.Null(deletedWallet);
+            Assert.Equal(4, this.db.Wallets.Count());
+        }
+
+        [Fact]
+        public async Task RecordsShouldReturnViewWithAllRecordsInWallet5()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Records(5, 1);
+
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<WalletSearchResultViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(3, model.Records.Count());
+        }
+
+        [Fact]
+        public async Task RecordsShouldReturnViewWith0RecordsInWallet1()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Records(1, 1);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<WalletSearchResultViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(0, model.Records.Count());
+        }
+
+        [Fact]
+        public async Task WalletDetailsShouldReturnViewWithCorrectView()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Details(5);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<WalletDetailsViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(3, model.Records.Count());
+            Assert.Equal(2, model.Categories.Count());
+            Assert.Equal("BRR", model.Currency);
+            Assert.Equal(5, model.WalletId);
+            Assert.Equal("Holiday Wallet", model.WalletName);
+            Assert.Equal(-15, model.TotalWalletExpenses);
+            Assert.Equal(15, model.TotalWalletIncomes);
+            Assert.Equal(-15, model.TotalWalletExpensesLast30Days);
+            Assert.Equal(15, model.TotalWalletIncomesLast30Days);
+            Assert.Equal(500, model.CurrentBalance);
+        }
+
+        [Fact]
+        public async Task SearchShouldReturn2ResultsWhenKeywordIsParty()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Search(5, "party", 1);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<WalletSearchResultViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(2, model.Records.Count());
+            Assert.Equal(2, model.RecordsCount);
+            Assert.Equal(5, model.WalletId);
+        }
+
+        [Fact]
+        public async Task SearchShouldReturn3ResultsWhenKeywordIsNull()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Search(5, null, 1);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<WalletSearchResultViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(3, model.Records.Count());
+            Assert.Equal(3, model.RecordsCount);
+            Assert.Equal(5, model.WalletId);
+        }
+
+        [Fact]
+        public async Task SearchShouldReturn3ResultsWhenKeywordIsEmpty()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Search(5, string.Empty, 1);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<WalletSearchResultViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(3, model.Records.Count());
+            Assert.Equal(3, model.RecordsCount);
+            Assert.Equal(5, model.WalletId);
+        }
+
+        [Fact]
+        public async Task SearchShouldReturn3ResultsWhenDateRangeIsBetweenTodayAndYesterday()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.DateSorted(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow, 5, 1);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<WalletSearchResultViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(3, model.Records.Count());
+            Assert.Equal(3, model.RecordsCount);
+            Assert.Equal(5, model.WalletId);
+        }
+
+        [Fact]
+        public async Task SearchShouldReturn0ResultsWhenDateRangeIsAfter2And3Days()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.DateSorted(DateTime.UtcNow.AddDays(1), DateTime.UtcNow.AddDays(2), 5, 1);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<WalletSearchResultViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(0, model.Records.Count());
+            Assert.Equal(0, model.RecordsCount);
+            Assert.Equal(5, model.WalletId);
+        }
+
+        [Fact]
+        public async Task CategoriesShouldReturn2Categories()
+        {
+            // Arrange
+            this.FillDatabase();
+
+            // Act
+            var result = await this.controller.Categories(5);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<StatisticsWalletViewModel>(viewResult.ViewData.Model);
+
+            Assert.Equal(2, model.Categories.Count());
+            Assert.Equal("Holiday Wallet", model.WalletName);
+            Assert.Equal(5, model.WalletId);
+            Assert.Equal("BRR", model.Currency);
+            Assert.Equal(15, model.Incomes);
+            Assert.Equal(-15, model.Outcomes);
         }
 
         private void FillDatabase()
