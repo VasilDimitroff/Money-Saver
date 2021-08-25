@@ -18,6 +18,10 @@
             this.AccountCategories = new HashSet<IndexCategoriesSummaryDto>();
         }
 
+        public decimal TotalAccountExpenses { get; set; }
+
+        public decimal TotalAccountIncomes { get; set; }
+
         public IEnumerable<AccountCategoryIncomesLast30DaysDto> CategoriesLast30DaysIncomes { get; set; }
 
         public IEnumerable<AccountCategoryExpensesLast30DaysDto> CategoriesLast30DaysExpenses { get; set; }

@@ -21,13 +21,15 @@
             this.AccountCategories = new HashSet<IndexCategoriesSummaryViewModel>();
         }
 
-        public decimal TotalAccountExpenses => this.AccountRecords
-            .Where(r => r.Type == RecordTypeInputModel.Expense)
-            .Count();
+        public decimal TotalAccountExpenses { get; set; }
+        //=> this.AccountRecords
+        //.Where(r => r.Type == RecordTypeInputModel.Expense)
+        //.Count();
 
-        public decimal TotalAccountIncomes => this.AccountRecords
-           .Where(r => r.Type == RecordTypeInputModel.Income)
-           .Count();
+        public decimal TotalAccountIncomes { get; set; }
+        // => this.AccountRecords
+        //.Where(r => r.Type == RecordTypeInputModel.Income)
+        //.Count();
 
         public int TotalAccountTrades => this.AccountTrades.Count();
 

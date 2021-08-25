@@ -36,6 +36,12 @@
                 AccountTrades = await this.GetLastTradesAsync(userId, 10),
                 AccountHoldings = await this.GetHoldingsAsync(userId),
                 AccountCategories = await this.GetCategoriesSummaryAsync(userId),
+                TotalAccountExpenses = this.dbContext.Records
+                 .Where(r => r.Category.Wallet.ApplicationUserId == userId && r.Type == RecordType.Expense)
+                 .Count(),
+                TotalAccountIncomes = this.dbContext.Records
+                 .Where(r => r.Category.Wallet.ApplicationUserId == userId && r.Type == RecordType.Income)
+                 .Count(),
             };
 
             return indexDto;

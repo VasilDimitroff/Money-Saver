@@ -75,6 +75,8 @@
         {
             return new IndexViewModel()
             {
+                TotalAccountExpenses = dto.TotalAccountExpenses,
+                TotalAccountIncomes = dto.TotalAccountIncomes,
                 CategoriesLast30DaysExpenses = dto.CategoriesLast30DaysExpenses.Select(ce => new AccountCategoryExpensesLast30DaysViewModel
                 {
                     CategoryId = ce.CategoryId,
