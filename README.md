@@ -1,8 +1,6 @@
 # SoftUni-CSharp-Web-ASP.NET
  <p><strong>Money Saver</strong> - Final Web Project For SoftUni</p>
  <p>Financial App For Tracking Incomes and Expenses, Stocks and ToDoLists</p>
- Available at: https://money-saver.azurewebsites.net/
-
 
 Used Technologies: 
 <ul>
